@@ -3,7 +3,7 @@
 
 @font-face {
   font-family: "Chewy";
-  src: url("./fonts/Chewy-Regular.ttf") format("truetype");
+  src: url("../fonts/Chewy-Regular.ttf") format("truetype");
   font-weight: 400;
   font-style: normal;
 }
