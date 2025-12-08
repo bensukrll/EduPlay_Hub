@@ -1,0 +1,161 @@
+/* ============================
+   OYUN SAYFASI – GENEL YAPI
+============================ */
+
+.game-page {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 40px 32px 64px;
+}
+
+/* ÜNİTE BAŞLIK BÖLÜMÜ */
+
+.game-unit-header {
+    text-align: center;
+    margin-bottom: 48px;
+}
+
+.game-unit-header .unit-tag {
+    display: inline-flex;
+    padding: 6px 14px;
+    border-radius: 30px;
+    background: #2563eb;
+    color: #fff;
+    font-size: 14px;
+    font-weight: 500;
+}
+
+.game-unit-header h1 {
+    margin: 12px 0 6px;
+    font-size: 28px;
+    font-weight: 600;
+}
+
+.game-unit-header p {
+    font-size: 15px;
+    color: #555;
+}
+
+/* ANA GAME CONTAINER */
+
+.game-container {
+    background: #ffffff;
+    border-radius: 24px;
+    padding: 32px;
+    box-shadow: var(--shadow-soft);
+}
+
+/* OYUN BAŞLIĞI BLOĞU */
+
+.game-header {
+    background: linear-gradient(90deg, #BA4BE4, #FF7BAC);
+    padding: 20px 24px;
+    border-radius: 18px;
+    color: white;
+    margin-bottom: 24px;
+}
+
+.game-header h2 {
+    font-size: 22px;
+    font-weight: 600;
+}
+
+.game-header small {
+    font-size: 13px;
+    opacity: 0.85;
+}
+
+/* OYUN ALANI */
+
+.game-area {
+    border: 3px dashed #B7D6FF;
+    border-radius: 18px;
+    min-height: 55vh;
+    background: #f8fcff;
+    padding: 40px;
+    text-align: center;
+
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+.game-area img {
+    width: 120px;
+    opacity: 0.7;
+}
+
+.game-area h3 {
+    margin-top: 18px;
+    font-size: 22px;
+    font-weight: 600;
+}
+
+.game-area p {
+    margin-top: 12px;
+    max-width: 600px;
+    font-size: 15px;
+    color: #555;
+}
+
+/* ============================
+   RESPONSIVE – TABLET
+============================ */
+
+@media (max-width: 768px) {
+
+    .game-page {
+        padding: 24px 20px 50px;
+    }
+
+    .game-container {
+        padding: 20px;
+    }
+
+    .game-area {
+        padding: 28px;
+        min-height: 45vh;
+    }
+
+    .game-area img {
+        width: 90px;
+    }
+
+    .game-area h3 {
+        font-size: 20px;
+    }
+}
+
+/* ============================
+   RESPONSIVE – TELEFON
+============================ */
+
+@media (max-width: 480px) {
+
+    .game-unit-header h1 {
+        font-size: 22px;
+    }
+
+    .game-container {
+        padding: 16px;
+    }
+
+    .game-area {
+        padding: 20px;
+        min-height: 40vh;
+    }
+
+    .game-area img {
+        width: 70px;
+    }
+
+    .game-area h3 {
+        font-size: 18px;
+    }
+
+    .game-area p {
+        font-size: 14px;
+        max-width: 95%;
+    }
+}
