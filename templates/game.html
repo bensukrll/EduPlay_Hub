@@ -4,63 +4,96 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>EduPlay Hub – Oyun</title>
-
-    <!-- Ana stil dosyası (ortak tasarım) -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link rel="stylesheet" href="../static/style.css">
-
-    <!-- Oyun sayfasına özel stil -->
     <link rel="stylesheet" href="../static/style-game.css">
 </head>
 
 <body>
     <div class="page">
 
-        <!-- HEADER (index.html ile birebir) -->
-        <header class="top-bar">
-            <div class="top-bar-inner">
-                <div class="logo-text">EduPlay Hub</div>
-                <div class="top-menu">
-                    <span>Oyunlarla Öğren, Eğlenerek Keşfet 🎉</span>
+        <header class="new-top-bar">
+            <div class="top-left">
+                <a href="#" class="back-btn">
+                    <i class="fa-solid fa-arrow-left"></i> Geri Dön
+                </a>
+            </div>
+
+            <div class="top-center">
+                <div class="unit-icon">
+                    <i class="fa-solid fa-laptop-code"></i>
                 </div>
+                <div class="unit-info">
+                    <h1>Ünite 1: Programlama ve Kodlama</h1>
+                    <span>Ortaokul Seviyesi - Algoritma ve blok tabanlı kodlama öğren! 🚀</span>
+                </div>
+            </div>
+
+            <div class="top-right">
+                <button class="icon-btn"><i class="fa-solid fa-gamepad"></i></button>
+                <button class="icon-btn"><i class="fa-solid fa-house"></i></button>
             </div>
         </header>
 
-        <!-- ANA OYUN İÇERİK ALANI -->
-        <main class="main game-page">
+        <main class="game-wrapper">
 
-            <!-- Ünite Başlık Kartı -->
-            <section class="game-unit-header">
-                <span class="unit-tag">Ünite 1</span>
-                <h1>Programlama ve Kodlama</h1>
-                <p>Algoritmalar ve blok tabanlı kodlama için hazırlık yap!</p>
-            </section>
+            <div class="game-box">
 
-            <!-- Oyun Kapsayıcı Kutu -->
-            <div class="game-container">
-
-                <div class="game-header">
-                    <h2>🎮 Oyun Başlığı</h2>
-                    <small>Oyun açıklaması burada yer alır</small>
+                <div class="game-box-header">
+                    <div class="header-left">
+                        <div class="game-icon">🎯</div>
+                        <div class="game-texts">
+                            <h2>Oyun Başlığı</h2>
+                            <small>Oyun açıklaması buraya gelecek</small>
+                        </div>
+                    </div>
+                    
+                    <div class="header-stats">
+                        <div class="stat-badge score">
+                            <i class="fa-solid fa-star"></i> Puan: 0
+                        </div>
+                        <div class="stat-badge level">
+                            <i class="fa-solid fa-gamepad"></i> Seviye: 1
+                        </div>
+                    </div>
                 </div>
 
                 <div class="game-area">
-                    <img src="https://cdn-icons-png.flaticon.com/512/833/833314.png" alt="icon">
-                    <h3>Oyun İçeriği Burada</h3>
+                    <img src="https://cdn-icons-png.flaticon.com/512/5260/5260498.png" alt="Controller" class="main-icon"/>
+                    
+                    <h3>Oyun İçeriği Buraya Gelecek</h3>
+                    
                     <p>
-                        Oyun canvas alanı, etkileşimli sorular, sürükle-bırak görevler veya mini sınavlar burada görünecek.
+                        Bu alan neredeyse tüm sayfayı kaplıyor ve oyununuzu buraya yerleştirebilirsiniz.
+                        Oyun componentleri, canvas, interaktif elementler vb. buraya eklenebilir.
                     </p>
+
+                    <div class="action-buttons">
+                        <div class="action-card yellow">
+                            <i class="fa-solid fa-lightbulb"></i>
+                            <span>İpucu Sistemi</span>
+                        </div>
+                        <div class="action-card green">
+                            <i class="fa-solid fa-check"></i>
+                            <span>Görev Takibi</span>
+                        </div>
+                        <div class="action-card purple">
+                            <i class="fa-solid fa-trophy"></i>
+                            <span>Başarım Sistemi</span>
+                        </div>
+                        <div class="action-card pink">
+                            <i class="fa-solid fa-bullseye"></i>
+                            <span>Hedefler</span>
+                        </div>
+                    </div>
                 </div>
 
             </div>
 
         </main>
 
-        <!-- FOOTER (index.html ile birebir) -->
-        <footer class="bottom-bar">
-            <div class="bottom-inner">
-                <span class="bottom-left">💻 Bilişim Teknolojileri · 5–6. Sınıf</span>
-                <span class="bottom-right">© 2024 Sevgiyle yapıldı ❤️</span>
-            </div>
+        <footer class="simple-footer">
+            ☀️ Eğlenceli oyunlarla öğrenmeye devam et! ✨
         </footer>
 
     </div>

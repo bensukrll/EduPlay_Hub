@@ -1,161 +1,304 @@
-/* ============================
-   OYUN SAYFASI – GENEL YAPI
-============================ */
+/* ============================================
+   GENEL AYARLAR
+============================================ */
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap');
 
-.game-page {
-    max-width: 1200px;
-    margin: 0 auto;
-    padding: 40px 32px 64px;
+body {
+    font-family: 'Poppins', sans-serif;
+    background: #fff5eb; /* Arka plan hafif krem/sarımsı ton */
+    margin: 0;
+    padding: 0;
 }
 
-/* ÜNİTE BAŞLIK BÖLÜMÜ */
-
-.game-unit-header {
-    text-align: center;
-    margin-bottom: 48px;
+.page {
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
 }
 
-.game-unit-header .unit-tag {
-    display: inline-flex;
-    padding: 6px 14px;
-    border-radius: 30px;
-    background: #2563eb;
+/* ============================================
+   YENİ ÜST BAR (MAVİ GRADIENT)
+============================================ */
+.new-top-bar {
+    background: linear-gradient(90deg, #3b82f6 0%, #8b5cf6 100%); /* Mavi-Mor Gradient */
+    padding: 15px 40px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    color: white;
+    box-shadow: 0 4px 15px rgba(59, 130, 246, 0.3);
+}
+
+/* Sol Taraf: Geri Dön Butonu */
+.back-btn {
+    background: rgba(255, 255, 255, 0.2);
     color: #fff;
-    font-size: 14px;
+    text-decoration: none;
+    padding: 10px 20px;
+    border-radius: 12px;
     font-weight: 500;
+    font-size: 14px;
+    transition: 0.3s;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    border: 1px solid rgba(255,255,255,0.3);
 }
 
-.game-unit-header h1 {
-    margin: 12px 0 6px;
-    font-size: 28px;
+.back-btn:hover {
+    background: rgba(255, 255, 255, 0.35);
+}
+
+/* Orta Taraf: Ünite Bilgisi */
+.top-center {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+}
+
+.unit-icon {
+    background: #fff;
+    color: #3b82f6;
+    width: 45px;
+    height: 45px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 12px;
+    font-size: 20px;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+}
+
+.unit-info h1 {
+    margin: 0;
+    font-size: 18px;
     font-weight: 600;
 }
 
-.game-unit-header p {
-    font-size: 15px;
-    color: #555;
+.unit-info span {
+    font-size: 13px;
+    opacity: 0.9;
 }
 
-/* ANA GAME CONTAINER */
+/* Sağ Taraf: İkonlar */
+.top-right {
+    display: flex;
+    gap: 10px;
+}
 
-.game-container {
+.icon-btn {
+    background: rgba(255, 255, 255, 0.2);
+    border: 1px solid rgba(255,255,255,0.3);
+    color: white;
+    width: 40px;
+    height: 40px;
+    border-radius: 12px;
+    cursor: pointer;
+    font-size: 16px;
+    transition: 0.3s;
+}
+
+.icon-btn:hover {
+    background: rgba(255, 255, 255, 0.4);
+}
+
+/* ============================================
+   OYUN WRAPPER
+============================================ */
+.game-wrapper {
+    max-width: 1200px;
+    width: 95%;
+    margin: 30px auto;
+}
+
+/* BEYAZ ANA KUTU */
+.game-box {
     background: #ffffff;
     border-radius: 24px;
-    padding: 32px;
-    box-shadow: var(--shadow-soft);
+    padding: 15px;
+    box-shadow: 0 10px 40px rgba(0,0,0,0.05);
+    border: 1px solid #eef2ff;
 }
 
-/* OYUN BAŞLIĞI BLOĞU */
-
-.game-header {
-    background: linear-gradient(90deg, #BA4BE4, #FF7BAC);
-    padding: 20px 24px;
-    border-radius: 18px;
+/* ============================================
+   OYUN BAŞLIĞI (HEADER)
+============================================ */
+.game-box-header {
+    /* 2. Resimdeki Mavi -> Pembe geçiş */
+    background: linear-gradient(90deg, #4facfe 0%, #f68084 100%);
+    border-radius: 16px 16px 0 0; /* Sadece üst köşeler yuvarlak */
+    padding: 20px 30px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
     color: white;
-    margin-bottom: 24px;
+    margin-bottom: 20px;
 }
 
-.game-header h2 {
-    font-size: 22px;
+.header-left {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+}
+
+.game-icon {
+    font-size: 24px;
+}
+
+.game-texts h2 {
+    margin: 0;
+    font-size: 20px;
     font-weight: 600;
 }
 
-.game-header small {
-    font-size: 13px;
-    opacity: 0.85;
+.game-texts small {
+    opacity: 0.9;
+    font-size: 14px;
 }
 
-/* OYUN ALANI */
+/* Sağ taraftaki Puan ve Seviye Rozetleri */
+.header-stats {
+    display: flex;
+    gap: 10px;
+}
 
+.stat-badge {
+    background: rgba(255, 255, 255, 0.25);
+    padding: 8px 16px;
+    border-radius: 10px;
+    font-size: 14px;
+    font-weight: 600;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    backdrop-filter: blur(4px);
+    border: 1px solid rgba(255,255,255,0.3);
+}
+
+/* ============================================
+   OYUN ALANI (DASHED BORDER)
+============================================ */
 .game-area {
-    border: 3px dashed #B7D6FF;
-    border-radius: 18px;
-    min-height: 55vh;
-    background: #f8fcff;
-    padding: 40px;
-    text-align: center;
-
+    border: 2px dashed #a5b4fc; /* Kesikli mavi çizgi */
+    background: #fdfdfd;
+    border-radius: 16px;
+    padding: 50px 20px;
+    min-height: 500px;
     display: flex;
     flex-direction: column;
     justify-content: center;
     align-items: center;
+    text-align: center;
+    position: relative;
+    margin: 10px; /* Header'dan biraz boşluk */
 }
 
-.game-area img {
-    width: 120px;
-    opacity: 0.7;
+.main-icon {
+    width: 80px;
+    margin-bottom: 20px;
+    opacity: 0.9;
 }
 
 .game-area h3 {
-    margin-top: 18px;
-    font-size: 22px;
-    font-weight: 600;
+    color: #4b5563;
+    font-size: 24px;
+    margin-bottom: 10px;
 }
 
 .game-area p {
-    margin-top: 12px;
+    color: #6b7280;
     max-width: 600px;
-    font-size: 15px;
-    color: #555;
+    margin-bottom: 40px;
+    line-height: 1.6;
 }
 
-/* ============================
-   RESPONSIVE – TABLET
-============================ */
+/* ============================================
+   AKSİYON BUTONLARI (Alt kısımdaki renkli kutular)
+============================================ */
+.action-buttons {
+    display: flex;
+    gap: 20px;
+    justify-content: center;
+    flex-wrap: wrap;
+}
 
+.action-card {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    width: 110px;
+    height: 100px;
+    border-radius: 16px;
+    cursor: pointer;
+    transition: transform 0.2s, box-shadow 0.2s;
+    border-bottom: 4px solid rgba(0,0,0,0.1); /* Alt kısımdaki kalın çizgi efekti */
+}
+
+.action-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 10px 15px rgba(0,0,0,0.1);
+}
+
+.action-card i {
+    font-size: 24px;
+    margin-bottom: 8px;
+}
+
+.action-card span {
+    font-size: 13px;
+    font-weight: 600;
+}
+
+/* Renk Temaları */
+.action-card.yellow {
+    background: #fff9c4;
+    color: #fbc02d;
+    border-color: #fbc02d;
+}
+
+.action-card.green {
+    background: #dcfce7;
+    color: #22c55e;
+    border-color: #22c55e;
+}
+
+.action-card.purple {
+    background: #f3e8ff;
+    color: #a855f7;
+    border-color: #a855f7;
+}
+
+.action-card.pink {
+    background: #fce7f3;
+    color: #ec4899;
+    border-color: #ec4899;
+}
+
+/* Footer */
+.simple-footer {
+    text-align: center;
+    padding: 20px;
+    color: #888;
+    font-size: 14px;
+    margin-top: auto;
+}
+
+/* Responsive */
 @media (max-width: 768px) {
-
-    .game-page {
-        padding: 24px 20px 50px;
+    .new-top-bar {
+        flex-direction: column;
+        text-align: center;
+        gap: 15px;
     }
-
-    .game-container {
-        padding: 20px;
+    .header-stats {
+        display: none; /* Mobilde istatistikleri gizleyebilir veya küçültebilirsin */
     }
-
-    .game-area {
-        padding: 28px;
-        min-height: 45vh;
+    .action-buttons {
+        gap: 10px;
     }
-
-    .game-area img {
+    .action-card {
         width: 90px;
-    }
-
-    .game-area h3 {
-        font-size: 20px;
-    }
-}
-
-/* ============================
-   RESPONSIVE – TELEFON
-============================ */
-
-@media (max-width: 480px) {
-
-    .game-unit-header h1 {
-        font-size: 22px;
-    }
-
-    .game-container {
-        padding: 16px;
-    }
-
-    .game-area {
-        padding: 20px;
-        min-height: 40vh;
-    }
-
-    .game-area img {
-        width: 70px;
-    }
-
-    .game-area h3 {
-        font-size: 18px;
-    }
-
-    .game-area p {
-        font-size: 14px;
-        max-width: 95%;
+        height: 80px;
     }
 }
