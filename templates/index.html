@@ -3,143 +3,117 @@
 <head>
     <meta charset="UTF-8">
     <title>EduPlay Hub – Ana Sayfa</title>
-    <link rel="stylesheet" href="../static/style.css">
+
+    <!-- ANA CSS -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+
+    <!-- FONT -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 </head>
+
 <body>
-    <div class="page">
-        <!-- Üst Gradient Bar -->
-        <header class="top-bar">
-            <div class="top-bar-inner">
-                <div class="logo-text">EduPlay Hub</div>
-                <div class="top-menu">
-                    <span>Oyunlarla Öğren, Eğlenerek Keşfet</span>
-                </div>
-            </div>            
-        </header>              
+<div class="page">
 
-        <!-- Ana İçerik -->
-        <main class="main">
-            <!-- Seviye Seç Bölümü -->
-            <section class="section section-level">
-                <div class="section-title">
-                    <span class="section-label">Seviye Seç ve Maceraya Başla</span>
-                    <h1>Hangi seviyede öğrenmek istersin?</h1>
-                </div>
-
-                <div class="cards level-cards">
-                    <!-- İlkokul Kartı -->
-                    <article class="card level-card level-primary">
-                        <div class="card-icon">
-                            <span>🏫</span>
-                        </div>
-                        <h2>İlkokul</h2>
-                        <p class="card-subtitle">1–4. Sınıflar</p>
-                        <p class="card-text">
-                            Bilgisayar giriş temeli kazanılır ve eğlenceli oyunlar ile öğrenilir.
-                        </p>
-                        <a href="ilkokul.html" class="btn btn-pink">İlkokul Seç</a>
-                    </article>
-
-                    <!-- Ortaokul Kartı -->
-                    <article class="card level-card level-secondary">
-                        <div class="card-icon">
-                            <span>🎓</span>
-                        </div>
-                        <h2>Ortaokul</h2>
-                        <p class="card-subtitle">5–6. Sınıflar</p>
-                        <p class="card-text">
-                            Programlama, kodlama ve dijital güvenlik konularını keşfet.
-                        </p>
-                        <a href="ortaokul.html" class="btn btn-blue">Ortaokul Seç</a>
-                    </article>
-                </div>
-            </section>
-
-            <!-- Üniteler Bölümü -->
-            <section class="section section-units">
-                <div class="section-title">
-                    <span class="section-label-secondary">Üniteler 📘</span>
-                </div>
-                
-                <div class="unit-slider">
-                    <div class="unit-track">
-                        <!-- Ünite 1 -->
-                        <article class="card unit-card unit-blue">
-                            <div class="unit-header">
-                                <span class="unit-tag">Ünite 1</span>
-                                <h3>Bilişim Teknolojileri</h3>
-                                <p class="card-text">
-                                    Teknolojiyi tanıma, bilgisayar sistemlerini keşfetme ve güvenli dijital kullanım becerileri.
-                                </p>
-                            </div>
-                        </article>
-
-                        <!-- Ünite 2 -->
-                        <article class="card unit-card unit-green">
-                            <div class="unit-header">
-                                <span class="unit-tag">Ünite 2</span>
-                                <h3>Etik ve Güvenlik</h3>
-                                <p class="card-text">
-                                    Güvenli internet kullanımı, dijital vatandaşlık ve kişisel veri güvenliği.
-                                </p>
-                            </div>
-                        </article>
-
-                        <!-- Ünite 3 -->
-                        <article class="card unit-card unit-lila">
-                            <div class="unit-header">
-                                <span class="unit-tag">Ünite 3</span>
-                                <h3>İletişim Araştırma ve İşbirliği</h3>
-                                <p class="card-text">
-                                    Dijital iletişim araçlarını tanıma, internetten bilgi araştırma ve çevrimiçi ortamlarda işbirliği yapma.
-                                </p>
-                            </div>
-                        </article>
-
-                        <article class="card unit-card unit-blue">
-                            <div class="unit-header">
-                                <span class="unit-tag">Ünite 1</span>
-                                <h3>Bilişim Teknolojileri</h3>
-                                <p class="card-text">
-                                    Teknolojiyi tanıma, bilgisayar sistemlerini keşfetme ve güvenli dijital kullanım becerileri.
-                                </p>
-                            </div>
-                        </article>
-
-                        <article class="card unit-card unit-green">
-                            <div class="unit-header">
-                                <span class="unit-tag">Ünite 2</span>
-                                <h3>Etik ve Güvenlik</h3>
-                                <p class="card-text">
-                                    Güvenli internet kullanımı, dijital vatandaşlık ve kişisel veri güvenliği.
-                                </p>
-                            </div>
-                        </article>
-
-                        <article class="card unit-card unit-lila">
-                            <div class="unit-header">
-                                <span class="unit-tag">Ünite 3</span>
-                                <h3>İletişim Araştırma ve İşbirliği</h3>
-                                <p class="card-text">
-                                    Dijital iletişim araçlarını tanıma, internetten bilgi araştırma ve çevrimiçi ortamlarda işbirliği yapma.
-                                </p>
-                            </div>
-                        </article>
-                    </div>  
-                </div>      
-            </section>
-        </main>
-
-        <!-- Alt Bar -->
-        <footer class="bottom-bar">
-            <div class="bottom-inner">
-                <span class="bottom-left">💻 Bilişim Teknolojileri · 5–6. Sınıf</span>
-                <span class="bottom-right">© 2024  </span>
+    <!-- ÜST BAR -->
+    <header class="top-bar">
+        <div class="top-bar-inner">
+            <div class="logo-text">EduPlay Hub</div>
+            <div class="top-menu">
+                <span>Oyunlarla Öğren, Eğlenerek Keşfet</span>
             </div>
-        </footer>
-    </div>
+        </div>
+    </header>
+
+    <!-- ANA İÇERİK -->
+    <main class="main">
+
+        <!-- SEVİYE SEÇ -->
+        <section class="section section-level">
+            <div class="section-title">
+                <span class="section-label">Seviye Seç ve Maceraya Başla</span>
+                <h1>Hangi seviyede öğrenmek istersin?</h1>
+            </div>
+
+            <div class="cards level-cards">
+
+                <!-- İLKOKUL -->
+                <article class="card level-card level-primary">
+                    <div class="card-icon">🏫</div>
+                    <h2>İlkokul</h2>
+                    <p class="card-subtitle">1–4. Sınıflar</p>
+                    <p class="card-text">
+                        Bilgisayar giriş temeli kazanılır ve eğlenceli oyunlar ile öğrenilir.
+                    </p>
+                    <a href="{{ url_for('ilkokul') }}" class="btn btn-pink">
+                        İlkokul Seç
+                    </a>
+                </article>
+
+                <!-- ORTAOKUL -->
+                <article class="card level-card level-secondary">
+                    <div class="card-icon">🎓</div>
+                    <h2>Ortaokul</h2>
+                    <p class="card-subtitle">5–6. Sınıflar</p>
+                    <p class="card-text">
+                        Programlama, kodlama ve dijital güvenlik konularını keşfet.
+                    </p>
+                    <a href="{{ url_for('ortaokul') }}" class="btn btn-blue">
+                        Ortaokul Seç
+                    </a>
+                </article>
+
+            </div>
+        </section>
+
+        <!-- ÜNİTELER -->
+        <section class="section section-units">
+            <div class="section-title">
+                <span class="section-label-secondary">Üniteler 📘</span>
+            </div>
+
+            <div class="unit-slider">
+                <div class="unit-track">
+
+                    <article class="card unit-card unit-blue">
+                        <span class="unit-tag">Ünite 1</span>
+                        <h3>Bilişim Teknolojileri</h3>
+                        <p class="card-text">
+                            Teknolojiyi tanıma, bilgisayar sistemlerini keşfetme ve güvenli dijital kullanım.
+                        </p>
+                    </article>
+
+                    <article class="card unit-card unit-green">
+                        <span class="unit-tag">Ünite 2</span>
+                        <h3>Etik ve Güvenlik</h3>
+                        <p class="card-text">
+                            Güvenli internet kullanımı, dijital vatandaşlık ve kişisel veri güvenliği.
+                        </p>
+                    </article>
+
+                    <article class="card unit-card unit-lila">
+                        <span class="unit-tag">Ünite 3</span>
+                        <h3>İletişim, Araştırma ve İşbirliği</h3>
+                        <p class="card-text">
+                            Dijital iletişim araçları, internetten bilgi araştırma ve işbirliği.
+                        </p>
+                    </article>
+
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <!-- ALT BAR -->
+    <footer class="bottom-bar">
+        <div class="bottom-inner">
+            <span>💻 Bilişim Teknolojileri · 5–6. Sınıf</span>
+            <span>© 2025 EduPlay Hub</span>
+        </div>
+    </footer>
+
+</div>
 </body>
 </html>

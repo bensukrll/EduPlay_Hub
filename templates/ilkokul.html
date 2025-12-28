@@ -2,10 +2,10 @@
 <html lang="tr">
 <head>
     <meta charset="UTF-8">
-    <title>EduPlay Hub – İlkokul Üniteleri</title>
+    <title>EduPlay Hub – İlkokul</title>
 
-    <link rel="stylesheet" href="../static/style.css">
-    <link rel="stylesheet" href="../static/ilkokul.css">
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='ilkokul.css') }}">
 
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -24,77 +24,64 @@
             </div>
         </div>
     </header>
-<!-- NAV ALTINDA GERİ DÖN -->
+
+    <!-- GERİ -->
     <div class="back-wrapper">
-        <a href="index.html" class="back-btn">
+        <a href="{{ url_for('home') }}" class="back-btn">
             ← Anasayfaya Dön
         </a>
     </div>
 
-    <!-- ANA İÇERİK -->
+    <!-- İÇERİK -->
     <main class="main">
 
-        <!-- BAŞLIK -->
-        <section class="section ">
+        <section class="section">
             <div class="section-title">
-                <span class="section-label-secondary">İlkokul Üniteleri </span>
+                <span class="section-label-secondary">İlkokul Üniteleri</span>
                 <h1>Hangi ünitede çalışmak istersin?</h1>
             </div>
         </section>
 
-        <!-- ÜNİTE KARTLARI -->
         <section class="section ilkokul-units">
             <div class="cards unit-cards">
 
-                <!-- ÜNİTE 1 -->
                 <article class="card unit-card unit-blue">
-                    <div class="unit-header">
-                        <h3>Bilişim Teknolojileri</h3>
-
-                        <ul class="unit-list">
-                            <li>Bilgisayarın temel parçalarını tanır.</li>
-                            <li>Teknolojinin günlük hayattaki kullanımını fark eder.</li>
-                            <li>Teknolojiyi güvenli ve sağlıklı kullanır.</li>
-                        </ul>
-                    </div>
-
-                    <button class="btn btn-blue full" onclick="window.location.href='game.html'">
+                    <h3>Bilişim Teknolojileri</h3>
+                    <ul class="unit-list">
+                        <li>Bilgisayarın temel parçalarını tanır.</li>
+                        <li>Teknolojinin günlük hayattaki kullanımını fark eder.</li>
+                        <li>Teknolojiyi güvenli kullanır.</li>
+                    </ul>
+                    <a href="{{ url_for('play', game_id='it_basics') }}"
+                       class="btn btn-blue full">
                         Oyuna Başla
-                    </button>
+                    </a>
                 </article>
 
-                <!-- ÜNİTE 2 -->
                 <article class="card unit-card unit-green">
-                    <div class="unit-header">
-                        <h3>Etik ve Güvenlik</h3>
-
-                        <ul class="unit-list">
-                            <li>İnterneti güvenli bir şekilde kullanır.</li>
-                            <li>Kişisel bilgilerin korunmasının önemini kavrar.</li>
-                            <li>Dijital ortamlarda doğru davranışlar sergiler.</li>
-                        </ul>
-                    </div>
-
-                    <button class="btn btn-success full" onclick="window.location.href='game.html'">
+                    <h3>Etik ve Güvenlik</h3>
+                    <ul class="unit-list">
+                        <li>İnterneti güvenli kullanır.</li>
+                        <li>Kişisel bilgilerin korunmasını öğrenir.</li>
+                        <li>Dijital davranışları kavrar.</li>
+                    </ul>
+                    <a href="{{ url_for('play', game_id='ethics_safety') }}"
+                       class="btn btn-success full">
                         Oyuna Başla
-                    </button>
+                    </a>
                 </article>
 
-                <!-- ÜNİTE 3 -->
                 <article class="card unit-card unit-lila">
-                    <div class="unit-header">
-                        <h3>İletişim ve İşbirliği</h3>
-
-                        <ul class="unit-list">
-                            <li>Dijital araçlarla iletişim kurar.</li>
-                            <li>Bilgi paylaşımının önemini fark eder.</li>
-                            <li>Grup çalışmasına katılır.</li>
-                        </ul>
-                    </div>
-
-                    <button class="btn btn-lila full" onclick="window.location.href='game.html'">
+                    <h3>İletişim ve İşbirliği</h3>
+                    <ul class="unit-list">
+                        <li>Dijital araçlarla iletişim kurar.</li>
+                        <li>Bilgi paylaşımının önemini fark eder.</li>
+                        <li>Grup çalışmasına katılır.</li>
+                    </ul>
+                    <a href="{{ url_for('play', game_id='collaboration') }}"
+                       class="btn btn-lila full">
                         Oyuna Başla
-                    </button>
+                    </a>
                 </article>
 
             </div>
@@ -106,7 +93,7 @@
     <footer class="bottom-bar">
         <div class="bottom-inner">
             <span>💻 Bilişim Teknolojileri · İlkokul</span>
-            <span>© 2024</span>
+            <span>© 2025 EduPlay Hub</span>
         </div>
     </footer>
 

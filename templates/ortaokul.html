@@ -2,10 +2,10 @@
 <html lang="tr">
 <head>
     <meta charset="UTF-8">
-    <title>EduPlay Hub – Ortaokul Üniteleri</title>
+    <title>EduPlay Hub – Ortaokul</title>
 
-    <link rel="stylesheet" href="../static/style.css">
-    <link rel="stylesheet" href="../static/ortaokul.css">
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='ortaokul.css') }}">
 
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -25,17 +25,16 @@
         </div>
     </header>
 
-    <!-- NAV ALTINDA GERİ DÖN -->
+    <!-- GERİ -->
     <div class="back-wrapper">
-        <a href="index.html" class="back-btn">
+        <a href="{{ url_for('home') }}" class="back-btn">
             ← Anasayfaya Dön
         </a>
     </div>
 
-    <!-- ANA İÇERİK -->
+    <!-- İÇERİK -->
     <main class="main">
 
-        <!-- BAŞLIK -->
         <section class="section">
             <div class="section-title">
                 <span class="section-label-secondary">Ortaokul Üniteleri</span>
@@ -43,7 +42,6 @@
             </div>
         </section>
 
-        <!-- ÜNİTE KARTLARI -->
         <section class="section ortaokul-units">
             <div class="cards unit-cards">
 
@@ -55,7 +53,10 @@
                         <li>Problem çözme adımlarını öğrenir.</li>
                         <li>Temel programlama mantığını kavrar.</li>
                     </ul>
-                    <button class="btn btn-blue full" onclick="window.location.href='game.html'">Oyuna Başla</button>
+                    <a href="{{ url_for('play', game_id='unit1_game') }}"
+                       class="btn btn-blue full">
+                        Oyuna Başla
+                    </a>
                 </article>
 
                 <!-- ÜNİTE 2 -->
@@ -66,7 +67,10 @@
                         <li>Güçlü şifre oluşturmayı öğrenir.</li>
                         <li>Veri gizliliğinin önemini kavrar.</li>
                     </ul>
-                    <button class="btn btn-success full" onclick="window.location.href='game.html'">Oyuna Başla</button>
+                    <a href="{{ url_for('play', game_id='security_game') }}"
+                       class="btn btn-success full">
+                        Oyuna Başla
+                    </a>
                 </article>
 
                 <!-- ÜNİTE 3 -->
@@ -77,7 +81,10 @@
                         <li>İnternetin nasıl çalıştığını kavrar.</li>
                         <li>Temel ağ kavramlarını öğrenir.</li>
                     </ul>
-                    <button class="btn btn-lila full" onclick="window.location.href='game.html'">Oyuna Başla</button>
+                    <a href="{{ url_for('play', game_id='network_game') }}"
+                       class="btn btn-lila full">
+                        Oyuna Başla
+                    </a>
                 </article>
 
             </div>
@@ -89,7 +96,7 @@
     <footer class="bottom-bar">
         <div class="bottom-inner">
             <span>💻 Bilişim Teknolojileri · Ortaokul</span>
-            <span>© 2024</span>
+            <span>© 2025 EduPlay Hub</span>
         </div>
     </footer>
 
