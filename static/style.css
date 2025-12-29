@@ -669,3 +669,58 @@ body {
     }
 
 }
+
+/* ===== TOP BAR (NEW DESIGN) ===== */
+
+
+.top-bar-inner {
+    max-width: 1400px;
+    margin: 0 auto;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+/* LOGO */
+.logo-text {
+    font-family: "Chewy", sans-serif;
+    font-size: 34px;
+    color: #ffffff;
+    letter-spacing: 0.5px;
+}
+
+/* NAV */
+.top-nav {
+    display: flex;
+    gap: 28px;
+}
+
+.nav-link {
+    position: relative;
+    font-size: 14px;
+    font-weight: 500;
+    color: rgba(255,255,255,0.9);
+    text-decoration: none;
+    padding-bottom: 4px;
+    transition: color 0.25s ease;
+}
+
+/* underline animasyon */
+.nav-link::after {
+    content: "";
+    position: absolute;
+    left: 0;
+    bottom: 0;
+    width: 0%;
+    height: 2px;
+    background: #ffffff;
+    transition: width 0.25s ease;
+}
+
+.nav-link:hover {
+    color: #ffffff;
+}
+
+.nav-link:hover::after {
+    width: 100%;
+}

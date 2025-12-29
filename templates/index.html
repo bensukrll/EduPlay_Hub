@@ -20,9 +20,11 @@
     <header class="top-bar">
         <div class="top-bar-inner">
             <div class="logo-text">EduPlay Hub</div>
-            <div class="top-menu">
-                <span>Oyunlarla Öğren, Eğlenerek Keşfet</span>
-            </div>
+
+            <nav class="top-nav">
+                <a href="{{ url_for('about') }}" class="nav-link">Hakkımızda</a>
+                <a href="{{ url_for('contact') }}" class="nav-link">İletişim</a>
+            </nav>
         </div>
     </header>
 

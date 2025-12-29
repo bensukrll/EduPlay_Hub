@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <title>EduPlay Hub – Hakkımızda</title>
+
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='about.css') }}">
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+</head>
+
+<body>
+<div class="page">
+
+    <!-- ÜST BAR -->
+    <header class="top-bar">
+        <div class="top-bar-inner">
+            <div class="logo-text">EduPlay Hub</div>
+
+            <nav class="top-nav">
+                <a href="{{ url_for('home') }}" class="nav-link">Anasayfa</a>
+                <a href="{{ url_for('contact') }}" class="nav-link">İletişim</a>
+            </nav>
+        </div>
+    </header>
+
+    <!-- İÇERİK -->
+    <main class="main about-page">
+
+        <section class="about-hero">
+            <h1>EduPlay Hub Nedir?</h1>
+            <p>
+                EduPlay Hub, ilkokul ve ortaokul öğrencilerinin bilişim teknolojileri konularını
+                <strong>oyun temelli</strong>, <strong>etkileşimli</strong> ve <strong>eğlenceli</strong>
+                bir şekilde öğrenmelerini amaçlayan bir eğitim platformudur.
+            </p>
+        </section>
+
+        <section class="about-section">
+            <h2>🎯 Amacımız</h2>
+            <p>
+                Öğrencilerin dijital dünyayı yalnızca tüketen bireyler olarak değil;
+                <strong>bilinçli, güvenli ve üretken kullanıcılar</strong> olarak tanımalarını sağlamak.
+                Oyunlaştırma yaklaşımıyla öğrenmeyi kalıcı ve motive edici hale getirmek.
+            </p>
+        </section>
+
+        <section class="about-section">
+            <h2>🧠 EduPlay Hub’da Neler Var?</h2>
+            <ul>
+                <li>🎮 Oyun temelli öğrenme aktiviteleri</li>
+                <li>💻 Bilişim Teknolojileri, Etik ve Güvenlik, Bilgisayar Ağları üniteleri</li>
+                <li>🔐 Dijital güvenlik ve dijital vatandaşlık içerikleri</li>
+                <li>📚 MEB Bilişim Teknolojileri dersi kazanımlarına uygun yapı</li>
+            </ul>
+        </section>
+
+        <section class="about-section">
+            <h2>👩‍🏫 Kimler İçin?</h2>
+            <p>
+                EduPlay Hub; <strong>1–6. sınıf öğrencileri</strong> için tasarlanmıştır.
+                Aynı zamanda öğretmenler için ders içi etkinliklerde,
+                öğrenciler için bireysel öğrenme süreçlerinde kullanılabilir.
+            </p>
+        </section>
+
+        <section class="about-section highlight">
+            <h2>🚀 Vizyonumuz</h2>
+            <p>
+                Teknolojiyi doğru, güvenli ve bilinçli kullanan bireyler yetiştirmeye katkı sağlamak;
+                eğitimi oyunlarla destekleyen yenilikçi dijital öğrenme ortamları geliştirmek.
+            </p>
+        </section>
+
+    </main>
+
+    <!-- ALT BAR -->
+    <footer class="bottom-bar">
+        <div class="bottom-inner">
+            <span>💻 Bilişim Teknolojileri · EduPlay Hub</span>
+            <span>© 2025 EduPlay Hub</span>
+        </div>
+    </footer>
+
+</div>
+</body>
+</html>
