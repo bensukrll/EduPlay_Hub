@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sanal Masaüstü Düzenleyicisi</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='games/unit1_level1/style.css') }}">
+</head>
+<body>
+
+    <div id="computer-setup">
+        <div id="monitor">
+            <div id="desktop">
+                <div class="folder" id="folder-docs" data-type="doc">
+                    <div class="icon">📁</div>
+                    <div class="name">Belgeler</div>
+                </div>
+                <div class="folder" id="folder-pics" data-type="img">
+                    <div class="icon">🖼️</div>
+                    <div class="name">Resimler</div>
+                </div>
+                <div class="folder" id="folder-music" data-type="music">
+                    <div class="icon">🎵</div>
+                    <div class="name">Müzikler</div>
+                </div>
+                <div class="folder trash" id="folder-trash" data-type="trash">
+                    <div class="icon">🗑️</div>
+                    <div class="name">Çöp Kutusu</div>
+                </div>
+
+                <div id="file-area"></div>
+            </div>
+
+            <div id="taskbar">
+                <div id="start-btn">Başlat</div>
+                <div id="clock">12:00</div>
+            </div>
+
+            <div id="quest-panel">
+                <h3>🖥️ GÖREV YÖNETİCİSİ</h3>
+                <p>Masaüstü çok dağınık! Dosyaları doğru klasörlere sürükle.</p>
+                <ul id="stats">
+                    <li>Kalan Dosya: <span id="remaining">0</span></li>
+                    <li>Puan: <span id="score">0</span></li>
+                </ul>
+                <div id="feedback">Başlamak için hazır ol...</div>
+            </div>
+            
+            <div id="game-over" class="hidden">
+                <h1>TEMİZLİK TAMAMLANDI!</h1>
+                <p>Bilgisayarın artık tertemiz.</p>
+                <button onclick="location.reload()">Tekrar Başlat</button>
+            </div>
+        </div> 
+        <div id="stand-neck"></div>
+        <div id="stand-base"></div>
+    </div>
+
+    <script src="{{ url_for('static', filename='games/unit1_level1/script.js') }}"></script>
+</body>
+</html>

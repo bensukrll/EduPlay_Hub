@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+<meta charset="UTF-8">
+<title>İç / Dış Donanım Eşleştirme</title>
+
+<link rel="stylesheet" href="/static/games/unit1_level1/style.css">
+</head>
+
+<body>
+
+<h2>İç Donanım – Dış Donanım Eşleştirme</h2>
+
+<div class="game">
+
+  <div class="items" id="items">
+
+    <!-- DIŞ DONANIM -->
+    <div class="card" draggable="true" data-type="external">
+      <img src="/static/games/unit1_level1/images/klavye.jpg" alt="Klavye">
+      <span>Klavye</span>
+    </div>
+
+    <div class="card" draggable="true" data-type="external">
+      <img src="/static/games/unit1_level1/images/fare.jpg" alt="Fare">
+      <span>Fare</span>
+    </div>
+
+    <div class="card" draggable="true" data-type="external">
+      <img src="/static/games/unit1_level1/images/yazici.jpg" alt="Yazıcı">
+      <span>Yazıcı</span>
+    </div>
+
+    <div class="card" draggable="true" data-type="external">
+      <img src="/static/games/unit1_level1/images/hoparlor.jpg" alt="Hoparlör">
+      <span>Hoparlör</span>
+    </div>
+
+    <div class="card" draggable="true" data-type="external">
+      <img src="/static/games/unit1_level1/images/webcam.jpg" alt="Webcam">
+      <span>Webcam</span>
+    </div>
+
+    <!-- İÇ DONANIM -->
+    <div class="card" draggable="true" data-type="internal">
+      <img src="/static/games/unit1_level1/images/ram.jpg" alt="RAM">
+      <span>RAM</span>
+    </div>
+
+    <div class="card" draggable="true" data-type="internal">
+      <img src="/static/games/unit1_level1/images/islemci.jpg" alt="İşlemci">
+      <span>İşlemci</span>
+    </div>
+
+    <div class="card" draggable="true" data-type="internal">
+      <img src="/static/games/unit1_level1/images/anakart.jpg" alt="Anakart">
+      <span>Anakart</span>
+    </div>
+
+    <div class="card" draggable="true" data-type="internal">
+      <img src="/static/games/unit1_level1/images/ekran-karti.png" alt="Ekran Kartı">
+      <span>Ekran Kartı</span>
+    </div>
+
+    <div class="card" draggable="true" data-type="internal">
+      <img src="/static/games/unit1_level1/images/ses-karti.jpg" alt="Ses Kartı">
+      <span>Ses Kartı</span>
+    </div>
+
+  </div>
+
+  <div class="zones">
+    <div class="zone">
+      <h3>İç Donanım Birimleri</h3>
+      <div class="drop-area" data-zone="internal"></div>
+    </div>
+
+    <div class="zone">
+      <h3>Dış Donanım Birimleri</h3>
+      <div class="drop-area" data-zone="external"></div>
+    </div>
+  </div>
+
+</div>
+
+<button id="checkBtn">Cevapları Gönder</button>
+<button id="restartBtn">Yeniden Başlat</button>
+<div class="result" id="result"></div>
+
+<script src="/static/games/unit1_level1/script.js"></script>
+</body>
+</html>

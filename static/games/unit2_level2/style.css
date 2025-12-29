@@ -1,0 +1,108 @@
+body {
+    font-family: "Poppins", sans-serif;
+    background: #f7f4e3;
+    padding: 20px;
+}
+
+h1 {
+    text-align: center;
+}
+
+.container {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 20px;
+}
+
+.left, .right {
+    width: 45%;
+}
+
+h2 {
+    text-align: center;
+}
+
+.dropzone {
+    background: #8f9dce;
+    border: 2px solid #301a69;
+    border-radius: 12px;
+    padding: 15px;
+    margin-bottom: 15px;
+    min-height: 50px;
+    font-weight: bold;
+    transition: 0.25s ease;
+}
+
+.dropzone.hover {
+    background: #e4cfa8;
+    transform: scale(1.03);
+}
+
+/* Sürüklenen kartlar */
+.drag {
+    background: #3a7048;
+    color: white;
+    padding: 12px;
+    border-radius: 10px;
+    margin: 10px 0;
+    cursor: grab;
+    font-weight: bold;
+    transition: 0.25s;
+}
+
+/* Hover animasyonu */
+.drag:hover {
+    transform: scale(1.05);
+    background: #559822b5;
+}
+
+/* Sürükleme sırasında */
+.drag.dragging {
+    opacity: 0.6;
+    transform: scale(1.07);
+}
+
+#check, #restart {
+    padding: 12px 20px;
+    font-size: 18px;
+    border-radius: 10px;
+    border: none;
+    cursor: pointer;
+    margin: 10px;
+}
+
+#check {
+    background: #54ab4abd;
+    color: white;
+}
+
+#restart {
+    background: #0a63cf;
+    color: white;
+}
+
+#result {
+    font-size: 20px;
+    font-weight: bold;
+    text-align: center;
+}
+.buttons {
+    width: 100%;
+    display: flex;
+    justify-content: center; /* YATAY ORTALAMA */
+    gap: 20px; /* Buton arası boşluk */
+    margin-top: 30px;
+}
+.categories {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;   /* dikey ortalama */
+    align-items: center;       /* yatay ortalama */
+    height: 100%;
+}
+.category-box {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+}

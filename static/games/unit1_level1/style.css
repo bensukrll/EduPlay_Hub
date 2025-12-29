@@ -1,0 +1,200 @@
+@import url('https://fonts.googleapis.com/css2?family=Segoe+UI:wght@400;600&display=swap');
+
+body {
+    margin: 0;
+    padding: 0;
+    background-color: #2c3e50; /* Odanın duvar rengi */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    overflow: hidden;
+}
+
+/* Bilgisayarın tamamını ortalamak için kapsayıcı */
+#computer-setup {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    transform: scale(0.9); /* Ekrana sığması için hafif küçültme */
+}
+
+/* Monitör Çerçevesi */
+#monitor {
+    width: 900px;
+    height: 600px;
+    background: #34495e url('windows_background.png') no-repeat center center/cover;
+    position: relative;
+    border: 15px solid #1a1a1a; /* Siyah çerçeve */
+    border-bottom-width: 25px; /* Alt çerçeve daha kalın */
+    border-radius: 10px;
+    box-shadow: 0 0 20px rgba(0,0,0,0.8), inset 0 0 10px rgba(0,0,0,0.5);
+    overflow: hidden; 
+    z-index: 10;
+}
+
+/* Monitör Boyunu */
+#stand-neck {
+    width: 120px;
+    height: 60px;
+    background: linear-gradient(to right, #111, #333, #111);
+    margin-top: -5px; /* Monitörle birleşsin */
+    z-index: 5;
+}
+
+/* Monitör Tabanı */
+#stand-base {
+    width: 280px;
+    height: 20px;
+    background: #1a1a1a;
+    border-radius: 10px 10px 0 0;
+    box-shadow: 0 10px 20px rgba(0,0,0,0.6);
+    background: linear-gradient(to bottom, #333, #111);
+    border-top: 2px solid #444; /* Işık yansıması */
+}
+
+#desktop {
+    width: 100%;
+    height: calc(100% - 40px); 
+    position: relative;
+}
+
+/* Klasörler */
+.folder {
+    width: 80px;
+    height: 90px;
+    position: absolute;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    border: 2px solid transparent;
+    border-radius: 5px;
+    transition: 0.2s;
+    z-index: 1;
+}
+
+.folder:hover {
+    background-color: rgba(255, 255, 255, 0.2);
+    border: 2px solid rgba(255, 255, 255, 0.4);
+}
+
+/* Klasör Konumları */
+#folder-docs { top: 20px; left: 20px; }
+#folder-pics { top: 120px; left: 20px; }
+#folder-music { top: 220px; left: 20px; }
+#folder-trash { bottom: 20px; right: 20px; } 
+
+.folder .icon { font-size: 40px; }
+.folder .name {
+    color: white;
+    font-size: 12px;
+    text-shadow: 1px 1px 2px black;
+    margin-top: 5px;
+    text-align: center;
+    background: rgba(0,0,0,0.3);
+    padding: 2px 5px;
+    border-radius: 4px;
+}
+
+/* Dosyalar */
+.file {
+    width: 70px;
+    height: 80px;
+    position: absolute;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    cursor: grab;
+    z-index: 20; /* Klasörlerin üstünde */
+}
+
+.file:active { cursor: grabbing; }
+.file .icon { font-size: 35px; }
+.file .name {
+    color: white;
+    font-size: 11px;
+    text-shadow: 1px 1px 2px black;
+    margin-top: 2px;
+    text-align: center;
+    max-width: 70px;
+    word-wrap: break-word;
+}
+
+/* Görev Çubuğu */
+#taskbar {
+    width: 100%;
+    height: 40px;
+    background: linear-gradient(to bottom, #2c5a85, #194383);
+    position: absolute;
+    bottom: 0;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 15px;
+    box-sizing: border-box;
+    color: white;
+    border-top: 1px solid #444;
+    z-index: 30;
+}
+
+#start-btn {
+    padding: 5px 15px;
+    background: linear-gradient(to bottom, #4CAF50, #2E7D32);
+    border-radius: 3px 10px 10px 3px;
+    font-weight: bold;
+    cursor: pointer;
+    font-style: italic;
+    display: flex;
+    align-items: center;
+}
+#start-btn::before { content: '🏁'; margin-right: 5px; }
+
+/* Görev Paneli (HUD) - SAĞ ÜST */
+#quest-panel {
+    position: absolute;
+    top: 20px;
+    right: 20px; /* SAĞA ALINDI */
+    width: 200px;
+    background: rgba(0, 0, 0, 0.7);
+    color: white;
+    padding: 15px;
+    border-radius: 8px;
+    backdrop-filter: blur(5px);
+    border: 1px solid rgba(255,255,255,0.1);
+    z-index: 5; 
+}
+
+#quest-panel h3 { margin: 0 0 10px 0; font-size: 14px; color: #4caf50; border-bottom: 1px solid #4caf50; padding-bottom: 5px; }
+#quest-panel p { font-size: 12px; color: #ccc; }
+#quest-panel ul { list-style: none; padding: 0; font-size: 13px; }
+#quest-panel li { margin-bottom: 5px; }
+#feedback { margin-top: 10px; font-size: 12px; color: #ffd700; font-weight: bold; min-height: 20px;}
+
+/* Oyun Bitti */
+#game-over {
+    position: absolute;
+    top: 0; left: 0; width: 100%; height: 100%;
+    background: rgba(0,0,0,0.85);
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    color: white;
+    z-index: 100;
+}
+
+.hidden { display: none !important; }
+
+button {
+    padding: 10px 20px;
+    font-size: 16px;
+    background: #4caf50;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
