@@ -16,28 +16,48 @@
 <div class="page">
 
 <header class="new-top-bar">
+
     <div class="top-left">
-        <a href="{{ url_for('home') }}" class="back-btn">
-            <i class="fa-solid fa-arrow-left"></i> Geri Dön
+        <a href="
+        {% if source == 'ilkokul' %}
+            {{ url_for('ilkokul') }}
+        {% elif source == 'ortaokul' %}
+            {{ url_for('ortaokul') }}
+        {% else %}
+            {{ url_for('home') }}
+        {% endif %}
+        " class="back-btn">
+            ← Geri Dön
         </a>
     </div>
 
     <div class="top-center">
         <div class="unit-icon"><i class="fa-solid fa-laptop-code"></i></div>
         <div class="unit-info">
-            <h1>Ünite 1: Programlama ve Kodlama</h1>
-            <span>Ortaokul Seviyesi - Algoritma ve blok tabanlı kodlama 🚀</span>
+            <h1>{{ game.level }} · {{ game.unit }}</h1>
+            <span>{{ game.subtitle }}</span>
         </div>
     </div>
 
     <div class="top-right">
-        <button class="icon-btn" onclick="window.location.href='/ortaokul'">
+        <a class="icon-btn"
+           href="
+           {% if source == 'ortaokul' %}
+               {{ url_for('ortaokul') }}
+           {% elif source == 'ilkokul' %}
+               {{ url_for('ilkokul') }}
+           {% else %}
+               {{ url_for('home') }}
+           {% endif %}
+           ">
             <i class="fa-solid fa-gamepad"></i>
-        </button>
-        <button class="icon-btn" onclick="window.location.href='/'">
+        </a>
+
+        <a class="icon-btn" href="{{ url_for('home') }}">
             <i class="fa-solid fa-house"></i>
-        </button>
+        </a>
     </div>
+
 </header>
 
 <main class="game-wrapper">
@@ -45,10 +65,10 @@
 
         <div class="game-box-header">
             <div class="header-left">
-                <div class="game-icon">🎯</div>
-                <div>
-                    <h2>Oyun Başlığı</h2>
-                    <small>Görevini tamamla ve puanları topla!</small>
+                <div class="game-icon">{{ game.icon }}</div>
+                <div class="game-header-text">
+                    <h2>{{ game.title }}</h2>
+                    <p class="game-subtitle">{{ game.subtitle }}</p>
                 </div>
             </div>
         </div>
@@ -66,8 +86,8 @@
 
 <footer class="game-footer">
     <div class="footer-inner">
-        <span>💻 Bilişim Teknolojileri · 5–6. Sınıf</span>
-        <span>© 2025</span>
+        <span>💻 Bilişim Teknolojileri · İlkokul - Ortaokul</span>
+        <span>© 2025 EduPlay Hub</span>
     </div>
 </footer>
 

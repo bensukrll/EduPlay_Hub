@@ -411,7 +411,7 @@ body {
 .bottom-bar {
     background: var(--bg-gradient-bottom);
     color: #fff;
-    padding: 35px 32px;
+    padding: 20px 32px;
 }
 
 .bottom-inner {
@@ -668,10 +668,4 @@ body {
         margin-top: 40px;
     }
 
-<<<<<<< HEAD
 }
-
-
-=======
-}
->>>>>>> 151032d74485ea9ba12aec26c449e1d76e3ca318

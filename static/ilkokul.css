@@ -1,6 +1,9 @@
 /* ============================= */
 /*  İLKOKUL ÜNİTELERİ SAYFASI   */
 /* ============================= */
+.main {
+    margin-top: 20px;
+}
 
 .ilkokul-units {
     margin: 0 auto 32px;
@@ -147,7 +150,7 @@
 
     border: 1px solid rgba(255,255,255,0.35);
     box-shadow: 0 6px 18px rgba(0,0,0,0.15);
-
+    margin-top: 25px;
     transition: all 0.25s ease;
 }
 
