@@ -21,57 +21,70 @@
             <div class="logo-text">EduPlay Hub</div>
 
             <nav class="top-nav">
-                <a href="{{ url_for('home') }}" class="nav-link">Anasayfa</a>
+                <a href="{{ url_for('home') }}" class="nav-link">Ana Sayfa</a>
+                <a href="{{ url_for('about') }}" class="nav-link">Hakkımızda</a>
                 <a href="{{ url_for('contact') }}" class="nav-link">İletişim</a>
             </nav>
         </div>
     </header>
 
-    <!-- İÇERİK -->
+    <!-- ANA İÇERİK -->
     <main class="main about-page">
 
+        <!-- HERO -->
         <section class="about-hero">
-            <h1>EduPlay Hub Nedir?</h1>
+            <span class="about-tag">EduPlay Hub</span>
+            <h1>Oyunla Öğren, Keşfet, Geliş</h1>
             <p>
-                EduPlay Hub, ilkokul ve ortaokul öğrencilerinin bilişim teknolojileri konularını
-                <strong>oyun temelli</strong>, <strong>etkileşimli</strong> ve <strong>eğlenceli</strong>
-                bir şekilde öğrenmelerini amaçlayan bir eğitim platformudur.
+                EduPlay Hub; ilkokul ve ortaokul öğrencilerinin bilişim teknolojilerini
+                <strong>oyun temelli, etkileşimli ve eğlenceli</strong> bir şekilde
+                öğrenmelerini amaçlayan bir eğitim platformudur.
             </p>
         </section>
 
-        <section class="about-section">
-            <h2>🎯 Amacımız</h2>
-            <p>
-                Öğrencilerin dijital dünyayı yalnızca tüketen bireyler olarak değil;
-                <strong>bilinçli, güvenli ve üretken kullanıcılar</strong> olarak tanımalarını sağlamak.
-                Oyunlaştırma yaklaşımıyla öğrenmeyi kalıcı ve motive edici hale getirmek.
-            </p>
+        <!-- KARTLAR -->
+        <section class="about-grid">
+
+            <div class="about-card">
+                <div class="about-icon">🎯</div>
+                <h3>Amacımız</h3>
+                <p>
+                    Öğrencilerin dijital dünyayı yalnızca tüketen bireyler olarak değil;
+                    <strong>bilinçli, güvenli ve üretken kullanıcılar</strong> olarak
+                    tanımalarını sağlamak.
+                </p>
+            </div>
+
+            <div class="about-card">
+                <div class="about-icon">🧠</div>
+                <h3>Neler Var?</h3>
+                <ul>
+                    <li>🎮 Oyun temelli öğrenme aktiviteleri</li>
+                    <li>💻 BT, Etik & Güvenlik, Bilgisayar Ağları</li>
+                    <li>🔐 Dijital güvenlik içerikleri</li>
+                    <li>📚 MEB kazanımlarına uygun yapı</li>
+                </ul>
+            </div>
+
+            <div class="about-card">
+                <div class="about-icon">👩‍🏫</div>
+                <h3>Kimler İçin?</h3>
+                <p>
+                    <strong>1–6. sınıf öğrencileri</strong> için tasarlanmıştır.
+                    Aynı zamanda öğretmenler için ders içi,
+                    öğrenciler için bireysel öğrenmede kullanılabilir.
+                </p>
+            </div>
+
         </section>
 
-        <section class="about-section">
-            <h2>🧠 EduPlay Hub’da Neler Var?</h2>
-            <ul>
-                <li>🎮 Oyun temelli öğrenme aktiviteleri</li>
-                <li>💻 Bilişim Teknolojileri, Etik ve Güvenlik, Bilgisayar Ağları üniteleri</li>
-                <li>🔐 Dijital güvenlik ve dijital vatandaşlık içerikleri</li>
-                <li>📚 MEB Bilişim Teknolojileri dersi kazanımlarına uygun yapı</li>
-            </ul>
-        </section>
-
-        <section class="about-section">
-            <h2>👩‍🏫 Kimler İçin?</h2>
+        <!-- VİZYON -->
+        <section class="about-vision">
+            <div class="vision-icon">🚀</div>
+            <h2>Vizyonumuz</h2>
             <p>
-                EduPlay Hub; <strong>1–6. sınıf öğrencileri</strong> için tasarlanmıştır.
-                Aynı zamanda öğretmenler için ders içi etkinliklerde,
-                öğrenciler için bireysel öğrenme süreçlerinde kullanılabilir.
-            </p>
-        </section>
-
-        <section class="about-section highlight">
-            <h2>🚀 Vizyonumuz</h2>
-            <p>
-                Teknolojiyi doğru, güvenli ve bilinçli kullanan bireyler yetiştirmeye katkı sağlamak;
-                eğitimi oyunlarla destekleyen yenilikçi dijital öğrenme ortamları geliştirmek.
+                Teknolojiyi doğru, güvenli ve bilinçli kullanan bireyler yetiştirmek;
+                eğitimi oyunlarla destekleyen yenilikçi dijital öğrenme ortamları oluşturmak.
             </p>
         </section>
 

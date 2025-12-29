@@ -3,7 +3,7 @@
 
 @font-face {
   font-family: "Chewy";
-  src: url("../fonts/Chewy-Regular.ttf") format("truetype");
+  src: url("fonts/Chewy-Regular.ttf") format("truetype");
   font-weight: 400;
   font-style: normal;
 }
@@ -69,12 +69,6 @@ body {
     align-items: center;
     justify-content: space-between;
     font-size: 14px;
-}
-
-.logo-text {
-    font-family: "Chewy", sans-serif;
-    font-weight: 400;
-    font-size: 30px;
 }
 
 .top-menu span {
@@ -203,6 +197,7 @@ body {
     display: flex;
     flex-direction: column;
     justify-content: space-between;
+    text-align: center;
     padding-bottom: 20px;
     width: 320px;
     max-width: 320px;
@@ -365,6 +360,7 @@ body {
     align-items: center;
     justify-content: center;
     gap: 6px;
+    text-decoration: none;
 }
 
 .btn.full {
@@ -684,9 +680,11 @@ body {
 /* LOGO */
 .logo-text {
     font-family: "Chewy", sans-serif;
-    font-size: 34px;
+    font-size: 44px;
     color: #ffffff;
     letter-spacing: 0.5px;
+    font-weight: 400;
+
 }
 
 /* NAV */

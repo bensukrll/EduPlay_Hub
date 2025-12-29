@@ -136,7 +136,7 @@ body {
 
 /* Oyun başlığı (gradient) */
 .game-box-header {
-    background: linear-gradient(90deg, #4facfe 0%, #f68084 100%);
+    background: linear-gradient(90deg, #4facfe 0%, #4facfe 100%);
     border-radius: 18px 18px 0 0;
     padding: 16px 22px;
     margin-bottom: 18px;
@@ -203,6 +203,174 @@ body {
     font-size: 14px;
     font-weight: 500;
 }
+/* =============================
+   ICON TOOLTIP (GAME PAGE)
+============================= */
+
+.icon-btn {
+    position: relative;
+}
+
+/* Tooltip kutusu */
+.icon-btn::after {
+    content: attr(data-tooltip);
+    position: absolute;
+    bottom: -42px;
+    left: 50%;
+    transform: translateX(-50%);
+    background: rgba(177, 20, 111, 0.85);
+    color: #ffffff;
+    font-size: 12px;
+    padding: 6px 10px;
+    border-radius: 8px;
+    white-space: nowrap;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.25s ease, transform 0.25s ease;
+}
+
+/* Küçük ok */
+.icon-btn::before {
+    content: "";
+    position: absolute;
+    bottom: -10px;
+    left: 50%;
+    transform: translateX(-50%);
+    border: 6px solid transparent;
+    border-bottom-color: rgba(15, 23, 42, 0.85);
+    opacity: 0;
+    transition: opacity 0.25s ease;
+}
+
+/* Hover */
+.icon-btn:hover::after {
+    opacity: 1;
+    transform: translateX(-50%) translateY(4px);
+}
+
+.icon-btn:hover::before {
+    opacity: 1;
+}
+
+/* =====================================
+   GAME PAGE NAVBAR → INDEX STYLE
+===================================== */
+
+.new-top-bar {
+    height: 72px;
+    padding: 0 36px;
+
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+    background: linear-gradient(
+        90deg,
+        #b44cff 0%,
+        #ff4fa3 45%,
+        #ffb020 100%
+    );
+
+    box-shadow: 0 8px 24px rgba(0,0,0,0.15);
+}
+
+/* Sol – geri butonu */
+.new-top-bar .back-btn {
+    background: rgba(255,255,255,0.18);
+    color: #fff;
+    border-radius: 999px;
+    padding: 8px 16px;
+    font-size: 14px;
+    font-weight: 500;
+    text-decoration: none;
+    backdrop-filter: blur(6px);
+    transition: background 0.25s ease;
+}
+
+.new-top-bar .back-btn:hover {
+    background: rgba(255,255,255,0.28);
+}
+
+/* Orta alan */
+.new-top-bar .top-center {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    color: #fff;
+}
+
+.new-top-bar .unit-icon {
+    background: rgba(255,255,255,0.2);
+    border-radius: 14px;
+    padding: 10px;
+    font-size: 18px;
+}
+
+.new-top-bar .unit-info h1 {
+    font-size: 18px;
+    font-weight: 600;
+    margin: 0;
+}
+
+.new-top-bar .unit-info span {
+    font-size: 13px;
+    opacity: 0.9;
+}
+
+/* Sağ ikonlar */
+.new-top-bar .top-right {
+    display: flex;
+    gap: 10px;
+}
+
+.new-top-bar .icon-btn {
+    width: 40px;
+    height: 40px;
+    border-radius: 12px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    background: rgba(255,255,255,0.18);
+    color: #fff;
+
+    backdrop-filter: blur(6px);
+    transition: background 0.25s ease, transform 0.2s ease;
+}
+
+.new-top-bar .icon-btn:hover {
+    background: rgba(255,255,255,0.3);
+    transform: translateY(-2px);
+}
+
+/* Tooltip */
+.icon-btn[data-tooltip] {
+    position: relative;
+}
+
+.icon-btn[data-tooltip]::after {
+    content: attr(data-tooltip);
+    position: absolute;
+    bottom: -36px;
+    left: 50%;
+    transform: translateX(-50%);
+    white-space: nowrap;
+
+    background: rgba(0,0,0,0.75);
+    color: #fff;
+    font-size: 12px;
+    padding: 6px 10px;
+    border-radius: 8px;
+
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.2s ease;
+}
+
+.icon-btn[data-tooltip]:hover::after {
+    opacity: 1;
+}
 
 /* ============================================
    RESPONSIVE
@@ -225,3 +393,4 @@ body {
         text-align: center;
     }
 }
+

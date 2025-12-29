@@ -5,9 +5,11 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>EduPlay Hub – Oyun</title>
 
+    <!-- ICONS -->
     <link rel="stylesheet"
           href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 
+    <!-- STYLES -->
     <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
     <link rel="stylesheet" href="{{ url_for('static', filename='style-game.css') }}">
 </head>
@@ -15,8 +17,12 @@
 <body>
 <div class="page">
 
+<!-- =============================
+     TOP BAR
+============================= -->
 <header class="new-top-bar">
 
+    <!-- SOL -->
     <div class="top-left">
         <a href="
         {% if source == 'ilkokul' %}
@@ -31,16 +37,19 @@
         </a>
     </div>
 
+    <!-- ORTA -->
     <div class="top-center">
-        <div class="unit-icon"><i class="fa-solid fa-laptop-code"></i></div>
-        <div class="unit-info">
-            <h1>{{ game.level }} · {{ game.unit }}</h1>
-            <span>{{ game.subtitle }}</span>
-        </div>
+            <div class="unit-icon"><i class="fa-solid fa-laptop-code"></i></div>
+            <div class="unit-info">
+                <h1>{{ game.level }} · {{ game.unit }}</h1>
+                <span>{{ game.subtitle }}</span>
+            </div>
     </div>
 
+    <!-- SAĞ -->
     <div class="top-right">
         <a class="icon-btn"
+           data-tooltip="Oyun Listesine Dön"
            href="
            {% if source == 'ortaokul' %}
                {{ url_for('ortaokul') }}
@@ -53,16 +62,22 @@
             <i class="fa-solid fa-gamepad"></i>
         </a>
 
-        <a class="icon-btn" href="{{ url_for('home') }}">
+        <a class="icon-btn"
+           data-tooltip="Ana Sayfaya Git"
+           href="{{ url_for('home') }}">
             <i class="fa-solid fa-house"></i>
         </a>
     </div>
 
 </header>
 
+<!-- =============================
+     GAME AREA
+============================= -->
 <main class="game-wrapper">
     <div class="game-box">
 
+        <!-- GAME HEADER -->
         <div class="game-box-header">
             <div class="header-left">
                 <div class="game-icon">{{ game.icon }}</div>
@@ -73,6 +88,7 @@
             </div>
         </div>
 
+        <!-- GAME IFRAME -->
         <div class="game-display-container">
             <iframe
                 src="{{ url_for('embed', game_id=game_id) }}"
@@ -84,6 +100,9 @@
     </div>
 </main>
 
+<!-- =============================
+     FOOTER
+============================= -->
 <footer class="game-footer">
     <div class="footer-inner">
         <span>💻 Bilişim Teknolojileri · İlkokul - Ortaokul</span>
