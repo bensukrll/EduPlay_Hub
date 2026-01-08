@@ -2,7 +2,7 @@
 /*  ORTAOKUL ÜNİTELERİ SAYFASI   */
 /* ============================= */
 .main {
-    margin-top: 20px;
+    margin-top: 15px;
 }
 
 .ortaokul-units {
@@ -128,6 +128,16 @@
     transform: translateY(-2px);
     box-shadow: 0 10px 26px rgba(0,0,0,0.25);
 }
+
+.logo-text {
+    transform: translateX(-7px); /* gerekirse -1 / +1 dene */
+}
+
+/* pixel fix */
+.top-nav {
+    transform: translateX(-7px); /* gerekirse -1 / +1 dene */
+}
+
 
 /* MOBİL */
 @media (max-width: 900px) {

@@ -15,15 +15,26 @@
 <body>
 <div class="page">
 
-    <!-- ÜST BAR -->
     <header class="top-bar">
         <div class="top-bar-inner">
-            <div class="logo-text">EduPlay Hub</div>
-            <div class="top-menu">
-                <span>İlkokul · Oyunlarla Öğren</span>
+
+            <!-- Logo -->
+            <div class="logo-text">
+                <a href="{{ url_for('home') }}" style="text-decoration:none; color:inherit;">
+                    EduPlay Hub
+                </a>
             </div>
+
+            <!-- Navigation -->
+            <nav class="top-nav">
+                <a href="{{ url_for('about') }}" class="nav-link">Hakkımızda</a>
+                <a href="{{ url_for('contact') }}" class="nav-link">İletişim</a>
+            </nav>
+
         </div>
     </header>
+
+
 
     <!-- GERİ -->
     <div class="back-wrapper">

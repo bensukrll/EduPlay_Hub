@@ -102,7 +102,7 @@ body {
 }
 
 .section-label {
-    font-size: 13px;
+    font-size: 16px;
     text-transform: uppercase;
     letter-spacing: 0.08em;
     color: var(--text-muted);
@@ -156,13 +156,13 @@ body {
 
 .card-subtitle {
     margin: 0;
-    font-size: 13px;
+    font-size: 15px;
     color: var(--text-muted);
 }
 
 .card-text {
     margin: 8px 0 16px;
-    font-size: 14px;
+    font-size: 16px;
     line-height: 1.5;
     color: var(--text-muted);
      min-height: 64px;
@@ -330,7 +330,7 @@ body {
     display: flex;
     gap: 28px;
     width: max-content;
-    animation: unitMarquee 40s linear infinite;
+    animation: unitMarquee 36s linear infinite;
 }
 
 @keyframes unitMarquee {
@@ -415,7 +415,7 @@ body {
     margin: 0 auto;
     display: flex;
     justify-content: space-between;
-    font-size: 13px;
+    font-size: 14px;
 }
 
 /*Responsive*/
@@ -435,9 +435,109 @@ body {
 }
 
  
+/* =====================================================
+   🎮 EĞLENCELİ MİKRO ETKİLEŞİMLER – EKRANI CANLANDIRIR
+   (DOSYANIN EN ALTINA YAPIŞTIR)
+===================================================== */
+
+/* === KARTLAR HOVER'DA ZIPLASIN + PARLASIN === */
+.level-card,
+.unit-card {
+    transition: 
+        transform 0.28s cubic-bezier(.34,1.56,.64,1),
+        box-shadow 0.28s ease;
+    cursor: pointer;
+}
+
+.level-card:hover,
+.unit-card:hover {
+    transform: translateY(-8px) scale(1.03);
+    box-shadow: 0 26px 55px rgba(0,0,0,0.22);
+}
+
+/* İlkokul kartı glow */
+.level-primary:hover {
+    box-shadow:
+        0 0 0 4px rgba(255,75,146,0.28),
+        0 26px 55px rgba(255,75,146,0.35);
+}
+
+/* Ortaokul kartı glow */
+.level-secondary:hover {
+    box-shadow:
+        0 0 0 4px rgba(37,99,235,0.28),
+        0 26px 55px rgba(37,99,235,0.35);
+}
+
+/* === BAŞLIK EMOJİSİ – YAVAŞ ZIPLAMA === */
+.section-title h1 span {
+    display: inline-block;
+    margin-left: 8px;
+    animation: funFloat 2.2s ease-in-out infinite;
+}
+
+@keyframes funFloat {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-8px); }
+}
+
+/* === BUTONLAR – GAME FEEDBACK (BASINCA POP) === */
+.btn {
+    transition: transform 0.15s ease, box-shadow 0.15s ease;
+}
+
+.btn:active {
+    animation: btnPop 0.18s ease;
+}
+
+@keyframes btnPop {
+    0% { transform: scale(1); }
+    50% { transform: scale(0.9); }
+    100% { transform: scale(1); }
+}
+
+
+/* === ARKA PLAN DAİRELERİ HAREKET ETSİN === */
+.circle {
+    animation: backgroundDrift 16s ease-in-out infinite alternate;
+}
+
+@keyframes backgroundDrift {
+    from {
+        transform: translate(0, 0);
+    }
+    to {
+        transform: translate(25px, -25px);
+    }
+}
+
+/* === KART ICONLARI MINI DÖNÜŞ === */
+.card-icon {
+    transition: transform 0.3s ease;
+}
+
+.level-card:hover .card-icon {
+    transform: rotate(-6deg) scale(1.1);
+}
 
 
 
+
+
+/* =====================================================
+   ✅ SLIDER İÇİN DÜZ AKIŞ (YUKARI–AŞAĞI YOK)
+===================================================== */
+
+/* Slider içindeki kartlar sabit kalsın */
+.unit-slider .unit-card {
+    animation: none !important;
+    transform: none !important;
+}
+
+/* Hover'da da yukarı çıkmasın */
+.unit-slider .unit-card:hover {
+    transform: none !important;
+}
 
 
 
