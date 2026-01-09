@@ -67,16 +67,107 @@ body {
     mask-size: 100% 100%;
     -webkit-mask-repeat: no-repeat;
     mask-repeat: no-repeat;
+    overflow: hidden;
+    z-index: 0;
 }
 
 .top-bar-inner {
-    max-width: 2000px;
+    max-width: 1400px;
     margin: 0 auto;
     display: flex;
     align-items: center;
     justify-content: space-between;
-    font-size: 14px;
+    z-index: 10; 
+    position: relative;
 }
+
+/* LOGO */
+.logo-text {
+    font-family: "Chewy", sans-serif;
+    font-size: 44px;
+    color: #ffffff;
+    letter-spacing: 0.5px;
+    font-weight: 400;
+
+}
+
+/* NAV */
+.top-nav {
+    display: flex;
+    gap: 28px;
+}
+
+.nav-link {
+    position: relative;
+    font-size: 14px;
+    font-weight: 500;
+    color: rgba(255,255,255,0.9);
+    text-decoration: none;
+    padding-bottom: 4px;
+    transition: color 0.25s ease;
+}
+
+/* underline animasyon */
+.nav-link::after {
+    content: "";
+    position: absolute;
+    left: 0;
+    bottom: 0;
+    width: 0%;
+    height: 2px;
+    background: #ffffff;
+    transition: width 0.25s ease;
+}
+
+.nav-link:hover {
+    color: #ffffff;
+}
+
+.nav-link:hover::after {
+    width: 100%;
+}
+
+
+.header-waves {
+  position: absolute;
+  bottom: -50px;
+  left: 0;
+  width: 100%;
+  height: 240px;
+  pointer-events: none;
+  z-index: 1;
+}
+
+.wave {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+}
+
+/* Katmanlı animasyon */
+.wave1 {
+  opacity: 0.45;
+  animation: waveFloat 6s ease-in-out infinite;
+}
+
+.wave2 {
+  opacity: 0.30;
+  animation: waveFloat 8s ease-in-out infinite;
+}
+
+.wave3 {
+  opacity: 0.20;
+  animation: waveFloat 10s ease-in-out infinite;
+}
+
+/* SADECE yukarı-aşağı */
+@keyframes waveFloat {
+  0%   { transform: translateY(0); }
+  50%  { transform: translateY(12px); }
+  100% { transform: translateY(0); }
+}
+
 
 .top-menu span {
     opacity: 0.9;
@@ -777,59 +868,4 @@ body {
 
 }
 
-/* ===== TOP BAR (NEW DESIGN) ===== */
 
-
-.top-bar-inner {
-    max-width: 1400px;
-    margin: 0 auto;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-}
-
-/* LOGO */
-.logo-text {
-    font-family: "Chewy", sans-serif;
-    font-size: 44px;
-    color: #ffffff;
-    letter-spacing: 0.5px;
-    font-weight: 400;
-
-}
-
-/* NAV */
-.top-nav {
-    display: flex;
-    gap: 28px;
-}
-
-.nav-link {
-    position: relative;
-    font-size: 14px;
-    font-weight: 500;
-    color: rgba(255,255,255,0.9);
-    text-decoration: none;
-    padding-bottom: 4px;
-    transition: color 0.25s ease;
-}
-
-/* underline animasyon */
-.nav-link::after {
-    content: "";
-    position: absolute;
-    left: 0;
-    bottom: 0;
-    width: 0%;
-    height: 2px;
-    background: #ffffff;
-    transition: width 0.25s ease;
-}
-
-.nav-link:hover {
-    color: #ffffff;
-}
-
-.nav-link:hover::after {
-    width: 100%;
-}
