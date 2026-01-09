@@ -2,6 +2,7 @@ from flask import Flask, render_template, request
 import smtplib
 from email.mime.text import MIMEText
 from email.mime.multipart import MIMEMultipart
+import cred
 
 app = Flask(__name__)
 
@@ -54,13 +55,6 @@ GAME_INFO = {
         "icon": "🌐"
     }
 }
-
-# ==================================================
-#  MAIL AYARLARI 
-# ==================================================
-
-MAIL_ADDRESS = "eduplayhub4@gmail.com"      # Maili ALACAK adres
-MAIL_PASSWORD = "dppf zftj mtnf jxmp"
 
 # ==================================================
 # ROUTES
@@ -127,6 +121,8 @@ def contact():
 # ==================================================
 #  MAIL GÖNDERME FONKSİYONU
 # ==================================================
+
+(MAIL_ADDRESS, MAIL_PASSWORD) = cred.setCred()
 
 def send_email(name, email, message):
     msg = MIMEMultipart()
