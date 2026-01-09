@@ -54,13 +54,20 @@ body {
 }
 
 /* Üst Bar */
-
 .top-bar {
-    background: var(--bg-gradient-top); 
-    color: #fff; 
-    padding: 10px 48px;
-}
+    background: var(--bg-gradient-top);
+    color: #fff;
+    padding: 20px 48px 120px; /* DEĞİŞMİYOR */
+    position: relative;
 
+    -webkit-mask-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1200 120' preserveAspectRatio='none'%3E%3Cpath d='M0 0H1200V75C1000 108 820 52 600 58 380 64 200 108 0 75V0Z'/%3E%3C/svg%3E");
+    mask-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1200 120' preserveAspectRatio='none'%3E%3Cpath d='M0 0H1200V75C1000 108 820 52 600 58 380 64 200 108 0 75V0Z'/%3E%3C/svg%3E");
+
+    -webkit-mask-size: 100% 100%;
+    mask-size: 100% 100%;
+    -webkit-mask-repeat: no-repeat;
+    mask-repeat: no-repeat;
+}
 
 .top-bar-inner {
     max-width: 2000px;
@@ -82,6 +89,7 @@ body {
     max-width: 1200px;
     margin: 0 auto;
     padding: 40px 32px 64px;
+    margin-top: -45px;
 }
 
 /* Bölümler */
