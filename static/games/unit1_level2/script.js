@@ -8,14 +8,29 @@ const questions = [
     { q: "Mouse bir çıkış birimidir.", a: false },
     { q: "Klavye giriş birimidir.", a: true },
     { q: "BIOS açılışta sistemi başlatır.", a: true },
-    { q: "Monitör giriş birimidir.", a: false }
+    { q: "Monitör giriş birimidir.", a: false },
+    { q: "Hard disk bilgisayarda verilerin kalıcı olarak saklandığı birimdir.", a: true },
+    { q: "İşletim sistemi bilgisayar donanımını yönetir.", a: true },
+    { q: "RAM dolduğunda bilgisayarın hızı artar.", a: false },
+    { q: "Yazılım olmadan bilgisayar çalışamaz.", a: true },
+    { q: "USB bellek bir depolama birimidir.", a: true },
 ];
 
 let current = 0;
-let step = 100; // İlerleme miktarı
-let monsterSpeed = 1.5;
 let chaseInterval = null;
 let wrongCount = 0;
+
+let monsterSpeed = 0.55;     // daha yavaş başlangıç
+const monsterSpeedInc = 0.08; // doğru cevapta çok az hızlansın
+
+let timeLeft = 60;
+let timerInterval = null;
+
+let isGameOver = false;      // ✅ kritik kilit
+
+// dinamik adım için
+let step = 60;               // başlangıç değeri (startGame'de hesaplanacak)
+let startX = 200;            // oyuncu başlangıç px
 
 const gameContainer = document.querySelector('.game-container');
 const player = document.getElementById("player");
@@ -28,139 +43,192 @@ const startScreen = document.getElementById("startScreen");
 const monsterRoar = document.getElementById("monsterRoar");
 const winSound = document.getElementById("winSound");
 
-// Oyuncu başlangıç konumu
-player.style.left = "200px";
+// başlangıç konumları
+player.style.left = startX + "px";
+if (!monster.style.left) monster.style.left = "-200px";
 
 questionText.innerText = questions[current].q;
 
+/* ===================== */
 function startGame() {
     startScreen.style.display = "none";
     questionBox.style.display = "block";
 
-    gameContainer.style.animationPlayState = "running";
-    player.style.animationPlayState = "running";
-    monster.style.animationPlayState = "running";
+    // ⏱ Timer UI varsa baştan yaz
+    const timerEl = document.getElementById("time");
+    if (timerEl) timerEl.innerText = timeLeft;
+
+    // ✅ Soru sayısı artsa da oyuncu kapıya kadar düzgün ilerlesin:
+    // Kapının ortasına kadar toplam mesafeyi, soru sayısına bölelim.
+    // (Kapı DOM ölçüsü oyun başında hazır olur)
+    const doorCenter = door.offsetLeft + (door.offsetWidth / 2) - (player.offsetWidth / 2);
+    const totalDistance = Math.max(300, doorCenter - startX); // minimum mesafe koruması
+    step = Math.floor(totalDistance / questions.length);
 
     startChase();
+    startTimer();
 }
 
+/* ===================== */
+function startTimer() {
+    timerInterval = setInterval(() => {
+        if (isGameOver) return;
+
+        timeLeft--;
+
+        const timerEl = document.getElementById("time");
+        if (timerEl) timerEl.innerText = timeLeft;
+
+        if (timeLeft <= 0) {
+            monsterRoar.play();
+            loseGame("⏱ Süre doldu!");
+        }
+    }, 1000);
+}
+
+/* ===================== */
 function startChase() {
     chaseInterval = setInterval(() => {
-        // Canavar henüz görünmüyorsa ekran dışından (-200) başlasın
-        let monsterPos = parseInt(monster.style.left || -200);
-        let playerPos = parseInt(player.style.left);
+        if (isGameOver) return;
+
+        let monsterPos = parseFloat(monster.style.left || -200);
+        let playerPos = parseFloat(player.style.left);
 
         monster.style.left = (monsterPos + monsterSpeed) + "px";
 
-        // ÇARPIŞMA AYARI:
-        // Canavarın görsel genişliğine göre burayı ayarlıyoruz.
-        // Eğer canavar çok erken yakalıyorsa 120'yi küçült, geç yakalıyorsa büyüt.
+        // Çarpışma kontrolü
         if (monsterPos + 120 >= playerPos) {
             monsterRoar.play();
-            loseGame();
+            loseGame("Canavar seni yakaladı!");
         }
     }, 50);
 }
 
+/* ===================== */
 function answer(userAnswer) {
-    if (userAnswer === questions[current].a) {
-        // DOĞRU CEVAP
-        wrongCount = 0; 
+    if (isGameOver) return;
+
+    const correct = (userAnswer === questions[current].a);
+
+    if (correct) {
+        wrongCount = 0;
         current++;
 
-        // Oyuncuyu ilerlet
+        // oyuncuyu ilerlet (kapıyı geçmeyecek şekilde)
         let currentLeft = parseInt(player.style.left);
         player.style.left = (currentLeft + step) + "px";
-        
-        monsterSpeed += 0.3; // Canavar hızlansın
 
-        if (current === questions.length) {
+        // canavar kontrollü hızlansın
+        monsterSpeed += monsterSpeedInc;
+
+        if (current >= questions.length) {
             questionBox.style.display = "none";
             escapeThroughDoor();
             return;
         }
+
         questionText.innerText = questions[current].q;
 
     } else {
-        // YANLIŞ CEVAP
         wrongCount++;
+
+        // canavar yaklaşsın ama oyunu "kilitlemeyecek" şekilde
         let monsterPos = parseInt(monster.style.left || -200);
-        monster.style.left = (monsterPos + 60) + "px"; // Canavar yaklaşsın
-        
-        // Hata efekti: Ekran titremesi
-        gameContainer.style.transform = "translateX(5px)";
-        setTimeout(() => gameContainer.style.transform = "translateX(0)", 100);
+        monster.style.left = (monsterPos + 60) + "px";
+
+        // titreme
+        gameContainer.style.transform = "translateX(6px)";
+        setTimeout(() => gameContainer.style.transform = "translateX(0)", 120);
 
         monsterRoar.play();
 
         if (wrongCount >= 3) {
-            loseGame();
+            loseGame("Çok fazla yanlış yaptın!");
         }
     }
 }
 
-function stopAllAnimations() {
+/* ===================== */
+function stopAll() {
     clearInterval(chaseInterval);
-    gameContainer.style.animationPlayState = "paused";
-    player.style.animationPlayState = "paused";
-    monster.style.animationPlayState = "paused";
+    clearInterval(timerInterval);
+    chaseInterval = null;
+    timerInterval = null;
 }
 
-function loseGame() {
-    stopAllAnimations();
+/* ===================== */
+function loseGame(reason = "") {
+    if (isGameOver) return;   // ✅ çift tetiklemeyi engeller
+    isGameOver = true;
+
+    stopAll();
     questionBox.style.display = "none";
+
+    // varsa önceki mesaj kutusunu sil (güvenlik)
+    const old = document.querySelector(".game-over-box");
+    if (old) old.remove();
 
     const msg = document.createElement("div");
     msg.className = "game-over-box";
     msg.innerHTML = `
-        <div class="game-over-content" style="border-color: #e74c3c;">
-            <h2 style="color: #e74c3c">❌ YAKALANDIN!</h2>
-            <p>Virüs sistemini ele geçirdi.</p>
+        <div class="game-over-content" style="border-color:#e74c3c">
+            <h2 style="color:#e74c3c">❌ YAKALANDIN</h2>
+            <p>${reason}</p>
             <button class="restart-btn" onclick="restart()">Tekrar Dene</button>
         </div>
     `;
     document.getElementById("gameArea").appendChild(msg);
-    
-    // Canavarı oyuncunun üstüne getir
+
+    // canavar oyuncuya gelsin
     monster.style.left = player.style.left;
 }
 
+/* ===================== */
 function winGame() {
-    stopAllAnimations();
+    if (isGameOver) return;   // ✅ çift tetiklemeyi engeller
+    isGameOver = true;
+
+    stopAll();
     winSound.play();
+
+    const old = document.querySelector(".game-over-box");
+    if (old) old.remove();
 
     const msg = document.createElement("div");
     msg.className = "game-over-box";
     msg.innerHTML = `
-        <div class="game-over-content" style="border-color: #2ecc71;">
-            <h2 style="color: #2ecc71">🎉 SİSTEM KURTARILDI!</h2>
-            <p>Tüm soruları bildin ve güvenli çıkış yaptın.</p>
+        <div class="game-over-content" style="border-color:#2ecc71">
+            <h2 style="color:#2ecc71">🎉 SİSTEM KURTARILDI!</h2>
+            <p>Tüm soruları doğru cevapladın.</p>
             <button class="restart-btn" onclick="restart()">Yeniden Oyna</button>
         </div>
     `;
     document.getElementById("gameArea").appendChild(msg);
+
     player.style.opacity = "0";
 }
 
-function restart() {
-    location.reload();
-}
-
+/* ===================== */
 function escapeThroughDoor() {
-    clearInterval(chaseInterval);
-    monster.style.animationPlayState = "paused";
+    // kovalamayı durdur, süre dursun
+    stopAll();
 
+    // oyuncuyu kapının ortasına götür (artık geri gelme "mantıksız" görünmeyecek çünkü zaten kapıya yakın)
     const doorLeft = door.offsetLeft;
-    const doorWidth = door.offsetWidth;
-    const playerWidth = player.offsetWidth;
-    
-    // Oyuncuyu kapının ortasına götür
-    const centerPos = doorLeft + (doorWidth / 2) - (playerWidth / 2);
+    const centerPos = doorLeft + door.offsetWidth / 2 - player.offsetWidth / 2;
 
-    player.style.transition = "left 1s ease-in-out, opacity 0.5s ease 0.8s";
+    player.style.transition = "left 0.8s ease-in-out, opacity 0.5s ease 0.6s";
     player.style.left = centerPos + "px";
 
+    // kapıdan çıkış efekti
     setTimeout(() => {
-        winGame();
-    }, 1200);
+        player.style.opacity = "0";
+    }, 650);
+
+    setTimeout(winGame, 1200);
+}
+
+/* ===================== */
+function restart() {
+    location.reload();
 }

@@ -8,6 +8,26 @@
 </head>
 <body>
 
+
+<div class="game-container" id="gameArea">
+
+    <div class="timer-bar">
+        Süre: <span id="time">40</span> sn
+    </div>
+
+    <!-- SÜRE GÖSTERGESİ -->
+    <div class="timer">
+        ⏱ Süre: <span id="time">30</span> sn
+    </div>
+    
+    <div class="question-box" id="questionBox">
+        <p id="question">Soru yükleniyor...</p>
+        <div class="btn-group">
+            <button class="yes" onclick="answer(true)">Doğru</button>
+            <button class="no" onclick="answer(false)">Yanlış</button>
+        </div>
+    </div> 
+
 <div class="game-container" id="gameArea">
     
     <div class="question-box" id="questionBox">

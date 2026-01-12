@@ -24,8 +24,8 @@
         }
 
         .box {
-            width: 320px;
-            min-height: 260px;
+            width: 300px;
+            min-height: 360px;
             padding: 20px;
             border-radius: 16px;
             border: 2px dashed #c0c6d8;
@@ -33,18 +33,16 @@
             font-size: 1.4rem;
             font-weight: bold;
             box-shadow: 0 6px 15px rgba(0,0,0,0.08);
-            transition: all 0.3s ease;
         }
 
         #safe { color: #2e7d32; }
         #unsafe { color: #c62828; }
 
         #items {
-            max-width: 700px;
-            margin: 0 auto;
+            width: 420px;
             display: flex;
             flex-direction: column;
-            align-items: center;
+            align-items: stretch;
         }
 
         .item {
@@ -83,6 +81,14 @@
             cursor: pointer;
             font-size: 1rem;
         }
+
+        .game-layout {
+            display: flex;
+            justify-content: center;
+            align-items: flex-start;
+            gap: 50px;
+            margin-top: 40px;
+        }
     </style>
 </head>
 <body>
@@ -90,11 +96,12 @@
     <h2>Aşağıdaki internet davranışlarını <strong>güvenli</strong> ve <strong>güvensiz</strong> olarak kutucuklara sürükleyiniz.</h2>
     <p class="note">NOT: Doğru yerleşim yeşil, yanlış yerleşim kırmızı renkte görünür.</p>
 
-    <h3>🎯 Puan: <span id="score">0</span></h3>
+    <div class="game-layout">
+    <div class="box" id="safe">✔ Güvenli</div>
 
-    <div class="container">
-        <div class="box" id="safe">✔ Güvenli</div>
-        <div class="box" id="unsafe">❌ Güvensiz</div>
+    <div id="items"></div>
+
+    <div class="box" id="unsafe">❌ Güvensiz</div>
     </div>
 
     <div id="items"></div>
@@ -120,8 +127,6 @@
         // Soruları karıştır (Randomize)
         data.sort(() => Math.random() - 0.5);
 
-        let score = 0;
-        let answeredCount = 0;
         const itemsDiv = document.getElementById("items");
 
         data.forEach((item, i) => {
@@ -156,8 +161,6 @@
                 if (correct) {
                     el.style.background = "#a5d6a7";
                     box.appendChild(el);
-                    score++;
-                    document.getElementById("score").innerText = score;
                 } else {
                     el.style.background = "#ef9a9a";
                     // Yanlışsa 1 saniye sonra rengini eski haline getir
@@ -173,9 +176,7 @@
         function checkGameOver() {
             const placedItems = document.querySelectorAll(".box .item").length;
             if (placedItems === data.length) {
-                const resultBox = document.getElementById("resultBox");
-                document.getElementById("finalScore").innerText = "Toplam Puanınız: " + score + " / " + data.length;
-                resultBox.style.display = "block";
+                document.getElementById("resultBox").style.display = "block";
             }
         }
     </script>

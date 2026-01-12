@@ -1,15 +1,15 @@
 // OYUN VERİLERİ
 const filesData = [
-    { type: 'doc', name: 'Odev_Taslak.docx', icon: '📄' },
-    { type: 'doc', name: 'Ders_Notu.txt', icon: '📝' },
-    { type: 'img', name: 'Tatil_Foto.jpg', icon: '📷' },
-    { type: 'img', name: 'Ekran_Goruntusu.png', icon: '🖼️' },
-    { type: 'music', name: 'Pop_Sarki.mp3', icon: '🎵' },
-    { type: 'music', name: 'Ses_Kaydi.wav', icon: '🎙️' },
-    { type: 'trash', name: 'Virus.exe', icon: '👾' },
-    { type: 'trash', name: 'Hata_Raporu.log', icon: '⚠️' },
-    { type: 'doc', name: 'Proje_Sunum.pptx', icon: '📊' },
-    { type: 'img', name: 'Profil.png', icon: '👤' }
+  { type: 'doc', name: 'Odev_Taslak.docx', icon: '📄' },
+  { type: 'doc', name: 'Ders_Notu.txt', icon: '📝' },
+  { type: 'img', name: 'Tatil_Foto.jpg', icon: '📷' },
+  { type: 'img', name: 'Ekran_Goruntusu.png', icon: '🖼️' },
+  { type: 'music', name: 'Pop_Sarki.mp3', icon: '🎵' },
+  { type: 'music', name: 'Ses_Kaydi.wav', icon: '🎙️' },
+  { type: 'trash', name: 'Virus.exe', icon: '👾' },
+  { type: 'trash', name: 'Hata_Raporu.log', icon: '⚠️' },
+  { type: 'doc', name: 'Proje_Sunum.pptx', icon: '📊' },
+  { type: 'img', name: 'Profil.png', icon: '👤' }
 ];
 
 let score = 0;
@@ -21,134 +21,121 @@ const scoreEl = document.getElementById('score');
 const remainingEl = document.getElementById('remaining');
 
 function initGame() {
-    remainingEl.innerText = remainingFiles;
-    filesData.forEach((file, index) => {
-        createFileElement(file, index);
-    });
-    startClock();
+  remainingEl.innerText = remainingFiles;
+  filesData.forEach(createFileElement);
+  startClock();
 }
 
-function createFileElement(data, index) {
-    const fileEl = document.createElement('div');
-    fileEl.classList.add('file');
-    fileEl.setAttribute('data-type', data.type);
-    
-    fileEl.innerHTML = `
-        <div class="icon">${data.icon}</div>
-        <div class="name">${data.name}</div>
-    `;
+function createFileElement(data) {
+  const fileEl = document.createElement('div');
+  fileEl.className = 'file';
+  fileEl.dataset.type = data.type;
 
-    // GÜNCELLEME: Spawn Alanı Hesabı
-    // Sol tarafta 100px (klasörler), Sağ tarafta 220px (panel) boşluk bırak.
-    // Dosyalar bu iki alanın ortasında oluşsun.
-    const safeXStart = 120; // Sol taraftan güvenli mesafe
-    const safeXWidth = desktop.offsetWidth - 360; // (Toplam - Sol - Sağ)
-    
-    const randX = safeXStart + Math.random() * safeXWidth;
-    const randY = 50 + Math.random() * (desktop.offsetHeight - 150);
-    
-    fileEl.style.left = randX + 'px';
-    fileEl.style.top = randY + 'px';
+  fileEl.innerHTML = `
+    <div class="icon">${data.icon}</div>
+    <div class="name">${data.name}</div>
+  `;
 
-    makeDraggable(fileEl);
-    desktop.appendChild(fileEl);
+  fileEl.style.left = 150 + Math.random() * 400 + 'px';
+  fileEl.style.top = 80 + Math.random() * 250 + 'px';
+
+  makeDraggable(fileEl);
+  desktop.appendChild(fileEl);
 }
 
-function makeDraggable(element) {
-    let pos1 = 0, pos2 = 0, pos3 = 0, pos4 = 0;
-    let originalZIndex = element.style.zIndex;
+function makeDraggable(el) {
+  let startX, startY, offsetX, offsetY;
 
-    element.onmousedown = dragMouseDown;
+  el.onmousedown = (e) => {
+    e.preventDefault();
 
-    function dragMouseDown(e) {
-        e = e || window.event;
-        e.preventDefault();
-        pos3 = e.clientX;
-        pos4 = e.clientY;
-        element.style.zIndex = 100;
-        document.onmouseup = closeDragElement;
-        document.onmousemove = elementDrag;
+    startX = el.offsetLeft;
+    startY = el.offsetTop;
+
+    offsetX = e.clientX;
+    offsetY = e.clientY;
+
+    el.style.zIndex = 100;
+
+    document.onmousemove = drag;
+    document.onmouseup = drop;
+  };
+
+  function drag(e) {
+    el.style.left = el.offsetLeft + (e.clientX - offsetX) + 'px';
+    el.style.top  = el.offsetTop  + (e.clientY - offsetY) + 'px';
+
+    offsetX = e.clientX;
+    offsetY = e.clientY;
+  }
+
+  function drop(e) {
+    document.onmousemove = null;
+    document.onmouseup = null;
+    el.style.zIndex = '';
+
+    // Dosyayı geçici olarak tıklanamaz yap
+    el.style.pointerEvents = 'none';
+    const target = document.elementFromPoint(e.clientX, e.clientY);
+    el.style.pointerEvents = 'auto';
+
+    const folder = target?.closest('.folder');
+
+    if (!folder) {
+      resetPosition();
+      return;
     }
 
-    function elementDrag(e) {
-        e = e || window.event;
-        e.preventDefault();
-        pos1 = pos3 - e.clientX;
-        pos2 = pos4 - e.clientY;
-        pos3 = e.clientX;
-        pos4 = e.clientY;
-        element.style.top = (element.offsetTop - pos2) + "px";
-        element.style.left = (element.offsetLeft - pos1) + "px";
+    if (folder.dataset.type === el.dataset.type) {
+      handleSuccess(el, folder);
+    } else {
+      handleError(folder.querySelector('.name').innerText);
+      resetPosition();
     }
+  }
 
-    function closeDragElement() {
-        document.onmouseup = null;
-        document.onmousemove = null;
-        element.style.zIndex = originalZIndex;
-        checkCollision(element);
-    }
-}
-
-function checkCollision(fileEl) {
-    const folders = document.querySelectorAll('.folder');
-    const fileRect = fileEl.getBoundingClientRect();
-
-    for (const folder of folders) {
-        const folderRect = folder.getBoundingClientRect();
-
-        if (
-            fileRect.left < folderRect.right &&
-            fileRect.right > folderRect.left &&
-            fileRect.top < folderRect.bottom &&
-            fileRect.bottom > folderRect.top
-        ) {
-            const folderType = folder.getAttribute('data-type');
-            const fileType = fileEl.getAttribute('data-type');
-
-            if (folderType === fileType) {
-                handleSuccess(fileEl, folder);
-                break; 
-            } else {
-                handleError(folder.querySelector('.name').innerText);
-            }
-        }
-    }
+  function resetPosition() {
+    el.style.left = startX + 'px';
+    el.style.top  = startY + 'px';
+  }
 }
 
 function handleSuccess(fileEl, folderEl) {
-    folderEl.style.transform = "scale(1.1)";
-    setTimeout(() => folderEl.style.transform = "scale(1)", 200);
+  feedback.innerText = "✅ Harika! Doğru klasör.";
+  feedback.style.color = "#4caf50";
 
-    feedback.innerText = "✅ Harika! Doğru klasör.";
-    feedback.style.color = "#4caf50";
+  folderEl.style.transform = "scale(1.1)";
+  setTimeout(() => folderEl.style.transform = "scale(1)", 200);
 
-    fileEl.remove();
-    score += 10;
-    remainingFiles--;
-    scoreEl.innerText = score;
-    remainingEl.innerText = remainingFiles;
+  fileEl.remove();
+  score += 10;
+  remainingFiles--;
 
-    if (remainingFiles === 0) {
-        setTimeout(() => {
-            document.getElementById('game-over').classList.remove('hidden');
-        }, 500);
-    }
+  scoreEl.innerText = score;
+  remainingEl.innerText = remainingFiles;
+
+  if (remainingFiles === 0) {
+    document.getElementById('game-over').classList.remove('hidden');
+  }
 }
 
 function handleError(folderName) {
-    feedback.innerText = `❌ Hata! O dosya '${folderName}' klasörüne ait değil.`;
-    feedback.style.color = "#ff4444";
-    score -= 5;
-    scoreEl.innerText = score;
+  // 🔴 TEMPLATE STRING HATASI DÜZELTİLDİ
+  feedback.innerText = `❌ Hata! Bu dosya "${folderName}" klasörüne ait değil.`;
+  feedback.style.color = "#ff4444";
+
+  score -= 5;
+  scoreEl.innerText = score;
 }
 
 function startClock() {
-    setInterval(() => {
-        const now = new Date();
-        const hours = String(now.getHours()).padStart(2, '0');
-        const minutes = String(now.getMinutes()).padStart(2, '0');
-        document.getElementById('clock').innerText = `${hours}:${minutes}`;
-    }, 1000);
+  setInterval(() => {
+    const now = new Date();
+
+    // 🔴 TEMPLATE STRING HATASI DÜZELTİLDİ
+    document.getElementById('clock').innerText =
+      `${String(now.getHours()).padStart(2, '0')}:${String(now.getMinutes()).padStart(2, '0')}`;
+  }, 1000);
 }
 
 initGame();
