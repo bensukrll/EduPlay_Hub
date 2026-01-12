@@ -1,0 +1,537 @@
+/* ===========================
+   GENEL STİL VE DEĞİŞKENLER
+   =========================== */
+
+:root {
+    --color-primary: #2563eb;
+    --color-success: #10b981;
+    --color-error: #ef4444;
+    --color-warning: #f59e0b;
+    --color-background: #f3f4f6;
+    --color-card-bg: #ffffff;
+    --color-text-default: #1f2937;
+    --color-text-muted: #6b7280;
+    --color-border: #e5e7eb;
+}
+
+/* ===========================
+   YAZI STİLİ VE TEMEL AYARLAR
+   =========================== */
+
+html, body {
+    margin: 0;
+    padding: 0;
+    height: 100%;
+    min-height: 100vh;
+    font-family: 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif; 
+    background-color: #e2e8f0; 
+    color: var(--color-text-default);
+}
+
+
+
+/* ===========================
+   ARKA PLAN GÖRSELİ
+   =========================== */
+
+#background-image {
+    position: fixed; 
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    /* Eğer arka plan resmin varsa burayı aktif et */
+    /* background-image:url("background_network.jpg"); */
+    background-color: #eef2f6; /* Resim yoksa bu renk görünür */
+    background-size: cover;
+    background-position: center;
+    opacity: 0.1; 
+    z-index: -1;
+}
+
+/* ===========================
+   ANA İÇERİK DÜZENİ (YENİ - ALT ALTA)
+   =========================== */
+
+.main-content {
+    max-width: 1200px;
+    width: 100%;
+    margin: 0 auto;
+    padding: 20px;
+    height: 100vh;              /* ❗ calc kaldırıldı */
+    display: flex;
+    flex-direction: column;
+}
+
+/* Kartları alt alta (dikey) sıralama */
+.game-layout {
+    flex: 1;
+    display: flex;
+    gap: 24px;
+    align-items: stretch;
+}
+
+
+
+/* ===========================
+   KART TASARIMLARI
+   =========================== */
+
+.card {
+    background-color: rgba(255, 255, 255, 0.95); 
+    border-radius: 18px;
+    padding: 25px;
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.06);
+    border: 1px solid var(--color-border);
+}
+
+.text-box {
+    background-color: rgba(255, 255, 255, 0.9);
+    padding: 20px 30px;
+    border-radius: 18px;
+    margin: 0 auto 20px auto;
+    max-width: 90%; 
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+    text-align: center;
+}
+
+.section-title h1 {
+    font-size: 28px;
+    margin: 0 0 10px;
+}
+
+.card-text {
+    font-size: 16px;
+    color: var(--color-text-muted);
+    max-width: 600px;
+    margin: 0 auto;
+}
+
+/* ===========================
+   GÖRSEL SAHNE (BÜYÜK İKONLU)
+   =========================== */
+
+/* Görsel Kartı (Üstteki Banner) */
+.game-visual {
+    width: 100%;
+    position: relative;
+    top: auto;
+    min-height: 340px;       /* İkonlar sığsın diye yükseklik */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 24px 0;
+    margin-top: 30px;
+    overflow: hidden;        /* Taşan animasyonları gizle */
+    background: linear-gradient(135deg, #fdfbfb 0%, #ebedee 100%);
+    border: none;
+    flex: 1.15;
+}
+
+.game-visual-badge {
+    position: absolute;
+    top: 15px;
+    left: 15px;
+    z-index: 10;
+    background: rgba(0, 0, 0, 0.7);
+    color: #fff;
+    padding: 5px 12px;
+    border-radius: 20px;
+    font-size: 0.8rem;
+    backdrop-filter: blur(4px);
+}
+
+/* Sahne Konteynırı */
+.visual-stage {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    padding: 20px;
+    text-align: center;
+}
+
+/* Ortak Ana İkon - BÜYÜTÜLDÜ */
+.stage-icon {
+    font-size: 105px; /* BÜYÜK BOYUT */
+    margin-bottom: 14px;
+    filter: drop-shadow(0 15px 25px rgba(0,0,0,0.25));
+    transition: transform 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    position: relative;
+    z-index: 2;
+}
+
+/* Açıklama Metni */
+.stage-description {
+    font-size: 1rem;
+    color: inherit;
+    opacity: 0.95;
+    max-width: 90%;
+    margin-top: 10px;
+    line-height: 1.5;
+    position: relative;
+    z-index: 2;
+    font-weight: 600;
+}
+
+/* Animasyon: Sahneye Giriş */
+.stage-enter {
+    animation: popIn 0.6s ease forwards;
+}
+
+@keyframes popIn {
+    0% { opacity: 0; transform: scale(0.8); }
+    100% { opacity: 1; transform: scale(1); }
+}
+
+/* ===========================
+   SORU PANELİ VE BUTONLAR
+   =========================== */
+
+/* Soru Paneli (Alttaki Kutu) */
+.game-panel {
+    flex: 0.85;
+    overflow-y: auto;   /* 👈 sadece burası */
+    padding-right: 4px;
+    margin-top: 30px;
+}
+
+.game-panel-content {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;   /* 👈 DİKEY ORTA */
+}
+
+.game-panel-content > * {
+    max-width: 100%;
+}
+
+.game-step-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 10px;
+}
+
+.step-section-pill { font-size: 12px; font-weight: bold; color: var(--color-text-muted); text-transform: uppercase; letter-spacing: 0.5px; }
+.step-counter { font-size: 14px; color: var(--color-primary); font-weight: 600; }
+.game-step-title { margin: 0; font-size: 22px; color: var(--color-text-default); }
+.game-story { font-size: 15px; line-height: 1.6; color: #4b5563; margin-bottom: 16px; }
+
+/* Seçenekler */
+.options-container { display: flex; flex-direction: column; margin-top: 15px; gap: 15px; flex-grow: 1; }
+
+.option-button {
+    border-radius: 12px;
+    border: 1px solid var(--color-border);
+    padding: 10px 14px;
+    background: var(--color-card-bg);
+    font-size: 15px;
+    text-align: left;
+    cursor: pointer;
+    display: flex;
+    align-items: center; /* Ortala */
+    gap: 12px;
+    transition: all 0.15s ease;
+    width: 100%;
+    font-family: inherit; /* Fontu miras al */
+}
+
+.option-button:hover { background: #f9fafb; border-color: #d1d5db; transform: translateY(-2px); box-shadow: 0 8px 15px rgba(0, 0, 0, 0.05); }
+
+.option-key {
+    min-width: 28px;
+    height: 28px;
+    border-radius: 999px;
+    background: #eff6ff;
+    color: var(--color-primary);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 14px;
+    font-weight: 600;
+    flex-shrink: 0;
+}
+
+/* Seçim Durumları */
+.option-button.option-selected { border-width: 2px; border-color: var(--color-primary); background: #eef4ff; box-shadow: 0 0 12px rgba(37, 99, 235, 0.2); transform: translateY(-1px); }
+.option-button.option-correct { border-width: 2px; border-color: var(--color-success); background: #e8f9f0; }
+.option-button.option-correct .option-key { background: var(--color-success); color: #fff; }
+.option-button.option-wrong { border-width: 2px; border-color: var(--color-error); background: #fee7e7; }
+.option-button.option-wrong .option-key { background: var(--color-error); color: #fff; }
+.option-button.multi-selected { border-width: 2px; border-color: var(--color-success); background: #e8f9f0; }
+
+/* Sıralama */
+.option-button.sequence-picked { border-width: 2px; border-color: var(--color-warning); background: #fffbeb; }
+.option-button.sequence-picked .option-key { background: var(--color-warning); color: #fff; position: relative; }
+.option-button.sequence-picked .option-key::after { content: attr(data-order); position: absolute; top: -8px; right: -8px; width: 18px; height: 18px; background: #fff; border: 1px solid var(--color-warning); border-radius: 999px; color: var(--color-warning); font-size: 10px; display: flex; align-items: center; justify-content: center; }
+
+/* Kontrol Butonları */
+.game-controls { margin-top: 8px; display: flex; gap: 10px; flex-wrap: wrap; justify-content: flex-start; }
+.btn { padding: 10px 20px; border-radius: 10px; font-size: 15px; font-weight: 600; cursor: pointer; transition: all 0.2s ease; border: 1px solid transparent; font-family: inherit; }
+#prevButton { order: -1; }
+#checkButton { order: 2; }
+#nextButton { order: 3; }
+#resetSequenceButton { order: 1; }
+
+.btn-primary { background-color: var(--color-primary); color: #fff; }
+.btn-primary:hover { background-color: #1d4ed8; }
+.btn-success { background-color: var(--color-success); color: #fff; }
+.btn-outline { background-color: transparent; border-color: var(--color-border); color: var(--color-text-default); }
+.btn:disabled { opacity: 0.6; cursor: not-allowed; }
+
+/* Geri Bildirim ve Progress */
+.feedback { margin-top: 10px; padding: 10px; border-radius: 8px; font-size: 14px; font-weight: 500; min-height: 20px; }
+.feedback-success { background-color: #d1fae5; color: #065f46; border: 1px solid #a7f3d0; }
+.feedback-error { background-color: #fee2e2; color: #991b1b; border: 1px solid #fecaca; }
+
+.game-progress {
+    margin-top: 24px;
+    display: flex;
+    align-items: center;
+    gap: 14px;
+}
+
+/* Arka plan */
+.progress-bar-bg {
+    flex-grow: 1;
+    height: 10px;
+    background: #e5e7eb;
+    border-radius: 999px;
+    overflow: hidden;
+}
+
+/* Dolan kısım */
+.progress-bar-fill {
+    height: 100%;
+    width: 0%;
+    background: linear-gradient(
+        90deg,
+        var(--color-success),
+        #34d399
+    );
+    transition: width 0.4s ease;
+}
+
+/* Yazı */
+.progress-text {
+    font-size: 13px;
+    font-weight: 500;
+    color: var(--color-text-muted);
+    white-space: nowrap;
+}
+
+
+
+/* ===========================
+   TEMALARA ÖZEL EFEKTLER (BÜYÜK BOYUTLAR)
+   =========================== */
+
+/* --- TEMA: LAN (EV AĞI) --- */
+.theme-home .stage-bg {
+    position: absolute;
+    width: 260px;  
+    height: 260px; 
+    background: #dbeafe;
+    border-radius: 50%;
+    z-index: 0;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    animation: pulseBlue 3s infinite;
+}
+.theme-home .cable-line {
+    height: 10px;    
+    background: #2563eb;
+    width: 0;
+    margin: 15px auto;
+    border-radius: 6px;
+    animation: growLine 1.5s ease forwards;
+}
+@keyframes growLine { from { width: 0; } to { width: 220px; } }
+@keyframes pulseBlue { 0% { transform: translate(-50%, -50%) scale(0.9); opacity: 0.7; } 50% { transform: translate(-50%, -50%) scale(1.1); opacity: 0.3; } 100% { transform: translate(-50%, -50%) scale(0.9); opacity: 0.7; } }
+
+/* --- TEMA: WIFI (KABLOSUZ) --- */
+.theme-wifi .signal-wave {
+    position: absolute;
+    border: 5px solid rgba(37, 99, 235, 0.25);
+    border-radius: 50%;
+    opacity: 0;
+    top: 40%; 
+    left: 50%;
+    transform: translate(-50%, -50%);
+    z-index: 0;
+}
+.theme-wifi .w1 { width: 120px; height: 120px; animation: wifiPulse 2s infinite; }
+.theme-wifi .w2 { width: 220px; height: 220px; animation: wifiPulse 2s infinite 0.4s; }
+.theme-wifi .w3 { width: 320px; height: 320px; animation: wifiPulse 2s infinite 0.8s; }
+@keyframes wifiPulse { 0% { opacity: 0; transform: translate(-50%, -50%) scale(0.5); } 50% { opacity: 1; } 100% { opacity: 0; transform: translate(-50%, -50%) scale(1.1); } }
+
+/* --- TEMA: WAN (DÜNYA) --- */
+.theme-wan {
+    background: linear-gradient(to bottom, #1e293b, #0f172a);
+    color: white;
+}
+.theme-wan .stage-icon { filter: drop-shadow(0 0 30px rgba(56, 189, 248, 0.6)); }
+.planet-orbit {
+    position: absolute;
+    width: 360px; 
+    height: 360px; 
+    border: 2px dashed rgba(255,255,255,0.15);
+    border-radius: 50%;
+    animation: spin 20s linear infinite;
+    top: 50%;
+    left: 50%;
+    margin-top: -180px; 
+    margin-left: -180px; 
+}
+@keyframes spin { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
+
+/* --- TEMA: CLOUD (BULUT) --- */
+.theme-cloud {
+    background: linear-gradient(to top, #e0f2fe, #fff);
+}
+.theme-cloud .cloud-item { animation: floatY 3s ease-in-out infinite; }
+.upload-arrow {
+    font-size: 60px; 
+    color: #0ea5e9;
+    animation: moveUp 1.5s infinite;
+    margin-bottom: 10px;
+}
+@keyframes floatY { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-20px); } }
+@keyframes moveUp { 0% { transform: translateY(10px); opacity: 0; } 50% { opacity: 1; } 100% { transform: translateY(-30px); opacity: 0; } }
+
+/* --- TEMA: SECURITY (GÜVENLİK) --- */
+.theme-security {
+    background: #ecfdf5;
+}
+.shield-pulse {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 240px;  
+    height: 280px; 
+    background: #10b981;
+    opacity: 0.15;
+    border-radius: 50% 50% 50% 50% / 60% 60% 40% 40%;
+    animation: pulseGreen 2s infinite;
+}
+@keyframes pulseGreen { 0% { transform: translate(-50%, -50%) scale(0.9); opacity: 0.3; } 100% { transform: translate(-50%, -50%) scale(1.3); opacity: 0; } }
+
+
+/* ===========================
+   FULL SCREEN FINAL EKRAN
+   =========================== */
+
+.final-screen {
+    width: 100%;
+    height: 100vh;
+    margin: 0;
+    padding: 0;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    background: linear-gradient(
+        135deg,
+        #e0f2fe 0%,
+        #f8fafc 50%,
+        #ecfdf5 100%
+    );
+}
+
+/* Sertifika kartı */
+.final-screen .final-card {
+    background: #ffffff;
+    border-radius: 28px;
+    padding: 48px 56px;
+    max-width: 720px;
+    width: 100%;
+
+    box-shadow: 
+        0 30px 60px rgba(0,0,0,0.12),
+        0 0 0 1px rgba(0,0,0,0.04);
+
+    text-align: center;
+    animation: finalPop 0.6s ease;
+}
+
+/* Tebrikler etiketi */
+.final-screen .step-section-pill {
+    display: inline-block;
+    font-size: 13px;
+    letter-spacing: 1.2px;
+    color: var(--color-text-muted);
+    margin-bottom: 14px;
+}
+
+/* Başlık */
+.final-screen .game-step-title {
+    font-size: 34px;
+    font-weight: 800;
+    margin-bottom: 16px;
+}
+
+/* Açıklama */
+.final-screen .game-story {
+    font-size: 18px;
+    line-height: 1.7;
+    color: #475569;
+    margin-bottom: 28px;
+}
+
+/* Feedback */
+.final-screen .feedback {
+    margin: 0 auto 32px;
+    padding: 24px 28px;
+    font-size: 16px;
+    border-radius: 18px;
+}
+
+/* Buton */
+.final-screen .btn-primary {
+    font-size: 16px;
+    padding: 14px 28px;
+    border-radius: 14px;
+}
+
+/* Animasyon */
+@keyframes finalPop {
+    from {
+        opacity: 0;
+        transform: translateY(30px) scale(0.96);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+    }
+}
+
+
+
+/* ===========================
+   DUYARLILIK (RESPONSIVE)
+   =========================== */
+
+@media (max-width: 600px) {
+    .game-controls { flex-direction: column; gap: 8px; }
+    .game-controls .btn { width: 100%; }
+    #prevButton, #nextButton, #checkButton, #resetSequenceButton { order: initial; }
+    .text-box { padding: 15px; }
+    
+    /* Mobil için ikonları biraz küçültelim ki taşmasın */
+    .stage-icon { font-size: 100px; }
+    .game-visual { min-height: 250px; }
+}
+
+@media (max-width: 900px) {
+    .game-layout {
+        flex-direction: column;   /* 📱 mobilde alt alta */
+    }
+}

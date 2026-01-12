@@ -47,7 +47,7 @@ GAME_INFO = {
         "icon": "🌐"
     },
 
-    "network_game": {
+    "unit3_level2": {
         "title": "Bilgisayar Ağları – İleri Seviye",
         "subtitle": "Ağ türlerini ve internetin nasıl çalıştığını keşfet!",
         "unit": "İletişim, Araştırma ve İş Birliği",
