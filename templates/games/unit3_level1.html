@@ -4,59 +4,74 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Bağlantı Türünü Seç - Ağ Oyunu</title>
+
     <link rel="stylesheet" href="{{ url_for('static', filename='games/unit3_level1/style.css') }}">
     <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;600&display=swap" rel="stylesheet">
 </head>
+
 <body>
 
-    <div class="game-container">
-        <header class="game-header">
-            <h1>Bağlantı Ustası</h1>
-            <p>Kartları sürükle ve doğru bağlantı türünün altındaki kutucuğa bırak!</p>
-            <div class="timer" id="timer">00:00</div>
-        </header>
+<div class="game-container">
 
-        <section class="draggable-area" id="sourceArea">
-            </section>
+    <!-- HEADER -->
+    <header class="game-header">
+        <h1>Bağlantı Ustası</h1>
+        <p>Kartları sürükle ve doğru bağlantı türünün altındaki kutucuğa bırak!</p>
+        <div class="timer" id="timer">00:00</div>
+    </header>
 
-        <section class="drop-zones-container">
-            
-            <div class="category-column wired-col">
-                <h2 class="category-title title-wired">Kablolu Bağlantı 🔌</h2>
-                <div class="slots-grid" id="wired-slots">
-                    <div class="slot" data-type="wired"></div>
-                    <div class="slot" data-type="wired"></div>
-                    <div class="slot" data-type="wired"></div>
-                    <div class="slot" data-type="wired"></div>
-                </div>
-            </div>
+    <!-- ================= GAME BOARD ================= -->
+    <section class="game-board">
 
-            <div class="category-column wireless-col">
-                <h2 class="category-title title-wireless">Kablosuz Bağlantı 📡</h2>
-                <div class="slots-grid" id="wireless-slots">
-                    <div class="slot" data-type="wireless"></div>
-                    <div class="slot" data-type="wireless"></div>
-                    <div class="slot" data-type="wireless"></div>
-                    <div class="slot" data-type="wireless"></div>
-                </div>
-            </div>
+        <!-- SOL: KABLOLU -->
+        <div class="category-column wired-col">
+            <h2 class="category-title title-wired">Kablolu Bağlantı 🔌</h2>
 
-        </section>
-
-        <footer class="game-footer">
-            <button id="checkBtn" class="btn btn-check">Cevapları Gönder</button>
-            <button id="resetBtn" class="btn btn-reset" style="display: none;">Tekrar Oyna</button>
-        </footer>
-
-        <div id="resultModal" class="modal hidden">
-            <div class="modal-content">
-                <div id="modalIcon" class="modal-icon">🎉</div>
-                <h2 id="modalTitle">Tebrikler!</h2>
-                <p id="modalText">Tüm bağlantıları doğru yerleştirdin.</p>
-                <button id="modalCloseBtn" class="btn btn-primary">Kapat</button>
+            <div class="slots-grid" id="wired-slots">
+                <div class="slot" data-type="wired"></div>
+                <div class="slot" data-type="wired"></div>
+                <div class="slot" data-type="wired"></div>
+                <div class="slot" data-type="wired"></div>
             </div>
         </div>
+
+        <!-- ORTA: KARTLAR -->
+        <div class="draggable-area" id="sourceArea">
+            <!-- Kartlar JS tarafından buraya eklenecek -->
+        </div>
+
+        <!-- SAĞ: KABLOSUZ -->
+        <div class="category-column wireless-col">
+            <h2 class="category-title title-wireless">Kablosuz Bağlantı 📡</h2>
+
+            <div class="slots-grid" id="wireless-slots">
+                <div class="slot" data-type="wireless"></div>
+                <div class="slot" data-type="wireless"></div>
+                <div class="slot" data-type="wireless"></div>
+                <div class="slot" data-type="wireless"></div>
+            </div>
+        </div>
+
+    </section>
+    <!-- ================= /GAME BOARD ================= -->
+
+    <!-- FOOTER -->
+    <footer class="game-footer">
+        <button id="checkBtn" class="btn btn-check">Cevapları Gönder</button>
+        <button id="resetBtn" class="btn btn-reset" style="display:none;">Tekrar Oyna</button>
+    </footer>
+
+    <!-- MODAL -->
+    <div id="resultModal" class="modal hidden">
+        <div class="modal-content">
+            <div id="modalIcon" class="modal-icon">🎉</div>
+            <h2 id="modalTitle">Tebrikler!</h2>
+            <p id="modalText">Tüm bağlantıları doğru yerleştirdin.</p>
+            <button id="modalCloseBtn" class="btn btn-primary">Kapat</button>
+        </div>
     </div>
+
+</div>
 
 <script src="{{ url_for('static', filename='games/unit3_level1/script.js') }}"></script>
 </body>
