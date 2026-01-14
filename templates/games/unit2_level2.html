@@ -7,6 +7,7 @@
     <link rel="stylesheet" href="{{ url_for('static', filename='games/unit2_level2/style.css') }}">
 </head>
 <body>
+
 <div class="game-wrapper">
     <div id="game-container">
         
@@ -28,23 +29,48 @@
             <h3 id="question-text">Soru yükleniyor...</h3>
         </div>
 
-        <div id="canvas-wrapper">
-            <canvas id="gameCanvas" width="800" height="480"></canvas>
+        <div id="main-area">
             
-            <div id="answers-overlay">
-                <button id="btn-answer-0" class="spaceship-answer" role="button" tabindex="0"></button>
-                <button id="btn-answer-1" class="spaceship-answer" role="button" tabindex="0"></button>
-                <button id="btn-answer-2" class="spaceship-answer" role="button" tabindex="0"></button>
+            <div id="canvas-wrapper">
+                <canvas id="gameCanvas" width="800" height="480"></canvas>
+                
+                <div id="answers-overlay">
+                    <button id="btn-answer-0" class="spaceship-answer" role="button" tabindex="0"></button>
+                    <button id="btn-answer-1" class="spaceship-answer" role="button" tabindex="0"></button>
+                    <button id="btn-answer-2" class="spaceship-answer" role="button" tabindex="0"></button>
+                </div>
             </div>
-        </div>
 
+            <div id="side-info-panel">
+                <div class="info-box">
+                    <div class="icon">⌨️</div>
+                    <div class="text">
+                        <strong>HAREKET ET</strong>
+                        <span>Yön Tuşlarını Kullan</span>
+                    </div>
+                </div>
+                <div class="info-box">
+                    <div class="icon">🖱️</div>
+                    <div class="text">
+                        <strong>CEVABI SEÇ</strong>
+                        <span>Cevaba git<br>veya Tıkla</span>
+                    </div>
+                </div>
+                <div class="mini-hint">
+                    ⚠️ Canavarlara Dikkat!
+                </div>
+            </div>
+
+        </div>
         <div id="game-over-screen" class="hidden">
             <h1 id="game-over-title">GAME OVER</h1>
             <p id="final-score">SCORE: 0</p>
             <button onclick="location.reload()">TEKRAR OYNA</button>
         </div>
+
     </div>
 </div>
-<script src="{{ url_for('static', filename='games/unit2_level2/script.js') }}"></script>
+
+    <script src="{{ url_for('static', filename='games/unit2_level2/script.js') }}"></script>
 </body>
 </html>

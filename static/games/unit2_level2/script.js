@@ -1,29 +1,25 @@
 const canvas = document.getElementById('gameCanvas');
 const ctx = canvas.getContext('2d');
 
-
-canvas.width = 800;
-canvas.height = 480;
-
 // --- OYUN AYARLARI ---
-const TILE_SIZE = 40; 
+const TILE_SIZE = 40;
 const COLS = 20;
-const ROWS = 12; 
+const ROWS = 12;
 
-// HARİTA
+// HARİTA (1: Duvar, 0: Yol)
 const mapDesign = [
-  [1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1], 
-  [1,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,1], 
-  [1,0,0,0,0,0,1,1,1,0,1,0,1,1,1,1,1,1,0,1], 
-  [1,0,1,1,1,0,1,0,0,0,0,0,1,0,0,0,0,0,0,1], 
-  [1,0,0,0,0,0,1,1,1,1,1,0,1,0,1,1,1,1,1,1], 
-  [1,1,1,1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1], 
-  [1,0,0,0,0,0,1,1,0,1,1,1,1,1,0,1,1,1,0,1], 
-  [1,0,1,1,1,0,1,0,0,0,1,0,0,0,0,1,0,0,0,1], 
-  [1,0,0,0,1,0,1,0,1,0,1,0,1,1,1,1,0,1,1,1], 
-  [1,0,0,0,0,0,0,0,1,0,0,0,1,0,0,0,0,0,0,1], 
-  [1,0,0,0,1,1,1,1,1,1,1,0,1,0,0,0,0,0,0,1], 
-  [1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1]  
+  [1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1],
+  [1,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,1],
+  [1,0,0,0,0,0,1,1,1,0,1,0,1,1,1,1,1,1,0,1],
+  [1,0,1,1,1,0,1,0,0,0,0,0,1,0,0,0,0,0,0,1],
+  [1,0,0,0,0,0,1,1,1,1,1,0,1,0,1,1,1,1,1,1],
+  [1,1,1,1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1],
+  [1,0,0,0,0,0,1,1,0,1,1,1,1,1,0,1,1,1,0,1],
+  [1,0,1,1,1,0,1,0,0,0,1,0,0,0,0,1,0,0,0,1],
+  [1,0,0,0,1,0,1,0,1,0,1,0,1,1,1,1,0,1,1,1],
+  [1,0,0,0,0,0,0,0,1,0,0,0,1,0,0,0,0,0,0,1],
+  [1,0,0,0,1,1,1,1,1,1,1,0,1,0,0,0,0,0,0,1],
+  [1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1]
 ];
 
 // 10 SORU
@@ -41,36 +37,40 @@ const questions = [
 ];
 
 // Oyuncu
-let player = { x: TILE_SIZE * 1.5, y: TILE_SIZE * 1.5, size: 22, speed: 2.5, dx: 0, dy: 0 };
+let player = { x: TILE_SIZE * 1.5, y: TILE_SIZE * 1.5, size: 22, speed: 3.0, dx: 0, dy: 0 };
 
 // Canavarlar
 let enemies = [
-  { x: TILE_SIZE * 18, y: TILE_SIZE * 1, dx: -1, dy: 0 },
-  { x: TILE_SIZE * 9,  y: TILE_SIZE * 5, dx: 1,  dy: 0 },
-  { x: TILE_SIZE * 2,  y: TILE_SIZE * 9, dx: 0.8, dy: 0 }
+  { x: TILE_SIZE * 18, y: TILE_SIZE * 1, dx: -1.8, dy: 0 },
+  { x: TILE_SIZE * 9,  y: TILE_SIZE * 5, dx:  1.8, dy: 0 },
+  { x: TILE_SIZE * 2,  y: TILE_SIZE * 9, dx:  1.5, dy: 0 }
 ];
 
 const possibleLocations = [
-  { x: 2 * TILE_SIZE,  y: 2 * TILE_SIZE },   
-  { x: 9 * TILE_SIZE,  y: 2 * TILE_SIZE },   
-  { x: 16 * TILE_SIZE, y: 2 * TILE_SIZE },  
-  { x: 9 * TILE_SIZE,  y: 5 * TILE_SIZE },   
-  { x: 2 * TILE_SIZE,  y: 9 * TILE_SIZE },   
-  { x: 9 * TILE_SIZE,  y: 9 * TILE_SIZE },   
-  { x: 15 * TILE_SIZE, y: 8 * TILE_SIZE }   
+  { x: 2 * TILE_SIZE,  y: 2 * TILE_SIZE },
+  { x: 9 * TILE_SIZE,  y: 2 * TILE_SIZE },
+  { x: 16 * TILE_SIZE, y: 2 * TILE_SIZE },
+  { x: 9 * TILE_SIZE,  y: 5 * TILE_SIZE },
+  { x: 2 * TILE_SIZE,  y: 9 * TILE_SIZE },
+  { x: 9 * TILE_SIZE,  y: 9 * TILE_SIZE },
+  { x: 15 * TILE_SIZE, y: 8 * TILE_SIZE }
 ];
 
-let activeAnswerZones = []; 
+let activeAnswerZones = [];
 let currentQIndex = 0;
 let score = 0;
 let lives = 3;
-let currentLevelAnswers = []; 
+let currentLevelAnswers = [];
 let isGameOver = false;
-let isProcessingAnswer = false; 
+let isProcessingAnswer = false;
 let isLevelTransitioning = false;
-let playerInvulnerable = false; 
+let playerInvulnerable = false;
 
 function initGame() {
+  // İstersen canvas ölçüsünü garantiye al:
+  canvas.width = COLS * TILE_SIZE;
+  canvas.height = ROWS * TILE_SIZE;
+
   loadQuestion();
   update();
 }
@@ -78,22 +78,22 @@ function initGame() {
 function isPathReachable(startCol, startRow, targetCol, targetRow) {
   let queue = [[startCol, startRow]];
   let visited = new Set();
-
   visited.add(`${startCol},${startRow}`);
 
-  let iterations = 0; 
-    
+  let iterations = 0;
+
   while (queue.length > 0) {
     let [c, r] = queue.shift();
     if (c === targetCol && r === targetRow) return true;
-        
-    const dirs = [[0,1], [0,-1], [1,0], [-1,0]];
+
+    const dirs = [[0,1],[0,-1],[1,0],[-1,0]];
     for (let [dc, dr] of dirs) {
       let nc = c + dc;
       let nr = r + dr;
 
       if (
-        nc >= 0 && nc < COLS && nr >= 0 && nr < ROWS &&
+        nc >= 0 && nc < COLS &&
+        nr >= 0 && nr < ROWS &&
         mapDesign[nr][nc] === 0 &&
         !visited.has(`${nc},${nr}`)
       ) {
@@ -103,27 +103,31 @@ function isPathReachable(startCol, startRow, targetCol, targetRow) {
     }
 
     iterations++;
-    if (iterations > ROWS * COLS) break; 
+    if (iterations > ROWS * COLS) break;
   }
+
   return false;
 }
 
 function loadQuestion() {
   if (currentQIndex >= questions.length) {
-    gameOver(true); 
+    gameOver(true);
     return;
   }
 
   isLevelTransitioning = true;
   const q = questions[currentQIndex];
-  document.getElementById('question-text').innerText = q.text;
-    
+
+  const qt = document.getElementById('question-text');
+  if (qt) qt.innerText = q.text;
+
+  // cevap sıralama
   let indices = [0, 1, 2];
   for (let i = indices.length - 1; i > 0; i--) {
     const j = Math.floor(Math.random() * (i + 1));
     [indices[i], indices[j]] = [indices[j], indices[i]];
   }
-    
+
   currentLevelAnswers = indices.map(i => ({
     text: q.answers[i],
     isCorrect: (i === q.correct)
@@ -138,23 +142,25 @@ function loadQuestion() {
 
   for (let loc of shuffledLocs) {
     let dist = Math.hypot(loc.x - player.x, loc.y - player.y);
-        
+
     if (dist > SAFE_DISTANCE) {
       let tCol = Math.floor(loc.x / TILE_SIZE);
       let tRow = Math.floor(loc.y / TILE_SIZE);
-            
+
       if (isPathReachable(pCol, pRow, tCol, tRow)) {
         activeAnswerZones.push({
-          x: loc.x, y: loc.y, w: 4 * TILE_SIZE, h: 1.5 * TILE_SIZE, id: activeAnswerZones.length 
+          x: loc.x, y: loc.y, w: 4 * TILE_SIZE, h: 1.5 * TILE_SIZE, id: activeAnswerZones.length
         });
       }
     }
     if (activeAnswerZones.length === 3) break;
   }
-    
+
+  // yetmezse tekrar dene
   if (activeAnswerZones.length < 3) {
     for (let loc of shuffledLocs) {
       if (activeAnswerZones.length === 3) break;
+
       let exists = activeAnswerZones.find(z => z.x === loc.x && z.y === loc.y);
       if (!exists) {
         let tCol = Math.floor(loc.x / TILE_SIZE);
@@ -178,18 +184,19 @@ function loadQuestion() {
 function updateSpaceshipVisuals() {
   activeAnswerZones.forEach((zone, index) => {
     const btn = document.getElementById(`btn-answer-${index}`);
-    if (btn) {
-      btn.style.left = zone.x + 'px';
-      btn.style.top = zone.y + 'px';
-      btn.style.width = zone.w + 'px';
-      btn.style.height = zone.h + 'px';
-            
-      if (currentLevelAnswers[index]) {
-        btn.innerHTML = currentLevelAnswers[index].text;
-      }
-      btn.className = 'spaceship-answer'; 
-      btn.onclick = () => checkAnswer(index);
+    if (!btn) return;
+
+    btn.style.left = zone.x + 'px';
+    btn.style.top = zone.y + 'px';
+    btn.style.width = zone.w + 'px';
+    btn.style.height = zone.h + 'px';
+
+    if (currentLevelAnswers[index]) {
+      btn.innerHTML = currentLevelAnswers[index].text;
     }
+
+    btn.className = 'spaceship-answer';
+    btn.onclick = () => checkAnswer(index);
   });
 }
 
@@ -201,23 +208,23 @@ document.addEventListener('keydown', (e) => {
   }
 
   if (e.key === 'ArrowRight') player.dx = player.speed;
-  if (e.key === 'ArrowLeft') player.dx = -player.speed;
-  if (e.key === 'ArrowUp') player.dy = -player.speed;
-  if (e.key === 'ArrowDown') player.dy = player.speed;
+  if (e.key === 'ArrowLeft')  player.dx = -player.speed;
+  if (e.key === 'ArrowUp')    player.dy = -player.speed;
+  if (e.key === 'ArrowDown')  player.dy = player.speed;
 });
 
 document.addEventListener('keyup', (e) => {
   if (['ArrowRight', 'ArrowLeft'].includes(e.key)) player.dx = 0;
-  if (['ArrowUp', 'ArrowDown'].includes(e.key)) player.dy = 0;
+  if (['ArrowUp', 'ArrowDown'].includes(e.key))    player.dy = 0;
 });
 
 function checkWallCollision(newX, newY) {
-  const margin = 4; 
+  const margin = 4;
   const corners = [
-    {x: newX - player.size/2 + margin, y: newY - player.size/2 + margin},
-    {x: newX + player.size/2 - margin, y: newY - player.size/2 + margin},
-    {x: newX - player.size/2 + margin, y: newY + player.size/2 - margin},
-    {x: newX + player.size/2 - margin, y: newY + player.size/2 - margin}
+    { x: newX - player.size/2 + margin, y: newY - player.size/2 + margin },
+    { x: newX + player.size/2 - margin, y: newY - player.size/2 + margin },
+    { x: newX - player.size/2 + margin, y: newY + player.size/2 - margin },
+    { x: newX + player.size/2 - margin, y: newY + player.size/2 - margin }
   ];
 
   for (let corner of corners) {
@@ -225,10 +232,11 @@ function checkWallCollision(newX, newY) {
     let row = Math.floor(corner.y / TILE_SIZE);
 
     if (
-      row < 0 || row >= ROWS || col < 0 || col >= COLS ||
+      row < 0 || row >= ROWS ||
+      col < 0 || col >= COLS ||
       mapDesign[row][col] === 1
     ) {
-      return true; 
+      return true;
     }
   }
   return false;
@@ -243,9 +251,10 @@ function update() {
   enemies.forEach(enemy => {
     let nextX = enemy.x + enemy.dx;
     let nextY = enemy.y + enemy.dy;
+
     let col = Math.floor(nextX / TILE_SIZE);
     let row = Math.floor(nextY / TILE_SIZE);
-        
+
     if (row < 0 || row >= ROWS || col < 0 || col >= COLS || mapDesign[row][col] === 1) {
       enemy.dx *= -1;
       enemy.dy *= -1;
@@ -255,9 +264,8 @@ function update() {
     }
 
     let dist = Math.hypot(player.x - enemy.x, player.y - enemy.y);
-        
     if (dist < player.size + 5) {
-      if (!playerInvulnerable) { 
+      if (!playerInvulnerable) {
         loseLife();
       }
     }
@@ -280,34 +288,42 @@ function update() {
 
 function checkAnswer(zoneIndex) {
   if (isProcessingAnswer) return;
-  if (isLevelTransitioning) return; 
+  if (isLevelTransitioning) return;
 
   isProcessingAnswer = true;
-    
+
   let selectedAnswer = currentLevelAnswers[zoneIndex];
   let btn = document.getElementById(`btn-answer-${zoneIndex}`);
-    
-  if (selectedAnswer && selectedAnswer.isCorrect) {
+
+  if (!selectedAnswer) {
+    isProcessingAnswer = false;
+    return;
+  }
+
+  if (selectedAnswer.isCorrect) {
     if (btn) btn.classList.add('spaceship-correct');
+
     score += 100;
-    document.getElementById('score').innerText = score;
+    const scoreEl = document.getElementById('score');
+    if (scoreEl) scoreEl.innerText = score;
 
     if (score >= 1000) {
-      setTimeout(() => {
-        gameOver(true); 
-      }, 500);
+      setTimeout(() => gameOver(true), 500);
       return;
     }
-        
+
     setTimeout(() => {
       currentQIndex++;
-      document.getElementById('level').innerText = currentQIndex + 1;
+      const levelEl = document.getElementById('level');
+      if (levelEl) levelEl.innerText = currentQIndex + 1;
+
       loadQuestion();
       isProcessingAnswer = false;
-    }, 1000); 
+    }, 1000);
+
   } else {
     if (btn) btn.classList.add('spaceship-wrong');
-        
+
     setTimeout(() => {
       loseLife();
       if (btn) btn.classList.remove('spaceship-wrong');
@@ -323,14 +339,14 @@ function loseLife() {
   if (hearts.length > 0) {
     const heartToRemove = hearts[hearts.length - 1];
     heartToRemove.classList.add('heart-lost');
-        
+
     setTimeout(() => {
       heartToRemove.style.visibility = 'hidden';
     }, 600);
   }
 
   lives--;
-    
+
   if (lives <= 0) {
     setTimeout(() => gameOver(false), 600);
   } else {
@@ -342,38 +358,43 @@ function loseLife() {
 
 function gameOver(win) {
   isGameOver = true;
+
   const screen = document.getElementById('game-over-screen');
   const title = document.getElementById('game-over-title');
-  screen.classList.remove('hidden');
-  document.getElementById('final-score').innerText = "SCORE: " + score;
-    
-  if (win) {
-    title.innerText = "TEBRİKLER! KAZANDINIZ! 🏆";
-    title.style.color = "#ffd700"; 
-  } else {
-    title.innerText = "OYUN BİTTİ";
-    title.style.color = "red";
+  const finalScore = document.getElementById('final-score');
+
+  if (screen) screen.classList.remove('hidden');
+  if (finalScore) finalScore.innerText = "SCORE: " + score;
+
+  if (title) {
+    if (win) {
+      title.innerText = "TEBRİKLER! KAZANDINIZ! 🏆";
+      title.style.color = "#ffd700";
+    } else {
+      title.innerText = "OYUN BİTTİ";
+      title.style.color = "red";
+    }
   }
 }
 
 function draw() {
   ctx.clearRect(0, 0, canvas.width, canvas.height);
 
-  ctx.fillStyle = "#5d2c91"; 
+  // Duvarlar
+  ctx.fillStyle = "#5d2c91";
   for (let row = 0; row < ROWS; row++) {
     for (let col = 0; col < COLS; col++) {
       if (mapDesign[row][col] === 1) {
         ctx.shadowBlur = 15;
         ctx.shadowColor = "#a64dff";
         ctx.fillRect(col * TILE_SIZE, row * TILE_SIZE, TILE_SIZE, TILE_SIZE);
-        ctx.shadowBlur = 0; 
+        ctx.shadowBlur = 0;
       }
     }
   }
 
-  if (playerInvulnerable) {
-    ctx.globalAlpha = 0.5; 
-  }
+  // Oyuncu
+  if (playerInvulnerable) ctx.globalAlpha = 0.5;
 
   ctx.shadowBlur = 15;
   ctx.shadowColor = "#00f2ff";
@@ -385,6 +406,7 @@ function draw() {
 
   ctx.globalAlpha = 1.0;
 
+  // Canavarlar
   enemies.forEach(enemy => {
     ctx.font = "35px Arial";
     ctx.fillText("👾", enemy.x, enemy.y);

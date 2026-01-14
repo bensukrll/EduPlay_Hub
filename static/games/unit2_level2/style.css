@@ -9,36 +9,32 @@ body {
     overflow: hidden; 
 }
 
-/* OYUNU TAŞIYAN ANA SAHNE */
 .game-wrapper {
     width: 100%;
     height: 100vh;
     display: flex;
     justify-content: center;
-    align-items: center; /* Ortada dursun, isterseniz flex-end yapabilirsiniz */
+    align-items: center;
     padding: 10px;
     box-sizing: border-box;
 }
 
-/* OYUN KUTUSU */
 #game-container {
     position: relative;
-    width: 820px;
-    max-width: 95%;
+    width: 970px;
+    max-width: 98%;
     border: 4px solid #00f2ff;
     border-radius: 14px;
-    max-height: 95vh;
     overflow: hidden; 
     box-shadow: 
         0 0 25px rgba(0,242,255,0.8), 
         inset 0 0 40px rgba(0,242,255,0.15);
     background: radial-gradient(circle, #2b1055 0%, #000000 100%);
-    
     display: flex;
     flex-direction: column;
 }
 
-/* ÜST PANEL (HUD) */
+
 #hud {
     display: flex;
     justify-content: space-between;
@@ -50,7 +46,7 @@ body {
     border-bottom: 1px solid #00f2ff;
 }
 
-/* HEDEF BANNER */
+
 #objective-banner {
     background: #000;
     color: #ffd700;
@@ -69,51 +65,111 @@ body {
     100% { opacity: 1; }
 }
 
-/* SORU PANELİ */
 #question-panel {
     background: rgba(0, 20, 40, 0.95);
-    padding: 14px 20px; 
+    padding: 15px; 
     text-align: center;
     color: white;
     border-bottom: 2px solid #00f2ff; 
 }
 
-/* Soru Metni */
 #question-text {
     margin: 0;
     font-family: 'Roboto', sans-serif;
-    font-size: 18px; 
+    font-size: 20px; 
     color: #ffffff;  
     font-weight: 700; 
     line-height: 1.4;
     text-shadow: 0 0 10px rgba(0, 242, 255, 0.5); 
 }
 
-/* CANVAS WRAPPER - GÜNCELLENDİ */
-#canvas-wrapper {
-    position: relative;
-    width: 100%;
-    aspect-ratio: 20 / 12;   /* 🎯 HARİTA ORANI */
-    overflow: hidden;
-    background: #000;
+
+
+#main-area {
+    display: flex;
+    flex-direction: row; 
+    background-color: #000;
+    
 }
 
-canvas {
-    position: absolute;
-    inset: 0;
-    width: 100%;
-    height: 100%;
+#canvas-wrapper {
+    position: relative;
+    line-height: 0;
+    font-size: 0;
     display: block;
+    flex-grow: 1; 
+}
 
-    image-rendering: pixelated;
 
+#side-info-panel {
+    width: 200px;
+    background: #1a0b2e;
+    border-left: 2px solid #00f2ff;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    padding: 10px;
+    gap: 20px;
+}
+
+.info-box {
+    background: rgba(0, 242, 255, 0.1);
+    border: 1px solid #00f2ff;
+    border-radius: 8px;
+    padding: 15px 10px;
+    width: 100%;
+    box-sizing: border-box;
+    text-align: center;
+    color: #fff;
+    box-shadow: 0 0 10px rgba(0, 242, 255, 0.2);
+}
+
+.info-box .icon {
+    font-size: 28px;
+    margin-bottom: 8px;
+}
+
+.info-box .text strong {
+    display: block;
+    color: #ffd700;
+    font-size: 11px;
+    margin-bottom: 5px;
+    font-family: 'Press Start 2P', cursive;
+}
+
+.info-box .text span {
+    font-size: 13px;
+    color: #ccc;
+    font-family: 'Roboto', sans-serif;
+    line-height: 1.3;
+}
+
+.mini-hint {
+    color: #ff0055;
+    font-size: 12px;
+    font-weight: bold;
+    font-family: 'Roboto', sans-serif;
+    animation: pulseHint 1s infinite alternate;
+}
+
+@keyframes pulseHint {
+    from { opacity: 0.6; transform: scale(0.95); }
+    to { opacity: 1; transform: scale(1.05); }
+}
+
+
+canvas {
+    display: block;
+    width: 100%;
+    height: auto;
     background-image:
         linear-gradient(#1a1a1a 1px, transparent 1px),
         linear-gradient(90deg, #1a1a1a 1px, transparent 1px);
     background-size: 40px 40px;
 }
 
-/* OYUN SONU EKRANI */
+
 #game-over-screen {
     position: absolute;
     inset: 0;
@@ -129,7 +185,6 @@ canvas {
 
 .hidden { display: none !important; }
 
-/* GENEL BUTONLAR */
 button {
     padding: 14px 28px;
     font-size: 18px;
@@ -143,7 +198,7 @@ button {
 }
 button:hover { background: #ff4488; }
 
-/* --- CEVAP KUTUCUKLARI (NEON STİLİ) --- */
+
 .spaceship-answer {
     position: absolute;
     margin: 0;
@@ -198,18 +253,20 @@ button:hover { background: #ff4488; }
     100% { transform: translateX(0); }
 }
 
-.heart {
-    font-size: 20px;
-    margin-right: 5px;
-    color: #ff0055;
-}
+.heart { font-size: 20px; margin-right: 5px; color: #ff0055; }
+.heart-lost { opacity: 0; transition: opacity 0.5s; }
 
-.heart-lost {
-    opacity: 0;
-    transition: opacity 0.5s;
-}
-
-@media (max-width: 850px) {
-    #game-container { width: 100%; border: none; }
+/* MOBİL UYUMU */
+@media (max-width: 1020px) {
+    #game-container { width: 98%; }
+    #main-area { flex-direction: column; }
+    #side-info-panel { 
+        width: 100%; 
+        flex-direction: row; 
+        border-left: none; 
+        border-top: 2px solid #00f2ff;
+        padding: 10px;
+    }
+    .info-box { width: 45%; font-size: 10px; }
     canvas { width: 100%; }
 }
