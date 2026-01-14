@@ -9,23 +9,39 @@
 <body>
 <div class="game-wrapper">
     <div id="game-container">
+        
         <div id="hud">
-            <div class="hud-item">❤️ Can: <span id="lives">3</span></div>
-            <div class="hud-item">⭐ Puan: <span id="score">0</span></div>
-            <div class="hud-item">Seviye: <span id="level">1</span></div>
+            <div class="hud-item">
+                <div id="lives-container">
+                    <span class="heart">❤️</span>
+                    <span class="heart">❤️</span>
+                    <span class="heart">❤️</span>
+                </div>
+            </div>
+            <div class="hud-item">SCORE: <span id="score">0</span></div>
+            <div class="hud-item">LVL: <span id="level">1</span></div>
         </div>
 
-        <canvas id="gameCanvas" width="800" height="500"></canvas>
+        <div id="objective-banner">🏆 1000 Puana Ulaş Kazan! 🏆</div>
 
         <div id="question-panel">
             <h3 id="question-text">Soru yükleniyor...</h3>
-            <div id="answers-hint">Doğru cevabın olduğu kapıya git!</div>
+        </div>
+
+        <div id="canvas-wrapper">
+            <canvas id="gameCanvas" width="800" height="480"></canvas>
+            
+            <div id="answers-overlay">
+                <button id="btn-answer-0" class="spaceship-answer" role="button" tabindex="0"></button>
+                <button id="btn-answer-1" class="spaceship-answer" role="button" tabindex="0"></button>
+                <button id="btn-answer-2" class="spaceship-answer" role="button" tabindex="0"></button>
+            </div>
         </div>
 
         <div id="game-over-screen" class="hidden">
-            <h1 id="game-over-title">Oyun Bitti!</h1>
-            <p id="final-score">Puanın: 0</p>
-            <button onclick="location.reload()">Tekrar Oyna</button>
+            <h1 id="game-over-title">GAME OVER</h1>
+            <p id="final-score">SCORE: 0</p>
+            <button onclick="location.reload()">TEKRAR OYNA</button>
         </div>
     </div>
 </div>

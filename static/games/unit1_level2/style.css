@@ -16,7 +16,6 @@ body {
     background-repeat: repeat-x;
     background-size: auto 100%;
     
-    /* Arka plan hareketi daha akıcı olsun diye süreyi kısalttık */
     animation: slideBg 40s linear infinite;
     animation-play-state: paused;
 }
@@ -26,76 +25,64 @@ body {
     to { background-position: -3000px 0; }
 }
 
-/* --- KARAKTERLER İÇİN BÜYÜK ZIPLAMA EFEKTİ --- */
+/* --- KARAKTER AYARLARI (GÖNDERDİĞİN DOSYADAKİ ORİJİNAL HALİ) --- */
 @keyframes bobbing {
     0%, 100% { transform: translateY(0); }
-    50% { transform: translateY(-30px); /* Daha yükseğe zıplasınlar */ }
+    50% { transform: translateY(-30px); }
 }
 
 .player, .monster {
     position: absolute;
-    /* Karakterleri zeminden daha yukarı taşıdık ki havada gibi durmasınlar */
     bottom: 100px; 
+    
+    /* Animasyon direkt burada tanımlı ama durdurulmuş (paused) */
     animation: bobbing 0.5s infinite ease-in-out;
     animation-play-state: paused;
+    
     transition: left 0.4s ease;
 }
 
-/* --- KOCAMAN KARAKTER BOYUTLARI --- */
-
 .player {
-    /* Oyuncu karakteri için yeni, büyük boyut */
     width: 350px; 
     height: auto;
     z-index: 10;
 }
 
 .monster {
-    left: -250px; /* Başlangıç konumu daha solda */
-    /* Canavar görseli için yeni, büyük boyut */
+    left: -250px; 
     width: 400px; 
     height: auto;
     z-index: 11;
 }
 
+/* --- KAPI AYARLARI --- */
+.door {
+    position: absolute;
+    right: -200px; 
+    bottom: 40px; 
+    height: 60vh; 
+    width: auto;
+    z-index: 5;
+    pointer-events: none;
+}
+
+/* --- TIMER BAR --- */
 .timer-bar {
     position: absolute;
     top: 12px;
     left: 50%;
     transform: translateX(-50%);
-
     background: rgba(0, 0, 0, 0.75);
     color: #ffffff;
-
     padding: 8px 16px;
     border-radius: 20px;
-
     font-size: 16px;
     font-weight: 600;
     letter-spacing: 0.5px;
-
     z-index: 999;
 }
-/* --- KESİN ÇÖZÜM: SAĞA GÖMÜLÜ DEV KAPI --- */
-.door {
-    position: absolute;
-    /* Eksi değer vererek sağdaki şeffaf boşluğu ekran dışına itiyoruz */
-    right: -200px; 
-    
-    /* Zemine tam oturtma */
-    bottom: 40px; 
-    
-    /* Yükseklik: Ekranın %80'i (Kocaman) */
-    height: 60vh; 
-    width: auto;
-    
-    z-index: 5;
-    pointer-events: none;
-    
-    /* Eğer hala çizdiğin gibi tam yapışmazsa buradaki -50px'i -80px veya -100px yap */
-}
 
-/* --- ARAYÜZ ELEMANLARI (DEĞİŞİKLİK YOK) --- */
+/* --- ARAYÜZ --- */
 .question-box {
     position: absolute;
     top: 0;
@@ -112,9 +99,7 @@ body {
     border-bottom: 2px solid #3498db;
 }
 
-.btn-group {
-    margin-top: 15px;
-}
+.btn-group { margin-top: 15px; }
 
 button {
     padding: 12px 35px;
@@ -127,7 +112,6 @@ button {
     font-weight: bold;
     text-transform: uppercase;
 }
-
 button:hover { transform: scale(1.05); }
 
 .yes { background: #27ae60; color: white; }

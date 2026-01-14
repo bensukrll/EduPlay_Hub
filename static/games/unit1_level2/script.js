@@ -20,17 +20,16 @@ let current = 0;
 let chaseInterval = null;
 let wrongCount = 0;
 
-let monsterSpeed = 0.55;     // daha yavaş başlangıç
-const monsterSpeedInc = 0.08; // doğru cevapta çok az hızlansın
+let monsterSpeed = 0.55;    
+const monsterSpeedInc = 0.08; 
 
 let timeLeft = 60;
 let timerInterval = null;
 
-let isGameOver = false;      // ✅ kritik kilit
+let isGameOver = false;      
 
-// dinamik adım için
-let step = 60;               // başlangıç değeri (startGame'de hesaplanacak)
-let startX = 200;            // oyuncu başlangıç px
+let step = 60;               
+let startX = 200;            
 
 const gameContainer = document.querySelector('.game-container');
 const player = document.getElementById("player");
@@ -43,7 +42,7 @@ const startScreen = document.getElementById("startScreen");
 const monsterRoar = document.getElementById("monsterRoar");
 const winSound = document.getElementById("winSound");
 
-// başlangıç konumları
+// Başlangıç konumları
 player.style.left = startX + "px";
 if (!monster.style.left) monster.style.left = "-200px";
 
@@ -54,16 +53,20 @@ function startGame() {
     startScreen.style.display = "none";
     questionBox.style.display = "block";
 
-    // ⏱ Timer UI varsa baştan yaz
+    // Timer UI
     const timerEl = document.getElementById("time");
     if (timerEl) timerEl.innerText = timeLeft;
 
-    // ✅ Soru sayısı artsa da oyuncu kapıya kadar düzgün ilerlesin:
-    // Kapının ortasına kadar toplam mesafeyi, soru sayısına bölelim.
-    // (Kapı DOM ölçüsü oyun başında hazır olur)
+    // Adım hesaplama
     const doorCenter = door.offsetLeft + (door.offsetWidth / 2) - (player.offsetWidth / 2);
-    const totalDistance = Math.max(300, doorCenter - startX); // minimum mesafe koruması
+    const totalDistance = Math.max(300, doorCenter - startX); 
     step = Math.floor(totalDistance / questions.length);
+
+    // ✅ ESKİ DOSYADAKİ GİBİ: Play State'i Running Yapıyoruz
+    // Bu yöntem gönderdiğin örnekteki gibi çalışır.
+    player.style.animationPlayState = "running";
+    monster.style.animationPlayState = "running";
+    gameContainer.style.animationPlayState = "running"; // Arka plan da aksın
 
     startChase();
     startTimer();
@@ -96,7 +99,6 @@ function startChase() {
 
         monster.style.left = (monsterPos + monsterSpeed) + "px";
 
-        // Çarpışma kontrolü
         if (monsterPos + 120 >= playerPos) {
             monsterRoar.play();
             loseGame("Canavar seni yakaladı!");
@@ -114,11 +116,9 @@ function answer(userAnswer) {
         wrongCount = 0;
         current++;
 
-        // oyuncuyu ilerlet (kapıyı geçmeyecek şekilde)
         let currentLeft = parseInt(player.style.left);
         player.style.left = (currentLeft + step) + "px";
 
-        // canavar kontrollü hızlansın
         monsterSpeed += monsterSpeedInc;
 
         if (current >= questions.length) {
@@ -126,17 +126,14 @@ function answer(userAnswer) {
             escapeThroughDoor();
             return;
         }
-
         questionText.innerText = questions[current].q;
 
     } else {
         wrongCount++;
 
-        // canavar yaklaşsın ama oyunu "kilitlemeyecek" şekilde
         let monsterPos = parseInt(monster.style.left || -200);
         monster.style.left = (monsterPos + 60) + "px";
 
-        // titreme
         gameContainer.style.transform = "translateX(6px)";
         setTimeout(() => gameContainer.style.transform = "translateX(0)", 120);
 
@@ -154,17 +151,21 @@ function stopAll() {
     clearInterval(timerInterval);
     chaseInterval = null;
     timerInterval = null;
+
+    // ✅ ESKİ DOSYADAKİ GİBİ: Play State'i Paused Yapıyoruz
+    player.style.animationPlayState = "paused";
+    monster.style.animationPlayState = "paused";
+    gameContainer.style.animationPlayState = "paused";
 }
 
 /* ===================== */
 function loseGame(reason = "") {
-    if (isGameOver) return;   // ✅ çift tetiklemeyi engeller
+    if (isGameOver) return; 
     isGameOver = true;
 
     stopAll();
     questionBox.style.display = "none";
 
-    // varsa önceki mesaj kutusunu sil (güvenlik)
     const old = document.querySelector(".game-over-box");
     if (old) old.remove();
 
@@ -179,13 +180,12 @@ function loseGame(reason = "") {
     `;
     document.getElementById("gameArea").appendChild(msg);
 
-    // canavar oyuncuya gelsin
     monster.style.left = player.style.left;
 }
 
 /* ===================== */
 function winGame() {
-    if (isGameOver) return;   // ✅ çift tetiklemeyi engeller
+    if (isGameOver) return; 
     isGameOver = true;
 
     stopAll();
@@ -210,17 +210,14 @@ function winGame() {
 
 /* ===================== */
 function escapeThroughDoor() {
-    // kovalamayı durdur, süre dursun
-    stopAll();
+    stopAll(); // Animasyonları durdur
 
-    // oyuncuyu kapının ortasına götür (artık geri gelme "mantıksız" görünmeyecek çünkü zaten kapıya yakın)
     const doorLeft = door.offsetLeft;
     const centerPos = doorLeft + door.offsetWidth / 2 - player.offsetWidth / 2;
 
     player.style.transition = "left 0.8s ease-in-out, opacity 0.5s ease 0.6s";
     player.style.left = centerPos + "px";
 
-    // kapıdan çıkış efekti
     setTimeout(() => {
         player.style.opacity = "0";
     }, 650);

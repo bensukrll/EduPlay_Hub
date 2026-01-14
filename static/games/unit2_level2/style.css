@@ -1,81 +1,119 @@
 @import url('https://fonts.googleapis.com/css2?family=Press+Start+2P&family=Roboto:wght@400;700&display=swap');
 
-/* BODY: ORTALAMA YOK */
+/* BODY */
 body {
     margin: 0;
     padding: 0;
     background-color: #120a2e;
     font-family: 'Roboto', sans-serif;
+    overflow: hidden; 
 }
 
 /* OYUNU TAŞIYAN ANA SAHNE */
 .game-wrapper {
     width: 100%;
-    min-height: calc(100vh - 140px); /* üst başlık payı */
+    height: 100vh;
     display: flex;
     justify-content: center;
-    align-items: center;
+    align-items: center; /* Ortada dursun, isterseniz flex-end yapabilirsiniz */
+    padding: 10px;
+    box-sizing: border-box;
 }
 
 /* OYUN KUTUSU */
 #game-container {
     position: relative;
-    width: 820px;          /* SABİT VE GÜÇLÜ */
+    width: 820px;
     max-width: 95%;
     border: 4px solid #00f2ff;
     border-radius: 14px;
-    box-shadow:
-        0 0 25px rgba(0,242,255,0.8),
+    max-height: 95vh;
+    overflow: hidden; 
+    box-shadow: 
+        0 0 25px rgba(0,242,255,0.8), 
         inset 0 0 40px rgba(0,242,255,0.15);
     background: radial-gradient(circle, #2b1055 0%, #000000 100%);
-    overflow: hidden;
+    
+    display: flex;
+    flex-direction: column;
 }
 
-/* HUD */
+/* ÜST PANEL (HUD) */
 #hud {
     display: flex;
     justify-content: space-between;
     padding: 12px 24px;
-    background: rgba(0, 0, 0, 0.7);
+    background: rgba(0, 0, 0, 0.8);
     color: #fff;
     font-family: 'Press Start 2P', cursive;
     font-size: 14px;
-    border-bottom: 2px solid #00f2ff;
+    border-bottom: 1px solid #00f2ff;
 }
 
-/* CANVAS — ARTIK EZİLMİYOR */
-canvas {
-    display: block;
+/* HEDEF BANNER */
+#objective-banner {
+    background: #000;
+    color: #ffd700;
+    text-align: center;
+    padding: 8px;
+    font-family: 'Press Start 2P', cursive;
+    font-size: 12px; 
+    border-bottom: 1px solid #00f2ff;
+    text-shadow: 2px 2px #ff0055;
+    animation: pulseText 1.5s infinite;
+}
+
+@keyframes pulseText {
+    0% { opacity: 1; }
+    50% { opacity: 0.8; }
+    100% { opacity: 1; }
+}
+
+/* SORU PANELİ */
+#question-panel {
+    background: rgba(0, 20, 40, 0.95);
+    padding: 14px 20px; 
+    text-align: center;
+    color: white;
+    border-bottom: 2px solid #00f2ff; 
+}
+
+/* Soru Metni */
+#question-text {
+    margin: 0;
+    font-family: 'Roboto', sans-serif;
+    font-size: 18px; 
+    color: #ffffff;  
+    font-weight: 700; 
+    line-height: 1.4;
+    text-shadow: 0 0 10px rgba(0, 242, 255, 0.5); 
+}
+
+/* CANVAS WRAPPER - GÜNCELLENDİ */
+#canvas-wrapper {
+    position: relative;
     width: 100%;
-    height: auto;
+    aspect-ratio: 20 / 12;   /* 🎯 HARİTA ORANI */
+    overflow: hidden;
+    background: #000;
+}
+
+canvas {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    display: block;
+
+    image-rendering: pixelated;
+
     background-image:
         linear-gradient(#1a1a1a 1px, transparent 1px),
         linear-gradient(90deg, #1a1a1a 1px, transparent 1px);
     background-size: 40px 40px;
 }
 
-/* SORU PANELİ */
-#question-panel {
-    background: rgba(0, 20, 40, 0.95);
-    padding: 16px;
-    text-align: center;
-    color: white;
-    border-top: 2px solid #ff0055;
-}
-
-#question-text {
-    margin: 0;
-    font-size: 16px;
-    color: #ffde00;
-}
-
-#answers-hint {
-    margin-top: 6px;
-    font-size: 12px;
-    color: #aaa;
-}
-
-/* OYUN SONU */
+/* OYUN SONU EKRANI */
 #game-over-screen {
     position: absolute;
     inset: 0;
@@ -85,13 +123,13 @@ canvas {
     justify-content: center;
     align-items: center;
     color: white;
-    z-index: 10;
+    z-index: 20;
+    font-family: 'Press Start 2P', cursive;
 }
 
-.hidden {
-    display: none !important;
-}
+.hidden { display: none !important; }
 
+/* GENEL BUTONLAR */
 button {
     padding: 14px 28px;
     font-size: 18px;
@@ -103,14 +141,75 @@ button {
     margin-top: 20px;
     border-radius: 6px;
 }
+button:hover { background: #ff4488; }
 
-button:hover {
-    background: #ff4488;
+/* --- CEVAP KUTUCUKLARI (NEON STİLİ) --- */
+.spaceship-answer {
+    position: absolute;
+    margin: 0;
+    padding: 8px 12px;
+    background: rgba(0, 15, 40, 0.75); 
+    border: 2px solid #00f2ff; 
+    border-radius: 6px; 
+    box-shadow: 
+        0 0 10px rgba(0, 242, 255, 0.7), 
+        inset 0 0 15px rgba(0, 242, 255, 0.3);
+    color: white;
+    font-family: 'Press Start 2P', cursive;
+    font-size: 10px;
+    line-height: 1.5;
+    text-shadow: 1px 1px 0 #000;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    z-index: 10;
+    cursor: pointer;
+    transition: all 0.2s ease-in-out;
 }
 
-/* KÜÇÜK EKRAN KORUMASI */
-@media (max-height: 700px) {
-    #game-container {
-        transform: scale(0.9);
-    }
+.spaceship-answer:hover {
+    background: rgba(0, 242, 255, 0.3);
+    box-shadow: 0 0 20px rgba(0, 242, 255, 1);
+    transform: scale(1.05);
+    z-index: 15;
+}
+
+.spaceship-correct {
+    border-color: #00ff00 !important;
+    background: rgba(0, 255, 0, 0.3) !important;
+    box-shadow: 0 0 20px #00ff00, inset 0 0 15px rgba(0, 255, 0, 0.5) !important;
+    color: #fff !important;
+}
+
+.spaceship-wrong {
+    border-color: #ff0000 !important;
+    background: rgba(255, 0, 0, 0.3) !important;
+    box-shadow: 0 0 20px #ff0000, inset 0 0 15px rgba(255, 0, 0, 0.5) !important;
+    color: #fff !important;
+    animation: shake 0.4s;
+}
+
+@keyframes shake {
+    0% { transform: translateX(0); }
+    25% { transform: translateX(-5px); }
+    50% { transform: translateX(5px); }
+    75% { transform: translateX(-5px); }
+    100% { transform: translateX(0); }
+}
+
+.heart {
+    font-size: 20px;
+    margin-right: 5px;
+    color: #ff0055;
+}
+
+.heart-lost {
+    opacity: 0;
+    transition: opacity 0.5s;
+}
+
+@media (max-width: 850px) {
+    #game-container { width: 100%; border: none; }
+    canvas { width: 100%; }
 }

@@ -8,28 +8,12 @@
 </head>
 <body>
 
-
 <div class="game-container" id="gameArea">
 
     <div class="timer-bar">
-        Süre: <span id="time">40</span> sn
+        Süre: <span id="time">60</span> sn
     </div>
 
-    <!-- SÜRE GÖSTERGESİ -->
-    <div class="timer">
-        ⏱ Süre: <span id="time">30</span> sn
-    </div>
-    
-    <div class="question-box" id="questionBox">
-        <p id="question">Soru yükleniyor...</p>
-        <div class="btn-group">
-            <button class="yes" onclick="answer(true)">Doğru</button>
-            <button class="no" onclick="answer(false)">Yanlış</button>
-        </div>
-    </div> 
-
-<div class="game-container" id="gameArea">
-    
     <div class="question-box" id="questionBox">
         <p id="question">Soru yükleniyor...</p>
         <div class="btn-group">
@@ -41,7 +25,6 @@
     <img src="{{ url_for('static', filename='games/unit1_level2/hero.png') }}" class="player" id="player">
     <img src="{{ url_for('static', filename='games/unit1_level2/monster.png') }}" class="monster" id="monster">
     <img src="{{ url_for('static', filename='games/unit1_level2/door.png') }}" class="door" id="door">
-
 
     <div class="start-screen" id="startScreen">
         <div class="screen-content">
