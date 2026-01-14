@@ -382,22 +382,72 @@ body {
 /* ============================================
    RESPONSIVE
 ============================================ */
+/* ============================================
+   🔧 MOBILE HOTFIX (Sadece sorunlu ekran için)
+============================================ */
 @media (max-width: 768px) {
+
+    /* Navbar yüksekliğini serbest bırak */
     .new-top-bar {
-        flex-direction: column;
-        gap: 12px;
-        padding: 14px 20px;
-        text-align: center;
+        height: auto;
+        padding: 16px 16px 18px;
     }
 
-    .game-display-container {
-        height: 360px;
-    }
-
-    .footer-inner {
+    /* Orta alanı tam ortala */
+    .new-top-bar .top-center {
         flex-direction: column;
         gap: 6px;
         text-align: center;
+    }
+
+    .new-top-bar .unit-info h1 {
+        font-size: 16px;
+        line-height: 1.2;
+    }
+
+    .new-top-bar .unit-info span {
+        font-size: 12px;
+    }
+
+    /* Sağ ikonlar taşmasın */
+    .new-top-bar .top-right {
+        justify-content: center;
+        margin-top: 6px;
+    }
+        /* Sol alan sabit kalsın */
+    .new-top-bar .top-left {
+        align-self: flex-start;
+    }
+
+    /* Geri dön butonu sadeleşiyor */
+    .new-top-bar .back-btn {
+        padding: 6px 12px;
+        font-size: 13px;
+        border-radius: 999px;
+
+        white-space: nowrap;   /* ⬅️ satır kırılmasını engeller */
+        line-height: 1;
+
+        background: rgba(255,255,255,0.22);
+        border: 1px solid rgba(255,255,255,0.35);
+    }
+
+    /* Game alanı navbar'a yapışmasın */
+    .game-wrapper {
+        margin-top: 16px;
+        width: 100%;
+    }
+
+    /* iframe alanı ekran yüksekliğine göre */
+    .game-display-container {
+        height: calc(100vh - 320px);
+        min-height: 300px;
+        border-radius: 16px;
+    }
+
+    /* iframe overflow fix */
+    .game-iframe {
+        display: block;
     }
 }
 

@@ -2,8 +2,6 @@
     margin-top: -80px;
 }
 
-
-/* Açıklama */
 .contact-desc {
     max-width: 520px;
     margin: 14px auto 40px;
@@ -13,19 +11,17 @@
     text-align: center;
 }
 
-/* KART */
 .contact-card {
     position: relative;
     max-width: 620px;
     margin: 0 auto;
-    padding: 42px 44px;
+    padding: 20px 44px;
     border-radius: 32px;
     background: #ffffff;
     z-index: 1;
     box-shadow: 0 25px 60px rgba(15, 23, 42, 0.15);
 }
 
-/* 👇 ORTAOKUL KARTI GİBİ MAVİ HALO */
 .contact-card::before {
     content: "";
     position: absolute;
@@ -40,7 +36,6 @@
     z-index: -1;
 }
 
-/* FORM */
 .contact-form {
     display: flex;
     flex-direction: column;
@@ -87,7 +82,6 @@
     transform: translateY(-1px);
 }
 
-/* SUCCESS */
 .contact-success {
     margin-bottom: 18px;
     padding: 14px 18px;
@@ -99,14 +93,13 @@
     text-align: center;
 }
 
-/* BUTON */
 .contact-btn {
     margin-top: 12px;
     padding: 14px 0;
     font-size: 20px;
     font-weight: 500;
     border-radius: 999px;
-    background: linear-gradient(90deg, #f8faff, #ced9ec);
+    background: linear-gradient(90deg, #ffffff, #e5e5ea);
     box-shadow: 0 14px 30px rgb(171, 173, 184);
     transition: all 0.25s ease;
     color: #ff3686;
@@ -115,4 +108,10 @@
 .contact-btn:hover {
     transform: translateY(-2px);
     box-shadow: 0 20px 44px rgba(37,99,235,0.6);
+}
+
+.form-group label {
+    font-size: 16px;   /* büyüt */
+    font-weight: 600;  /* daha net */
+    color: #ffffff;    /* beyaz */
 }

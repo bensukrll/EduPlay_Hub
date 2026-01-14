@@ -146,10 +146,98 @@
     transform: translateX(-7px); /* gerekirse -1 / +1 dene */
 }
 
+/* ============================= */
+/* 📱 TABLET (768px – 1199px) */
+/* ============================= */
+@media (max-width: 1199px) {
 
-/* MOBİL */
-@media (max-width: 900px) {
+    .ortaokul-units .unit-cards {
+        grid-template-columns: repeat(2, minmax(280px, 1fr));
+        gap: 32px;
+        padding: 0 24px;
+    }
+
+    .ortaokul-units .unit-card {
+        min-height: auto;
+        padding: 24px;
+    }
+
+    .ortaokul-units .unit-card h3 {
+        font-size: 17px;
+        margin-bottom: 16px;
+    }
+
+    .ortaokul-units .unit-list li {
+        font-size: 13.5px;
+    }
+
+    .ortaokul-units .btn {
+        min-width: 150px;
+        padding: 11px 22px;
+        font-size: 14px;
+    }
+}
+
+
+/* ============================= */
+/* 📱 TELEFON (≤ 767px) */
+/* ============================= */
+@media (max-width: 767px) {
+
+    .main {
+        padding: 0 16px;
+    }
+
+    .section-title h1 {
+        font-size: 22px;
+        text-align: center;
+    }
+
+    .section-label-secondary {
+        font-size: 13px;
+    }
+
     .ortaokul-units .unit-cards {
         grid-template-columns: 1fr;
+        gap: 24px;
+        padding: 0;
+    }
+
+    .ortaokul-units .unit-card {
+        padding: 22px;
+        border-radius: 22px;
+    }
+
+    .ortaokul-units .unit-card h3 {
+        font-size: 16px;
+        margin-bottom: 14px;
+    }
+
+    .ortaokul-units .unit-list li {
+        font-size: 13px;
+        line-height: 1.5;
+    }
+
+    .ortaokul-units .btn {
+        width: 100%;
+        min-width: unset;
+        padding: 12px;
+        font-size: 14px;
+    }
+
+    .back-wrapper {
+        margin-top: -10px;
+    }
+
+    .back-btn {
+        font-size: 13px;
+        padding: 9px 16px;
+    }
+
+    .bottom-bar .bottom-inner {
+        flex-direction: column;
+        gap: 6px;
+        font-size: 12px;
+        text-align: center;
     }
 }
