@@ -1,8 +1,9 @@
-from flask import Flask, render_template, request
+from flask import Flask, render_template, jsonify ,request
 import smtplib
 from email.mime.text import MIMEText
 from email.mime.multipart import MIMEMultipart
 import cred
+import json
 
 app = Flask(__name__)
 
@@ -116,6 +117,10 @@ def contact():
         return render_template("contact.html", success=True)
 
     return render_template("contact.html")
+
+@app.route("/map")
+def map():
+    return render_template("map.html")  # map.html sayfasını render et
 
 
 # ==================================================

@@ -1,0 +1,144 @@
+/* 1. GENEL SIFIRLAMA */
+body {
+    margin: 0;
+    padding: 0;
+    height: 100vh;
+    width: 100vw;
+    overflow: hidden;
+    font-family: 'Poppins', sans-serif;
+}
+
+/* 2. 🌳 MAP (ARKA PLAN) */
+.map {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-image: url("/static/background/background_v1.png");
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    z-index: 0;
+}
+
+/* 3. ⚪ UI LAYER (PANEL KATMANI) */
+.ui-layer {
+    position: relative;
+    z-index: 2;
+    display: flex;
+    justify-content: space-between;
+    padding: 20px;
+    pointer-events: none;
+}
+
+.left-panel, .right-panel {
+    pointer-events: auto;
+    background: white;
+    border-radius: 30px;
+    padding: 20px;
+    opacity: 0.9;
+}
+
+.left-panel { width: 350px; height: 650px; overflow-y: auto; }
+.right-panel { width: 400px; height: 700px; display: flex; align-items: center; justify-content: center; }
+
+/* 4. 🕹️ BUTON KONTEYNERI */
+.game-btn-container {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 3;
+    pointer-events: none;
+    
+    /* 📍 PERSPEKTİF: Butonların yola yatık durmasını sağlar */
+    perspective: 800px;
+    transform: rotateX(15deg);
+    transform-origin: center bottom;
+}
+
+.game-level-btn {
+    all: unset;
+    cursor: pointer;
+    position: absolute;
+    width: 110px; 
+    height: 70px; 
+    display: inline-block;
+    -webkit-tap-highlight-color: transparent;
+    pointer-events: auto;
+    transition: transform 0.1s ease;
+}
+
+/* 📍 BUTON KOORDİNATLARI */
+#level1-btn { top: 61%; left: 49%; }
+#level2-btn { top: 45%; left: 38%; }
+#level3-btn { top: 25%; left: 48%; }
+
+
+/* 5. 🔵 ALT MAVİ KATMAN (BASE) - Güncellendi */
+.base-layer {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: #1976d2; /* Canlı Mavi */
+    border-radius: 50%; 
+    
+    /* 3D Derinlik ve Gölge */
+    box-shadow: 
+        inset 0 4px 0 rgba(255, 255, 255, 0.4), /* Üst parlaklık */
+        inset 0 -4px 0 rgba(0, 0, 0, 0.2),      /* Alt iç gölge */
+        0 12px 0 #0d47a1,                      /* Koyu mavi kalınlık (Derinlik) */
+        0 15px 20px rgba(25, 118, 210, 0.4);   /* Mavi dış gölge */
+    
+    transition: all 0.1s ease;
+}
+
+/* 6. 🟡 ÜST SARI KATMAN (TOP) */
+.top-layer {
+    position: absolute;
+    top: -10px; 
+    left: 10%;
+    width: 80%;
+    height: 80%;
+    
+    /* Canlı Güneş Sarısı Degrade */
+    background: radial-gradient(circle at 50% 30%, #ffee58 0%, #fbc02d 100%);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    
+    /* Yazı Stili */
+    color: white;
+    font-size: 38px;
+    font-weight: 900;
+    font-family: 'Arial Rounded MT Bold', sans-serif;
+    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.4);
+
+    border: 3px solid #fdd835;
+    
+    /* Sarı Katman Derinliği */
+    box-shadow: 
+        inset 0 4px 0 rgba(255, 255, 255, 0.3),
+        0 6px 0 #f9a825;
+        
+    transition: all 0.1s ease;
+}
+
+/* 7. 🖱️ ETKİLEŞİM (BASILMA) EFEKTLERİ */
+
+.game-level-btn:active .base-layer {
+    transform: translateY(4px);
+    box-shadow: 
+        inset 0 1px 0 rgba(255, 255, 255, 0.1), 
+        0 6px 0 #0d47a1, 
+        0 8px 15px rgba(25, 118, 210, 0.3);
+}
+.game-level-btn:active .top-layer {
+    transform: translateY(8px);
+    box-shadow: 0 1px 0 #f9a825;
+}
