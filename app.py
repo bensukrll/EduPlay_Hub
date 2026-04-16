@@ -8,53 +8,60 @@ import json
 app = Flask(__name__)
 
 GAME_INFO = {
-    "unit1_level1": {
+    "ilkokul_unit1_game1": {
         "title": "Dosya Yönetimi",
         "subtitle": "Dosya ve klasörleri doğru şekilde düzenlemeyi öğren!",
         "unit": "Bilişim Teknolojileri",
         "level": "İlkokul",
-        "icon": "📁"
+        "icon": "📁",
+        "template": "unit1_level1"   # ← fiziksel dosya adı
     },
-
-    "unit1_level2": {
+    "ortaokul_unit1_game1": {
         "title": "Bilgisayar Sistemleri",
         "subtitle": "Bilgisayarın temel donanım ve yazılım bileşenlerini keşfet!",
         "unit": "Bilişim Teknolojileri",
         "level": "Ortaokul",
-        "icon": "🖥️"
+        "icon": "🖥️",
+        "template": "unit1_level2"   # ← fiziksel dosya adı
     },
-
-    "unit2_level1": {
+    "ilkokul_unit2_game1": {
         "title": "Gizlilik ve Güvenlik",
         "subtitle": "Kişisel bilgilerini internette nasıl koruyacağını öğren!",
         "unit": "Etik ve Güvenlik",
         "level": "İlkokul",
-        "icon": "🔐"
+        "icon": "🔐",
+        "template": "unit2_level1"
     },
-
-    "unit2_level2": {
+    "ortaokul_unit2_game1": {
         "title": "Dijital Vatandaşlık",
         "subtitle": "İnternette sorumlu ve bilinçli bir birey ol!",
         "unit": "Etik ve Güvenlik",
         "level": "Ortaokul",
-        "icon": "🧑‍💻"
+        "icon": "🧑‍💻",
+        "template": "unit2_level2"
     },
-
-    "unit3_level1": {
+    "ilkokul_unit3_game1": {
         "title": "Bilgisayar Ağları",
         "subtitle": "Bilgiler bilgisayarlar arasında nasıl dolaşır?",
         "unit": "İletişim, Araştırma ve İş Birliği",
         "level": "İlkokul",
-        "icon": "🌐"
+        "icon": "🌐",
+        "template": "unit3_level1"
     },
-
-    "unit3_level2": {
+    "ortaokul_unit3_game1": {
         "title": "Bilgisayar Ağları – İleri Seviye",
         "subtitle": "Ağ türlerini ve internetin nasıl çalıştığını keşfet!",
         "unit": "İletişim, Araştırma ve İş Birliği",
         "level": "Ortaokul",
-        "icon": "🌐"
+        "icon": "🌐",
+        "template": "unit3_level2"
     }
+}
+
+# Seviye ve ünite bilgileri
+LEVELS_AND_UNITS = {
+    'ilkokul': ['unit1', 'unit2', 'unit3'],
+    'ortaokul': ['unit1', 'unit2', 'unit3']
 }
 
 # ==================================================
@@ -97,7 +104,11 @@ def play(game_id):
     )
 @app.route("/embed/<game_id>")
 def embed(game_id):
-    return render_template(f"games/{game_id}.html")
+    game = GAME_INFO.get(game_id)
+    if not game:
+        return "Oyun bulunamadı", 404
+    template_name = game.get("template", game_id)
+    return render_template(f"games/{template_name}.html")
 
 
 @app.route("/about")
@@ -119,8 +130,37 @@ def contact():
     return render_template("contact.html")
 
 @app.route("/map")
-def map():
-    return render_template("map.html")  # map.html sayfasını render et
+def map_page():
+    level = request.args.get('level')
+    unit = request.args.get('unit')
+
+    units = LEVELS_AND_UNITS.get(level, [])
+
+    unit_games = []
+    if unit and level:
+        prefix = f"{level}_{unit}_"
+        unit_games = [key for key in GAME_INFO.keys() if key.startswith(prefix)]
+
+    return render_template(
+        'map.html',
+        level=level,
+        unit=unit,
+        units=units,
+        unit_games=unit_games
+    )
+# ==================================================
+# ROTA: Oyun Sayfası
+# ==================================================
+@app.route("/game/<level>/<unit>/<game_id>")
+def game_page(level, unit, game_id):
+    # Seçilen oyun bilgilerini al
+    game_info = GAME_INFO.get(f"{unit}_{game_id}", {})
+    
+    if not game_info:
+        return "Oyun bulunamadı", 404
+
+    return render_template("game.html", game=game_info, level=level, unit=unit, game_id=game_id)
+
 
 
 # ==================================================

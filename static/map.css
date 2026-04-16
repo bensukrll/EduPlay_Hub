@@ -32,13 +32,13 @@ body {
     pointer-events: none;
 }
 
-.left-panel, .right-panel {
+/*.left-panel, .right-panel {
     pointer-events: auto;
     background: white;
     border-radius: 30px;
     padding: 20px;
     opacity: 0.9;
-}
+}*/
 
 .left-panel { width: 350px; height: 650px; overflow-y: auto; }
 .right-panel { width: 400px; height: 700px; display: flex; align-items: center; justify-content: center; }
@@ -52,10 +52,7 @@ body {
     height: 100%;
     z-index: 3;
     pointer-events: none;
-    
-    /* 📍 PERSPEKTİF: Butonların yola yatık durmasını sağlar */
     perspective: 800px;
-    transform: rotateX(15deg);
     transform-origin: center bottom;
 }
 
@@ -71,10 +68,16 @@ body {
     transition: transform 0.1s ease;
 }
 
-/* 📍 BUTON KOORDİNATLARI */
+
+/* Ünite butonları */
 #level1-btn { top: 61%; left: 49%; }
-#level2-btn { top: 45%; left: 38%; }
-#level3-btn { top: 25%; left: 48%; }
+#level2-btn { top: 28%; left: 47%; }
+#level3-btn { top: 23%; left: 48%; }
+
+/* Oyun butonları */
+#game1-btn { top: 61%; left: 49%; }
+#game2-btn { top: 45%; left: 38%; }
+#game3-btn { top: 23%; left: 49%; }
 
 
 /* 5. 🔵 ALT MAVİ KATMAN (BASE) - Güncellendi */
