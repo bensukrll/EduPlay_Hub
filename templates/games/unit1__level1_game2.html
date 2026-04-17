@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <title>İç / Dış Donanım Eşleştirme</title>
 
-<link rel="stylesheet" href="/static/games/unit1_level1/style.css">
+    <link rel="stylesheet" href="{{ url_for('static', filename='games/unit1__level1_game2/style.css') }}">
 </head>
 
 <body>
@@ -17,53 +17,53 @@
 
     <!-- DIŞ DONANIM -->
     <div class="card" draggable="true" data-type="external">
-      <img src="/static/games/unit1_level1/images/klavye.jpg" alt="Klavye">
+      <img src="{{ url_for('static', filename='games/unit1__level1_game2/images/klavye.jpg') }}" alt="Klavye">
       <span>Klavye</span>
     </div>
 
     <div class="card" draggable="true" data-type="external">
-      <img src="/static/games/unit1_level1/images/fare.jpg" alt="Fare">
+      <img src="{{ url_for('static', filename='games/unit1__level1_game2/images/fare.jpg') }}" alt="Fare">
       <span>Fare</span>
     </div>
 
     <div class="card" draggable="true" data-type="external">
-      <img src="/static/games/unit1_level1/images/yazici.jpg" alt="Yazıcı">
+      <img src="{{ url_for('static', filename='games/unit1__level1_game2/images/yazici.jpg') }}" alt="Yazıcı">
       <span>Yazıcı</span>
     </div>
 
     <div class="card" draggable="true" data-type="external">
-      <img src="/static/games/unit1_level1/images/hoparlor.jpg" alt="Hoparlör">
+      <img src="{{ url_for('static', filename='games/unit1__level1_game2/images/hoparlor.jpg') }}" alt="Hoparlör">
       <span>Hoparlör</span>
     </div>
 
     <div class="card" draggable="true" data-type="external">
-      <img src="/static/games/unit1_level1/images/webcam.jpg" alt="Webcam">
+      <img src="{{ url_for('static', filename='games/unit1__level1_game2/images/webcam.jpg') }}" alt="Webcam">
       <span>Webcam</span>
     </div>
 
     <!-- İÇ DONANIM -->
     <div class="card" draggable="true" data-type="internal">
-      <img src="/static/games/unit1_level1/images/ram.jpg" alt="RAM">
+      <img src="{{ url_for('static', filename='games/unit1__level1_game2/images/ram.jpg') }}" alt="RAM">
       <span>RAM</span>
     </div>
 
     <div class="card" draggable="true" data-type="internal">
-      <img src="/static/games/unit1_level1/images/islemci.jpg" alt="İşlemci">
+      <img src="{{ url_for('static', filename='games/unit1__level1_game2/images/islemci.jpg') }}" alt="İşlemci">
       <span>İşlemci</span>
     </div>
 
     <div class="card" draggable="true" data-type="internal">
-      <img src="/static/games/unit1_level1/images/anakart.jpg" alt="Anakart">
+      <img src="{{ url_for('static', filename='games/unit1__level1_game2/images/anakart.jpg') }}" alt="Anakart">
       <span>Anakart</span>
     </div>
 
     <div class="card" draggable="true" data-type="internal">
-      <img src="/static/games/unit1_level1/images/ekran-karti.png" alt="Ekran Kartı">
+      <img src="{{ url_for('static', filename='games/unit1__level1_game2/images/ekran-karti.png') }}" alt="Ekran Kartı">
       <span>Ekran Kartı</span>
     </div>
 
     <div class="card" draggable="true" data-type="internal">
-      <img src="/static/games/unit1_level1/images/ses-karti.jpg" alt="Ses Kartı">
+      <img src="{{ url_for('static', filename='games/unit1__level1_game2/images/ses-karti.jpg') }}" alt="Ses Kartı">
       <span>Ses Kartı</span>
     </div>
 
@@ -87,6 +87,6 @@
 <button id="restartBtn">Yeniden Başlat</button>
 <div class="result" id="result"></div>
 
-<script src="/static/games/unit1_level1/script.js"></script>
+    <script src="{{ url_for('static', filename='games/unit1__level1_game2/script.js') }}"></script>
 </body>
 </html>

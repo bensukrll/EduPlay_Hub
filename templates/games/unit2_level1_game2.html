@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <title>BT 5.2.2 – Dijital Vatandaşlık Eşleştirme Oyunu</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='games/unit2_level1_game2/style.css') }}">
+</head>
+
+<body>
+
+<h1>BT 5.2.2 – Dijital Vatandaşlık Eşleştirme Oyunu</h1>
+<p>Dijital vatandaşlık uygulamalarını kullanım amaçlarıyla eşleştir.</p>
+
+<div class="container">
+
+    <!-- SOL TARAF: KATEGORİLER -->
+    <div class="left">
+        <div class="dropzone" data-match="edevlet">
+            <span class="label">E-Devlet</span>
+        </div>
+
+        <div class="dropzone" data-match="eokul">
+            <span class="label">E-Okul</span>
+        </div>
+
+        <div class="dropzone" data-match="erandevu">
+            <span class="label">E-Randevu</span>
+        </div>
+
+        <div class="dropzone" data-match="ebankacilik">
+            <span class="label">E-Bankacılık</span>
+        </div>
+
+        <div class="dropzone" data-match="esaglik">
+            <span class="label">E-Sağlık</span>
+        </div>
+
+        <div class="dropzone" data-match="ebelediye">
+            <span class="label">E-Belediye</span>
+        </div>
+    </div>
+
+    <!-- SAĞ TARAF: KARTLAR -->
+    <div class="right">
+        <h2>Uygulamalar</h2>
+
+        <div class="drag" draggable="true" data-id="edevlet">
+            Kimlik bilgileri, adli sicil kaydı, ikametgâh belgesi gibi işlemleri
+            internet üzerinden yapmayı sağlar.
+        </div>
+
+        <div class="drag" draggable="true" data-id="eokul">
+            Öğrencilerin notlarını, devamsızlıklarını ve ders bilgilerini
+            dijital ortamda görmesini sağlar.
+        </div>
+
+        <div class="drag" draggable="true" data-id="erandevu">
+            Hastanelerden ve sağlık kurumlarından online randevu almayı sağlar.
+        </div>
+
+        <div class="drag" draggable="true" data-id="ebankacilik">
+            Para gönderme, fatura ödeme ve hesap işlemlerini internetten yapmayı sağlar.
+        </div>
+
+        <div class="drag" draggable="true" data-id="esaglik">
+            Sağlık geçmişi, reçeteler ve muayene bilgilerine dijital erişim sağlar.
+        </div>
+
+        <div class="drag" draggable="true" data-id="ebelediye">
+            Belediye hizmetleri, borç sorgulama ve başvuruların online yapılmasını sağlar.
+        </div>
+    </div>
+</div>
+
+<div class="buttons">
+    <button id="check">Cevapları Kontrol Et</button>
+    <button id="restart">Yeniden Oyna</button>
+</div>
+
+<p id="result"></p>
+
+    <script src="{{ url_for('static', filename='games/unit2_level1_game2/script.js') }}"></script>
+</body>
+</html>

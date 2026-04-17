@@ -16,6 +16,14 @@ GAME_INFO = {
         "icon": "📁",
         "template": "unit1_level1"   # ← fiziksel dosya adı
     },
+     "ilkokul_unit1_game2": {          
+        "title": "İç / Dış Donanım Eşleştirme",
+        "subtitle": "Donanım birimlerini doğru kategoriye sürükle!",
+        "unit": "Bilişim Teknolojileri",
+        "level": "İlkokul",
+        "icon": "🖥️",
+        "template": "unit1__level1_game2"     # ← oyun HTML dosyasının adı
+    },
     "ortaokul_unit1_game1": {
         "title": "Bilgisayar Sistemleri",
         "subtitle": "Bilgisayarın temel donanım ve yazılım bileşenlerini keşfet!",
@@ -31,6 +39,14 @@ GAME_INFO = {
         "level": "İlkokul",
         "icon": "🔐",
         "template": "unit2_level1"
+    },
+    "ilkokul_unit2_game2": {
+    "title": "Dijital Vatandaşlık Eşleştirme Oyunu",
+    "subtitle": "Dijital vatandaşlık uygulamalarını kullanım amaçlarıyla eşleştir.",
+    "unit": "Dijital Vatandaşlık",
+    "level": "İlkokul",
+    "icon": "🌐",
+    "template": "unit2_level1_game2"
     },
     "ortaokul_unit2_game1": {
         "title": "Dijital Vatandaşlık",
