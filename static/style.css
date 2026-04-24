@@ -204,6 +204,8 @@ body {
     font-weight: 600;
 }
 
+
+
 .section-label {
     font-size: 16px;
     text-transform: uppercase;
@@ -422,6 +424,84 @@ body {
     background: rgba(15, 23, 42, 0.35);
 }
 
+.unit-yellow {
+    background:
+        radial-gradient(
+            circle at bottom right,
+            rgba(255,255,255,0.55) 20%,
+            rgba(255,255,255,0.25) 35%,
+            rgba(255,255,255,0.05) 60%,
+            rgba(255,255,255,0) 75%
+        ),
+        linear-gradient(
+            160deg,
+            #FFB84D 0%,
+            #FF9A00 100%
+        );
+    color: #ffffff;
+}
+
+.unit-yellow .card-text,
+.unit-yellow .unit-list {
+    color: #ffffff;
+}
+
+.unit-yellow .unit-tag {
+    background: rgba(15, 23, 42, 0.35);
+}
+
+.unit-pink {
+    background:
+        radial-gradient(
+            circle at bottom right,
+            rgba(255,255,255,0.55) 20%,
+            rgba(255,255,255,0.25) 35%,
+            rgba(255,255,255,0.05) 60%,
+            rgba(255,255,255,0) 75%
+        ),
+        linear-gradient(
+            90deg,
+            #ff4b92 0%,
+            #ff78b0 100%
+        );
+    color: #ffffff;
+}
+
+.unit-pink .card-text,
+.unit-pink .unit-list {
+    color: #ffffff;
+}
+
+.unit-pink .unit-tag {
+    background: rgba(15, 23, 42, 0.35);
+}
+
+.unit-lightgreen {
+    background:
+        radial-gradient(
+            circle at bottom right,
+            rgba(255,255,255,0.55) 20%,
+            rgba(255,255,255,0.25) 35%,
+            rgba(255,255,255,0.05) 60%,
+            rgba(255,255,255,0) 75%
+        ),
+        linear-gradient(
+            160deg,
+            #6CCF66 0%,
+            #4CAF50 100%
+        );
+    color: #ffffff;
+}
+
+.unit-lightgreen .card-text,
+.unit-lightgreen .unit-list {
+    color: #ffffff;
+}
+
+.unit-lightgreen .unit-tag {
+    background: rgba(15, 23, 42, 0.35);
+}
+
 .unit-slider {
     width: 100%;
     overflow: hidden;
@@ -463,6 +543,7 @@ body {
     justify-content: center;
     gap: 6px;
     text-decoration: none;
+    color: #ffffff;
 }
 
 .btn.full {
@@ -501,7 +582,6 @@ body {
     transform: translateY(-1px);
     box-shadow: 0 16px 30px rgba(37, 99, 235, 0.6);
 }
-
 
 
 /*HEADER*/

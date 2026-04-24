@@ -35,12 +35,16 @@
     transition: transform 0.3s ease, box-shadow 0.3s ease;
 }
 
+
 /* === BAŞLIK === */
 .ilkokul-units .unit-card h3 {
     text-align: center;
-    margin-bottom: 20px;
+    margin-bottom: 10px;
     font-size: 18px;
     color: #ffffff;
+}
+.ilkokul-units .unit-card h2 {
+    margin-bottom: 5px;  
 }
 
 /* === BULLET LİSTE (İSTEDİĞİN GİBİ) === */
@@ -114,6 +118,23 @@
     transform: translateY(-8px);
     box-shadow: 0 28px 60px rgba(0,0,0,0.25);
 }
+/* === PEMBE BUTON === */
+.ilkokul-units .btn-pink {
+    background: linear-gradient(135deg, #ec4899, #f472b6);
+    color: #ffffff;
+}
+
+/* === SARI BUTON === */
+.ilkokul-units .btn-yellow {
+    background: linear-gradient(135deg, #facc15, #f59e0b);
+    color: #ffffff;
+}
+
+/* === YEŞİL BUTON (AÇIK YEŞİL) === */
+.ilkokul-units .btn-lightgreen {
+    background: linear-gradient(135deg, #39a278, #3f9d7b);
+    color: #ffffff;
+}
 
 
 .ilkokul-units .btn {
@@ -170,6 +191,7 @@
 .top-nav {
     transform: translateX(-7px); /* gerekirse -1 / +1 dene */
 }
+
 
 /* ============================= */
 /* 📱 TABLET (768px – 1199px) */
@@ -269,6 +291,5 @@
         text-align: center;
     }
 }
-
 
 

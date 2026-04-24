@@ -19,6 +19,7 @@
     margin: 0 auto;
 }
 
+
 /* KART */
 .ortaokul-units .unit-card {
     min-height: 260px;
@@ -32,6 +33,9 @@
     transition: transform 0.3s ease, box-shadow 0.3s ease;
 }
 
+.ortaokul-units .unit-card h2 {
+    margin-bottom: 5px;  
+}
 .ortaokul-units .unit-card:hover {
     transform: translateY(-8px);
     box-shadow: 0 28px 60px rgba(0,0,0,0.25);
@@ -95,6 +99,23 @@
     color: #fff;
 }
 
+/* === PEMBE BUTON === */
+.ortaokul-units .btn-pink {
+    background: linear-gradient(135deg, #ec4899, #f472b6);
+    color: #ffffff;
+}
+
+/* === SARI BUTON === */
+.ortaokul-units .btn-yellow {
+    background: linear-gradient(135deg, #facc15, #f59e0b);
+    color: #ffffff;
+}
+
+/* === YEŞİL BUTON (AÇIK YEŞİL) === */
+.ortaokul-units .btn-lightgreen {
+    background: linear-gradient(135deg, #39a278, #3f9d7b);
+    color: #ffffff;
+}
 /* BUTON HOVER */
 .ortaokul-units .btn:hover {
     transform: translateY(-4px);
