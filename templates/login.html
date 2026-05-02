@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <title>EduPlay Hub - Giriş</title>
+
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='log-reg.css') }}">
+</head>
+
+<body class="entrance-body">
+
+<div class="entrance-wrapper">
+
+    <!-- BACKGROUND -->
+    <div class="circle circle-green"></div>
+    <div class="circle circle-orange"></div>
+    <div class="circle circle-blue"></div>
+    <div class="circle circle-pink"></div>
+    <div class="circle circle-small-pink"></div>
+    <div class="circle circle-yellow"></div>
+
+    <!-- TITLE -->
+    <h1 class="entrance-title">EduPlay Hub</h1>
+    <p class="sub-title">Bilişim Teknolojileri Oyun Dünyası</p>
+
+    <!-- MONITOR -->
+    <div class="monitor">
+        <div class="monitor-frame">
+            <div class="monitor-screen">
+
+                <!-- LOGIN FORM -->
+                <form method="POST" class="login-form">
+
+                    <input 
+                        type="text" 
+                        name="username" 
+                        placeholder="Kullanıcı Adı " 
+                        required
+                    >
+
+                    <input 
+                        type="password" 
+                        name="password" 
+                        placeholder="Şifre " 
+                        required
+                    >
+
+                    <button class="start-button">
+                        Giriş Yap 
+                    </button>
+
+                    <p class="login-switch">
+                        Hesabın yok mu? 
+                        <a href="{{ url_for('register') }}">Kaydol</a>
+                    </p>
+
+                </form>
+
+            </div>
+        </div>
+        <div class="monitor-led"></div>
+        <div class="monitor-stand"></div>
+        <div class="monitor-base"></div>
+    </div>
+
+    <p class="entrance-subtitle">
+        ✨ Macerana devam etmek için giriş yap! ✨
+    </p>
+
+</div>
+
+</body>
+</html>

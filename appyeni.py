@@ -221,8 +221,8 @@ def login():
 
         print("Gelen:", username, password)  # şimdilik test
 
-        # 👉 Indexe gonder
-        return redirect(url_for("home"))
+        # 👉 Şimdilik direkt map'e yönlendirelim
+        return redirect(url_for("map_page"))
 
     return render_template("login.html")
 

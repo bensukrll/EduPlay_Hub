@@ -1,0 +1,70 @@
+/* FORM */
+.login-form {
+    width: 360px;
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+    margin-top: 8px; 
+    align-items: center;
+}
+
+/* INPUT */
+.login-form input {
+    padding: 12px;
+    border-radius: 14px;
+    border: none;
+    outline: none;
+    font-size: 20px; /* 🔥 20 → 18 daha dengeli */
+    text-align: center;
+    font-family: "Fredoka", sans-serif;
+    width: 360px; 
+
+    box-shadow: 0 6px 14px rgba(0,0,0,0.08);
+    transition: 0.2s ease;
+}
+
+.login-form input:focus {
+    transform: scale(1.03);
+    box-shadow: 0 0 0 3px rgba(255,75,146,0.25);
+}
+
+/* BUTTON */
+.login-form .start-button {
+    border: none;
+    cursor: pointer;
+    width: 300px;
+}
+
+/* HOVER */
+.login-form:hover {
+    transform: translateY(-2px);
+    transition: 0.3s ease;
+}
+
+/* ALT YAZI */
+.login-switch {
+    margin-top: 10px;
+    font-size: 17px; /* 🔥 20 → küçült */
+    text-align: center;
+    font-family: "Fredoka", sans-serif;
+    color: #374151;                
+    
+}
+
+/* LINK */
+.login-switch a {
+    color: #ff4b92;
+    font-weight: 600;
+    text-decoration: none;
+}
+
+.login-switch a:hover {
+    text-decoration: underline;
+}
+
+/* 🔥 EN KRİTİK FIX (KAYMA ÇÖZÜMÜ) */
+.monitor-screen {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
