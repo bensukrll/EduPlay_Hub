@@ -76,8 +76,8 @@ GAME_INFO = {
 
 # Seviye ve ünite bilgileri
 LEVELS_AND_UNITS = {
-    'ilkokul': ['unit1', 'unit2', 'unit3'],
-    'ortaokul': ['unit1', 'unit2', 'unit3']
+    'ilkokul': ['unit1', 'unit2', 'unit3', 'unit4', 'unit5', 'unit6'],
+    'ortaokul': ['unit1', 'unit2', 'unit3', 'unit4', 'unit5', 'unit6']
 }
 
 # ==================================================
