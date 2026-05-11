@@ -112,12 +112,19 @@ def play(game_id):
     if not game:
         return "Oyun bulunamadı", 404
 
+    parts = game_id.split("_")
+    level = parts[0]      # ilkokul / ortaokul
+    unit = parts[1]       # unit1 / unit2 / unit3
+
     return render_template(
         "game.html",
         game=game,
         game_id=game_id,
-        source=source
+        source=source,
+        level=level,
+        unit=unit
     )
+
 @app.route("/embed/<game_id>")
 def embed(game_id):
     game = GAME_INFO.get(game_id)

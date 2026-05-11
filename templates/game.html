@@ -22,22 +22,13 @@
 ============================= -->
 <header class="new-top-bar">
 
-    <!-- SOL -->
-    <div class="top-left">
-        <a href="
-        {% if source == 'ilkokul' %}
-            {{ url_for('ilkokul') }}
-        {% elif source == 'ortaokul' %}
-            {{ url_for('ortaokul') }}
-        {% else %}
-            {{ url_for('home') }}
-        {% endif %}
-        " class="back-btn">
-            ← Geri Dön
-        </a>
-    </div>
-
-    <!-- ORTA -->
+<!-- SOL -->
+<div class="top-left">
+    <a href="{{ url_for('map_page', level=level, unit=unit) }}" class="back-btn">
+        ← Geri Dön
+    </a>
+</div>
+    <!-- ORTA --> 
     <div class="top-center">
             <div class="unit-icon"><i class="fa-solid fa-laptop-code"></i></div>
             <div class="unit-info">

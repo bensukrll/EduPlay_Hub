@@ -47,39 +47,114 @@
     </div>
 </header>
 
+<!-- UI LAYER -->
 <div class="ui-layer">
-    <div class="left-panel"></div>
-    <div class="right-panel"></div>
+
+    <div class="right-panel" id="right-panel">
+
+        <div class="panel-card game-info-card" id="game-info-card">
+
+            <div class="game-card-top">
+                <div class="game-card-icon">🎮</div>
+
+                <div class="game-card-meta">
+                    <span class="game-grade-badge" id="game-grade-badge"></span>
+                    <span class="game-week-badge" id="game-week-badge"></span>
+                </div>
+            </div>
+
+            <div class="game-unit-chip" id="game-unit-name"></div>
+
+            <h2 class="game-info-title" id="game-info-title"></h2>
+
+            <p class="game-info-desc" id="game-info-desc"></p>
+
+            <div class="game-info-section">
+                <div class="game-section-label">
+                    <span>🎯</span>
+                    <span>Kazanım</span>
+                </div>
+
+                <p class="game-outcome-text" id="game-outcome-text"></p>
+            </div>
+
+            <button class="start-btn" id="start-btn">
+                Başla 🚀
+            </button>
+
+        </div>
+
+    </div>
+
 </div>
 
+<!-- DÜZELTİLMİŞ GERİ DÖN BUTONU -->
+{% set target_url = url_for('ilkokul') if level == 'ilkokul' else url_for('ortaokul') if level == 'ortaokul' else url_for('home') %}
+
+<a href="{{ target_url }}" class="map-back-btn" aria-label="Geri Dön">
+    <svg class="map-back-svg" viewBox="0 0 150 58" xmlns="http://www.w3.org/2000/svg">
+        <defs>
+          <linearGradient id="yellowTop" x1="0%" y1="0%" x2="0%" y2="100%">
+            <stop offset="0%" stop-color="#fff176"/>
+            <stop offset="100%" stop-color="#ffc107"/>
+          </linearGradient>
+          <linearGradient id="yellowEdge" x1="0%" y1="0%" x2="0%" y2="100%">
+            <stop offset="0%" stop-color="#ffd54f"/>
+            <stop offset="100%" stop-color="#f9a825"/>
+          </linearGradient>
+          <linearGradient id="blueBottom" x1="0%" y1="0%" x2="0%" y2="100%">
+            <stop offset="0%" stop-color="#1e88e5"/>
+            <stop offset="100%" stop-color="#0d47a1"/>
+          </linearGradient>
+        </defs>
+        <rect x="5" y="10" width="138" height="42" rx="21" fill="url(#blueBottom)"/>
+        <rect x="5" y="5" width="138" height="42" rx="21" fill="url(#yellowTop)" stroke="#fff3b0" stroke-width="3"/>
+        <circle cx="29" cy="26" r="17" fill="url(#yellowEdge)" stroke="#ffffff" stroke-width="3"/>
+        <path d="M32 17 L23 26 L32 35 M24 26 H40" fill="none" stroke="#ffffff" stroke-width="4.5" stroke-linecap="round" stroke-linejoin="round"/>
+        <text x="86" y="32" text-anchor="middle" font-size="17" font-weight="800" font-family="Poppins, sans-serif" fill="#ffffff" paint-order="stroke">
+          Geri Dön
+        </text>
+    </svg>
+</a>
+
+<!-- BUTON KONTEYNERI -->
 <div class="game-btn-container">
     {% if unit %}
-        <!-- ÜNİTE SEÇİLDİ → OYUN BUTONLARINI GÖSTER -->
+        <!-- ÜNİTE SEÇİLDİ → OYUN BUTONLARI -->
         {% for game_key in unit_games %}
-            {% set game_url = url_for('play', game_id=game_key) + '?source=' + level %}
-            <button class="game-level-btn" id="game{{ loop.index }}-btn"
-                    onclick="window.location.href='{{ game_url }}'">
+            <button class="game-level-btn" id="game{{loop.index}}-btn"
+                    data-game-key="{{ game_key }}"
+                    data-index="{{ loop.index }}"
+                    onclick="showGameInfo(this)">
                 <span class="base-layer"><span class="top-layer">{{ loop.index }}</span></span>
             </button>
         {% endfor %}
 
-        <!-- HENÜZ YAPILMAMIŞ OYUNLAR İÇİN PLACEHOLDER BUTONLAR -->
+        <!-- PLACEHOLDER BUTONLAR -->
         {% for i in range(unit_games|length + 1, 4) %}
-            <button class="game-level-btn" id="game{{ i }}-btn" disabled>
+            <button class="game-level-btn" id="game{{i}}-btn" disabled>
                 <span class="base-layer"><span class="top-layer">{{ i }}</span></span>
             </button>
         {% endfor %}
 
     {% else %}
-        <!-- ÜNİTE SEÇİLMEDİ → ÜNİTE BUTONLARINI GÖSTER -->
+        <!-- ÜNİTE SEÇİLMEDİ → ÜNİTE BUTONLARI -->
         {% for unit_item in units %}
             {% set map_url = url_for('map_page', level=level, unit=unit_item) %}
-            <button class="game-level-btn" id="level{{ loop.index }}-btn"
-                    onclick="window.location.href='{{ map_url }}'">
+            <button class="game-level-btn" id="level{{loop.index}}-btn"
+                    onclick="window.location.href='{{map_url}}'">
                 <span class="base-layer"><span class="top-layer">{{ loop.index }}</span></span>
             </button>
         {% endfor %}
     {% endif %}
 </div>
+
+<!-- Flask verilerini JS'e aktar -->
+<script>
+    const CURRENT_LEVEL = "{{ level }}";
+    const CURRENT_UNIT  = "{{ unit or '' }}";
+</script>
+<script src="{{ url_for('static', filename='map.js') }}"></script>
+
 </body>
 </html>

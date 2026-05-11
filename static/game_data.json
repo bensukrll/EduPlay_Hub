@@ -1,0 +1,89 @@
+{
+  "ilkokul": {
+    "unit1": {
+      "grade": "5. Sınıf",
+      "unitNumber": "Ünite 1",
+      "title": "Bilişim Teknolojilerinin Temelleri",
+      "description": "Bilgisayarın temel parçalarını ve kullanım alanlarını öğren.",
+      "games": {
+        "ilkokul_unit1_game1": {
+          "title": "Parça Eşleştirme",
+          "week": "1. Hafta",
+          "description": "Bilgisayar parçalarını doğru görevleriyle eşleştir.",
+          "outcome": "Bilgisayarın temel donanım bileşenlerini tanır ve görevlerini açıklar."
+        },
+        "ilkokul_unit1_game2": {
+          "title": "Donanım Dedektifi",
+          "week": "2. Hafta",
+          "description": "Verilen ipuçlarına göre doğru donanım parçasını seç.",
+          "outcome": "Farklı donanım birimlerini kullanım amaçlarına göre ayırt eder."
+        }
+      }
+    },
+
+    "unit2": {
+      "grade": "5. Sınıf",
+      "unitNumber": "Ünite 2",
+      "title": "Dijital Ürün Tasarım ve Geliştirme",
+      "description": "Dijital ürün oluşturma ve tasarım sürecini keşfet.",
+      "games": {
+        "ilkokul_unit2_game1": {
+          "title": "Tasarım Sıralaması",
+          "week": "3. Hafta",
+          "description": "Bir dijital ürün oluştururken izlenmesi gereken adımları doğru sıraya koy.",
+          "outcome": "Dijital ürün tasarlama sürecindeki temel aşamaları sıralar."
+        },
+        "ilkokul_unit2_game2": {
+          "title": "Renk ve Düzen Oyunu",
+          "week": "4. Hafta",
+          "description": "Ekrandaki öğeleri doğru yerlere yerleştirerek düzenli bir tasarım oluştur.",
+          "outcome": "Görsel tasarımda düzen, renk ve okunabilirlik ilkelerini fark eder."
+        }
+      }
+    }
+  },
+
+  "ortaokul": {
+    "unit1": {
+      "grade": "6. Sınıf",
+      "unitNumber": "Ünite 1",
+      "title": "Bilgisayar Ağları ve İletişim",
+      "description": "Bilgisayar ağlarının temel kavramlarını öğren.",
+      "games": {
+        "ortaokul_unit1_game1": {
+          "title": "Ağ Kurma Görevi",
+          "week": "1. Hafta",
+          "description": "Cihazları doğru şekilde bağlayarak çalışan bir ağ oluştur.",
+          "outcome": "Bilgisayar ağlarının temel bileşenlerini ve bağlantı mantığını açıklar."
+        },
+        "ortaokul_unit1_game2": {
+          "title": "Veri Paketi Yolculuğu",
+          "week": "2. Hafta",
+          "description": "Veri paketini doğru ağ cihazlarından geçirerek hedefe ulaştır.",
+          "outcome": "Verinin ağ üzerinde nasıl iletildiğini temel düzeyde açıklar."
+        }
+      }
+    },
+
+    "unit2": {
+      "grade": "6. Sınıf",
+      "unitNumber": "Ünite 2",
+      "title": "Bilişim Etiği ve Siber Güvenlik",
+      "description": "Dijital ortamda güvenli ve etik davranışları öğren.",
+      "games": {
+        "ortaokul_unit2_game1": {
+          "title": "Güvenli Şifre Avı",
+          "week": "3. Hafta",
+          "description": "Güçlü ve zayıf şifreleri ayırt ederek güvenli şifre oluştur.",
+          "outcome": "Güçlü şifre oluşturma kurallarını uygular ve zayıf şifreleri ayırt eder."
+        },
+        "ortaokul_unit2_game2": {
+          "title": "Siber Tuzaklardan Kaç",
+          "week": "4. Hafta",
+          "description": "Şüpheli bağlantıları, güvenilir olmayan mesajları ve riskli durumları belirle.",
+          "outcome": "Dijital ortamda karşılaşabileceği temel siber güvenlik risklerini fark eder."
+        }
+      }
+    }
+  }
+}
