@@ -8,70 +8,78 @@ import json
 app = Flask(__name__)
 
 GAME_INFO = {
-    "ilkokul_unit1_game1": {
-        "title": "Dosya Yönetimi",
-        "subtitle": "Dosya ve klasörleri doğru şekilde düzenlemeyi öğren!",
-        "unit": "Bilişim Teknolojileri",
-        "level": "İlkokul",
-        "icon": "📁",
-        "template": "unit1_level1"   # ← fiziksel dosya adı
-    },
-     "ilkokul_unit1_game2": {          
-        "title": "İç / Dış Donanım Eşleştirme",
-        "subtitle": "Donanım birimlerini doğru kategoriye sürükle!",
-        "unit": "Bilişim Teknolojileri",
-        "level": "İlkokul",
-        "icon": "🖥️",
-        "template": "unit1__level1_game2"     # ← oyun HTML dosyasının adı
-    },
-    "ortaokul_unit1_game1": {
-        "title": "Bilgisayar Sistemleri",
-        "subtitle": "Bilgisayarın temel donanım ve yazılım bileşenlerini keşfet!",
-        "unit": "Bilişim Teknolojileri",
-        "level": "Ortaokul",
-        "icon": "🖥️",
-        "template": "unit1_level2"   # ← fiziksel dosya adı
-    },
     "ilkokul_unit2_game1": {
-        "title": "Gizlilik ve Güvenlik",
-        "subtitle": "Kişisel bilgilerini internette nasıl koruyacağını öğren!",
-        "unit": "Etik ve Güvenlik",
-        "level": "İlkokul",
-        "icon": "🔐",
+        "title": "Tasarım Sıralaması",
+        "subtitle": "Dijital ürün tasarlama adımlarını doğru sıraya koy!",
+        "unit": "Dijital Ürün Tasarım ve Geliştirme",
+        "level": "5. Sınıf",
+        "icon": "🎨",
         "template": "unit2_level1"
     },
-    "ilkokul_unit2_game2": {
-    "title": "Dijital Vatandaşlık Eşleştirme Oyunu",
-    "subtitle": "Dijital vatandaşlık uygulamalarını kullanım amaçlarıyla eşleştir.",
-    "unit": "Dijital Vatandaşlık",
-    "level": "İlkokul",
-    "icon": "🌐",
-    "template": "unit2_level1_game2"
+
+    "ilkokul_unit5_game1": {
+        "title": "Dosya Yönetimi",
+        "subtitle": "Dosya ve klasörleri doğru şekilde düzenle!",
+        "unit": "Bilişim Teknolojilerinin Temelleri",
+        "level": "5. Sınıf",
+        "icon": "📁",
+        "template": "unit1_level1"
     },
-    "ortaokul_unit2_game1": {
-        "title": "Dijital Vatandaşlık",
-        "subtitle": "İnternette sorumlu ve bilinçli bir birey ol!",
-        "unit": "Etik ve Güvenlik",
-        "level": "Ortaokul",
-        "icon": "🧑‍💻",
-        "template": "unit2_level2"
+
+    "ilkokul_unit5_game2": {
+        "title": "İç / Dış Donanım Eşleştirme",
+        "subtitle": "Donanım birimlerini doğru kategoriye sürükle!",
+        "unit": "Bilişim Teknolojilerinin Temelleri",
+        "level": "5. Sınıf",
+        "icon": "🖥️",
+        "template": "unit1__level1_game2"
     },
-    "ilkokul_unit3_game1": {
+
+    "ilkokul_unit5_game3": {
         "title": "Bilgisayar Ağları",
-        "subtitle": "Bilgiler bilgisayarlar arasında nasıl dolaşır?",
-        "unit": "İletişim, Araştırma ve İş Birliği",
-        "level": "İlkokul",
+        "subtitle": "Bilgisayarların birbirleriyle nasıl iletişim kurduğunu keşfet!",
+        "unit": "Bilişim Teknolojilerinin Temelleri",
+        "level": "5. Sınıf",
         "icon": "🌐",
         "template": "unit3_level1"
     },
-    "ortaokul_unit3_game1": {
-        "title": "Bilgisayar Ağları – İleri Seviye",
+
+    "ortaokul_unit2_game1": {
+        "title": "Dijital Vatandaşlık",
+        "subtitle": "İnternette sorumlu ve bilinçli bir birey ol!",
+        "unit": "Bilişim Etiği ve Siber Güvenlik",
+        "level": "6. Sınıf",
+        "icon": "🧑‍💻",
+        "template": "unit2_level2"
+    },
+
+    "ortaokul_unit5_game1": {
+        "title": "Bilgisayar Sistemleri",
+        "subtitle": "Bilgisayarın temel donanım ve yazılım bileşenlerini keşfet!",
+        "unit": "Bilgisayar Ağları ve İletişim",
+        "level": "6. Sınıf",
+        "icon": "🖥️",
+        "template": "unit1_level2"
+    },
+
+    "ortaokul_unit5_game2": {
+        "title": "Bilgisayar Ağları",
         "subtitle": "Ağ türlerini ve internetin nasıl çalıştığını keşfet!",
-        "unit": "İletişim, Araştırma ve İş Birliği",
-        "level": "Ortaokul",
+        "unit": "Bilgisayar Ağları ve İletişim",
+        "level": "6. Sınıf",
         "icon": "🌐",
         "template": "unit3_level2"
+    },
+
+    "ortaokul_unit5_game3": {
+        "title": "Ağ Dedektifi",
+        "subtitle": "Ağ türlerini ve temel ağ bileşenlerini keşfet!",
+        "unit": "Bilgisayar Ağları ve İletişim",
+        "level": "6. Sınıf",
+        "icon": "🕵️‍♀️",
+        "template": "unit3_level2"
     }
+
 }
 
 # Seviye ve ünite bilgileri
