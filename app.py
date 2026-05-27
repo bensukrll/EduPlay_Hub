@@ -35,13 +35,13 @@ GAME_INFO = {
         "template": "unit1__level1_game2"
     },
 
-    "ilkokul_unit5_game3": {
+    "5_unit3_w2": {
         "title": "Bilgisayar Ağları",
         "subtitle": "Bilgisayarların birbirleriyle nasıl iletişim kurduğunu keşfet!",
         "unit": "Bilişim Teknolojilerinin Temelleri",
         "level": "5. Sınıf",
         "icon": "🌐",
-        "template": "unit3_level1"
+        "template": "5_unit3_w2"
     },
 
     "ortaokul_unit2_game1": {
@@ -71,7 +71,7 @@ GAME_INFO = {
         "template": "unit3_level2"
     },
 
-    "ortaokul_unit5_game3": {
+    "6_unit3_w2": {
         "title": "Ağ Dedektifi",
         "subtitle": "Ağ türlerini ve temel ağ bileşenlerini keşfet!",
         "unit": "Bilgisayar Ağları ve İletişim",
@@ -84,8 +84,8 @@ GAME_INFO = {
 
 # Seviye ve ünite bilgileri
 LEVELS_AND_UNITS = {
-    'ilkokul': ['unit1', 'unit2', 'unit3', 'unit4', 'unit5', 'unit6'],
-    'ortaokul': ['unit1', 'unit2', 'unit3', 'unit4', 'unit5', 'unit6']
+    '5': ['unit1', 'unit2', 'unit3', 'unit4', 'unit5', 'unit6'],
+    '6': ['unit1', 'unit2', 'unit3', 'unit4', 'unit5', 'unit6']
 }
 
 # ==================================================
@@ -167,17 +167,27 @@ def map_page():
 
     units = LEVELS_AND_UNITS.get(level, [])
 
-    unit_games = []
+    # 3 butonluk hafta alanı: [1. hafta, 2. hafta, 3. hafta]
+    week_slots = [None, None, None]
+
     if unit and level:
         prefix = f"{level}_{unit}_"
-        unit_games = [key for key in GAME_INFO.keys() if key.startswith(prefix)]
+
+        for key in GAME_INFO.keys():
+            if key.startswith(prefix):
+                try:
+                    week_no = int(key.split("_w")[-1])  # 5_unit3_w2 -> 2
+                    if 1 <= week_no <= 3:
+                        week_slots[week_no - 1] = key
+                except ValueError:
+                    pass
 
     return render_template(
         'map.html',
         level=level,
         unit=unit,
         units=units,
-        unit_games=unit_games
+        week_slots=week_slots
     )
 # ==================================================
 # ROTA: Oyun Sayfası

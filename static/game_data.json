@@ -1,16 +1,85 @@
 {
-  "ilkokul": {
+  "5": {
+    "unit1": {
+      "grade": "5. Sınıf",
+      "unitNumber": "Ünite 1",
+      "title": "Dijital Dünyaya Giriş",
+      "description": "Bilişim teknolojilerinin günlük yaşamdaki yerini ve temel kavramlarını öğren.",
+      "games": {
+        "5_unit1_w1": {
+          "title": "Dijital Dünyayı Keşfet",
+          "week": "1. Hafta",
+          "description": "Bilişim teknolojilerinin günlük yaşamda nerelerde kullanıldığını keşfet.",
+          "outcome": "Bilişim teknolojilerinin günlük yaşamdaki kullanım alanlarını fark eder."
+        },
+        "5_unit1_w2": {
+          "title": "Teknoloji Dedektifi",
+          "week": "2. Hafta",
+          "description": "Farklı teknolojik araçları kullanım amaçlarına göre eşleştir.",
+          "outcome": "Bilişim teknolojisi araçlarını kullanım amaçlarına göre sınıflandırır."
+        }
+      }
+    },
+
     "unit2": {
       "grade": "5. Sınıf",
       "unitNumber": "Ünite 2",
       "title": "Dijital Ürün Tasarım ve Geliştirme",
       "description": "Dijital ürün oluşturma ve tasarım sürecini keşfet.",
       "games": {
-        "ilkokul_unit2_game1": {
+        "5_unit2_w1": {
           "title": "Tasarım Sıralaması",
           "week": "1. Hafta",
           "description": "Bir dijital ürün oluştururken izlenmesi gereken adımları doğru sıraya koy.",
           "outcome": "Dijital ürün tasarlama sürecindeki temel aşamaları sıralar."
+        },
+        "5_unit2_w2": {
+          "title": "Tasarım Kartları",
+          "week": "2. Hafta",
+          "description": "Dijital ürün tasarımında kullanılan kavramları doğru açıklamalarla eşleştir.",
+          "outcome": "Dijital ürün geliştirme sürecindeki temel kavramları açıklar."
+        }
+      }
+    },
+
+    "unit3": {
+      "grade": "5. Sınıf",
+      "unitNumber": "Ünite 3",
+      "title": "Bilgisayar Ağları ve İletişim",
+      "description": "Bilgisayar ağlarının nasıl çalıştığını ve bağlantı yöntemlerini öğren.",
+      "games": {
+        "5_unit3_w1": {
+          "title": "Ağları Tanıyalım",
+          "week": "1. Hafta",
+          "description": "Bilgisayar ağlarının ne işe yaradığını ve nerelerde kullanıldığını keşfet.",
+          "outcome": "Bilgisayar ağlarının günlük yaşamdaki kullanım alanlarını fark eder."
+        },
+        "5_unit3_w2": {
+          "title": "Bağlantı Ustası",
+          "week": "2. Hafta",
+          "description": "Kartları sürükle ve doğru bağlantı türünün altındaki kutucuğa bırak.",
+          "outcome": "Bilgisayar ağları ve bağlanma yöntemlerini sınıflandırır."
+        }
+      }
+    },
+
+    "unit4": {
+      "grade": "5. Sınıf",
+      "unitNumber": "Ünite 4",
+      "title": "Dijital Güvenlik ve Etik",
+      "description": "Dijital ortamda güvenli, etik ve sorumlu davranmayı öğren.",
+      "games": {
+        "5_unit4_w1": {
+          "title": "Güvenli mi Riskli mi?",
+          "week": "1. Hafta",
+          "description": "Dijital ortamdaki davranışları güvenli ve riskli olarak ayır.",
+          "outcome": "Dijital ortamda güvenli ve riskli davranışları ayırt eder."
+        },
+        "5_unit4_w2": {
+          "title": "Etik Davranış Seçimi",
+          "week": "2. Hafta",
+          "description": "Verilen durumlarda doğru ve etik dijital davranışı seç.",
+          "outcome": "Dijital ortamda etik davranış kurallarını uygular."
         }
       }
     },
@@ -21,40 +90,124 @@
       "title": "Bilişim Teknolojilerinin Temelleri",
       "description": "Bilgisayarın temel parçalarını, donanım birimlerini ve kullanım alanlarını öğren.",
       "games": {
-        "ilkokul_unit5_game1": {
+        "5_unit5_w1": {
           "title": "Dosya Yönetimi",
           "week": "1. Hafta",
           "description": "Dosya ve klasörleri doğru şekilde düzenleyerek dijital ortamda düzen oluştur.",
           "outcome": "Dosya ve klasörleri amacına uygun şekilde düzenler."
         },
-        "ilkokul_unit5_game2": {
+        "5_unit5_w2": {
           "title": "İç / Dış Donanım Eşleştirme",
           "week": "2. Hafta",
           "description": "Donanım birimlerini iç donanım ve dış donanım olarak doğru kategorilere ayır.",
           "outcome": "Bilgisayar donanım birimlerini türlerine göre sınıflandırır."
+        }
+      }
+    },
+
+    "unit6": {
+      "grade": "5. Sınıf",
+      "unitNumber": "Ünite 6",
+      "title": "Algoritma ve Programlama",
+      "description": "Problem çözme, algoritmik düşünme ve temel programlama mantığını öğren.",
+      "games": {
+        "5_unit6_w1": {
+          "title": "Algoritma Sıralaması",
+          "week": "1. Hafta",
+          "description": "Bir problemin çözüm adımlarını doğru sıraya koy.",
+          "outcome": "Problem çözümü için işlem adımlarını sıralar."
         },
-        "ilkokul_unit5_game3": {
-          "title": "Bilgisayar Ağları",
-          "week": "3. Hafta",
-          "description": "Bilgisayarların birbirleriyle nasıl iletişim kurduğunu ve ağların temel mantığını keşfet.",
-          "outcome": "Bilgisayar ağlarının günlük yaşamda nasıl kullanıldığını fark eder."
+        "5_unit6_w2": {
+          "title": "Akış Şeması Tamamlama",
+          "week": "2. Hafta",
+          "description": "Eksik bırakılan akış şeması parçalarını doğru yerlere yerleştir.",
+          "outcome": "Problem çözümüne ilişkin işlem adımlarını akış şeması ile gösterir."
         }
       }
     }
   },
 
-  "ortaokul": {
+  "6": {
+    "unit1": {
+      "grade": "6. Sınıf",
+      "unitNumber": "Ünite 1",
+      "title": "Bilişim Teknolojileri ve Toplum",
+      "description": "Bilişim teknolojilerinin birey ve toplum üzerindeki etkilerini öğren.",
+      "games": {
+        "6_unit1_w1": {
+          "title": "Teknoloji Hayatımızda",
+          "week": "1. Hafta",
+          "description": "Teknolojinin günlük yaşam üzerindeki etkilerini örneklerle keşfet.",
+          "outcome": "Bilişim teknolojilerinin birey ve toplum üzerindeki etkilerini açıklar."
+        },
+        "6_unit1_w2": {
+          "title": "Dijital Etki Kartları",
+          "week": "2. Hafta",
+          "description": "Teknoloji kullanımının olumlu ve olumsuz etkilerini sınıflandır.",
+          "outcome": "Bilişim teknolojilerinin olumlu ve olumsuz etkilerini ayırt eder."
+        }
+      }
+    },
+
     "unit2": {
       "grade": "6. Sınıf",
       "unitNumber": "Ünite 2",
       "title": "Bilişim Etiği ve Siber Güvenlik",
       "description": "Dijital ortamda güvenli ve etik davranışları öğren.",
       "games": {
-        "ortaokul_unit2_game1": {
+        "6_unit2_w1": {
           "title": "Dijital Vatandaşlık",
           "week": "1. Hafta",
           "description": "İnternette sorumlu, güvenli ve bilinçli davranışları keşfet.",
           "outcome": "Dijital ortamda güvenli ve sorumlu davranışları açıklar."
+        },
+        "6_unit2_w2": {
+          "title": "Siber Güvenlik Avı",
+          "week": "2. Hafta",
+          "description": "Güvenli ve güvensiz dijital durumları ayırt et.",
+          "outcome": "Siber güvenlik için dikkat edilmesi gereken temel durumları fark eder."
+        }
+      }
+    },
+
+    "unit3": {
+      "grade": "6. Sınıf",
+      "unitNumber": "Ünite 3",
+      "title": "Dijital İçerik Üretimi",
+      "description": "Dijital içerik oluşturma, düzenleme ve paylaşma süreçlerini öğren.",
+      "games": {
+        "6_unit3_w1": {
+          "title": "İçerik Tasarımcısı",
+          "week": "1. Hafta",
+          "description": "Dijital içerik oluşturma adımlarını doğru sıraya koy.",
+          "outcome": "Dijital içerik oluşturma sürecindeki temel aşamaları sıralar."
+        },
+        "6_unit3_w2": {
+          "title": "Doğru İçerik Seçimi",
+          "week": "2. Hafta",
+          "description": "Amaca uygun dijital içerik türünü seç.",
+          "outcome": "Dijital içerikleri kullanım amaçlarına göre ayırt eder."
+        }
+      }
+    },
+
+    "unit4": {
+      "grade": "6. Sınıf",
+      "unitNumber": "Ünite 4",
+      "title": "Veri ve Bilgi İşleme",
+      "description": "Veri toplama, düzenleme ve yorumlama süreçlerini öğren.",
+      "games": {
+        "6_unit4_w1": {
+          "title": "Veri Sınıflandırma",
+          "week": "1. Hafta",
+          "description": "Verileri türlerine göre doğru gruplara ayır.",
+          "outcome": "Verileri özelliklerine göre sınıflandırır."
+        },
+        "6_unit4_w2": {
+          "title": "Tablo Tamamlama",
+          "week": "2. Hafta",
+          "description": "Eksik verilen tablo bilgilerini doğru şekilde tamamla.",
+          "outcome": "Verileri tablo üzerinde düzenler ve yorumlar."
         }
       }
     },
@@ -65,23 +218,38 @@
       "title": "Bilgisayar Ağları ve İletişim",
       "description": "Bilgisayar ağlarının temel kavramlarını ve iletişim süreçlerini öğren.",
       "games": {
-        "ortaokul_unit5_game1": {
+        "6_unit5_w1": {
           "title": "Bilgisayar Sistemleri",
           "week": "1. Hafta",
           "description": "Bilgisayarın temel donanım ve yazılım bileşenlerini keşfet.",
           "outcome": "Bilgisayar sistemlerini oluşturan temel bileşenleri açıklar."
         },
-        "ortaokul_unit5_game2": {
+        "6_unit5_w2": {
           "title": "Bilgisayar Ağları",
           "week": "2. Hafta",
           "description": "Ağ türlerini ve internetin temel çalışma mantığını keşfet.",
           "outcome": "Bilgisayar ağlarının temel bileşenlerini ve bağlantı mantığını açıklar."
+        }
+      }
+    },
+
+    "unit6": {
+      "grade": "6. Sınıf",
+      "unitNumber": "Ünite 6",
+      "title": "Algoritma ve Programlama",
+      "description": "Algoritmik düşünme, problem çözme ve programlama temellerini öğren.",
+      "games": {
+        "6_unit6_w1": {
+          "title": "Kod Bloklarını Sırala",
+          "week": "1. Hafta",
+          "description": "Bir programın çalışması için kod bloklarını doğru sıraya koy.",
+          "outcome": "Algoritmik işlem adımlarını doğru sırayla düzenler."
         },
-        "ortaokul_unit5_game3": {
-          "title": "Ağ Dedektifi",
-          "week": "3. Hafta",
-          "description": "Ağ türlerini, bağlantı araçlarını ve veri iletim sürecini ipuçlarıyla keşfet.",
-          "outcome": "Ağ türlerini ve temel ağ bileşenlerini kullanım amaçlarına göre ayırt eder."
+        "6_unit6_w2": {
+          "title": "Hata Ayıklama Görevi",
+          "week": "2. Hafta",
+          "description": "Verilen algoritmadaki hataları bul ve doğru adımlarla değiştir.",
+          "outcome": "Algoritmadaki hataları fark eder ve düzeltir."
         }
       }
     }
