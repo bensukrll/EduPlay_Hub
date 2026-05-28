@@ -8,67 +8,184 @@ import json
 app = Flask(__name__)
 
 GAME_INFO = {
-    "ilkokul_unit2_game1": {
+    # =========================
+    # 5. SINIF - ÜNİTE 1
+    # =========================
+    "5_unit1_w1": {
+        "title": "Teknoloji Dedektifi",
+        "subtitle": "Günlük yaşamda kullanılan bilişim teknolojilerini tanı ve sınıflandır!",
+        "unit": "Bilişim Teknolojilerinin Hayatımızdaki Yeri",
+        "level": "5. Sınıf",
+        "icon": "💻",
+        "template": "5_unit1_w1"
+    },
+
+    "5_unit1_w2": {
+        "title": "Dijital Sağlık Dengesi",
+        "subtitle": "Bilişim teknolojilerinin olumlu ve olumsuz etkilerini ayırt et!",
+        "unit": "Bilişim Teknolojilerinin Hayatımızdaki Yeri",
+        "level": "5. Sınıf",
+        "icon": "🧘",
+        "template": "5_unit1_w2"
+    },
+
+    # =========================
+    # 5. SINIF - ÜNİTE 2
+    # =========================
+    "5_unit2_w1": {
+        "title": "Görsel Düzenleme Araçları",
+        "subtitle": "Görsel düzenleme programlarının temel özelliklerini keşfet!",
+        "unit": "Dijital Ürün Tasarım ve Geliştirme",
+        "level": "5. Sınıf",
+        "icon": "🎨",
+        "template": "5_unit2_w1"
+    },
+
+    "5_unit2_w2": {
         "title": "Tasarım Sıralaması",
         "subtitle": "Dijital ürün tasarlama adımlarını doğru sıraya koy!",
         "unit": "Dijital Ürün Tasarım ve Geliştirme",
         "level": "5. Sınıf",
-        "icon": "🎨",
-        "template": "unit2_level1"
+        "icon": "🖌️",
+        "template": "5_unit2_w2"
     },
 
-    "ilkokul_unit5_game1": {
-        "title": "Dosya Yönetimi",
-        "subtitle": "Dosya ve klasörleri doğru şekilde düzenle!",
-        "unit": "Bilişim Teknolojilerinin Temelleri",
+    # =========================
+    # 5. SINIF - ÜNİTE 3
+    # =========================
+    "5_unit3_w1": {
+        "title": "Ağ Bileşenleri",
+        "subtitle": "Bilgisayar ağlarında kullanılan temel bileşenleri tanı!",
+        "unit": "Bilgisayar Ağları ve İletişim",
         "level": "5. Sınıf",
-        "icon": "📁",
-        "template": "unit1_level1"
-    },
-
-    "ilkokul_unit5_game2": {
-        "title": "İç / Dış Donanım Eşleştirme",
-        "subtitle": "Donanım birimlerini doğru kategoriye sürükle!",
-        "unit": "Bilişim Teknolojilerinin Temelleri",
-        "level": "5. Sınıf",
-        "icon": "🖥️",
-        "template": "unit1__level1_game2"
+        "icon": "🔌",
+        "template": "5_unit3_w1"
     },
 
     "5_unit3_w2": {
-        "title": "Bilgisayar Ağları",
-        "subtitle": "Bilgisayarların birbirleriyle nasıl iletişim kurduğunu keşfet!",
-        "unit": "Bilişim Teknolojilerinin Temelleri",
+        "title": "Bağlantı Ustası",
+        "subtitle": "Kablolu ve kablosuz bağlantı yöntemlerini günlük yaşam örnekleriyle ayırt et!",
+        "unit": "Bilgisayar Ağları ve İletişim",
         "level": "5. Sınıf",
         "icon": "🌐",
         "template": "5_unit3_w2"
     },
 
-    "ortaokul_unit2_game1": {
+    # =========================
+    # 5. SINIF - ÜNİTE 4
+    # =========================
+    "5_unit4_w1": {
+        "title": "Bilişim Etiği Seçimi",
+        "subtitle": "Dijital ortamlarda etik olan ve olmayan davranışları ayırt et!",
+        "unit": "Bilişim Etiği ve Siber Güvenlik",
+        "level": "5. Sınıf",
+        "icon": "⚖️",
+        "template": "5_unit4_w1"
+    },
+
+    "5_unit4_w2": {
+        "title": "Dijital Güvenlik Kalkanı",
+        "subtitle": "Gizlilik risklerini, kişisel verileri ve güvenlik önlemlerini doğru sınıflandır!",
+        "unit": "Bilişim Etiği ve Siber Güvenlik",
+        "level": "5. Sınıf",
+        "icon": "🛡️",
+        "template": "5_unit4_w2"
+    },
+
+    # =========================
+    # 5. SINIF - ÜNİTE 5
+    # =========================
+    "5_unit5_w1": {
+        "title": "Yapay Zekâ Avı",
+        "subtitle": "Günlük yaşamda kullanılan yapay zekâ örneklerini keşfet!",
+        "unit": "Yapay Zekâ",
+        "level": "5. Sınıf",
+        "icon": "🤖",
+        "template": "5_unit5_w1"
+    },
+
+    "5_unit5_w2": {
+        "title": "Yapay Zekâ Sınıflandırması",
+        "subtitle": "Yapay zekâ uygulamalarını kullanım alanlarına göre gruplandır!",
+        "unit": "Yapay Zekâ",
+        "level": "5. Sınıf",
+        "icon": "🧠",
+        "template": "5_unit5_w2"
+    },
+
+    # =========================
+    # 5. SINIF - ÜNİTE 6
+    # =========================
+    "5_unit6_w1": {
+        "title": "Problem Çözme Adımları",
+        "subtitle": "Bir problemi çözmek için gerekli işlem adımlarını belirle!",
+        "unit": "Yazılım Tasarımı ve Programlama",
+        "level": "5. Sınıf",
+        "icon": "🧩",
+        "template": "5_unit6_w1"
+    },
+
+    "5_unit6_w2": {
+        "title": "Algoritma Sıralaması",
+        "subtitle": "Verilen günlük yaşam problemini algoritmik adımlarla sırala!",
+        "unit": "Yazılım Tasarımı ve Programlama",
+        "level": "5. Sınıf",
+        "icon": "🔢",
+        "template": "5_unit6_w2"
+    },
+
+    # =========================
+    # 6. SINIF - ÜNİTE 1
+    # =========================
+    "6_unit1_w1": {
+        "title": "Bilişim Kavramları",
+        "subtitle": "Bilişim teknolojileriyle ilgili temel kavramları eşleştir!",
+        "unit": "Bilişim Teknolojilerinin Temelleri",
+        "level": "6. Sınıf",
+        "icon": "💡",
+        "template": "6_unit1_w1"
+    },
+
+    "6_unit1_w2": {
+        "title": "Donanım ve Yazılım",
+        "subtitle": "Bilgisayar sistemindeki donanım ve yazılım örneklerini ayırt et!",
+        "unit": "Bilişim Teknolojilerinin Temelleri",
+        "level": "6. Sınıf",
+        "icon": "🖥️",
+        "template": "6_unit1_w2"
+    },
+
+    # =========================
+    # 6. SINIF - ÜNİTE 2
+    # =========================
+    "6_unit2_w1": {
         "title": "Dijital Vatandaşlık",
-        "subtitle": "İnternette sorumlu ve bilinçli bir birey ol!",
+        "subtitle": "Dijital ortamda sorumlu ve bilinçli davranışları seç!",
         "unit": "Bilişim Etiği ve Siber Güvenlik",
         "level": "6. Sınıf",
         "icon": "🧑‍💻",
-        "template": "unit2_level2"
+        "template": "6_unit2_w1"
     },
 
-    "ortaokul_unit5_game1": {
-        "title": "Bilgisayar Sistemleri",
-        "subtitle": "Bilgisayarın temel donanım ve yazılım bileşenlerini keşfet!",
-        "unit": "Bilgisayar Ağları ve İletişim",
+    "6_unit2_w2": {
+        "title": "Siber Güvenlik Görevi",
+        "subtitle": "Siber güvenlik risklerini ve korunma yollarını doğru eşleştir!",
+        "unit": "Bilişim Etiği ve Siber Güvenlik",
         "level": "6. Sınıf",
-        "icon": "🖥️",
-        "template": "unit1_level2"
+        "icon": "🔐",
+        "template": "6_unit2_w2"
     },
 
-    "ortaokul_unit5_game2": {
-        "title": "Bilgisayar Ağları",
-        "subtitle": "Ağ türlerini ve internetin nasıl çalıştığını keşfet!",
+    # =========================
+    # 6. SINIF - ÜNİTE 3
+    # =========================
+    "6_unit3_w1": {
+        "title": "Ağ Türleri",
+        "subtitle": "Ağ türlerini özelliklerine göre doğru şekilde sınıflandır!",
         "unit": "Bilgisayar Ağları ve İletişim",
         "level": "6. Sınıf",
-        "icon": "🌐",
-        "template": "unit3_level2"
+        "icon": "📡",
+        "template": "6_unit3_w1"
     },
 
     "6_unit3_w2": {
@@ -77,9 +194,71 @@ GAME_INFO = {
         "unit": "Bilgisayar Ağları ve İletişim",
         "level": "6. Sınıf",
         "icon": "🕵️‍♀️",
-        "template": "unit3_level2"
-    }
+        "template": "6_unit3_w2"
+    },
 
+    # =========================
+    # 6. SINIF - ÜNİTE 4
+    # =========================
+    "6_unit4_w1": {
+        "title": "Dijital Ürün Planlama",
+        "subtitle": "Bir dijital ürün geliştirmek için gerekli planlama adımlarını sırala!",
+        "unit": "Dijital Ürün Tasarım ve Geliştirme",
+        "level": "6. Sınıf",
+        "icon": "📝",
+        "template": "6_unit4_w1"
+    },
+
+    "6_unit4_w2": {
+        "title": "Tasarım Kararları",
+        "subtitle": "Dijital ürün tasarımında doğru araç ve yöntemleri seç!",
+        "unit": "Dijital Ürün Tasarım ve Geliştirme",
+        "level": "6. Sınıf",
+        "icon": "🎯",
+        "template": "6_unit4_w2"
+    },
+
+    # =========================
+    # 6. SINIF - ÜNİTE 5
+    # =========================
+    "6_unit5_w1": {
+        "title": "Yapay Zekâ Nerede?",
+        "subtitle": "Yapay zekâ kullanılan ve kullanılmayan durumları ayırt et!",
+        "unit": "Yapay Zekâ",
+        "level": "6. Sınıf",
+        "icon": "🤖",
+        "template": "6_unit5_w1"
+    },
+
+    "6_unit5_w2": {
+        "title": "Akıllı Sistemler",
+        "subtitle": "Yapay zekâ sistemlerinin çalışma mantığını örneklerle keşfet!",
+        "unit": "Yapay Zekâ",
+        "level": "6. Sınıf",
+        "icon": "🧠",
+        "template": "6_unit5_w2"
+    },
+
+    # =========================
+    # 6. SINIF - ÜNİTE 6
+    # =========================
+    "6_unit6_w1": {
+        "title": "Algoritma Kurucusu",
+        "subtitle": "Bir problemin çözüm adımlarını algoritmik düşünerek oluştur!",
+        "unit": "Yazılım Tasarımı ve Programlama",
+        "level": "6. Sınıf",
+        "icon": "🧩",
+        "template": "6_unit6_w1"
+    },
+
+    "6_unit6_w2": {
+        "title": "Kodlama Mantığı",
+        "subtitle": "Koşul, döngü ve sıralama mantığını oyun içinde uygula!",
+        "unit": "Yazılım Tasarımı ve Programlama",
+        "level": "6. Sınıf",
+        "icon": "👩‍💻",
+        "template": "6_unit6_w2"
+    }
 }
 
 # Seviye ve ünite bilgileri

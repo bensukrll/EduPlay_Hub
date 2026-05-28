@@ -57,8 +57,8 @@
         "5_unit3_w2": {
           "title": "Bağlantı Ustası",
           "week": "2. Hafta",
-          "description": "Kartları sürükle ve doğru bağlantı türünün altındaki kutucuğa bırak.",
-          "outcome": "Bilgisayar ağları ve bağlanma yöntemlerini sınıflandırır."
+          "description": "Kartlardaki günlük yaşam durumlarını incele; kablolu ve kablosuz bağlantı yöntemlerini doğru şekilde sınıflandır.",
+          "outcome": "BTY.5.3.2. Bilgisayar ağları ve bağlanma yöntemlerini sınıflandırabilme."
         }
       }
     },
@@ -76,10 +76,10 @@
           "outcome": "Dijital ortamda güvenli ve riskli davranışları ayırt eder."
         },
         "5_unit4_w2": {
-          "title": "Etik Davranış Seçimi",
+          "title": "Dijital Güvenlik Kalkanı",
           "week": "2. Hafta",
-          "description": "Verilen durumlarda doğru ve etik dijital davranışı seç.",
-          "outcome": "Dijital ortamda etik davranış kurallarını uygular."
+          "description": "Verilen durumları gizlilik riski, güvenlik önlemi ve kişisel veri olarak doğru kutulara yerleştir.",
+          "outcome": "BTY.5.4.2. Dijital ortamlarda gizlilik ve güvenlik önlemlerini yönetebilme."
         }
       }
     },

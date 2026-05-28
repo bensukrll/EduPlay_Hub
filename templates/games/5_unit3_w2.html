@@ -6,7 +6,7 @@
     <title>Bağlantı Türünü Seç - Ağ Oyunu</title>
 
     <link rel="stylesheet" href="{{ url_for('static', filename='games/unit3_level1/style.css') }}">
-    <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;600&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;600;700;800&display=swap" rel="stylesheet">
 </head>
 
 <body>
@@ -16,16 +16,22 @@
     <!-- HEADER -->
     <header class="game-header">
         <h1>Bağlantı Ustası</h1>
-        <p>Kartları sürükle ve doğru bağlantı türünün altındaki kutucuğa bırak!</p>
+        <p>
+            Kartları incele, bağlantının <strong>kablolu</strong> mu yoksa
+            <strong>kablosuz</strong> mu olduğunu belirle ve doğru kutuya sürükle!
+        </p>
         <div class="timer" id="timer">00:00</div>
     </header>
 
     <!-- ================= GAME BOARD ================= -->
     <section class="game-board">
 
-        <!-- SOL: KABLOLU -->
+        <!-- SOL: KABLOLU BAĞLANTI -->
         <div class="category-column wired-col">
             <h2 class="category-title title-wired">Kablolu Bağlantı 🔌</h2>
+            <p class="category-subtitle">
+                Cihazların kablo kullanarak ağa veya internete bağlanmasıdır.
+            </p>
 
             <div class="slots-grid" id="wired-slots">
                 <div class="slot" data-type="wired"></div>
@@ -40,9 +46,12 @@
             <!-- Kartlar JS tarafından buraya eklenecek -->
         </div>
 
-        <!-- SAĞ: KABLOSUZ -->
+        <!-- SAĞ: KABLOSUZ BAĞLANTI -->
         <div class="category-column wireless-col">
             <h2 class="category-title title-wireless">Kablosuz Bağlantı 📡</h2>
+            <p class="category-subtitle">
+                Wi-Fi, Bluetooth ve mobil veri gibi kablosuz bağlantı yöntemlerini kapsar.
+            </p>
 
             <div class="slots-grid" id="wireless-slots">
                 <div class="slot" data-type="wireless"></div>

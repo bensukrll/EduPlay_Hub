@@ -1,0 +1,747 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dijital Güvenlik Kalkanı</title>
+
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+
+        html,
+        body {
+            margin: 0;
+            padding: 0;
+            width: 100%;
+            min-height: 100%;
+            font-family: "Poppins", "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+            background: transparent;
+            color: #253156;
+        }
+
+        body {
+            overflow: hidden;
+        }
+
+        .game-shell {
+            width: min(1500px, calc(100% - 28px));
+            height: calc(100vh - 28px);
+            margin: 14px auto;
+            display: grid;
+            grid-template-rows: auto 1fr auto;
+            gap: 14px;
+        }
+
+        /* Üst durum alanı: oyun içinde ekstra mavi header yok */
+        .compact-status-card {
+            background: rgba(255, 255, 255, 0.96);
+            border-radius: 20px;
+            padding: 14px 18px;
+            display: grid;
+            grid-template-columns: auto 1fr auto;
+            gap: 16px;
+            align-items: center;
+            box-shadow: 0 8px 22px rgba(41, 58, 95, 0.09);
+            border: 1px solid rgba(120, 135, 170, 0.14);
+        }
+
+        .status-pill {
+            background: #ffffff;
+            color: #253156;
+            padding: 10px 17px;
+            border-radius: 999px;
+            font-weight: 900;
+            font-size: 1rem;
+            white-space: nowrap;
+            box-shadow: 0 5px 14px rgba(0, 0, 0, 0.07);
+        }
+
+        .status-pill.danger {
+            color: #d64242;
+        }
+
+        .progress-track {
+            width: 100%;
+            height: 16px;
+            background: #e8edf6;
+            border-radius: 999px;
+            overflow: hidden;
+        }
+
+        .progress-fill {
+            height: 100%;
+            width: 0%;
+            background: linear-gradient(90deg, #ffe066, #ffbf3f);
+            border-radius: 999px;
+            transition: width 0.25s ease;
+        }
+
+        /* Ana kazanım alanı: risk, önlem, kişisel veri */
+        .drop-zone-grid {
+            min-height: 0;
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 16px;
+        }
+
+        .drop-card {
+            min-height: 0;
+            background: rgba(255, 255, 255, 0.96);
+            border-radius: 24px;
+            padding: 18px;
+            display: grid;
+            grid-template-rows: auto auto 1fr;
+            box-shadow: 0 10px 26px rgba(55, 74, 120, 0.08);
+            transition: transform 0.18s ease, box-shadow 0.18s ease;
+        }
+
+        .drop-card:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 12px 30px rgba(55, 74, 120, 0.11);
+        }
+
+        .risk-zone {
+            border: 3px dashed #f1a4a4;
+            background: linear-gradient(180deg, #fff3f3 0%, #ffffff 100%);
+        }
+
+        .measure-zone {
+            border: 3px dashed #9ed8a9;
+            background: linear-gradient(180deg, #f2fff4 0%, #ffffff 100%);
+        }
+
+        .personal-zone {
+            border: 3px dashed #cda7ef;
+            background: linear-gradient(180deg, #fbf3ff 0%, #ffffff 100%);
+        }
+
+        .drop-heading {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 10px;
+            margin-bottom: 8px;
+        }
+
+        .drop-title {
+            display: flex;
+            align-items: center;
+            gap: 11px;
+            min-width: 0;
+        }
+
+        .drop-icon {
+            width: 48px;
+            height: 48px;
+            border-radius: 16px;
+            background: #ffffff;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.65rem;
+            box-shadow: 0 6px 16px rgba(0, 0, 0, 0.08);
+            flex: 0 0 auto;
+        }
+
+        .drop-card h3 {
+            margin: 0;
+            font-size: 1.55rem;
+            font-weight: 950;
+            line-height: 1.1;
+        }
+
+        .risk-zone h3 {
+            color: #d74b4b;
+        }
+
+        .measure-zone h3 {
+            color: #2d8a47;
+        }
+
+        .personal-zone h3 {
+            color: #7d35b2;
+        }
+
+        .counter-badge {
+            background: rgba(255, 255, 255, 0.9);
+            border: 1px solid rgba(140, 150, 180, 0.28);
+            border-radius: 999px;
+            padding: 7px 12px;
+            font-size: 0.92rem;
+            font-weight: 900;
+            color: #66708d;
+            white-space: nowrap;
+        }
+
+        .drop-card p {
+            margin: 0 0 12px;
+            color: #5f6b88;
+            line-height: 1.35;
+            font-size: 1.03rem;
+        }
+
+        .drop-inner {
+            min-height: 0;
+            border: 2px dashed rgba(140, 150, 180, 0.26);
+            border-radius: 18px;
+            padding: 12px;
+            background: rgba(255, 255, 255, 0.68);
+            overflow-y: auto;
+            transition: 0.18s ease;
+        }
+
+        .drop-inner.drag-over {
+            transform: scale(1.01);
+            background: #ffffff;
+            border-color: #42a5f5;
+        }
+
+        .empty-text {
+            min-height: 110px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #7d879d;
+            font-size: 1rem;
+            line-height: 1.35;
+            text-align: center;
+            padding: 8px;
+        }
+
+        /* Alt kart havuzu: cevap kutusu değil, kaynak alan */
+        .card-tray {
+            background: rgba(255, 249, 223, 0.97);
+            border: 3px solid #f6d55c;
+            border-radius: 24px;
+            padding: 14px;
+            display: grid;
+            grid-template-columns: 150px 1fr;
+            gap: 14px;
+            box-shadow: 0 10px 24px rgba(218, 184, 55, 0.13);
+            min-height: 150px;
+            max-height: 220px;
+        }
+        .card-tray .item {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+        }
+
+        .tray-info {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            gap: 8px;
+            border-right: 2px dashed rgba(130, 105, 0, 0.2);
+            padding-right: 12px;
+        }
+
+        .tray-badge {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: fit-content;
+            background: #f6d54e;
+            color: #4a3d00;
+            padding: 9px 14px;
+            border-radius: 999px;
+            font-size: 1rem;
+            font-weight: 950;
+            align-self: center;
+            text-align: center;
+        }
+
+        .tray-info p {
+            margin: 0;
+            color: #7d6b1f;
+            font-size: 0.96rem;
+            line-height: 1.35;
+        }
+
+        .items-container {
+            min-height: 0;
+            overflow-y: auto;
+            padding-right: 4px;
+        }
+
+        .items-grid {
+            display: grid;
+            grid-template-columns: repeat(4, minmax(160px, 1fr));
+            gap: 12px;
+        }
+
+        .item {
+            background: linear-gradient(135deg, #ffe169, #ffd84d);
+            border: none;
+            border-radius: 16px;
+            padding: 12px 14px;
+            color: #3b3200;
+            font-size: 1.03rem;
+            line-height: 1.28;
+            cursor: grab;
+            box-shadow: 0 6px 14px rgba(218, 184, 55, 0.2);
+            transition: transform 0.15s ease, box-shadow 0.15s ease, background 0.15s ease;
+            user-select: none;
+        }
+
+        .item:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 8px 19px rgba(218, 184, 55, 0.3);
+        }
+
+        .item:active {
+            cursor: grabbing;
+        }
+
+        .item.selected {
+            outline: 4px solid rgba(66, 165, 245, 0.58);
+            transform: scale(1.01);
+        }
+
+        .item.correct {
+            background: linear-gradient(135deg, #b7f0c2, #8ee6a1);
+            color: #173f22;
+            cursor: default;
+            box-shadow: 0 5px 12px rgba(76, 175, 80, 0.17);
+            margin-bottom: 9px;
+        }
+
+        .item.wrong {
+            background: linear-gradient(135deg, #ffb3b3, #ff8f8f);
+            color: #5b1111;
+            animation: shake 0.3s ease;
+        }
+
+        @keyframes shake {
+            0% { transform: translateX(0); }
+            25% { transform: translateX(-4px); }
+            50% { transform: translateX(4px); }
+            75% { transform: translateX(-3px); }
+            100% { transform: translateX(0); }
+        }
+
+        .result-backdrop {
+            position: fixed;
+            inset: 0;
+            background: rgba(22, 31, 55, 0.42);
+            display: none;
+            align-items: center;
+            justify-content: center;
+            padding: 24px;
+            z-index: 20;
+        }
+
+        .result-box {
+            width: min(470px, 100%);
+            background: white;
+            border-radius: 24px;
+            padding: 26px;
+            text-align: center;
+            box-shadow: 0 18px 50px rgba(22, 31, 55, 0.28);
+        }
+
+        .result-box h3 {
+            margin: 0 0 8px;
+            font-size: 1.85rem;
+        }
+
+        .result-box p {
+            color: #66708d;
+            font-size: 1.08rem;
+            line-height: 1.45;
+            margin: 0 0 16px;
+        }
+
+        .result-box button {
+            background: linear-gradient(90deg, #ff7eb3, #ffb347);
+            color: white;
+            border: none;
+            border-radius: 14px;
+            padding: 12px 20px;
+            font-size: 1.05rem;
+            font-weight: 900;
+            cursor: pointer;
+        }
+
+        @media (max-width: 1200px) {
+            body {
+                overflow: auto;
+            }
+
+            .game-shell {
+                height: auto;
+                min-height: calc(100vh - 28px);
+            }
+
+            .drop-zone-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .drop-inner {
+                min-height: 150px;
+            }
+
+            .card-tray {
+                grid-template-columns: 1fr;
+                max-height: none;
+            }
+
+            .tray-info {
+                border-right: 0;
+                border-bottom: 2px dashed rgba(130, 105, 0, 0.18);
+                padding-right: 0;
+                padding-bottom: 10px;
+            }
+
+            .items-grid {
+                grid-template-columns: repeat(2, minmax(160px, 1fr));
+            }
+        }
+
+        @media (max-width: 720px) {
+            .game-shell {
+                width: min(100% - 18px, 1500px);
+                margin: 9px auto;
+                gap: 10px;
+            }
+
+            .compact-status-card {
+                grid-template-columns: 1fr;
+            }
+
+            .items-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <main class="game-shell">
+        <section class="compact-status-card" aria-label="Oyun durumu">
+            <div class="status-pill" id="progressText">0/8 kart yerleştirildi</div>
+            <div class="progress-track">
+                <div class="progress-fill" id="progressFill"></div>
+            </div>
+            <div class="status-pill danger" id="wrongCount">Yanlış deneme: 0</div>
+        </section>
+
+        <section class="drop-zone-grid" aria-label="Sınıflandırma alanları">
+            <div class="drop-card risk-zone" data-category="risk">
+                <div class="drop-heading">
+                    <div class="drop-title">
+                        <span class="drop-icon">⚠️</span>
+                        <h3>Gizlilik Riski</h3>
+                    </div>
+                    <span class="counter-badge" id="riskCount">0 kart</span>
+                </div>
+                <p>Bilgilerin başkasının eline geçmesine yol açabilecek durumlar.</p>
+                <div class="drop-inner" id="riskBox">
+                    <div class="empty-text">Riskli durumları buraya bırak.</div>
+                </div>
+            </div>
+
+            <div class="drop-card measure-zone" data-category="measure">
+                <div class="drop-heading">
+                    <div class="drop-title">
+                        <span class="drop-icon">🛡️</span>
+                        <h3>Güvenlik Önlemi</h3>
+                    </div>
+                    <span class="counter-badge" id="measureCount">0 kart</span>
+                </div>
+                <p>Dijital ortamda bizi koruyan doğru davranışlar.</p>
+                <div class="drop-inner" id="measureBox">
+                    <div class="empty-text">Koruyucu davranışları buraya bırak.</div>
+                </div>
+            </div>
+
+            <div class="drop-card personal-zone" data-category="personalData">
+                <div class="drop-heading">
+                    <div class="drop-title">
+                        <span class="drop-icon">🔐</span>
+                        <h3>Kişisel Veri</h3>
+                    </div>
+                    <span class="counter-badge" id="personalDataCount">0 kart</span>
+                </div>
+                <p>Bizi tanıtan ve herkesle paylaşılmaması gereken bilgiler.</p>
+                <div class="drop-inner" id="personalDataBox">
+                    <div class="empty-text">Kişisel veri örneklerini buraya bırak.</div>
+                </div>
+            </div>
+        </section>
+
+        <section class="card-tray" aria-label="Kart havuzu">
+            <div class="tray-info">
+                <div class="tray-badge">Kart Havuzu</div>
+                <p>Kartları buradan alıp yukarıdaki doğru alana bırak.</p>
+            </div>
+
+            <div class="items-container">
+                <div id="items" class="items-grid"></div>
+            </div>
+        </section>
+    </main>
+
+    <div class="result-backdrop" id="resultBackdrop">
+        <section id="resultBox" class="result-box">
+            <h3>🎉 Harika, oyunu tamamladın!</h3>
+            <p id="finalScore"></p>
+            <button onclick="location.reload()">Tekrar Oyna</button>
+        </section>
+    </div>
+
+    <script>
+        const QUESTION_COUNT = 8;
+
+        const QUESTION_POOL = [
+            /* Gizlilik Riski: dijital ortamda karşılaşılabilecek riskler */
+            { text: "Tanımadığın birinden gelen ‘Ödül kazandın!’ bağlantısına tıklamak.", category: "risk" },
+            { text: "Bir oyun sitesinde telefon numaranı ve okul adını yazmak.", category: "risk" },
+            { text: "Yapay zekâya gerçek adını, adresini ve okul bilgini yazmak.", category: "risk" },
+            { text: "‘Hesabın kapanacak, şifreni gönder.’ mesajına inanmak.", category: "risk" },
+            { text: "Bilinmeyen bir dosyayı kontrol etmeden indirmek.", category: "risk" },
+            { text: "Her uygulamaya kamera ve mikrofon izni vermek.", category: "risk" },
+            { text: "Hikâyene evinin konumunu eklemek.", category: "risk" },
+            { text: "Güvenilir olmayan bir alışveriş sitesine kart bilgisi yazmak.", category: "risk" },
+            { text: "Tanımadığın bir kişiyle özel bilgilerini mesajlaşmada paylaşmak.", category: "risk" },
+            { text: "Oyun sohbetinde hangi okulda okuduğunu ve sınıfını söylemek.", category: "risk" },
+            { text: "Sosyal medya hesabını herkese açık kullanmak.", category: "risk" },
+            { text: "İnternette gördüğün her kampanya mesajına inanmak.", category: "risk" },
+            { text: "Sahte bir siteye kullanıcı adı ve şifre yazmak.", category: "risk" },
+            { text: "Tanımadığın birinin gönderdiği uygulamayı telefona kurmak.", category: "risk" },
+            { text: "Oyun yöneticisi olduğunu söyleyen kişiye şifreni göndermek.", category: "risk" },
+
+            /* Güvenlik Önlemi: gizlilik ve güvenliği koruma yolları */
+            { text: "Sosyal medya hesabını gizli moda almak.", category: "measure" },
+            { text: "Şifrede büyük harf, küçük harf, rakam ve sembol kullanmak.", category: "measure" },
+            { text: "Web sitesinin https:// ile başlayıp başlamadığını kontrol etmek.", category: "measure" },
+            { text: "Şüpheli bir mesajı öğretmene veya aileye göstermek.", category: "measure" },
+            { text: "Tanımadığın bağlantılara tıklamadan önce düşünmek.", category: "measure" },
+            { text: "Kimlerin seni etiketleyebileceğini sınırlandırmak.", category: "measure" },
+            { text: "Hikâye paylaşırken konum bilgisini kapalı tutmak.", category: "measure" },
+            { text: "Kamera ve mikrofon izinlerini kontrol etmek.", category: "measure" },
+            { text: "Güçlü ve tahmin edilmesi zor şifre kullanmak.", category: "measure" },
+            { text: "Kişisel bilgileri dijital ortamda paylaşmadan önce izin almak.", category: "measure" },
+            { text: "Güvenli olduğundan emin olmadığın siteye bilgi yazmamak.", category: "measure" },
+            { text: "Aynı şifreyi her hesapta kullanmamak.", category: "measure" },
+            { text: "Paylaşım yapmadan önce kimlerin göreceğini kontrol etmek.", category: "measure" },
+            { text: "Şifreyi arkadaşlarla bile paylaşmamak.", category: "measure" },
+            { text: "Bir siteden çıkarken hesabından güvenli şekilde çıkış yapmak.", category: "measure" },
+
+            /* Kişisel Veri: öğrenciyi tanıtan bilgiler */
+            { text: "Ad ve soyad", category: "personalData" },
+            { text: "Ev adresi", category: "personalData" },
+            { text: "Telefon numarası", category: "personalData" },
+            { text: "Okul adı", category: "personalData" },
+            { text: "Şifre", category: "personalData" },
+            { text: "Fotoğraf", category: "personalData" },
+            { text: "Doğum tarihi", category: "personalData" },
+            { text: "E-posta adresi", category: "personalData" },
+            { text: "Konum bilgisi", category: "personalData" },
+            { text: "Aile bireylerinin isimleri", category: "personalData" },
+            { text: "Kullanıcı adı ve hesap bilgileri", category: "personalData" },
+            { text: "Kimlik bilgileri", category: "personalData" },
+            { text: "Okul numarası", category: "personalData" },
+            { text: "Yaşadığın mahalle", category: "personalData" },
+            { text: "Ailenin telefon numarası", category: "personalData" }
+        ];
+
+        let currentQuestions = [];
+        let placedCount = 0;
+        let wrongAttempts = 0;
+        let selectedCard = null;
+
+        const itemsDiv = document.getElementById("items");
+        const progressText = document.getElementById("progressText");
+        const progressFill = document.getElementById("progressFill");
+        const wrongCount = document.getElementById("wrongCount");
+        const resultBackdrop = document.getElementById("resultBackdrop");
+        const finalScore = document.getElementById("finalScore");
+
+        const categoryPlacedCounts = {
+            risk: 0,
+            measure: 0,
+            personalData: 0
+        };
+
+        function shuffleArray(array) {
+            const copiedArray = [...array];
+
+            for (let i = copiedArray.length - 1; i > 0; i--) {
+                const randomIndex = Math.floor(Math.random() * (i + 1));
+                const temp = copiedArray[i];
+                copiedArray[i] = copiedArray[randomIndex];
+                copiedArray[randomIndex] = temp;
+            }
+
+            return copiedArray;
+        }
+
+        function getBalancedRandomQuestions() {
+            const categories = ["risk", "measure", "personalData"];
+            const selected = [];
+            const perCategory = Math.floor(QUESTION_COUNT / categories.length);
+            const remainder = QUESTION_COUNT % categories.length;
+
+            categories.forEach(category => {
+                const categoryQuestions = QUESTION_POOL.filter(question => question.category === category);
+                const shuffledCategoryQuestions = shuffleArray(categoryQuestions);
+                selected.push(...shuffledCategoryQuestions.slice(0, perCategory));
+            });
+
+            if (remainder > 0) {
+                const selectedTexts = selected.map(question => question.text);
+                const remainingPool = QUESTION_POOL.filter(question => !selectedTexts.includes(question.text));
+                selected.push(...shuffleArray(remainingPool).slice(0, remainder));
+            }
+
+            return shuffleArray(selected).slice(0, QUESTION_COUNT);
+        }
+
+        function createCards() {
+            currentQuestions = getBalancedRandomQuestions();
+            itemsDiv.innerHTML = "";
+
+            currentQuestions.forEach((item, index) => {
+                const card = document.createElement("div");
+
+                card.className = "item";
+                card.draggable = true;
+                card.innerText = item.text;
+                card.id = "item" + index;
+                card.dataset.index = index;
+                card.dataset.category = item.category;
+
+                itemsDiv.appendChild(card);
+
+                card.addEventListener("dragstart", event => {
+                    event.dataTransfer.setData("id", card.id);
+                });
+
+                card.addEventListener("click", () => {
+                    if (card.classList.contains("correct")) return;
+
+                    document.querySelectorAll(".item").forEach(itemElement => {
+                        itemElement.classList.remove("selected");
+                    });
+
+                    selectedCard = card;
+                    card.classList.add("selected");
+                });
+            });
+        }
+
+        function removeEmptyText(dropInner) {
+            const emptyText = dropInner.querySelector(".empty-text");
+
+            if (emptyText) {
+                emptyText.remove();
+            }
+        }
+
+        function updateCategoryCounter(category) {
+            const counter = document.getElementById(category + "Count");
+
+            if (counter) {
+                counter.innerText = categoryPlacedCounts[category] + " kart";
+            }
+        }
+
+        function handleDropToCategory(card, dropCard) {
+            if (!card || card.classList.contains("correct")) return;
+
+            const correctCategory = card.dataset.category;
+            const targetCategory = dropCard.dataset.category;
+            const dropInner = dropCard.querySelector(".drop-inner");
+
+            if (correctCategory === targetCategory) {
+                card.classList.remove("selected", "wrong");
+                card.classList.add("correct");
+                card.draggable = false;
+
+                removeEmptyText(dropInner);
+                dropInner.appendChild(card);
+
+                placedCount++;
+                categoryPlacedCounts[targetCategory]++;
+                selectedCard = null;
+
+                updateCategoryCounter(targetCategory);
+                updateProgress();
+                checkGameOver();
+            } else {
+                wrongAttempts++;
+                wrongCount.innerText = "Yanlış deneme: " + wrongAttempts;
+
+                card.classList.add("wrong");
+
+                setTimeout(() => {
+                    card.classList.remove("wrong");
+                }, 650);
+            }
+        }
+
+        function setupDropZones() {
+            document.querySelectorAll(".drop-card").forEach(dropCard => {
+                const dropInner = dropCard.querySelector(".drop-inner");
+
+                dropCard.addEventListener("dragover", event => {
+                    event.preventDefault();
+                    dropInner.classList.add("drag-over");
+                });
+
+                dropCard.addEventListener("dragleave", () => {
+                    dropInner.classList.remove("drag-over");
+                });
+
+                dropCard.addEventListener("drop", event => {
+                    event.preventDefault();
+                    dropInner.classList.remove("drag-over");
+
+                    const id = event.dataTransfer.getData("id");
+                    const card = document.getElementById(id);
+
+                    handleDropToCategory(card, dropCard);
+                });
+
+                dropCard.addEventListener("click", () => {
+                    if (selectedCard) {
+                        handleDropToCategory(selectedCard, dropCard);
+                    }
+                });
+            });
+        }
+
+        function updateProgress() {
+            progressText.innerText = placedCount + "/" + currentQuestions.length + " kart yerleştirildi";
+
+            const percentage = (placedCount / currentQuestions.length) * 100;
+            progressFill.style.width = percentage + "%";
+        }
+
+        function checkGameOver() {
+            if (placedCount === currentQuestions.length) {
+                let message = "Tüm kartları doğru yerleştirdin. ";
+
+                if (wrongAttempts === 0) {
+                    message += "Hiç yanlış deneme yapmadın, süpersin! 🌟";
+                } else if (wrongAttempts <= 3) {
+                    message += "Çok az yanlış denemeyle bitirdin, harika! 👏";
+                } else {
+                    message += "Deneyerek öğrendin, güzel iş! 💪";
+                }
+
+                finalScore.innerText = message;
+                resultBackdrop.style.display = "flex";
+            }
+        }
+
+        createCards();
+        setupDropZones();
+        updateProgress();
+    </script>
+</body>
+</html>

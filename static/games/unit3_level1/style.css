@@ -210,6 +210,7 @@ body {
     grid-template-columns: 1fr 1.2fr 1fr;
     gap: 30px;
     align-items: stretch;
+    margin-left: -55px;
 }
 
 
@@ -261,4 +262,14 @@ body {
 /* Kartların içindeki yazı rengini sabitleyelim (eski renkleri ezmek için) */
 .card-yellow, .card-purple, .card-green, .card-blue {
     color: #000000;
+}
+
+.category-subtitle {
+    text-align: center;
+    font-size: 0.95rem;
+    font-weight: 700;
+    color: #64748b;
+    line-height: 1.35;
+    margin-top: -10px;
+    margin-bottom: 18px;
 }
