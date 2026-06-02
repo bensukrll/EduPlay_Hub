@@ -3,7 +3,6 @@
 <head>
     <meta charset="UTF-8">
     <title>EduPlay Hub - Kaydol</title>
-
     <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
     <link rel="stylesheet" href="{{ url_for('static', filename='log-reg.css') }}">
 </head>
@@ -23,7 +22,6 @@
     <!-- TITLE -->
     <h1 class="entrance-title">EduPlay Hub</h1>
     <p class="sub-title">Bilişim Teknolojileri Oyun Dünyası</p>
-</p>
 
     <!-- MONITOR -->
     <div class="monitor">
@@ -32,11 +30,29 @@
 
                 <form method="POST" class="login-form">
 
-                    <input type="text" name="username" placeholder="Lütfen Kullanıcı Adı Giriniz " required>
-                    <input type="password" name="password" placeholder="Lütfen Şifre Giriniz " required>
+                    <input
+                        type="text"
+                        name="username"
+                        placeholder="Kullanıcı Adı"
+                        required
+                    >
+
+                    <input
+                        type="email"
+                        name="email"
+                        placeholder="E-posta Adresi"
+                        required
+                    >
+
+                    <input
+                        type="password"
+                        name="password"
+                        placeholder="Şifre (en az 6 karakter)"
+                        required
+                    >
 
                     <button class="start-button">
-                        Kaydol 
+                        Kaydol
                     </button>
 
                     <p class="login-switch">

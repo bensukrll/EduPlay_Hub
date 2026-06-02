@@ -3,7 +3,6 @@
 <head>
     <meta charset="UTF-8">
     <title>EduPlay Hub - Giriş</title>
-
     <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
     <link rel="stylesheet" href="{{ url_for('static', filename='log-reg.css') }}">
 </head>
@@ -29,33 +28,69 @@
         <div class="monitor-frame">
             <div class="monitor-screen">
 
-                <!-- LOGIN FORM -->
-                <form method="POST" class="login-form">
+                <!-- GİRİŞ FORMU -->
+                <div id="loginView">
+                    <form method="POST" class="login-form">
 
-                    <input 
-                        type="text" 
-                        name="username" 
-                        placeholder="Kullanıcı Adı " 
-                        required
-                    >
+                        <input
+                            type="email"
+                            name="email"
+                            placeholder="E-posta Adresi"
+                            required
+                        >
 
-                    <input 
-                        type="password" 
-                        name="password" 
-                        placeholder="Şifre " 
-                        required
-                    >
+                        <input
+                            type="password"
+                            name="password"
+                            placeholder="Şifre"
+                            required
+                        >
 
-                    <button class="start-button">
-                        Giriş Yap 
-                    </button>
+                        <button class="start-button">
+                            Giriş Yap
+                        </button>
 
-                    <p class="login-switch">
-                        Hesabın yok mu? 
-                        <a href="{{ url_for('register') }}">Kaydol</a>
-                    </p>
+                        <p class="login-switch">
+                            <a href="#" onclick="showForgot(); return false;">Şifremi Unuttum</a>
+                        </p>
 
-                </form>
+                        <p class="login-switch">
+                            Hesabın yok mu?
+                            <a href="{{ url_for('register') }}">Kaydol</a>
+                        </p>
+
+                    </form>
+                </div>
+
+                <!-- ŞİFREMİ UNUTTUM -->
+                <div id="forgotView" style="display:none;">
+                    <form class="login-form" onsubmit="handleForgot(event)">
+
+                        <p class="forgot-info">
+                             E-posta adresini gir,<br>şifreni gönderelim!
+                        </p>
+
+                        <input
+                            type="email"
+                            id="forgotEmail"
+                            placeholder="E-posta Adresi"
+                            required
+                        >
+
+                        <button class="start-button" type="submit">
+                            Şifre Gönder
+                        </button>
+
+                        <p id="forgotMsg" style="display:none;" class="form-success">
+                            ✅ Şifreniz e-posta adresinize gönderildi!
+                        </p>
+
+                        <p class="login-switch">
+                            <a href="#" onclick="showLogin(); return false;">← Giriş ekranına dön</a>
+                        </p>
+
+                    </form>
+                </div>
 
             </div>
         </div>
@@ -69,6 +104,32 @@
     </p>
 
 </div>
+
+<script>
+    function showForgot() {
+        document.getElementById('loginView').style.display = 'none';
+        document.getElementById('forgotView').style.display = 'block';
+    }
+
+    function showLogin() {
+        document.getElementById('forgotView').style.display = 'none';
+        document.getElementById('loginView').style.display = 'block';
+        document.getElementById('forgotEmail').value = '';
+        document.getElementById('forgotMsg').style.display = 'none';
+    }
+
+    function handleForgot(e) {
+        e.preventDefault();
+        const email = document.getElementById('forgotEmail').value;
+        if (!email) return;
+
+        // Backend hazır olunca buraya fetch() eklenecek
+        // Şimdilik başarı mesajı göster
+        document.getElementById('forgotMsg').style.display = 'block';
+        document.querySelector('#forgotView .start-button').disabled = true;
+        document.getElementById('forgotEmail').disabled = true;
+    }
+</script>
 
 </body>
 </html>

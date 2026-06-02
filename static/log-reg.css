@@ -68,3 +68,107 @@
     justify-content: center;
     align-items: center;
 }
+
+
+
+
+
+
+.form-error {
+    background: #ffe4e4;
+    color: #c0392b;
+    border: 1.5px solid #e74c3c;
+    border-radius: 12px;
+    padding: 10px 16px;
+    font-size: 15px;
+    text-align: center;
+    font-family: "Fredoka", sans-serif;
+    width: 320px;
+    margin-bottom: 4px;
+}
+
+.form-success {
+    background: #e4ffe8;
+    color: #1e7e34;
+    border: 1.5px solid #28a745;
+    border-radius: 12px;
+    padding: 10px 16px;
+    font-size: 15px;
+    text-align: center;
+    font-family: "Fredoka", sans-serif;
+    width: 320px;
+    margin-bottom: 4px;
+}
+
+.forgot-info {
+    font-size: 16px;
+    text-align: center;
+    font-family: "Fredoka", sans-serif;
+    color: #374151;
+    line-height: 1.5;
+    margin-bottom: 6px;
+}
+
+
+
+
+
+
+
+
+.form-error {
+    background: #ffe4e4;
+    color: #c0392b;
+    border: 1.5px solid #e74c3c;
+    border-radius: 12px;
+    padding: 10px 16px;
+    font-size: 15px;
+    text-align: center;
+    font-family: "Fredoka", sans-serif;
+    width: 320px;
+    margin-bottom: 4px;
+}
+
+.form-success {
+    background: #e4ffe8;
+    color: #1e7e34;
+    border: 1.5px solid #28a745;
+    border-radius: 12px;
+    padding: 10px 16px;
+    font-size: 15px;
+    text-align: center;
+    font-family: "Fredoka", sans-serif;
+    width: 320px;
+    margin-bottom: 4px;
+}
+
+.forgot-info {
+    font-size: 16px;
+    text-align: center;
+    font-family: "Fredoka", sans-serif;
+    color: #374151;
+    line-height: 1.5;
+    margin-bottom: 6px;
+}
+
+.forgot-info {
+    font-size: 16px;
+    text-align: center;
+    font-family: "Fredoka", sans-serif;
+    color: #374151;
+    line-height: 1.5;
+    margin-bottom: 6px;
+}
+
+.form-success {
+    background: #e4ffe8;
+    color: #1e7e34;
+    border: 1.5px solid #28a745;
+    border-radius: 12px;
+    padding: 10px 16px;
+    font-size: 15px;
+    text-align: center;
+    font-family: "Fredoka", sans-serif;
+    width: 320px;
+    margin-top: 6px;
+}
