@@ -105,11 +105,11 @@ GAME_INFO = {
     },
 
     "5_unit5_w2": {
-        "title": "Yapay Zekâ Sınıflandırması",
-        "subtitle": "Yapay zekâ uygulamalarını kullanım alanlarına göre gruplandır!",
+        "title": "Yapay Zekâda Etik ve Güvenlik",
+        "subtitle": "Labirentte ilerleyerek yapay zekâyı güvenli, etik ve bilinçli kullanmayı öğren!",
         "unit": "Yapay Zekâ",
         "level": "5. Sınıf",
-        "icon": "🧠",
+        "icon": "🔐",
         "template": "5_unit5_w2"
     },
 

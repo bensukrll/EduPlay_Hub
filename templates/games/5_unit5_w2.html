@@ -1,0 +1,1526 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AI Labirent</title>
+
+<style>
+#loseOverlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(2, 6, 23, 0.92);
+    display: none;
+    justify-content: center;
+    align-items: center;
+    z-index: 9999;
+}
+
+.loseCard {
+    width: 360px;
+    background: #0f172a;
+    border: 2px solid #ef4444;
+    border-radius: 14px;
+    padding: 25px;
+    text-align: center;
+    box-shadow: 0 0 30px rgba(239, 68, 68, 0.45);
+}
+
+.loseTitle {
+    color: #f87171;
+    font-size: 28px;
+}
+
+.loseMessage {
+    font-size: 18px;
+    margin-bottom: 20px;
+}
+
+.loseBtn {
+    background: linear-gradient(to right, #b91c1c, #ef4444);
+    color: white;
+    font-size: 16px;
+    padding: 12px;
+    border-radius: 10px;
+}
+#winOverlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(2, 6, 23, 0.92);
+    display: none;
+    justify-content: center;
+    align-items: center;
+    z-index: 9999;
+}
+
+.winCard {
+    width: 360px;
+    background: #0f172a;
+    border: 2px solid #38bdf8;
+    border-radius: 14px;
+    padding: 25px;
+    text-align: center;
+    box-shadow: 0 0 30px rgba(56, 189, 248, 0.45);
+}
+
+.winTitle {
+    color: #38bdf8;
+    font-size: 28px;
+}
+
+.winMessage {
+    font-size: 18px;
+    margin-bottom: 20px;
+}
+
+.winStats {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    margin-bottom: 20px;
+}
+
+.winStatItem {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    background: #020617;
+    padding: 12px 15px;
+    border-radius: 9px;
+    border: 1px solid #334155;
+}
+
+.winIcon {
+    font-size: 24px;
+}
+
+.winLabel {
+    font-size: 15px;
+    font-weight: bold;
+}
+
+.winValue {
+    font-size: 22px;
+    font-weight: bold;
+}
+
+.winBtn {
+    background: linear-gradient(to right, #2563eb, #38bdf8);
+    color: white;
+    font-size: 16px;
+    padding: 12px;
+    border-radius: 10px;
+}
+body {
+    margin: 0;
+    background: #0f172a;
+    color: white;
+    font-family: Arial, sans-serif;
+}
+
+#gameContainer {
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+    flex-wrap: wrap;
+    margin-top: 20px;
+}
+
+canvas {
+    background: #1e293b;
+    border: 3px solid #38bdf8;
+}
+
+#leftPanel,
+#rightPanel {
+    width: 220px;
+    margin: 10px;
+}
+
+.panelBox {
+    background: #111827;
+    padding: 10px;
+    margin-bottom: 10px;
+    border: 2px solid #38bdf8;
+    border-radius: 8px;
+}
+
+button {
+    width: 100%;
+    padding: 8px;
+    margin-top: 5px;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+}
+
+#characterSelect {
+    text-align: center;
+    padding: 40px;
+    min-height: 100vh;
+    background: radial-gradient(circle at center, #0b1c2c, #020617);
+}
+
+.titleBox {
+    font-size: 32px;
+    font-weight: bold;
+    color: #38bdf8;
+    margin-bottom: 20px;
+}
+
+.subtitle {
+    font-size: 18px;
+    color: white;
+    margin-top: 10px;
+}
+
+.cardContainer {
+    display: flex;
+    justify-content: center;
+    gap: 30px;
+    margin-top: 30px;
+    flex-wrap: wrap;
+}
+
+.charCard {
+    width: 250px;
+    padding: 20px;
+    border-radius: 15px;
+    cursor: pointer;
+    transition: 0.3s;
+    background: #020617;
+    box-shadow: 0 0 15px rgba(0,0,0,0.5);
+}
+
+.charCard img {
+    width: 100%;
+    height: 280px;
+    object-fit: contain;
+}
+
+.charCard h2 {
+    margin: 10px 0;
+    font-size: 22px;
+}
+
+.charCard p {
+    font-size: 14px;
+    opacity: 0.8;
+}
+
+.orange {
+    border: 2px solid rgb(0, 242, 255);
+}
+
+.yellow {
+    border: 2px solid gold;
+}
+
+.green {
+    border: 2px solid limegreen;
+}
+
+.charCard:hover {
+    transform: scale(1.07);
+    box-shadow: 0 0 25px rgba(56,189,248,0.6);
+}
+
+.infoText {
+    margin-top: 20px;
+    color: #38bdf8;
+}
+
+.statBox {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.statItem {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    background: #020617;
+    padding: 8px;
+    border-radius: 8px;
+    border: 1px solid #334155;
+}
+
+.icon {
+    font-size: 20px;
+}
+
+.label {
+    font-size: 13px;
+    font-weight: bold;
+}
+
+.value {
+    font-size: 18px;
+    font-weight: bold;
+}
+
+.red {
+    color: #f87171;
+}
+
+.yellow {
+    color: #facc15;
+}
+
+.blue {
+    color: #38bdf8;
+}
+
+.controllerBox {
+    text-align: center;
+}
+
+.controls {
+    display: grid;
+    grid-template-columns: repeat(3, 60px);
+    gap: 10px;
+    justify-content: center;
+    margin-top: 10px;
+}
+
+.btn {
+    width: 60px;
+    height: 60px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background: #020617;
+    border: 2px solid #334155;
+    border-radius: 10px;
+    font-size: 20px;
+    box-shadow: 0 0 10px rgba(0,0,0,0.5);
+}
+
+.controlText {
+    margin-top: 10px;
+    font-size: 12px;
+    opacity: 0.7;
+}
+
+.goalBox {
+    text-align: center;
+}
+
+.goalContent {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-top: 10px;
+}
+
+.goalIcon {
+    width: 50px;
+    height: 50px;
+}
+
+.goalContent p {
+    font-size: 14px;
+    text-align: left;
+}
+
+.eventBox {
+    text-align: center;
+}
+
+.eventTitle {
+    color: #a855f7;
+    margin-bottom: 10px;
+}
+
+.robotImg {
+    width: 80px;
+    margin: 10px 0;
+}
+
+.eventTextBox {
+    background: #020617;
+    border: 2px solid #334155;
+    border-radius: 10px;
+    padding: 10px;
+    margin-bottom: 10px;
+}
+
+.eventButtons button {
+    width: 100%;
+    padding: 12px;
+    margin-top: 10px;
+    border: none;
+    border-radius: 8px;
+    font-size: 14px;
+    cursor: pointer;
+    background: linear-gradient(to right, #2563eb, #38bdf8);
+    color: white;
+    transition: 0.2s;
+}
+
+.eventButtons button:hover {
+    transform: scale(1.03);
+    filter: brightness(1.1);
+}
+
+.correct {
+    background: linear-gradient(to right, #16a34a, #22c55e);
+    color: white;
+}
+
+.wrong {
+    background: linear-gradient(to right, #b91c1c, #ef4444);
+    color: white;
+}
+
+.tipBox {
+    background: linear-gradient(145deg, #020617, #0f172a);
+    border: 2px solid #38bdf8;
+    border-radius: 12px;
+    padding: 15px;
+    margin-top: 10px;
+    box-shadow: 0 0 15px rgba(30,64,175,0.4);
+}
+
+.tipTitle {
+    color: #facc15;
+    margin-bottom: 8px;
+}
+
+.tipBox p {
+    font-size: 14px;
+    line-height: 1.4;
+    opacity: 0.9;
+}
+
+.menuBtn {
+    width: 100%;
+    padding: 12px;
+    background: linear-gradient(145deg, #020617, #1e293b);
+    border: 2px solid #334155;
+    border-radius: 10px;
+    color: #94a3b8;
+    font-size: 16px;
+    cursor: pointer;
+    transition: 0.2s;
+}
+
+.menuBtn:hover {
+    border-color: #f5f838;
+    color: white;
+    transform: scale(1.05);
+}
+.bottomMenuBox {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    margin-top: 10px;
+    margin-bottom: 10px;
+}
+
+.bottomMenuBox .menuBtn {
+    width: 280px;
+}
+</style>
+</head>
+
+<body>
+
+<div id="characterSelect">
+
+    <div class="titleBox">
+        LABİRENT KAÇIŞI 
+        <p class="subtitle">Macerana başlamak için karakterini seç!</p>
+    </div>
+
+    <div class="cardContainer">
+
+        <div class="charCard orange" onclick="startGame('diego')">
+            <img src="{{ url_for('static', filename='games/5_unit5_w2/images/diego.png') }}" alt="Kılıç Diş">
+            <h2>KILIÇ DİŞ</h2>
+            <p>Hızlı ve çevik bir avcı.<br>Biraz daha hızlı hareket eder.</p>
+        </div>
+
+        <div class="charCard yellow" onclick="startGame('manny')">
+            <img src="{{ url_for('static', filename='games/5_unit5_w2/images/manny.png') }}" alt="Mamut">
+            <h2>MAMUT</h2>
+            <p>Güçlü ve dayanıklı.<br>Daha fazla cana sahiptir.</p>
+        </div>
+
+        <div class="charCard green" onclick="startGame('sid')">
+            <img src="{{ url_for('static', filename='games/5_unit5_w2/images/sid.png') }}" alt="Sid">
+            <h2>SID</h2>
+            <p>Dengeli ve akıllı.<br>Sorularda daha fazla puan kazanır.</p>
+        </div>
+
+    </div>
+    <br>
+    <p class="infoText">Unutma! Her karakterin kendine özel avantajı var!</p>
+
+</div>
+
+<div id="gameContainer" style="display:none;">
+
+    <div id="leftPanel">
+
+        <div class="panelBox statBox">
+
+            <div class="statItem">
+                <span class="icon">❤️</span>
+                <span class="label red">CAN</span>
+                <span id="hp" class="value">3</span>
+            </div>
+
+            <div class="statItem">
+                <span class="icon">⭐</span>
+                <span class="label yellow">PUAN</span>
+                <span id="xp" class="value">0</span>
+            </div>
+
+        </div>
+
+        <div class="panelBox controllerBox">
+
+            <h3>KONTROLLER</h3>
+
+            <div class="controls">
+                <div></div>
+                <div class="btn">↑</div>
+                <div></div>
+
+                <div class="btn">←</div>
+                <div class="btn">↓</div>
+                <div class="btn">→</div>
+            </div>
+
+            <p class="controlText">Ok tuşları ile hareket et</p>
+
+        </div>
+
+        <div class="panelBox goalBox">
+
+            <h3>HEDEF</h3>
+
+            <div class="goalContent">
+                <img src="{{ url_for('static', filename='games/5_unit5_w2/images/door.png') }}" class="goalIcon" alt="Kapı">
+                <p id="quest">Kapıyı açmak için 10 kristali topla!</p>
+            </div>
+
+        </div>
+
+    </div>
+
+    <canvas id="game" width="768" height="624"></canvas>
+
+    <div id="rightPanel">
+
+        <div class="panelBox eventBox">
+
+            <h3 class="eventTitle">OLAY!</h3>
+
+            <img src="{{ url_for('static', filename='games/5_unit5_w2/images/robot.png') }}" class="robotImg" alt="Robot">
+
+            <div class="eventTextBox">
+                <p id="story">Macera başlıyor...</p>
+            </div>
+
+            <div id="options" class="eventButtons"></div>
+
+        </div>
+
+        <div class="panelBox tipBox">
+
+            <h3 class="tipTitle">💡 İPUCU</h3>
+
+            <p>
+                Kristalleri toplamak için soruları doğru cevapla. DİKKAT!! Robot düşmanlara yakalanırsan canın azalır!
+            </p>
+            <p>
+                Tüm kristalleri topladıktan sonra kapıya git ve labirentten kaç!
+            </p>
+
+        </div>
+    </div>
+
+</div>
+</div> <!-- gameContainer kapanışı -->
+
+<div class="bottomMenuBox">
+    <button class="menuBtn" onclick="goMenu()">
+        🏠 ANA MENÜ
+    </button>
+</div>
+<div id="winOverlay">
+    <div class="winCard">
+        <h1 class="winTitle">🎉 TEBRİKLER!</h1>
+
+        <p class="winMessage">
+            Oyunu başarıyla tamamladınız.
+        </p>
+
+        <div class="winStats">
+            <div class="winStatItem">
+                <span class="winIcon">❤️</span>
+                <span class="winLabel red">CAN</span>
+                <span id="finalHp" class="winValue">0</span>
+            </div>
+
+            <div class="winStatItem">
+                <span class="winIcon">⭐</span>
+                <span class="winLabel yellow">PUAN</span>
+                <span id="finalXp" class="winValue">0</span>
+            </div>
+        </div>
+
+        <button class="winBtn" onclick="goMenu()">🏠 Ana Menüye Dön</button>
+    </div>
+</div>
+<div id="loseOverlay">
+    <div class="loseCard">
+        <h1 class="loseTitle">😢 ÜZGÜNÜM!</h1>
+
+        <p class="loseMessage">
+            Kaybettiniz.
+        </p>
+
+        <div class="winStats">
+            <div class="winStatItem">
+                <span class="winIcon">❤️</span>
+                <span class="winLabel red">CAN</span>
+                <span id="loseHp" class="winValue">0</span>
+            </div>
+
+            <div class="winStatItem">
+                <span class="winIcon">⭐</span>
+                <span class="winLabel yellow">PUAN</span>
+                <span id="loseXp" class="winValue">0</span>
+            </div>
+        </div>
+
+        <button class="loseBtn" onclick="retryGame()">🔁 Tekrar Dene</button>
+    </div>
+</div>
+
+<script>
+const canvas = document.getElementById("game");
+const ctx = canvas.getContext("2d");
+
+const TILE = 48;
+const TOTAL_CRYSTALS = 10;
+
+const wallImg = new Image();
+wallImg.src = "{{ url_for('static', filename='games/5_unit5_w2/images/wall.png') }}";
+
+const doorImg = new Image();
+doorImg.src = "{{ url_for('static', filename='games/5_unit5_w2/images/door.png') }}";
+
+const crystalImg = new Image();
+crystalImg.src = "{{ url_for('static', filename='games/5_unit5_w2/images/diamond.png') }}";
+
+const playerImg = new Image();
+
+const enemyImg = new Image();
+enemyImg.src = "{{ url_for('static', filename='games/5_unit5_w2/images/robot.png') }}";
+
+let loadedImages = 0;
+const totalImages = 5;
+
+let gameStarted = false;
+let renderStarted = false;
+let questionActive = false;
+let pendingCrystal = null;
+let currentQuestion = null;
+let enemyTimer = null;
+let enemyHitCooldown = false;
+
+function imageReady() {
+    loadedImages++;
+
+    if (loadedImages >= totalImages && gameStarted && !renderStarted) {
+        renderStarted = true;
+        draw();
+    }
+}
+
+wallImg.onload = imageReady;
+doorImg.onload = imageReady;
+crystalImg.onload = imageReady;
+playerImg.onload = imageReady;
+enemyImg.onload = imageReady;
+
+wallImg.onerror = imageReady;
+doorImg.onerror = imageReady;
+crystalImg.onerror = imageReady;
+playerImg.onerror = imageReady;
+enemyImg.onerror = imageReady;
+
+const map = [
+    "11111111111111111111",
+    "10000000000000000001",
+    "10111101111101111001",
+    "10000100000100001001",
+    "11110111110111101001",
+    "10000100000000001001",
+    "10111101111110111001",
+    "10000001000000001001",
+    "10111111011111101001",
+    "10000000000000001001",
+    "10111111101111111001",
+    "10000000000000000001",
+    "11111111111111111111"
+];
+
+let player = {
+    x: 1,
+    y: 1,
+    dir: 1,
+    frame: 0
+};
+
+let door = {
+    x: 18,
+    y: 11,
+    open: false
+};
+
+/*
+    Her kristalin kendine ait bir questionIndex değeri var.
+    Oyuncu o kristalin sorusunu doğru bilmeden kristali toplayamaz.
+    Konumların tamamı map üzerinde yürünebilir "0" karelerdir.
+*/
+const initialCrystals = [
+    { x: 3,  y: 1,  collected: false, questionIndex: 0 },
+    { x: 8,  y: 1,  collected: false, questionIndex: 1 },
+    { x: 14, y: 1,  collected: false, questionIndex: 2 },
+    { x: 17, y: 3,  collected: false, questionIndex: 3 },
+    { x: 17, y: 5,  collected: false, questionIndex: 4 },
+    { x: 13, y: 5,  collected: false, questionIndex: 5 },
+    { x: 11, y: 7,  collected: false, questionIndex: 6 },
+    { x: 14, y: 9,  collected: false, questionIndex: 7 },
+    { x: 8,  y: 11, collected: false, questionIndex: 8 },
+    { x: 3,  y: 11, collected: false, questionIndex: 9 }
+];
+
+let crystals = cloneCrystals();
+
+const initialEnemies = [
+    { x: 6, y: 1, dir: 1, axis: "x" },
+    { x: 12, y: 5, dir: 1, axis: "x" },
+    { x: 17, y: 8, dir: 1, axis: "y" }
+];
+
+let enemies = cloneEnemies();
+
+const questionPool = [
+    {
+        question: "Etik ne demektir?",
+        options: [
+            "Doğru ve yanlış davranışları ayırt etmeye yardımcı olan kurallar",
+            "Sadece bilgisayar oyunları",
+            "İnternette hızlı yazı yazmak"
+        ],
+        answer: 0
+    },
+    {
+        question: "Yapay zekâ günlük hayatta nerede kullanılabilir?",
+        options: [
+            "Telefonlarda, oyunlarda ve eğitim uygulamalarında",
+            "Sadece taş ve toprakta",
+            "Hiçbir yerde kullanılamaz"
+        ],
+        answer: 0
+    },
+    {
+        question: "Yapay zekâ karar verirken genellikle ne kullanır?",
+        options: [
+            "Çok sayıda veri",
+            "Sadece tahmin",
+            "Sadece renkler"
+        ],
+        answer: 0
+    },
+    {
+        question: "Yapay zekâda etik ne anlama gelir?",
+        options: [
+            "Yapay zekânın insanlara zarar vermeden ve adil şekilde kullanılması",
+            "Yapay zekânın sadece oyun oynaması",
+            "Bilgisayarın hiç kapanmaması"
+        ],
+        answer: 0
+    },
+    {
+        question: "Yapay zekâ kontrolsüz bırakılırsa ne olabilir?",
+        options: [
+            "Etik ve güvenlik sorunlarına yol açabilir",
+            "Her zaman mükemmel çalışır",
+            "Hiçbir etkisi olmaz"
+        ],
+        answer: 0
+    },
+    {
+        question: "Yapay zekâ kendi başına insan gibi düşünür mü?",
+        options: [
+            "Hayır, insanlar tarafından programlanır",
+            "Evet, her şeyi kendi bilir",
+            "Sadece hafta sonları düşünür"
+        ],
+        answer: 0
+    },
+    {
+        question: "Yanlış veriyle eğitilen yapay zekâ ne yapabilir?",
+        options: [
+            "Yanlış veya adaletsiz sonuçlar üretebilir",
+            "Her zaman doğru cevap verir",
+            "Daha güvenli olur"
+        ],
+        answer: 0
+    },
+    {
+        question: "Aşağıdakilerden hangisi etik bir risktir?",
+        options: [
+            "Kişisel verilerin izinsiz toplanması",
+            "Şifreyi korumak",
+            "Kaynak göstermek"
+        ],
+        answer: 0
+    },
+    {
+        question: "Özel hayatın gizliliği ne demektir?",
+        options: [
+            "Kişiye ait özel bilgilerin izinsiz paylaşılmaması",
+            "Herkesin şifresini bilmek",
+            "Her fotoğrafı paylaşmak"
+        ],
+        answer: 0
+    },
+    {
+        question: "Yapay zekâ yanlış bilgi üretirse ne yapmalıyız?",
+        options: [
+            "Bilgiyi farklı kaynaklardan kontrol etmeliyiz",
+            "Hemen doğru kabul etmeliyiz",
+            "Herkese göndermeliyiz"
+        ],
+        answer: 0
+    },
+    {
+        question: "Bilgi güvenliğinin üç temel bileşeni nedir?",
+        options: [
+            "Gizlilik, bütünlük, erişilebilirlik",
+            "Oyun, eğlence, hız",
+            "Ses, görüntü, renk"
+        ],
+        answer: 0
+    },
+    {
+        question: "Gizlilik ne demektir?",
+        options: [
+            "Bilginin yetkisiz kişilere açılmaması",
+            "Bilginin herkesle paylaşılması",
+            "Şifrenin unutulması"
+        ],
+        answer: 0
+    },
+    {
+        question: "Bütünlük ne demektir?",
+        options: [
+            "Bilginin doğru kalması ve izinsiz değiştirilmemesi",
+            "Bilginin silinmesi",
+            "Bilginin herkes tarafından değiştirilmesi"
+        ],
+        answer: 0
+    },
+    {
+        question: "Erişilebilirlik ne demektir?",
+        options: [
+            "Bilgiye ihtiyaç duyulduğunda ulaşılabilmesi",
+            "Bilginin tamamen saklanması",
+            "Bilginin yanlış olması"
+        ],
+        answer: 0
+    },
+    {
+        question: "Kişisel veri nedir?",
+        options: [
+            "Bir kişiyi tanımlayan bilgi",
+            "Sadece hava durumu",
+            "Bilgisayar kablosu"
+        ],
+        answer: 0
+    },
+    {
+        question: "Aşağıdakilerden hangisi kişisel veridir?",
+        options: [
+            "Telefon numarası",
+            "Tahta kalemi",
+            "Boş defter"
+        ],
+        answer: 0
+    },
+    {
+        question: "Aşağıdakilerden hangisi kişisel veridir?",
+        options: [
+            "Fotoğraf",
+            "Bulut şekli",
+            "Kalem rengi"
+        ],
+        answer: 0
+    },
+    {
+        question: "Kişisel veriler izinsiz paylaşılırsa ne olur?",
+        options: [
+            "Hak ihlali olabilir",
+            "Daha güvenli olur",
+            "Hiçbir sorun olmaz"
+        ],
+        answer: 0
+    },
+    {
+        question: "KVKK neyi korumayı amaçlar?",
+        options: [
+            "Kişisel verileri",
+            "Bilgisayar oyunlarını",
+            "Sadece resimleri"
+        ],
+        answer: 0
+    },
+    {
+        question: "Telif hakkı neyle ilgilidir?",
+        options: [
+            "Bir eserin sahibinden izinsiz kullanılmamasıyla",
+            "Şifrenin kısa olmasıyla",
+            "Telefonun şarjıyla"
+        ],
+        answer: 0
+    },
+    {
+        question: "Başkalarının fotoğraflarını izinsiz kullanmak doğru mudur?",
+        options: [
+            "Hayır, gizlilik ve telif açısından sorun olabilir",
+            "Evet, her zaman serbesttir",
+            "Sadece oyunlarda doğrudur"
+        ],
+        answer: 0
+    },
+    {
+        question: "Yapay zekâ kullanırken başkalarının bilgilerini ne yapmalıyız?",
+        options: [
+            "İzinsiz yapay zekâya yüklememeliyiz",
+            "Herkesle paylaşmalıyız",
+            "Sosyal medyada yayınlamalıyız"
+        ],
+        answer: 0
+    },
+    {
+        question: "Toplumsal eşitlik açısından yapay zekâ nasıl olmalıdır?",
+        options: [
+            "Herkese adil davranmalıdır",
+            "Bazı kişileri ayırmalıdır",
+            "Sadece belirli kişilere çalışmalıdır"
+        ],
+        answer: 0
+    },
+    {
+        question: "Akıllı kullanıcı ne yapar?",
+        options: [
+            "Kişisel verilerini korur",
+            "Şifresini herkesle paylaşır",
+            "Her bağlantıya tıklar"
+        ],
+        answer: 0
+    },
+    {
+        question: "Yapay zekâya hangi bilgiyi yazmamalıyız?",
+        options: [
+            "T.C. kimlik numarası ve şifre",
+            "Genel bir soru",
+            "Ders konusu"
+        ],
+        answer: 0
+    },
+    {
+        question: "Güvenli ve bilinçli kullanım için ne yapmalıyız?",
+        options: [
+            "Kaynakları kontrol etmeli ve kişisel bilgilerimizi korumalıyız",
+            "Her şeyi paylaşmalıyız",
+            "Şifremizi kolay seçmeliyiz"
+        ],
+        answer: 0
+    },
+    {
+        question: "Paylaştığımız haberlerde neye dikkat etmeliyiz?",
+        options: [
+            "Kaynağını kontrol etmeye",
+            "Hemen yaymaya",
+            "Şifremizi eklemeye"
+        ],
+        answer: 0
+    },
+    {
+        question: "Şifrelerimizi nasıl kullanmalıyız?",
+        options: [
+            "Gizli tutmalı ve korumalıyız",
+            "Arkadaşlarımızla paylaşmalıyız",
+            "Herkese açık yazmalıyız"
+        ],
+        answer: 0
+    },
+    {
+        question: "Yapay zekâ uygulamaları neden dikkatli kullanılmalıdır?",
+        options: [
+            "Çünkü çok fazla kişisel bilgiye erişebilir",
+            "Çünkü hiç veri kullanmaz",
+            "Çünkü sadece çizim yapar"
+        ],
+        answer: 0
+    },
+    {
+        question: "Bilinçli kullanıcı olmak neden önemlidir?",
+        options: [
+            "Güvenli bir dijital ortam oluşturmak için",
+            "Daha çok oyun oynamak için",
+            "Şifreleri paylaşmak için"
+        ],
+        answer: 0
+    }
+];
+
+function shuffleArray(array) {
+    return array.sort(() => Math.random() - 0.5);
+}
+
+let questions = shuffleArray([...questionPool]).slice(0, TOTAL_CRYSTALS);
+
+let collectedCount = 0;
+let hp = 3;
+let xp = 0;
+let selectedCharacter = "";
+
+let camX = 0;
+let camY = 0;
+
+function cloneCrystals() {
+    return initialCrystals.map(function(c) {
+        return {
+            x: c.x,
+            y: c.y,
+            collected: false,
+            questionIndex: c.questionIndex
+        };
+    });
+}
+
+function cloneEnemies() {
+    return initialEnemies.map(function(enemy) {
+        return {
+            x: enemy.x,
+            y: enemy.y,
+            dir: enemy.dir,
+            axis: enemy.axis
+        };
+    });
+}
+
+function validateCrystalSetup() {
+    const usedPositions = {};
+
+    if (crystals.length !== TOTAL_CRYSTALS) {
+        console.warn("Kristal sayısı TOTAL_CRYSTALS değeriyle eşleşmiyor.");
+    }
+
+    crystals.forEach(function(c, index) {
+        const key = c.x + "," + c.y;
+
+        if (!isWalkable(c.x, c.y)) {
+            console.warn("Kristal yürünebilir olmayan bir karede:", index + 1, key);
+        }
+
+        if (usedPositions[key]) {
+            console.warn("Aynı karede birden fazla kristal var:", key);
+        }
+
+        if (!questions[c.questionIndex]) {
+            console.warn("Kristale bağlı soru bulunamadı:", index + 1);
+        }
+
+        usedPositions[key] = true;
+    });
+}
+
+function startGame(char) {
+    selectedCharacter = char;
+
+    document.getElementById("characterSelect").style.display = "none";
+    document.getElementById("gameContainer").style.display = "flex";
+
+    resetGameValues();
+    validateCrystalSetup();
+
+    if (char === "diego") {
+        playerImg.src = "{{ url_for('static', filename='games/5_unit5_w2/images/diego.png') }}";
+        document.getElementById("story").innerText = "Kılıç Diş seçildi! Labirentten kaçmaya hazırsın.";
+    } 
+    else if (char === "manny") {
+        playerImg.src = "{{ url_for('static', filename='games/5_unit5_w2/images/manny.png') }}";
+        hp = 5;
+        document.getElementById("story").innerText = "Mamut seçildi! Daha fazla canın var.";
+    } 
+    else if (char === "sid") {
+        playerImg.src = "{{ url_for('static', filename='games/5_unit5_w2/images/sid.png') }}";
+        document.getElementById("story").innerText = "Sid seçildi! Sorulardan daha fazla puan kazanırsın.";
+    }
+
+    updateStats();
+
+    gameStarted = true;
+
+    if (!enemyTimer) {
+        enemyTimer = setInterval(moveEnemies, 650);
+    }
+
+    if (loadedImages >= totalImages && !renderStarted) {
+        renderStarted = true;
+        draw();
+    }
+}
+
+function resetGameValues() {
+    player.x = 1;
+    player.y = 1;
+    player.dir = 1;
+    player.frame = 0;
+
+    door.open = false;
+
+    crystals = cloneCrystals();
+    enemies = cloneEnemies();
+
+    collectedCount = 0;
+    hp = 3;
+    xp = 0;
+    questionActive = false;
+    pendingCrystal = null;
+    currentQuestion = null;
+    enemyHitCooldown = false;
+
+    document.getElementById("quest").innerText = "Kapıyı açmak için 10 kristali topla!";
+    document.getElementById("options").innerHTML = "";
+}
+
+function updateStats() {
+    document.getElementById("hp").innerText = hp;
+    document.getElementById("xp").innerText = xp;
+     document.getElementById("quest").innerText =
+        "Kapıyı açmak için 10 kristali topla! (" +
+        collectedCount + "/" + TOTAL_CRYSTALS + " kristal toplandı)";
+    }
+
+function goMenu() {
+    location.reload();
+}
+
+document.addEventListener("keydown", function(e) {
+    if (!gameStarted) return;
+    if (questionActive) return;
+
+    const allowedKeys = ["ArrowUp", "ArrowDown", "ArrowLeft", "ArrowRight"];
+
+    if (!allowedKeys.includes(e.key)) {
+        return;
+    }
+
+    e.preventDefault();
+
+    let nx = player.x;
+    let ny = player.y;
+
+    if (e.key === "ArrowUp") {
+        ny--;
+    } 
+    else if (e.key === "ArrowDown") {
+        ny++;
+    } 
+    else if (e.key === "ArrowLeft") {
+        nx--;
+        player.dir = -1;
+    } 
+    else if (e.key === "ArrowRight") {
+        nx++;
+        player.dir = 1;
+    }
+
+    if (isDoorPosition(nx, ny)) {
+        checkDoor();
+        return;
+    }
+
+    if (isWalkable(nx, ny)) {
+        player.x = nx;
+        player.y = ny;
+        player.frame++;
+
+        const enemyTouched = checkEnemyCollision();
+
+        if (!enemyTouched) {
+            checkCrystal();
+        }
+    }
+});
+
+function isWalkable(x, y) {
+    if (!map[y]) return false;
+    if (!map[y][x]) return false;
+
+    return map[y][x] === "0";
+}
+
+function isDoorPosition(x, y) {
+    return x === door.x && y === door.y;
+}
+
+function checkCrystal() {
+    crystals.forEach(function(c) {
+        if (!c.collected && c.x === player.x && c.y === player.y && !questionActive) {
+            pendingCrystal = c;
+            showQuestion(c.questionIndex);
+        }
+    });
+}
+
+function showQuestion(questionIndex) {
+    questionActive = true;
+
+    if (!questions[questionIndex]) {
+        console.warn("Bu kristal için soru bulunamadı. Varsayılan soru açılıyor.");
+        questionIndex = 0;
+    }
+
+    currentQuestion = questions[questionIndex];
+
+    document.getElementById("story").innerText = currentQuestion.question;
+
+    const optionsDiv = document.getElementById("options");
+    optionsDiv.innerHTML = "";
+
+    currentQuestion.options.forEach(function(optionText, index) {
+        const btn = document.createElement("button");
+        btn.innerText = optionText;
+        btn.onclick = function() {
+            answerQuestion(index);
+        };
+        optionsDiv.appendChild(btn);
+    });
+}
+
+function answerQuestion(selectedIndex) {
+    if (!currentQuestion || !pendingCrystal) return;
+
+    const optionsDiv = document.getElementById("options");
+
+    if (selectedIndex === currentQuestion.answer) {
+        pendingCrystal.collected = true;
+        collectedCount++;
+
+        if (selectedCharacter === "sid") {
+            xp += 25;
+        } else {
+            xp += 15;
+        }
+
+        document.getElementById("story").innerText =
+            "Doğru cevap! Kristali topladın. Toplanan kristal: " +
+            collectedCount + "/" + TOTAL_CRYSTALS;
+
+        if (collectedCount >= TOTAL_CRYSTALS) {
+            openDoor();
+        }
+    } else {
+        hp--;
+
+        document.getElementById("story").innerText =
+            "Yanlış cevap! Bir can kaybettin. Aynı kristali toplamak için soruyu tekrar doğru cevaplamalısın.";
+
+        player.x = 1;
+        player.y = 1;
+
+        if (hp <= 0) {
+            gameOver();
+            return;
+        }
+    }
+
+    updateStats();
+
+    questionActive = false;
+    pendingCrystal = null;
+    currentQuestion = null;
+    optionsDiv.innerHTML = "";
+}
+
+function openDoor() {
+    door.open = true;
+
+    document.getElementById("quest").innerText =
+        "Tüm kristalleri topladın! Kapı açıldı, şimdi yeşil kapıya git.";
+
+    document.getElementById("story").innerText =
+        "Harika! 10 kristalin tamamını topladın. Kapı artık açık.";
+
+    updateStats();
+}
+
+function checkDoor() {
+    if (door.open) {
+        showWinScreen();
+    } else {
+        alert("Kapı kilitli! Önce 10 kristali toplamalısın 💎");
+
+        document.getElementById("story").innerText =
+            "Kapı henüz kilitli. Kristalleri toplamaya devam et! " +
+            collectedCount + "/" + TOTAL_CRYSTALS;
+    }
+}
+
+function moveEnemies() {
+    if (!gameStarted || questionActive) return;
+
+    enemies.forEach(function(enemy) {
+        let nx = enemy.x;
+        let ny = enemy.y;
+
+        if (enemy.axis === "x") {
+            nx += enemy.dir;
+        } else {
+            ny += enemy.dir;
+        }
+
+        if (isWalkable(nx, ny) && !isDoorPosition(nx, ny)) {
+            enemy.x = nx;
+            enemy.y = ny;
+        } else {
+            enemy.dir *= -1;
+        }
+    });
+
+    checkEnemyCollision();
+}
+
+function checkEnemyCollision() {
+    if (enemyHitCooldown) return false;
+
+    let hit = false;
+
+    enemies.forEach(function(enemy) {
+        if (enemy.x === player.x && enemy.y === player.y && !hit) {
+            hp--;
+            hit = true;
+            enemyHitCooldown = true;
+
+            document.getElementById("story").innerText =
+                "Robot düşmana yakalandın! Bir can kaybettin.";
+
+            player.x = 1;
+            player.y = 1;
+
+            updateStats();
+
+            if (hp <= 0) {
+                gameOver();
+                return;
+            }
+
+            setTimeout(function() {
+                enemyHitCooldown = false;
+            }, 1000);
+        }
+    });
+
+    return hit;
+}
+function showWinScreen() {
+    gameStarted = false;
+    questionActive = true;
+
+    if (enemyTimer) {
+        clearInterval(enemyTimer);
+        enemyTimer = null;
+    }
+
+    document.getElementById("finalHp").innerText = hp;
+    document.getElementById("finalXp").innerText = xp;
+    document.getElementById("winOverlay").style.display = "flex";
+}
+function showLoseScreen() {
+    gameStarted = false;
+    questionActive = true;
+
+    if (enemyTimer) {
+        clearInterval(enemyTimer);
+        enemyTimer = null;
+    }
+
+    document.getElementById("loseHp").innerText = hp;
+    document.getElementById("loseXp").innerText = xp;
+    document.getElementById("loseOverlay").style.display = "flex";
+}
+
+function retryGame() {
+    document.getElementById("loseOverlay").style.display = "none";
+    document.getElementById("gameContainer").style.display = "none";
+    document.getElementById("characterSelect").style.display = "block";
+
+    resetGameValues();
+    updateStats();
+
+    gameStarted = false;
+    renderStarted = false;
+    selectedCharacter = "";
+
+    document.getElementById("story").innerText = "Macera başlıyor...";
+}
+
+function gameOver() {
+    showLoseScreen();
+}
+
+function drawImageSafe(img, x, y, w, h, fallbackColor, fallbackText) {
+    try {
+        if (img.complete && img.naturalWidth > 0) {
+            ctx.drawImage(img, x, y, w, h);
+        } else {
+            drawFallback(x, y, w, h, fallbackColor, fallbackText);
+        }
+    } catch (error) {
+        drawFallback(x, y, w, h, fallbackColor, fallbackText);
+    }
+}
+
+function drawFallback(x, y, w, h, color, text) {
+    ctx.fillStyle = color;
+    ctx.fillRect(x, y, w, h);
+
+    if (text !== "") {
+        ctx.fillStyle = "white";
+        ctx.font = "24px Arial";
+        ctx.textAlign = "center";
+        ctx.textBaseline = "middle";
+        ctx.fillText(text, x + w / 2, y + h / 2);
+    }
+}
+
+function draw() {
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+    const mapWidth = map[0].length * TILE;
+    const mapHeight = map.length * TILE;
+
+    camX = player.x * TILE - canvas.width / 2 + TILE / 2;
+    camY = player.y * TILE - canvas.height / 2 + TILE / 2;
+
+    camX = Math.max(0, Math.min(camX, mapWidth - canvas.width));
+    camY = Math.max(0, Math.min(camY, mapHeight - canvas.height));
+
+    ctx.save();
+    ctx.translate(-camX, -camY);
+
+    for (let y = 0; y < map.length; y++) {
+        for (let x = 0; x < map[y].length; x++) {
+
+            ctx.fillStyle = (x + y) % 2 === 0 ? "#164e63" : "#155e75";
+            ctx.fillRect(x * TILE, y * TILE, TILE, TILE);
+
+            if (map[y][x] === "1") {
+                drawImageSafe(
+                    wallImg,
+                    x * TILE,
+                    y * TILE,
+                    TILE,
+                    TILE,
+                    "#334155",
+                    ""
+                );
+            }
+        }
+    }
+
+    crystals.forEach(function(c) {
+        if (!c.collected) {
+            drawImageSafe(
+                crystalImg,
+                c.x * TILE,
+                c.y * TILE,
+                TILE,
+                TILE,
+                "#7c3aed",
+                "💎"
+            );
+        }
+    });
+
+    ctx.globalAlpha = door.open ? 1 : 0.5;
+
+    drawImageSafe(
+        doorImg,
+        door.x * TILE,
+        door.y * TILE,
+        TILE,
+        TILE,
+        door.open ? "#22c55e" : "#64748b",
+        "🚪"
+    );
+
+    ctx.globalAlpha = 1;
+
+    enemies.forEach(function(enemy) {
+        drawImageSafe(
+            enemyImg,
+            enemy.x * TILE,
+            enemy.y * TILE,
+            TILE,
+            TILE,
+            "#ef4444",
+            "🤖"
+        );
+    });
+
+    const offset = Math.sin(player.frame * 0.3) * 3;
+
+    ctx.save();
+    ctx.translate(player.x * TILE + TILE / 2, player.y * TILE + TILE / 2 + offset);
+    ctx.scale(player.dir, 1);
+
+    drawImageSafe(
+        playerImg,
+        -TILE / 2,
+        -TILE / 2,
+        TILE,
+        TILE,
+        "#f97316",
+        "🙂"
+    );
+
+    ctx.restore();
+    ctx.restore();
+
+    const gradient = ctx.createRadialGradient(
+        canvas.width / 2,
+        canvas.height / 2,
+        80,
+        canvas.width / 2,
+        canvas.height / 2,
+        420
+    );
+
+    gradient.addColorStop(0, "rgba(0,0,0,0)");
+    gradient.addColorStop(0.7, "rgba(0,0,0,0.15)");
+    gradient.addColorStop(1, "rgba(0,0,0,0.35)");
+
+    ctx.fillStyle = gradient;
+    ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+    requestAnimationFrame(draw);
+}
+</script>
+
+</body>
+</html>

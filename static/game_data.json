@@ -97,10 +97,10 @@
           "outcome": "Dosya ve klasörleri amacına uygun şekilde düzenler."
         },
         "5_unit5_w2": {
-          "title": "İç / Dış Donanım Eşleştirme",
+          "title": "Güvenli Yapay Zekâ Labirenti",
           "week": "2. Hafta",
-          "description": "Donanım birimlerini iç donanım ve dış donanım olarak doğru kategorilere ayır.",
-          "outcome": "Bilgisayar donanım birimlerini türlerine göre sınıflandırır."
+          "description": "Etik, kişisel veri, gizlilik ve güvenlik sorularını cevaplayarak kristalleri topla ve labirentten çık.",
+          "outcome": "Yapay zekâ uygulamalarını etik ilkeler ile e-güvenlik/e-gizlilik açısından değerlendirir."
         }
       }
     },
