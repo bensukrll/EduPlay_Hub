@@ -1,11 +1,21 @@
-from flask import Flask, render_template, jsonify ,request,redirect, url_for
+from flask import Flask, render_template, jsonify, request, redirect, url_for
+from flask_login import LoginManager, UserMixin, login_user, logout_user, login_required, current_user
 import smtplib
 from email.mime.text import MIMEText
 from email.mime.multipart import MIMEMultipart
 import cred
 import json
+import psycopg2
+from werkzeug.security import generate_password_hash, check_password_hash
+from functools import lru_cache
+from psycopg2.pool import SimpleConnectionPool
 
 app = Flask(__name__)
+
+app.secret_key = cred.getSecretKey()
+
+login_manager = LoginManager(app)
+login_manager.login_view = "login"
 
 GAME_INFO = {
     # =========================
@@ -267,6 +277,54 @@ LEVELS_AND_UNITS = {
     '6': ['unit1', 'unit2', 'unit3', 'unit4', 'unit5', 'unit6']
 }
 
+# Database Connection
+db_pool = SimpleConnectionPool(
+    minconn=1,
+    maxconn=10,
+    **cred.getDbConfig()
+)
+
+def get_db_connection():
+    return db_pool.getconn()
+
+def release_db_connection(conn):
+    db_pool.putconn(conn)
+
+
+class User(UserMixin):
+    def __init__(self, id, username, email, role, current_grade):
+        self.id = id
+        self.username = username
+        self.email = email
+        self.role = role
+        self.current_grade = current_grade
+
+@lru_cache(maxsize=100)
+def get_user_cached(user_id):
+    conn = get_db_connection()
+    cur = conn.cursor()
+
+    cur.execute("""
+        SELECT id, username, email, role, current_grade
+        FROM users
+        WHERE id = %s
+    """, (user_id,))
+
+    row = cur.fetchone()
+
+    cur.close()
+    release_db_connection(conn)
+
+    if row:
+        return User(*row)
+
+    return None
+
+
+@login_manager.user_loader
+def load_user(user_id):
+    return get_user_cached(user_id)
+
 # ==================================================
 # ROUTES
 # ==================================================
@@ -381,8 +439,59 @@ def game_page(level, unit, game_id):
 
     return render_template("game.html", game=game_info, level=level, unit=unit, game_id=game_id)
 
+@app.route("/account", methods=["GET", "POST"])
+@login_required
+def account():
+    conn = get_db_connection()
+    cur = conn.cursor()
 
+    if request.method == "POST":
+        username = request.form.get("username")
+        email = request.form.get("email")
+        current_grade = request.form.get("current_grade")
 
+        if current_user.role == "student" and current_grade:
+            cur.execute("""
+                UPDATE users SET username = %s, email = %s, current_grade = %s WHERE id = %s
+            """, (username, email, int(current_grade), current_user.id))
+        else:
+            cur.execute("""
+                UPDATE users SET username = %s, email = %s WHERE id = %s
+            """, (username, email, current_user.id))
+
+        conn.commit()
+        get_user_cached.cache_clear()
+        cur.close()
+        release_db_connection(conn)
+        return redirect(url_for("account"))
+
+    completed_games = 0
+    total_score = 0
+    teacher_stats = None
+
+    if current_user.role == 'student':
+        cur.execute("""
+            SELECT COUNT(*), COALESCE(SUM(score), 0)
+            FROM user_progress
+            WHERE user_id = %s AND completion_status = TRUE
+        """, (current_user.id,))
+        row = cur.fetchone()
+        completed_games = row[0]
+        total_score = row[1]
+
+    elif current_user.role == 'teacher':
+        teacher_stats = {}
+
+    cur.close()
+    release_db_connection(conn)
+
+    return render_template(
+        "account.html",
+        user=current_user,
+        completed_games=completed_games,
+        total_score=total_score,
+        teacher_stats=teacher_stats
+    )
 # ==================================================
 #  MAIL GÖNDERME FONKSİYONU
 # ==================================================
@@ -420,28 +529,120 @@ Mesaj:
 @app.route("/login", methods=["GET", "POST"])
 def login():
     if request.method == "POST":
-        username = request.form.get("username")
+        email = request.form.get("email")
         password = request.form.get("password")
 
-        print("Gelen:", username, password)  # şimdilik test
+        conn = get_db_connection()
+        cur = conn.cursor()
+        cur.execute("SELECT id, username, email, role, current_grade, password_hash FROM users WHERE email = %s", (email,))
+        row = cur.fetchone()
+        cur.close()
+        release_db_connection(conn)
 
-        # 👉 Indexe gonder
-        return redirect(url_for("home"))
+        if row and check_password_hash(row[5], password):
+            user = User(row[0], row[1], row[2], row[3], row[4])
+            login_user(user)
+            return redirect(url_for("home"))
+        else:
+            return render_template("login.html", error="E-posta veya şifre hatalı")
 
     return render_template("login.html")
+
+
+@app.route("/logout")
+@login_required
+def logout():
+    logout_user()
+    return redirect(url_for("start"))
 
 @app.route("/register", methods=["GET", "POST"])
 def register():
     if request.method == "POST":
         username = request.form.get("username")
+        email = request.form.get("email")
         password = request.form.get("password")
+        role = request.form.get("role")
+        current_grade = request.form.get("current_grade")
 
-        print("Yeni kullanıcı:", username, password)
+        if role == "teacher":
+            current_grade = None
+        elif role == "student":
+            current_grade = int(current_grade)
 
-        # şimdilik login’e yönlendir
-        return redirect(url_for("login"))
+        password_hash = generate_password_hash(password)
+
+        try:
+            conn = get_db_connection()
+            cur = conn.cursor()
+            cur.execute("""
+                INSERT INTO users (username, email, password_hash, role, current_grade)
+                VALUES (%s, %s, %s, %s, %s)
+            """, (username, email, password_hash, role, current_grade))
+            conn.commit()
+            cur.close()
+            release_db_connection(conn)
+            get_user_cached.cache_clear()
+            return redirect(url_for("login"))
+
+        except psycopg2.errors.UniqueViolation:
+            conn.rollback()
+            cur.close()
+            release_db_connection(conn)
+            return render_template("register.html", error="Bu e-posta veya kullanıcı adı zaten kayıtlı.")
 
     return render_template("register.html")
+
+# Oyunların Progressini Kaydetme Fonksiyonu
+@app.route("/save-progress", methods=["POST"])
+def save_progress():
+    if not current_user.is_authenticated:
+        return jsonify({"error": "Giriş yapılmamış"}), 401
+
+    data = request.get_json()
+    game_key = data.get("game_key")
+    score = data.get("score", 0)
+
+    game = GAME_INFO.get(game_key)
+    if not game:
+        return jsonify({"error": "Oyun bulunamadı"}), 404
+
+    conn = get_db_connection()
+    cur = conn.cursor()
+
+    cur.execute("SELECT id FROM games WHERE game_key = %s", (game_key,))
+    row = cur.fetchone()
+
+    if not row:
+        parts = game_key.split("_")
+        grade = int(parts[0])
+        unit = int(parts[1].replace("unit", ""))
+        week = int(parts[2].replace("w", ""))
+
+        cur.execute("""
+            INSERT INTO games (game_key, grade, unit, week, title)
+            VALUES (%s, %s, %s, %s, %s)
+            RETURNING id
+        """, (game_key, grade, unit, week, game["title"]))
+
+        row = cur.fetchone()
+
+    game_id = row[0]
+
+    cur.execute("""
+        INSERT INTO user_progress (user_id, game_id, score, completion_status, completed_at)
+        VALUES (%s, %s, %s, TRUE, NOW())
+        ON CONFLICT (user_id, game_id)
+        DO UPDATE SET 
+            score = EXCLUDED.score,
+            completion_status = TRUE,
+            completed_at = NOW()
+    """, (current_user.id, game_id, score))
+
+    conn.commit()
+    cur.close()
+    release_db_connection(conn)
+
+    return jsonify({"success": True})
 
 # ==================================================
 # APP RUN

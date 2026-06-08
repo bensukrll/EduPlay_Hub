@@ -18,12 +18,17 @@
     <!-- ÜST BAR -->
     <header class="top-bar">
         <div class="top-bar-inner">
-            <div class="logo-text">EduPlay Hub</div>
+            <div class="logo-text">
+                <a href="{{ url_for('home') }}">
+                    EduPlay Hub
+                </a>
+            </div>
 
             <nav class="top-nav">
                 <a href="{{ url_for('home') }}" class="nav-link">Ana Sayfa</a>
                 <a href="{{ url_for('about') }}" class="nav-link">Hakkımızda</a>
                 <a href="{{ url_for('contact') }}" class="nav-link">İletişim</a>
+                <a href="{{ url_for('account') }}" class="nav-link">Hesabım</a>
             </nav>
         </div>
 

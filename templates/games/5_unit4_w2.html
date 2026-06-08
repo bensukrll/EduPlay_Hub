@@ -722,22 +722,43 @@
             progressFill.style.width = percentage + "%";
         }
 
-        function checkGameOver() {
-            if (placedCount === currentQuestions.length) {
-                let message = "Tüm kartları doğru yerleştirdin. ";
+function checkGameOver() {
+    if (placedCount === currentQuestions.length) {
+        let message = "Tüm kartları doğru yerleştirdin. ";
 
-                if (wrongAttempts === 0) {
-                    message += "Hiç yanlış deneme yapmadın, süpersin! 🌟";
-                } else if (wrongAttempts <= 3) {
-                    message += "Çok az yanlış denemeyle bitirdin, harika! 👏";
-                } else {
-                    message += "Deneyerek öğrendin, güzel iş! 💪";
-                }
-
-                finalScore.innerText = message;
-                resultBackdrop.style.display = "flex";
-            }
+        if (wrongAttempts === 0) {
+            message += "Hiç yanlış deneme yapmadın, süpersin! 🌟";
+        } else if (wrongAttempts <= 3) {
+            message += "Çok az yanlış denemeyle bitirdin, harika! 👏";
+        } else {
+            message += "Deneyerek öğrendin, güzel iş! 💪";
         }
+
+        finalScore.innerText = message;
+        resultBackdrop.style.display = "flex";
+
+        // PUANI HESAPLA
+        // Örnek: Her doğru kart 10 puan, her yanlış deneme -2 puan
+        const score = Math.max(0, placedCount * 10 - wrongAttempts * 2);
+
+        // SKORU VERİTABANINA GÖNDER
+        fetch("/save-progress", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({
+                game_key: "5_unit4_w2",  // Bu oyunun key'i, diğerlerinden farklı
+                score: score
+            })
+        })
+        .then(res => res.json())
+        .then(data => {
+            console.log("Skor kaydedildi:", data);
+        })
+        .catch(err => {
+            console.error("Skor kaydedilemedi:", err);
+        });
+    }
+}
 
         createCards();
         setupDropZones();

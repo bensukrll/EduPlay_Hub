@@ -51,6 +51,18 @@
                         required
                     >
 
+                    <select name="role" id="roleSelect" required>
+                        <option value="" disabled selected>Kullanıcı Türü Seç</option>
+                        <option value="student">Öğrenci</option>
+                        <option value="teacher">Öğretmen</option>
+                    </select>
+
+                    <select name="current_grade" id="gradeSelect" style="display: none;">
+                        <option value="" disabled selected>Sınıf Düzeyi Seç</option>
+                        <option value="5">5. Sınıf</option>
+                        <option value="6">6. Sınıf</option>
+                    </select>
+
                     <button class="start-button">
                         Kaydol
                     </button>
@@ -69,7 +81,27 @@
         <div class="monitor-base"></div>
     </div>
 
+        <p class="entrance-subtitle">
+        ✨ Macerana devam etmek için kaydol! ✨
+    </p>
+
 </div>
+
+    <script>
+        const roleSelect = document.getElementById("roleSelect");
+        const gradeSelect = document.getElementById("gradeSelect");
+
+        roleSelect.addEventListener("change", function () {
+            if (roleSelect.value === "student") {
+                gradeSelect.style.display = "block";
+                gradeSelect.required = true;
+            } else {
+                gradeSelect.style.display = "none";
+                gradeSelect.required = false;
+                gradeSelect.value = "";
+            }
+        });
+    </script>
 
 </body>
 </html>

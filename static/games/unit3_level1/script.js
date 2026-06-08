@@ -375,11 +375,26 @@ document.addEventListener("DOMContentLoaded", () => {
             showModal("Eksik Var!", "Lütfen tüm kartları kutucuklara yerleştir.", "⚠️");
         } else if (correctCount === currentItems.length) {
             stopTimer();
-            showModal("Harika İş!", `Tüm bağlantıları ${formatTime(seconds)} sürede doğru yerleştirdin!`, "🏆");
+            const score = Math.max(100, 1000 - seconds * 5);
 
+            fetch("http://127.0.0.1:5000/save-progress", {
+                method: "POST",
+                credentials: "include",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ game_key: "5_unit3_w2", score: score })
+            });
+
+            showModal("Harika İş!", `Tüm bağlantıları ${formatTime(seconds)} sürede doğru yerleştirdin!`, "🏆");
             checkBtn.style.display = "none";
             resetBtn.style.display = "inline-block";
         } else {
+            fetch("http://127.0.0.1:5000/save-progress", {
+                method: "POST",
+                credentials: "include",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ game_key: "5_unit3_w2", score: 0 })
+            });
+
             showModal("Bazı Hatalar Var", "Kırmızı yanan kartları tekrar kontrol et.", "❌");
         }
     }

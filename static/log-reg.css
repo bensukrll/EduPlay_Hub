@@ -1,57 +1,72 @@
-/* FORM */
+/* =====================================================
+    EDUPLAY HUB - REGISTRATION FORM CSS
+===================================================== */
+
+/* FORM SARMALAYICI */
 .login-form {
-    width: 360px;
+    width: 100%;
+    max-width: 320px; /* Kompakt görünüm */
     display: flex;
     flex-direction: column;
-    gap: 14px;
-    margin-top: 8px; 
+    gap: 12px;
     align-items: center;
+    margin: 0 auto;
 }
 
-/* INPUT */
-.login-form input {
-    padding: 12px;
-    border-radius: 14px;
-    border: none;
+/* INPUT VE SELECT */
+.login-form input,
+.login-form select {
+    width: 100%;
+    height: 44px;
+    padding: 0 14px;
+    border-radius: 12px;
+    border: 1.5px solid #ddd;
     outline: none;
-    font-size: 20px; /* 🔥 20 → 18 daha dengeli */
+    font-size: 16px; /* Okunabilirlik için optimize edildi */
     text-align: center;
     font-family: "Fredoka", sans-serif;
-    width: 360px; 
-
-    box-shadow: 0 6px 14px rgba(0,0,0,0.08);
-    transition: 0.2s ease;
+    box-shadow: 0 5px 12px rgba(0, 0, 0, 0.06);
+    transition: all 0.2s ease;
+    box-sizing: border-box;
 }
 
-.login-form input:focus {
-    transform: scale(1.03);
-    box-shadow: 0 0 0 3px rgba(255,75,146,0.25);
+/* FOCUS EFEKTI */
+.login-form input:focus,
+.login-form select:focus {
+    transform: scale(1.02);
+    box-shadow: 0 0 0 3px rgba(255, 75, 146, 0.25);
+    border-color: #ff4b92;
 }
 
-/* BUTTON */
+/* BUTON */
 .login-form .start-button {
+    height: 46px;
+    font-size: 18px;
+    font-weight: 600;
+    width: 100%;
+    border-radius: 22px;
+    background: linear-gradient(90deg, #ffb412 0%, #ff5b8a 100%);
+    color: #fff;
     border: none;
     cursor: pointer;
-    width: 300px;
+    box-shadow: 0 12px 24px rgba(255, 120, 160, 0.5); /* Aşırı gölge yumuşatıldı */
+    transition: all 0.2s ease;
 }
 
-/* HOVER */
-.login-form:hover {
+.login-form .start-button:hover {
     transform: translateY(-2px);
-    transition: 0.3s ease;
+    box-shadow: 0 16px 32px rgba(255, 120, 160, 0.65);
 }
 
-/* ALT YAZI */
+/* ALT YAZI VE LINKLER */
 .login-switch {
-    margin-top: 10px;
-    font-size: 17px; /* 🔥 20 → küçült */
+    margin-top: 6px;
+    font-size: 15px;
     text-align: center;
     font-family: "Fredoka", sans-serif;
-    color: #374151;                
-    
+    color: #374151;
 }
 
-/* LINK */
 .login-switch a {
     color: #ff4b92;
     font-weight: 600;
@@ -62,18 +77,7 @@
     text-decoration: underline;
 }
 
-/* 🔥 EN KRİTİK FIX (KAYMA ÇÖZÜMÜ) */
-.monitor-screen {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-}
-
-
-
-
-
-
+/* HATA / BAŞARI MESAJI */
 .form-error {
     background: #ffe4e4;
     color: #c0392b;
@@ -81,10 +85,11 @@
     border-radius: 12px;
     padding: 10px 16px;
     font-size: 15px;
-    text-align: center;
-    font-family: "Fredoka", sans-serif;
-    width: 320px;
+    width: 100%;
+    max-width: 320px;
     margin-bottom: 4px;
+    text-align: center;
+    box-sizing: border-box;
 }
 
 .form-success {
@@ -94,81 +99,159 @@
     border-radius: 12px;
     padding: 10px 16px;
     font-size: 15px;
-    text-align: center;
-    font-family: "Fredoka", sans-serif;
-    width: 320px;
-    margin-bottom: 4px;
-}
-
-.forgot-info {
-    font-size: 16px;
-    text-align: center;
-    font-family: "Fredoka", sans-serif;
-    color: #374151;
-    line-height: 1.5;
-    margin-bottom: 6px;
-}
-
-
-
-
-
-
-
-
-.form-error {
-    background: #ffe4e4;
-    color: #c0392b;
-    border: 1.5px solid #e74c3c;
-    border-radius: 12px;
-    padding: 10px 16px;
-    font-size: 15px;
-    text-align: center;
-    font-family: "Fredoka", sans-serif;
-    width: 320px;
-    margin-bottom: 4px;
-}
-
-.form-success {
-    background: #e4ffe8;
-    color: #1e7e34;
-    border: 1.5px solid #28a745;
-    border-radius: 12px;
-    padding: 10px 16px;
-    font-size: 15px;
-    text-align: center;
-    font-family: "Fredoka", sans-serif;
-    width: 320px;
-    margin-bottom: 4px;
-}
-
-.forgot-info {
-    font-size: 16px;
-    text-align: center;
-    font-family: "Fredoka", sans-serif;
-    color: #374151;
-    line-height: 1.5;
-    margin-bottom: 6px;
-}
-
-.forgot-info {
-    font-size: 16px;
-    text-align: center;
-    font-family: "Fredoka", sans-serif;
-    color: #374151;
-    line-height: 1.5;
-    margin-bottom: 6px;
-}
-
-.form-success {
-    background: #e4ffe8;
-    color: #1e7e34;
-    border: 1.5px solid #28a745;
-    border-radius: 12px;
-    padding: 10px 16px;
-    font-size: 15px;
-    text-align: center;
-    font-family: "Fredoka", sans-serif;
-    width: 320px;
+    width: 100%;
+    max-width: 320px;
     margin-top: 6px;
+    text-align: center;
+    box-sizing: border-box;
+}
+
+/* RESPONSIVE */
+@media (max-width: 1024px) {
+    .login-form { max-width: 300px; }
+    .login-form input, .login-form select { font-size: 15px; height: 42px; }
+    .login-form .start-button { font-size: 17px; height: 44px; }
+}
+
+@media (max-width: 768px) {
+    .login-form { max-width: 260px; gap: 10px; }
+    .login-form input, .login-form select { font-size: 14px; height: 40px; }
+    .login-form .start-button { font-size: 16px; height: 42px; }
+}
+
+
+/* =====================================================
+    EDUPLAY HUB - LOGIN & FORGOT PASSWORD FORM CSS
+===================================================== */
+
+/* FORM SARMALAYICI */
+.login-form {
+    width: 100%;
+    max-width: 400px; /* İstek üzerine login formu büyütüldü */
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    align-items: center;
+    margin: 0 auto;
+}
+
+/* INPUT VE SELECT */
+.login-form input {
+    width: 100%;
+    height: 46px;
+    padding: 0 14px;
+    border-radius: 12px;
+    border: 1.5px solid #ddd;
+    outline: none;
+    font-size: 18px;
+    text-align: center;
+    font-family: "Fredoka", sans-serif;
+    box-shadow: 0 5px 12px rgba(0, 0, 0, 0.06);
+    transition: all 0.2s ease;
+    box-sizing: border-box;
+}
+
+/* FOCUS EFEKTI */
+.login-form input:focus {
+    transform: scale(1.02);
+    box-shadow: 0 0 0 3px rgba(255, 75, 146, 0.25);
+    border-color: #ff4b92;
+}
+
+/* LOGIN BUTON */
+.login-form .start-button {
+    height: 48px;
+    font-size: 20px;
+    font-weight: 600;
+    width: 100%;
+    border-radius: 24px;
+    background: linear-gradient(90deg, #ffb412 0%, #ff5b8a 100%);
+    color: #fff;
+    border: none;
+    cursor: pointer;
+    box-shadow: 0 12px 24px rgba(255, 120, 160, 0.5);
+    transition: all 0.2s ease;
+}
+
+.login-form .start-button:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 16px 32px rgba(255, 120, 160, 0.65);
+}
+
+.login-form .start-button:disabled {
+    background: #ccc;
+    cursor: not-allowed;
+    box-shadow: none;
+    transform: none;
+}
+
+/* ALT YAZI VE LINKLER */
+.login-switch {
+    margin-top: 6px;
+    font-size: 15px;
+    text-align: center;
+    font-family: "Fredoka", sans-serif;
+    color: #374151;
+}
+
+.login-switch a {
+    color: #ff4b92;
+    font-weight: 600;
+    text-decoration: none;
+}
+
+.login-switch a:hover {
+    text-decoration: underline;
+}
+
+/* ŞİFREMİ UNUTTUM BİLGİ METNİ */
+.forgot-info {
+    font-size: 16px;
+    text-align: center;
+    font-family: "Fredoka", sans-serif;
+    color: #374151;
+    line-height: 1.5;
+    margin-bottom: 6px;
+}
+
+/* HATA / BAŞARI MESAJI */
+.form-error {
+    background: #ffe4e4;
+    color: #c0392b;
+    border: 1.5px solid #e74c3c;
+    border-radius: 12px;
+    padding: 10px 16px;
+    font-size: 15px;
+    width: 100%;
+    max-width: 400px;
+    margin-bottom: 4px;
+    text-align: center;
+    box-sizing: border-box;
+}
+
+.form-success {
+    background: #e4ffe8;
+    color: #1e7e34;
+    border: 1.5px solid #28a745;
+    border-radius: 12px;
+    padding: 10px 16px;
+    font-size: 15px;
+    width: 100%;
+    max-width: 400px;
+    margin-top: 6px;
+    text-align: center;
+    box-sizing: border-box;
+}
+
+/* RESPONSIVE */
+@media (max-width: 1024px) {
+    .login-form { max-width: 340px; }
+    .login-form input { font-size: 16px; height: 44px; }
+    .login-form .start-button { font-size: 18px; height: 46px; }
+}
+
+@media (max-width: 768px) {
+    .login-form { max-width: 280px; gap: 10px; }
+    .login-form input { font-size: 15px; height: 42px; }
+    .login-form .start-button { font-size: 16px; height: 44px; }
 }

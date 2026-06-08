@@ -3,8 +3,22 @@
 # ==================================================
 
 def setCred():
-    cred_file = open("pass.wd","r")
-    MAIL_ADDRESS = cred_file.readline()
-    MAIL_PASSWORD = cred_file.readline()
-    cred_file.close()
-    return (MAIL_ADDRESS, MAIL_PASSWORD)
+    with open("pass.wd", "r") as f:
+        lines = f.read().splitlines()
+    return (lines[0], lines[1])
+
+def getDbConfig():
+    with open("pass.wd", "r") as f:
+        lines = f.read().splitlines()
+    return {
+        "host": lines[2],
+        "database": "postgres",
+        "user": lines[3],
+        "password": lines[4],
+        "port": "5432"
+    }
+
+def getSecretKey():
+    with open("pass.wd", "r") as f:
+        lines = f.read().splitlines()
+    return lines[5]

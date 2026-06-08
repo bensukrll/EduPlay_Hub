@@ -1362,6 +1362,16 @@ function showLoseScreen() {
     document.getElementById("loseHp").innerText = hp;
     document.getElementById("loseXp").innerText = xp;
     document.getElementById("loseOverlay").style.display = "flex";
+
+    // PUANI VERİTABANINA GÖNDER
+    fetch("/save-progress", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+            game_key: "5_unit5_w2",
+            score: xp
+        })
+    });
 }
 
 function retryGame() {

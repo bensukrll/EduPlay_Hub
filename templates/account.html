@@ -1,0 +1,549 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>EduPlay Hub - Profil</title>
+
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+
+    <style>
+        /* ============================================= */
+/* ROOT VARIABLES */
+:root {
+    --pink: #ff4b92;
+    --pink-light: #ffe1f0;
+    --blue: #2563eb;
+    --purple: #7c3aed;
+    --text: #1a1a2e;
+    --text-muted: #6b7280;
+    --card-radius: 28px;
+    --shadow-soft: 0 8px 32px rgba(0,0,0,0.08);
+}
+
+/* RESET */
+* { box-sizing: border-box; margin: 0; padding: 0; }
+
+/* PAGE BACKGROUND */
+.page {
+    min-height: 100vh;
+    background:
+        radial-gradient(ellipse at 0% 30%, #ffe3f2 0%, transparent 55%),
+        radial-gradient(ellipse at 100% 60%, #fde8c8 0%, transparent 55%),
+        radial-gradient(ellipse at 50% 100%, #e8d5ff 0%, transparent 60%),
+        #faf5ff;
+}
+
+/* MAIN CONTAINER */
+.profile-main {
+    max-width: 1100px;
+    margin: -30px auto 80px;
+    padding: 0 32px;
+    position: relative;
+    z-index: 2;
+}
+
+/* PAGE TITLE */
+.profile-title {
+    text-align: center;
+    margin-bottom: 40px;
+}
+
+.profile-title .eyebrow {
+    display: inline-block;
+    font-size: 13px;
+    letter-spacing: 0.14em;
+    color: var(--text-muted);
+    text-transform: uppercase;
+    font-weight: 600;
+    background: rgba(255,255,255,0.8);
+    border-radius: 999px;
+    padding: 6px 18px;
+    backdrop-filter: blur(6px);
+}
+
+.profile-title h1 {
+    margin: 14px 0 0;
+    font-size: 38px;
+    font-weight: 700;
+    font-family: 'Fredoka', sans-serif;
+    letter-spacing: -0.5px;
+}
+
+/* PROFILE GRID: LEFT + RIGHT COLUMNS */
+.profile-grid {
+    display: flex;
+    flex-direction: row; /* Alt alta dizilmeyi iptal edip yan yana getirir */
+    gap: 28px;           /* Kartlar arası boşluk */
+    align-items: flex-start;
+    width: 100%;
+}
+
+/* LEFT COLUMN */
+.left-col {
+    flex: 0 0 360px; /* Genişliği sabitleyerek sağ tarafın alta kaymasını önler */
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+/* PROFILE CARD */
+.profile-card {
+    background: #fff;
+    border-radius: var(--card-radius);
+    box-shadow: var(--shadow-soft);
+    padding: 32px 24px 28px;
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+}
+
+.profile-card::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 5px;
+    background: linear-gradient(90deg, var(--purple), var(--pink), #ff9f1c);
+    border-radius: var(--card-radius) var(--card-radius) 0 0;
+}
+
+.avatar {
+    width: 100px;
+    height: 100px;
+    border-radius: 26px;
+    margin: 0 auto 16px;
+    background: linear-gradient(135deg, #a044fc, #ff4b92);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #fff;
+    font-size: 48px;
+    font-weight: 700;
+    font-family: 'Fredoka', sans-serif;
+    box-shadow: 0 16px 30px rgba(255,75,146,0.3);
+    transform: rotate(-3deg);
+}
+
+.profile-card h2 {
+    font-size: 24px;
+    font-weight: 700;
+    margin-bottom: 8px;
+}
+
+.profile-role {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 7px 16px;
+    border-radius: 999px;
+    background: var(--pink-light);
+    color: var(--pink);
+    font-size: 13px;
+    font-weight: 600;
+}
+
+/* STATS BOX */
+.stats {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 12px;
+    margin-top: 22px;
+}
+
+.stat-box {
+    border-radius: 20px;
+    padding: 18px 10px;
+    color: #fff;
+    text-align: center;
+}
+
+.stat-pink { background: linear-gradient(135deg, #ff4b92, #ff78b0); }
+.stat-blue { background: linear-gradient(135deg, #2563eb, #3b82f6); }
+.stat-purple { background: linear-gradient(135deg, #7c3aed, #a78bfa); }
+.stat-orange { background: linear-gradient(135deg, #f59e0b, #fbbf24); }
+
+.stat-box small { display: block; font-size: 11px; opacity: 0.9; font-weight: 600; letter-spacing: 0.03em; }
+.stat-box strong { display: block; font-size: 30px; margin-top: 4px; font-family: 'Fredoka', sans-serif; }
+
+/* QUICK BADGES CARD */
+.quick-card {
+    background: #fff;
+    border-radius: var(--card-radius);
+    box-shadow: var(--shadow-soft);
+    padding: 28px 28px 24px;
+}
+
+.quick-card-title {
+    font-size: 12px;
+    font-weight: 700;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--text-muted);
+    margin-bottom: 16px;
+}
+
+.quick-card p {
+    font-size: 14px;
+    color: var(--text-muted);
+    line-height: 2;
+    margin-top: 0;
+    padding: 16px;
+    background: linear-gradient(135deg, #f5f3ff, #ffe1f0);
+    border-radius: 16px;
+}
+.badge-row {
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
+}
+
+.badge {
+    padding: 6px 14px;
+    border-radius: 999px;
+    font-size: 13px;
+    font-weight: 600;
+}
+
+.badge-green { background: #d1fae5; color: #065f46; }
+.badge-blue { background: #dbeafe; color: #1e40af; }
+.badge-pink { background: var(--pink-light); color: #be185d; }
+.badge-yellow { background: #fef3c7; color: #92400e; }
+
+/* SETTINGS CARD */
+.settings-card {
+    background: #fff;
+    border-radius: var(--card-radius);
+    box-shadow: var(--shadow-soft);
+    padding: 36px 36px 32px;
+    flex: 1; /* sağ kolon esnek genişlik */
+    position: relative;
+    overflow: hidden;
+}
+
+.settings-card::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 5px;
+    background: linear-gradient(90deg, #2563eb, #7c3aed, var(--pink));
+    border-radius: var(--card-radius) var(--card-radius) 0 0;
+}
+
+.settings-card > h2 {
+    font-size: 22px;
+    font-weight: 700;
+    margin-bottom: 28px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+/* FORM SECTIONS */
+.form-section { border-radius: 20px; padding: 22px; margin-bottom: 16px; }
+.section-hesap { background: #f0f7ff; }
+.section-egitim { background: #fff5fb; }
+.section-guvenlik { background: #f5f3ff; }
+
+.form-section h3 {
+    font-size: 12px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    color: var(--text-muted);
+    margin-bottom: 16px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.form-section h3 .section-dot { width: 8px; height: 8px; border-radius: 50%; display: inline-block; }
+.dot-blue { background: var(--blue); }
+.dot-pink { background: var(--pink); }
+.dot-purple { background: var(--purple); }
+
+.form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+.form-group { display: flex; flex-direction: column; gap: 7px; }
+.form-group label { font-size: 12px; font-weight: 600; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.06em; }
+
+.form-group input,
+.form-group select {
+    border: 2px solid transparent;
+    border-radius: 14px;
+    padding: 12px 15px;
+    font-size: 15px;
+    font-family: 'Poppins', sans-serif;
+    font-weight: 500;
+    outline: none;
+    background: #fff;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+    transition: border-color 0.2s, box-shadow 0.2s;
+}
+
+.form-group input:focus,
+.form-group select:focus { border-color: var(--pink); box-shadow: 0 0 0 4px rgba(255,75,146,0.12); }
+.form-group input[readonly] { background: #f9fafb; color: var(--text-muted); cursor: default; }
+
+.role-info { margin-top: 12px; color: var(--text-muted); font-size: 13px; line-height: 1.6; }
+
+/* BUTTONS */
+.btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 13px 26px;
+    border-radius: 999px;
+    font-family: 'Poppins', sans-serif;
+    font-size: 14px;
+    font-weight: 600;
+    text-decoration: none;
+    cursor: pointer;
+    border: none;
+    transition: transform 0.15s, box-shadow 0.15s;
+}
+.btn:hover { transform: translateY(-2px); }
+.btn-pink { background: linear-gradient(135deg, var(--pink), #ff78b0); color: #fff; box-shadow: 0 8px 20px rgba(255,75,146,0.35); }
+.btn-blue { background: linear-gradient(135deg, var(--blue), #3b82f6); color: #fff; box-shadow: 0 8px 20px rgba(37,99,235,0.3); }
+.btn-soft { background: #f3f4f6; color: #6b7280; }
+.form-actions { display: flex; justify-content: flex-end; gap: 12px; margin-top: 24px; padding-top: 24px; border-top: 1px solid #f1f1f1; }
+
+/* PROFILE GRID RESPONSIVE */
+@media (max-width: 900px) {
+    .profile-grid { display: flex; flex-direction: column; gap: 20px; }
+    .form-row { grid-template-columns: 1fr; }
+    .top-bar-inner { padding: 18px 24px; }
+    .left-col, .settings-card {
+        flex: 1 1 auto;
+    }
+}
+
+.teacher-coming-soon {
+    margin-top: 22px;
+    width: 350px;
+    background: linear-gradient(135deg, #f5f3ff, #ffe1f0);
+    border-radius: 20px;
+    padding: 24px 16px;
+    text-align: center;
+}
+
+.teacher-coming-icon {
+    font-size: 36px;
+    display: block;
+    margin-bottom: 10px;
+}
+
+.teacher-coming-soon p {
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--text);
+    margin-bottom: 4px;
+}
+
+.teacher-coming-soon small {
+    font-size: 12px;
+    color: var(--text-muted);
+}
+    </style>
+</head>
+
+<body>
+    <div class="page">
+
+    <!-- ÜST BAR -->
+    <header class="top-bar">
+        <div class="top-bar-inner">
+            <div class="logo-text">
+                <a href="{{ url_for('home') }}">
+                    EduPlay Hub
+                </a>
+            </div>
+
+            <nav class="top-nav">
+                <a href="{{ url_for('home') }}" class="nav-link">Ana Sayfa</a>
+                <a href="{{ url_for('about') }}" class="nav-link">Hakkımızda</a>
+                <a href="{{ url_for('contact') }}" class="nav-link">İletişim</a>
+                <a href="{{ url_for('account') }}" class="nav-link">Hesabım</a>
+            </nav>
+        </div>
+
+                <div class="header-waves">
+
+
+    <!-- 🌈 WAVE GRADIENT – MOR GÜÇLÜ -->
+    <svg width="0" height="0" aria-hidden="true">
+        <defs>
+    <linearGradient id="waveGradient" x1="0%" y1="0%" x2="100%" y2="0%">
+        <!-- SOĞUK, NET MOR -->
+        <stop offset="0%" stop-color="#5b21b6"/>
+        <stop offset="32%" stop-color="#6d28d9"/>
+
+        <!-- KIRMIZI (DAHA GEÇ BAŞLIYOR) -->
+        <stop offset="56%" stop-color="#d72638"/>
+
+        <!-- TURUNCU -->
+        <stop offset="80%" stop-color="#ff9f1c"/>
+        <stop offset="100%" stop-color="#ff7a00"/>
+    </linearGradient>
+
+
+        </defs>
+    </svg>
+
+        <!-- WAVE 1 (en üst, en yumuşak) -->
+<svg viewBox="0 0 1440 320" class="wave wave1" preserveAspectRatio="none" style="opacity: 0.3;">
+    <path fill="url(#waveGradient)" d="M0,192L48,176C96,160,192,128,288,128C384,128,480,160,576,181.3C672,203,768,213,864,192C960,171,1056,117,1152,101.3C1248,85,1344,107,1392,117.3L1440,128L1440,0L1392,0C1344,0,1248,0,1152,0C1056,0,960,0,864,0C768,0,672,0,576,0C480,0,384,0,288,0C192,0,96,0,48,0L0,0Z"></path>
+</svg>
+
+
+        <!-- WAVE 2 (orta katman) -->
+<svg viewBox="0 0 1440 320" class="wave wave2" preserveAspectRatio="none" style="opacity: 0.6;">
+    <path fill="url(#waveGradient)" d="M0,160L60,170.7C120,181,240,203,360,186.7C480,171,600,117,720,117.3C840,117,960,171,1080,181.3C1200,192,1320,160,1380,144L1440,128L1440,0L1380,0C1320,0,1200,0,1080,0C960,0,840,0,720,0C600,0,480,0,360,0C240,0,120,0,60,0L0,0Z"></path>
+</svg>
+
+        <!-- WAVE 3 (en alt, daha belirgin) -->
+<svg viewBox="0 0 1440 320" class="wave wave3" preserveAspectRatio="none">
+    <path fill="url(#waveGradient)" d="M0,128L80,117.3C160,107,320,85,480,112C640,139,800,213,960,218.7C1120,224,1280,160,1360,128L1440,96L1440,0L1360,0C1280,0,1120,0,960,0C800,0,640,0,480,0C320,0,160,0,80,0L0,0Z"></path>
+</svg>
+
+
+
+    </div>
+    </header>
+
+        <main class="profile-main">
+ 
+        <!-- PAGE TITLE -->
+        <section class="profile-title">
+            <span class="eyebrow">Profilini düzenle 🎮</span>
+            <h1>Hesap ve Gelişim Paneli</h1>
+        </section>
+ 
+        <section class="profile-grid">
+ 
+ 
+<!-- account.html -->
+<aside class="left-col">
+    <!-- Profil Kartı -->
+    <div class="profile-card">
+        <div class="avatar">{{ user.username[0].upper() }}</div>
+        <h2>{{ user.username }}</h2>
+        <div class="profile-role">
+            {% if user.role == 'student' %}
+                🎓 Öğrenci Profili · {{ user.current_grade }}. Sınıf
+            {% elif user.role == 'teacher' %}
+                📋 Öğretmen Profili · 5. ve 6. sınıflara erişim
+            {% endif %}
+        </div>
+        <div class="stats">
+            {% if user.role == 'student' %}
+            <div class="stat-box stat-pink">
+                <small>Tamamlanan Oyun</small>
+                <strong>{{ completed_games }}</strong>
+            </div>
+            <div class="stat-box stat-blue">
+                <small>Toplam Puan</small>
+                <strong>{{ total_score }}</strong>
+            </div>
+            {% elif user.role == 'teacher' %}
+            
+            {% endif %}
+        </div>
+    </div>
+
+<!-- Quick Badge Kartı -->
+<div class="quick-card">
+    {% if user.role == 'student' %}
+    <div class="quick-card-title">📊 Durum</div>
+    <div class="badge-row">
+        <span class="badge badge-blue">{{ user.current_grade }}. Sınıf</span>
+        <span class="badge badge-pink">Öğrenci</span>
+    </div>
+    {% elif user.role == 'teacher' %}
+    <div class="quick-card-title">📊 Sınıf İstatistikleri</div>
+    <p style="font-size: 13px; color: var(--text-muted); line-height: 1.7; margin-top: 4px;">
+        🏫 Sınıflarınıza ait istatistikler <br>yakında burada görünecek!
+    </p>
+    {% endif %}
+</div>
+</aside>
+
+<!-- Sağ Taraf: Hesap Ayarları -->
+<section class="settings-card">
+    <h2>⚙️ Hesap Ayarları</h2>
+
+    <form method="POST">
+        <!-- Hesap Bilgileri -->
+        <div class="form-section section-hesap">
+            <h3><span class="section-dot dot-blue"></span> Hesap Bilgileri</h3>
+            <div class="form-row">
+                <div class="form-group">
+                    <label>Kullanıcı Adı</label>
+                    <input type="text" name="username" value="{{ user.username }}">
+                </div>
+                <div class="form-group">
+                    <label>E-posta Adresi</label>
+                    <input type="email" name="email" value="{{ user.email }}">
+                </div>
+            </div>
+        </div>
+
+        <!-- Eğitim Bilgileri -->
+        <div class="form-section section-egitim">
+            <h3><span class="section-dot dot-pink"></span> Eğitim Bilgileri</h3>
+            <div class="form-row">
+                <div class="form-group">
+                    <label>Rol</label>
+                    <input type="text" value="{% if user.role == 'student' %}Öğrenci{% else %}Öğretmen{% endif %}" readonly>
+                </div>
+                {% if user.role == 'student' %}
+                <div class="form-group">
+                    <label>Sınıf Düzeyi</label>
+                    <select name="current_grade">
+                        <option value="5" {% if user.current_grade == 5 %}selected{% endif %}>5. Sınıf</option>
+                        <option value="6" {% if user.current_grade == 6 %}selected{% endif %}>6. Sınıf</option>
+                    </select>
+                </div>
+                {% endif %}
+            </div>
+
+            {% if user.role == 'student' %}
+            <p class="role-info">
+                Öğrencinin güncel sınıf düzeyi buradan seçilir. Eski oyun ilerlemeleri silinmez.
+            </p>
+            {% elif user.role == 'teacher' %}
+            <p class="role-info">
+                Öğretmen olarak 5. ve 6. sınıflara erişim hakkınız bulunmaktadır.
+            </p>
+            {% endif %}
+        </div>
+
+        <!-- Güvenlik -->
+        <div class="form-section section-guvenlik">
+            <h3><span class="section-dot dot-purple"></span> Güvenlik</h3>
+            <p class="role-info">
+                Hesabının güvenliği için şifreni ayrı bir ekrandan değiştirebilirsin.
+            </p>
+            <a href="#" class="btn btn-blue">🔐 Şifre Değiştir (yakında)</a>
+        </div>
+
+        <div class="form-actions">
+            <a href="#" class="btn btn-soft">Vazgeç</a>
+            <button type="submit" class="btn btn-pink">✓ Değişiklikleri Kaydet</button>
+        </div>
+    </form>
+</section>
+        </section>
+ 
+    </main>
+
+
+    <footer class="bottom-bar">
+        <div class="bottom-inner">
+            <span>💻 Bilişim Teknolojileri · 5 ve 6. Sınıflar</span>
+            <span>© 2025 EduPlay Hub</span>
+        </div>
+    </footer>
+    
+</div>
+</body>
+</html>
+ 

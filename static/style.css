@@ -1,5 +1,5 @@
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap');
 @import url('https://fonts.googleapis.com/css2?family=Fredoka:wght@300;400;500;600&display=swap');
-
 
 @font-face {
   font-family: "Chewy";
@@ -95,6 +95,12 @@ body {
 
 }
 
+.logo-text a{
+    text-decoration: none;
+    color: inherit;
+    display: block;
+}
+
 
 .top-nav {
     display: flex;
@@ -108,7 +114,6 @@ body {
     color: rgba(255,255,255,0.9);
     text-decoration: none;
     /*padding-bottom: 4px;*/
-    
     transition: color 0.25s ease;
 }
 
@@ -826,286 +831,151 @@ body {
 
 
 
-/* =====================================================
-        START PAGE
-===================================================== */
+    /* =====================================================
+            START PAGE
+    ===================================================== */
 
-.entrance-body {
-    margin: 0;
-    min-height: 100vh;
-    font-family: "Poppins", sans-serif;
-    background: var(--bg-gradient-top);
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    color: #ffffff;
-    overflow: hidden;
-}
-
-
-.entrance-wrapper {
-    position: relative;
-    text-align: center;
-    width: 100%;
-    max-width: 1200px;
-    padding: 40px 16px;
-}
-
-.circle {
-    position: absolute;
-    border-radius: 50%;    
-    z-index: 1;
-}
-
-.circle-green {
-    width: 130px;
-    height: 130px;
-    background: #a3d986;
-    top: 40px;
-    left: -280px;
-    opacity: 0.95;
-}
-
-.circle-orange {
-    width: 80px;
-    height: 80px;
-    background: #ffb86c;
-    top: 260px;
-    left: 20px;
-    opacity: 1;
-}
-
-
-.circle-blue {
-    width: 70px;
-    height: 70px;
-    background: #6ec8ff;
-    top: 425px;
-    right: 20px;
-    opacity: 1;
-}
-
-.circle-pink {
-    width: 100px;
-    height: 100px;
-    background: #f7a8ff;
-    bottom: 120px;
-    left: -100px;
-    opacity: 0.9;
-}
-
-.circle-small-pink {
-    width: 110px;
-    height: 110px;
-    transform: translateX(-50%);
-    opacity: 0.75;
-    width: 110px;
-    background: #ff60cd;
-    position: absolute;
-    top: 50px;
-    right: -70px;
-    border-radius: 50%;
-}
-
-.circle-yellow {
-    width: 140px;
-    height: 140px;
-    background: #bd08bd;
-    bottom: 40px;
-    right: -80px;
-    opacity: 0.95;
-}
-
-
-.entrance-title {
-    color: #fefefd;
-    margin-top: -20px;
-    font-family: "Chewy", sans-serif;
-    font-size: 100px;
-    font-weight: 100;
-}
-
-
-.sub-title {
-    margin-top: -60px;
-    font-size: 25px;
-    font-family: "Fredoka", sans-serif;
-    font-weight: 500;
-}
-
-.monitor {
-    margin: 0 auto;
-    width: 650px;
-    position: relative;
-}
-
-.monitor-frame {
-    width: 100%;
-    height: 380px;
-    background: #111827;
-    border-radius: 26px;
-    box-shadow: 0 24px 60px rgba(0, 0, 0, 0.55);
-    padding: 22px;
-    box-sizing: border-box;
-}
-
-.monitor-screen {
-    width: 100%;
-    height: 100%;
-    border-radius: 18px;
-    background: radial-gradient(
-        circle at top left,
-        #fff1fb 0%,
-        #fff7ed 45%,
-        #ffffff 75%
-    );
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    padding-top: 40px; 
-}
-
-.monitor-led {
-    width: 10px;
-    height: 10px;
-    border-radius: 50%;
-    background: #32d96b;
-    margin: -10px auto 0;
-    z-index: 5; 
-    position: relative;
-}
-
-.monitor-stand {
-    width: 34px;
-    height: 80px;
-    background: #111827;
-    margin: -20px auto 0;
-    border-radius: 12px;
-}
-
-
-.monitor-base {
-    width: 180px;
-    height: 22px;
-    background: #111827;
-    border-radius: 999px;
-    margin: -6px auto 0;
-}
-
-.start-button {
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    padding: 18px 50px;
-    border-radius: 24px;
-    background: linear-gradient(90deg, #ffb412 0%, #ff5b8a 100%);
-    color: #ffffff;
-    text-decoration: none;
-    font-size: 22px;
-    font-weight: 600;
-    box-shadow: 0 18px 40px rgba(255, 120, 160, 0.7);
-    transition: transform 0.2s ease, box-shadow 0.2s ease;
-}
-
-.start-button:hover {
-    transform: translateY(-3px);
-    box-shadow: 0 22px 44px rgba(255, 120, 160, 0.85);
-}
-
-
-.entrance-subtitle {
-    font-family: "Fredoka", sans-serif;
-    margin-top: 60px;
-    font-size: 20px;
-}
-
-/*RESPONSIVE*/
-@media (max-width: 1024px) {
-
-    .entrance-title {
-        font-size: 64px;
-        margin-top: 0;
+    .entrance-body {
+        margin: 0;
+        min-height: 100vh;
+        font-family: "Poppins", sans-serif;
+        background: var(--bg-gradient-top);
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        color: #fff;
+        overflow: hidden;
     }
-
-    .sub-title {
-        font-size: 22px;
-        margin-top: -30px;
-    }
-
-    .monitor {
-        width: 420px;
-    }
-
-    .monitor-frame {
-        height: 280px;
-    }
-
-    .start-button {
-        font-size: 20px;
-        padding: 16px 40px;
-    }
-
-    .entrance-subtitle {
-        font-size: 18px;
-        margin-top: 40px;
-    }
-
-    .circle-green { left: -60px; }
-    .circle-pink { left: -20px; }
-    .circle-yellow { right: -40px; }
-}
-
-
-@media (max-width: 768px) {
 
     .entrance-wrapper {
-        padding: 20px 12px;
-    }
-
-    .entrance-title {
-        font-size: 40px;
-        line-height: 1.1;
-        margin-bottom: 12px;
-    }
-
-    .sub-title {
-        font-size: 16px;
-        margin-top: 0;
-    }
-
-    .monitor {
+        position: relative;
+        text-align: center;
         width: 100%;
-        max-width: 320px;
-        margin-top: 20px;
+        max-width: 1200px;
+        padding: 40px 16px;
+        min-height: 100vh;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        box-sizing: border-box;
+    }
+
+    /* Arka plan daireleri */
+    .circle {
+        position: absolute;
+        border-radius: 50%;
+        z-index: 1;
+    }
+    .circle-green { width: 130px; height: 130px; background: #a3d986; top: 40px; left: -280px; opacity: 0.95; }
+    .circle-orange { width: 80px; height: 80px; background: #ffb86c; top: 260px; left: 20px; opacity: 1; }
+    .circle-blue { width: 70px; height: 70px; background: #6ec8ff; top: 425px; right: 20px; opacity: 1; }
+    .circle-pink { width: 100px; height: 100px; background: #f7a8ff; bottom: 120px; left: -100px; opacity: 0.9; }
+    .circle-small-pink { width: 110px; height: 110px; background: #ff60cd; position: absolute; top: 50px; right: -70px; border-radius: 50%; opacity: 0.75; transform: translateX(-50%); }
+    .circle-yellow { width: 140px; height: 140px; background: #bd08bd; bottom: 40px; right: -80px; opacity: 0.95; }
+
+    /* Başlıklar */
+    .entrance-title { color: #fefefd; font-family: "Chewy", sans-serif; font-size: 80px; font-weight: 100; margin-bottom: 8px; }
+    .sub-title { font-size: 22px; font-family: "Fredoka", sans-serif; font-weight: 500; margin-bottom: 20px; }
+
+    /* MONITOR */
+    /* MONITOR */
+    .monitor {
+        width: 680px;
+        max-width: 95%;
+        position: relative;
+        margin: 20px auto;
     }
 
     .monitor-frame {
-        height: 200px;
-        padding: 14px;
+        width: 100%;
+        height: 440px; /* biraz büyütüldü */
+        background: #111827;
+        border-radius: 26px;
+        box-shadow: 0 24px 60px rgba(0,0,0,0.55);
+        padding: 20px;
+        box-sizing: border-box;
+    }
+
+    .monitor-screen {
+        width: 100%;
+        height: 100%;
+        border-radius: 18px;
+        background: radial-gradient(circle at top left, #fff1fb 0%, #fff7ed 45%, #ffffff 75%);
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        padding-top: 12px;
+    }
+
+    .monitor-led {
+        width: 10px;
+        height: 10px;
+        border-radius: 50%;
+        background: #32d96b;
+        margin: -10px auto 0;
+        position: relative;
+        z-index: 5;
     }
 
     .monitor-stand {
-        height: 50px;
+        width: 34px;
+        height: 60px; /* boyut dengelendi */
+        background: #111827;
+        margin: -20px auto 0;
+        border-radius: 12px;
     }
 
     .monitor-base {
-        width: 120px;
+        width: 150px; /* biraz küçültüldü */
         height: 18px;
+        background: #111827;
+        border-radius: 999px;
+        margin: -6px auto 0;
     }
 
+    /* START BUTTON */
     .start-button {
-        font-size: 16px;
-        padding: 12px 28px;
-        border-radius: 18px;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        padding: 16px 40px;
+        border-radius: 22px;
+        background: linear-gradient(90deg, #ffb412 0%, #ff5b8a 100%);
+        color: #fff;
+        font-size: 20px;
+        font-weight: 600;
+        text-decoration: none;
+        box-shadow: 0 16px 36px rgba(255,120,160,0.7);
+        transition: transform 0.2s ease, box-shadow 0.2s ease;
     }
 
+    .start-button:hover {
+        transform: translateY(-3px);
+        box-shadow: 0 20px 40px rgba(255,120,160,0.85);
+    }
+
+    /* START PAGE SUBTITLE */
     .entrance-subtitle {
-        font-size: 14px;
-        margin-top: 28px;
+        font-family: "Fredoka", sans-serif;
+        font-size: 18px;
+        margin-top: 20px;
         padding: 0 10px;
     }
 
-    .circle {
-        display: none;
+    /* Responsive */
+    @media (max-width: 1024px) {
+        .entrance-title { font-size: 60px; }
+        .sub-title { font-size: 20px; margin-top: -20px; }
+        .monitor { width: 480px; }
+        .monitor-frame { height: 320px; padding: 16px; }
+        .start-button { font-size: 18px; padding: 14px 36px; }
     }
-}
+
+    @media (max-width: 768px) {
+        .entrance-title { font-size: 38px; }
+        .sub-title { font-size: 16px; margin-top: 0; }
+        .monitor { width: 100%; max-width: 340px; }
+        .monitor-frame { height: 240px; padding: 14px; }
+        .start-button { font-size: 16px; padding: 12px 28px; border-radius: 18px; }
+    }
