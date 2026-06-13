@@ -1,0 +1,310 @@
+/* GENEL TASARIM VE RENK PALETİ */
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    font-family: "Poppins", sans-serif;
+    background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+    color: #2c3e50;
+    min-height: 100vh;
+    padding: 10px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.game-wrapper {
+    width: 100%;
+    max-width: 1200px;
+    background: #ffffff;
+    border-radius: 24px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+    padding: 20px;
+}
+
+header {
+    text-align: center;
+    margin-bottom: 15px;
+    border-bottom: 3px solid #eef2f3;
+    padding-bottom: 12px;
+}
+
+header h1 {
+    font-size: 1.6rem;
+    color: #4a00e0;
+    font-weight: 700;
+    margin-bottom: 10px;
+}
+
+header .instruction {
+    font-size: 0.95rem;
+    color: #7f8c8d;
+    font-weight: 400;
+}
+
+/* OYUN ALANI DÜZENİ */
+.container {
+    display: flex;
+    justify-content: space-between;
+    gap: 30px;
+}
+
+.left-panel, .right-panel {
+    width: 50%;
+    background: #f8fafc;
+    border-radius: 16px;
+    padding: 20px;
+    border: 1px solid #e2e8f0;
+}
+
+.left-panel h2, .right-panel h2 {
+    font-size: 1.3rem;
+    margin-bottom: 20px;
+    color: #34495e;
+    text-align: center;
+    border-bottom: 2px solid #e2e8f0;
+    padding-bottom: 10px;
+}
+
+/* DROPZONE ALANLARI */
+.dropzone {
+    background: #ffffff;
+    border: 2px dashed #b8c2cc;
+    border-radius: 16px;
+    padding: 10px 15px;
+    margin-bottom: 15px;
+    min-height: 90px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    position: relative;
+    transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+    box-shadow: 0 2px 5px rgba(0,0,0,0.02);
+}
+
+.dropzone .label {
+    font-weight: 600;
+    font-size: 0.95rem;
+    color: #2e3d49;
+    margin-bottom: 5px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.dropzone.hover {
+    background: #eef2ff;
+    border-color: #4a00e0;
+    transform: translateY(-2px);
+}
+
+/* SÜREKLENEBİLİR KARTLAR */
+.drag {
+    background: #ffffff;
+    color: #334155;
+    padding: 10px 12px;
+    border-radius: 12px;
+    margin-bottom: 12px;
+    cursor: grab;
+    font-weight: 500;
+    font-size: 0.88rem;
+    border: 2px solid #e2e8f0;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+    transition: all 0.25s ease;
+    user-select: none;
+}
+
+.drag:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 6px 12px rgba(74, 0, 224, 0.15);
+    border-color: #a5b4fc;
+    background: #fafafa;
+}
+
+.drag:active {
+    cursor: grabbing;
+}
+
+.drag.dragging {
+    opacity: 0.4;
+    transform: scale(0.98);
+    border-color: #4a00e0;
+}
+
+/* Dropzone içine yerleşen kart özelleştirmesi */
+.dropzone .drag {
+    margin: 5px 0 0 0;
+    box-shadow: none;
+    border: 1px solid #cbd5e1;
+    background: #f1f5f9;
+}
+
+/* Sağ panele geri sürükleme için genel alan hover efekti */
+.right-panel.hover {
+    background: #f0fdf4;
+    border-color: #22c55e;
+}
+
+/* DOĞRU / YANLIŞ DURUM RENKLERİ */
+.dropzone.correct-match {
+    border-color: #22c55e;
+    background: #f0fdf4;
+}
+.dropzone.correct-match .drag {
+    background: #22c55e;
+    color: white;
+    border-color: #16a34a;
+}
+
+.dropzone.wrong-match {
+    border-color: #ef4444;
+    background: #fef2f2;
+}
+.dropzone.wrong-match .drag {
+    background: #ef4444;
+    color: white;
+    border-color: #dc2626;
+}
+
+/* KONTROL BUTONLARI VE SONUÇ EKRANI */
+.footer-controls {
+    margin-top: 20px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 12px;
+}
+
+.buttons {
+    display: flex;
+    justify-content: center;
+    gap: 20px;
+    width: 100%;
+}
+
+button {
+    padding: 10px 22px;
+    font-size: 0.9rem;
+    font-weight: 600;
+    font-family: "Poppins", sans-serif;
+    border-radius: 12px;
+    border: none;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+}
+
+#check {
+    background: linear-gradient(135deg, #11998e 0%, #38ef7d 100%);
+    color: white;
+}
+#check:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 15px rgba(56, 239, 125, 0.4);
+}
+
+#restart {
+    background: linear-gradient(135deg, #4a00e0 0%, #8e2de2 100%);
+    color: white;
+}
+#restart:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 15px rgba(142, 45, 226, 0.4);
+}
+
+button:active {
+    transform: translateY(1px);
+}
+
+.result-box {
+    width: 100%;
+    max-width: 600px;
+    padding: 15px;
+    border-radius: 12px;
+    text-align: center;
+    font-size: 1.1rem;
+    font-weight: 600;
+    animation: fadeInUp 0.4s ease-out;
+}
+
+.result-box.success {
+    background-color: #d1fae5;
+    color: #065f46;
+    border: 2px solid #34d399;
+}
+
+.result-box.warning {
+    background-color: #fee2e2;
+    color: #991b1b;
+    border: 2px solid #fca5a5;
+}
+
+.hidden {
+    display: none;
+}
+
+@keyframes fadeInUp {
+    from { opacity: 0; transform: translateY(10px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+/* MOBİL VE TABLET UYUMLULUĞU (RESPONSIVE) */
+@media (max-width: 850px) {
+    .container {
+        flex-direction: column;
+    }
+    .left-panel, .right-panel {
+        width: 100%;
+    }
+    header h1 {
+        font-size: 1.8rem;
+    }
+    .buttons {
+        flex-direction: column;
+        align-items: center;
+        gap: 10px;
+    }
+    button {
+        width: 100%;
+        max-width: 350px;
+    }
+}
+
+/* Sol taraftaki kategorileri 3-3 şeklinde düzenle */
+#dropzones-container {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 15px;
+}
+
+/* 3-3 düzende kutular daha kompakt olsun */
+.dropzone {
+    min-height: 120px;
+    margin-bottom: 0;
+}
+
+/* Dropzone içindeki başlık ve kart düzgün dursun */
+.dropzone .label {
+    margin-bottom: 8px;
+}
+
+/* Sağdaki kartlar da daha rahat sığsın */
+#cards-container {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.drag {
+    margin-bottom: 0;
+}
+
+/* Daha küçük ekranlarda tekrar tek sütuna düşsün */
+@media (max-width: 850px) {
+    #dropzones-container {
+        grid-template-columns: 1fr;
+    }
+}

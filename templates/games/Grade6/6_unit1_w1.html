@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Yenilikçi Bilişim Teknolojileri Eşleştirme Oyunu</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="{{ url_for('static', filename='games/Grade6/6_unit1_w1/style.css') }}">
+</head>
+<body>
+
+    <div class="game-wrapper">
+        <header>
+            <h1>Yenilikçi Bilişim Teknolojileri Eşleştirme Oyunu</h1>
+            <p class="instruction">Teknoloji açıklamalarını doğru yenilikçi bilişim teknolojisiyle eşleştir.</p>
+        </header>
+
+        <div class="container">
+            <div class="left-panel">
+                <h2>Kavramlar / Kategoriler</h2>
+                <div id="dropzones-container">
+                    </div>
+            </div>
+
+            <div class="right-panel">
+                <h2>Açıklamalar</h2>
+                <div id="cards-container">
+                    </div>
+            </div>
+        </div>
+
+        <div class="footer-controls">
+            <div class="buttons">
+                <button id="check">Cevapları Kontrol Et</button>
+                <button id="restart">Yeniden Oyna (Yeni Sorular)</button>
+            </div>
+            <div id="result-box" class="result-box hidden">
+                <p id="result-text"></p>
+            </div>
+        </div>
+    </div>
+
+<script src="{{ url_for('static', filename='games/Grade6/6_unit1_w1/script.js') }}"></script>
+</body>
+</html>

@@ -437,19 +437,19 @@ button {
     <div class="cardContainer">
 
         <div class="charCard orange" onclick="startGame('diego')">
-            <img src="{{ url_for('static', filename='games/5_unit5_w2/images/diego.png') }}" alt="Kılıç Diş">
+            <img src="{{ url_for('static', filename='games/Grade5/5_unit5_w2/images/diego.png') }}" alt="Kılıç Diş">
             <h2>KILIÇ DİŞ</h2>
             <p>Hızlı ve çevik bir avcı.<br>Biraz daha hızlı hareket eder.</p>
         </div>
 
         <div class="charCard yellow" onclick="startGame('manny')">
-            <img src="{{ url_for('static', filename='games/5_unit5_w2/images/manny.png') }}" alt="Mamut">
+            <img src="{{ url_for('static', filename='games/Grade5/5_unit5_w2/images/manny.png') }}" alt="Mamut">
             <h2>MAMUT</h2>
             <p>Güçlü ve dayanıklı.<br>Daha fazla cana sahiptir.</p>
         </div>
 
         <div class="charCard green" onclick="startGame('sid')">
-            <img src="{{ url_for('static', filename='games/5_unit5_w2/images/sid.png') }}" alt="Sid">
+            <img src="{{ url_for('static', filename='games/Grade5/5_unit5_w2/images/sid.png') }}" alt="Sid">
             <h2>SID</h2>
             <p>Dengeli ve akıllı.<br>Sorularda daha fazla puan kazanır.</p>
         </div>
@@ -503,7 +503,7 @@ button {
             <h3>HEDEF</h3>
 
             <div class="goalContent">
-                <img src="{{ url_for('static', filename='games/5_unit5_w2/images/door.png') }}" class="goalIcon" alt="Kapı">
+                <img src="{{ url_for('static', filename='games/Grade5/5_unit5_w2/images/door.png') }}" class="goalIcon" alt="Kapı">
                 <p id="quest">Kapıyı açmak için 10 kristali topla!</p>
             </div>
 
@@ -519,7 +519,7 @@ button {
 
             <h3 class="eventTitle">OLAY!</h3>
 
-            <img src="{{ url_for('static', filename='games/5_unit5_w2/images/robot.png') }}" class="robotImg" alt="Robot">
+            <img src="{{ url_for('static', filename='games/Grade5/5_unit5_w2/images/robot.png') }}" class="robotImg" alt="Robot">
 
             <div class="eventTextBox">
                 <p id="story">Macera başlıyor...</p>
@@ -610,18 +610,18 @@ const TILE = 48;
 const TOTAL_CRYSTALS = 10;
 
 const wallImg = new Image();
-wallImg.src = "{{ url_for('static', filename='games/5_unit5_w2/images/wall.png') }}";
+wallImg.src = "{{ url_for('static', filename='games/Grade5/5_unit5_w2/images/wall.png') }}";
 
 const doorImg = new Image();
-doorImg.src = "{{ url_for('static', filename='games/5_unit5_w2/images/door.png') }}";
+doorImg.src = "{{ url_for('static', filename='games/Grade5/5_unit5_w2/images/door.png') }}";
 
 const crystalImg = new Image();
-crystalImg.src = "{{ url_for('static', filename='games/5_unit5_w2/images/diamond.png') }}";
+crystalImg.src = "{{ url_for('static', filename='games/Grade5/5_unit5_w2/images/diamond.png') }}";
 
 const playerImg = new Image();
 
 const enemyImg = new Image();
-enemyImg.src = "{{ url_for('static', filename='games/5_unit5_w2/images/robot.png') }}";
+enemyImg.src = "{{ url_for('static', filename='games/Grade5/5_unit5_w2/images/robot.png') }}";
 
 let loadedImages = 0;
 const totalImages = 5;
@@ -1057,16 +1057,16 @@ function startGame(char) {
     validateCrystalSetup();
 
     if (char === "diego") {
-        playerImg.src = "{{ url_for('static', filename='games/5_unit5_w2/images/diego.png') }}";
+        playerImg.src = "{{ url_for('static', filename='games/Grade5/5_unit5_w2/images/diego.png') }}";
         document.getElementById("story").innerText = "Kılıç Diş seçildi! Labirentten kaçmaya hazırsın.";
     } 
     else if (char === "manny") {
-        playerImg.src = "{{ url_for('static', filename='games/5_unit5_w2/images/manny.png') }}";
+        playerImg.src = "{{ url_for('static', filename='games/Grade5/5_unit5_w2/images/manny.png') }}";
         hp = 5;
         document.getElementById("story").innerText = "Mamut seçildi! Daha fazla canın var.";
     } 
     else if (char === "sid") {
-        playerImg.src = "{{ url_for('static', filename='games/5_unit5_w2/images/sid.png') }}";
+        playerImg.src = "{{ url_for('static', filename='games/Grade5/5_unit5_w2/images/sid.png') }}";
         document.getElementById("story").innerText = "Sid seçildi! Sorulardan daha fazla puan kazanırsın.";
     }
 

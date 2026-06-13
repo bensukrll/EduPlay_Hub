@@ -92,7 +92,7 @@
 </div>
 
 <!-- GERİ DÖN + HAFTA SEÇ AÇIKLAMA KARTI -->
-{% set target_url = url_for('ilkokul') if level == 'ilkokul' else url_for('ortaokul') if level == 'ortaokul' else url_for('home') %}
+{% set target_url = url_for('ilkokul') if level == '5' else url_for('ortaokul') if level == '6' else url_for('home') %}
 
 {% if unit %}
 <div class="map-task-card">

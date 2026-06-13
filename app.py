@@ -358,8 +358,8 @@ def play(game_id):
         return "Oyun bulunamadı", 404
 
     parts = game_id.split("_")
-    level = parts[0]      # ilkokul / ortaokul
-    unit = parts[1]       # unit1 / unit2 / unit3
+    level = parts[0]      
+    unit = parts[1]       
 
     return render_template(
         "game.html",
@@ -372,11 +372,18 @@ def play(game_id):
 
 @app.route("/embed/<game_id>")
 def embed(game_id):
+    # GAME_INFO’dan oyun bilgisini al
     game = GAME_INFO.get(game_id)
     if not game:
         return "Oyun bulunamadı", 404
+
     template_name = game.get("template", game_id)
-    return render_template(f"games/{template_name}.html")
+
+    # game_id'den grade bilgisi al
+    grade = game_id.split("_")[0]  # "5" veya "6"
+
+    # Flask template path: Grade klasörü kullanılıyor
+    return render_template(f"games/Grade{grade}/{template_name}.html")
 
 
 @app.route("/about")
