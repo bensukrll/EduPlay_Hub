@@ -1,0 +1,278 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>İnternet Görev Tetrisi</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0;font-family:"Segoe UI",sans-serif}
+body{min-height:100vh;background:linear-gradient(135deg,#253156,#4d6bb3,#cad1e2);display:flex;justify-content:center;align-items:center;padding:20px;color:#253156}
+.game-wrapper{width:1120px;max-width:100%;background:#fff;border-radius:28px;padding:24px;box-shadow:0 18px 45px rgba(0,0,0,.25)}
+header{text-align:center;margin-bottom:18px}
+header h1{font-size:34px}
+header p{margin-top:8px;color:#52607c}
+.info-bar{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-bottom:16px}
+.info-card{background:#f1f4fb;padding:12px;border-radius:16px;text-align:center;font-weight:800}
+.main-area{display:grid;grid-template-columns:1fr 285px;gap:18px}
+.game-board{position:relative;height:560px;background:linear-gradient(180deg,#eef3ff,#fff);border:4px solid #253156;border-radius:24px;overflow:hidden}
+.columns{position:absolute;inset:0;display:grid;grid-template-columns:repeat(5,1fr)}
+.column{border-right:2px dashed rgba(37,49,86,.25);display:flex;align-items:flex-end;justify-content:center;padding:12px}
+.column:last-child{border-right:none}
+.column-label{width:95%;min-height:72px;border-radius:16px;background:#253156;color:white;display:flex;align-items:center;justify-content:center;text-align:center;padding:8px;font-size:14px;font-weight:900}
+.falling-card{position:absolute;width:19%;min-height:128px;background:white;border:4px solid #4d6bb3;border-radius:20px;box-shadow:0 12px 22px rgba(0,0,0,.22);padding:10px;text-align:center;transition:left .12s linear;z-index:5}
+.card-image{width:62px;height:62px;object-fit:contain;margin:0 auto 7px;display:block}
+.type{font-size:12px;font-weight:900;color:#4d6bb3;margin-bottom:6px}
+.text{font-size:14px;font-weight:900}
+.side-panel{background:#f7f9ff;border-radius:24px;padding:18px;border:2px solid #dce3f4}
+.instructions{font-size:14px;line-height:1.55;color:#4d5875;margin:12px 0 16px}
+.feedback{min-height:110px;background:white;border-radius:16px;padding:14px;font-weight:800;border:2px solid #dce3f4;margin-bottom:14px;line-height:1.45}
+button{width:100%;border:none;background:#253156;color:white;padding:13px;border-radius:16px;font-weight:900;cursor:pointer;margin-top:10px;font-size:15px}
+button:hover{background:#4d6bb3}
+.pause-button{background:#f4a261}
+.category-list{margin-top:16px;font-size:13px;line-height:1.5;color:#52607c}
+.overlay{position:absolute;inset:0;background:rgba(37,49,86,.94);color:white;z-index:20;display:flex;align-items:center;justify-content:center;text-align:center;padding:30px}
+.overlay-content{max-width:580px}
+.overlay h2{font-size:34px;margin-bottom:14px}
+.overlay p{line-height:1.6;margin-bottom:14px}
+.hidden{display:none}
+@media(max-width:850px){.main-area{grid-template-columns:1fr}.info-bar{grid-template-columns:repeat(2,1fr)}.column-label{font-size:11px}.text{font-size:12px}}
+</style>
+</head>
+<body>
+
+<div class="game-wrapper">
+<header>
+<h1>📡 İnternet Görev Tetrisi</h1>
+<p>Kartları doğru kategoriye yerleştir!</p>
+</header>
+
+<div class="info-bar">
+<div class="info-card">⭐ Puan: <span id="score">0</span></div>
+<div class="info-card">❤️ Can: <span id="lives">5</span></div>
+<div class="info-card">🚀 Seviye: <span id="level">1</span></div>
+<div class="info-card">✅ Doğru: <span id="correct">0</span></div>
+</div>
+
+<div class="main-area">
+<div class="game-board">
+<div class="columns">
+<div class="column"><div class="column-label">🔍 Arama Motorları</div></div>
+<div class="column"><div class="column-label">⚡ Eş Zamanlı İletişim</div></div>
+<div class="column"><div class="column-label">📧 Eş Zamansız İletişim</div></div>
+<div class="column"><div class="column-label">🚀 Yeni İnternet Teknolojileri</div></div>
+<div class="column"><div class="column-label">✉️ E-posta Kullanımı</div></div>
+</div>
+
+<div id="fallingCard" class="falling-card hidden">
+<img id="cardImage" class="card-image" alt="Kart görseli">
+<div class="type" id="cardType"></div>
+<div class="text" id="cardText"></div>
+</div>
+
+<div class="overlay" id="startOverlay">
+<div class="overlay-content">
+<h2>Hazır mısın? 🎮</h2>
+<p>Sağ-sol ok tuşlarıyla kartı hareket ettir. Doğru sütuna gelince <b>boşluk</b> veya <b>aşağı ok</b> tuşuna bas.</p>
+<p>Bu sürümde görseller oyunun içine gömülüdür; kaybolmaz ve internet gerektirmez.</p>
+<button onclick="startGame()">Oyuna Başla</button>
+</div>
+</div>
+</div>
+
+<div class="side-panel">
+<h2>🎯 Görev</h2>
+<div class="instructions">Düşen kartı doğru sütuna indir. Kart; araç, senaryo veya e-posta bileşeni olabilir.</div>
+<div class="feedback" id="feedback">Oyun başladığında ilk kart burada değerlendirilecek.</div>
+<button onclick="dropCard()">⬇️ Kartı Bırak</button>
+<button onclick="togglePause()" id="pauseBtn" class="pause-button">⏸️ Durdur</button>
+<button onclick="restartGame()">🔄 Yeniden Başlat</button>
+<div class="category-list">
+<b>Kategoriler:</b><br>
+🔍 Arama Motorları<br>
+⚡ Eş Zamanlı İletişim<br>
+📧 Eş Zamansız İletişim<br>
+🚀 Yeni İnternet Teknolojileri<br>
+✉️ E-posta Kullanımı
+</div>
+</div>
+</div>
+</div>
+
+<script>
+function svg(bg, emoji, label){
+  return "data:image/svg+xml;charset=UTF-8," + encodeURIComponent(`
+  <svg xmlns="http://www.w3.org/2000/svg" width="120" height="120" viewBox="0 0 120 120">
+    <rect width="120" height="120" rx="26" fill="${bg}"/>
+    <circle cx="60" cy="48" r="30" fill="white" opacity="0.92"/>
+    <text x="60" y="60" text-anchor="middle" font-size="42" font-family="Arial">${emoji}</text>
+    <text x="60" y="98" text-anchor="middle" font-size="13" font-weight="700" font-family="Arial" fill="white">${label}</text>
+  </svg>`);
+}
+
+const img = {
+search: svg("#4d6bb3","🔍","ARAMA"),
+video: svg("#2a9d8f","🎥","CANLI"),
+mail: svg("#e76f51","📧","POSTA"),
+cloud: svg("#457b9d","☁️","BULUT"),
+ai: svg("#7b2cbf","🤖","YAPAY ZEKA"),
+doc: svg("#3a86ff","📝","BELGE"),
+calendar: svg("#ff9f1c","📅","TAKVİM"),
+translate: svg("#00afb9","🌐","ÇEVİRİ"),
+phone: svg("#06d6a0","☎️","TELEFON"),
+chat: svg("#118ab2","💬","SOHBET"),
+forum: svg("#6c757d","🗨️","FORUM"),
+attach: svg("#8338ec","📎","EK"),
+person: svg("#fb5607","👤","ALICI"),
+subject: svg("#ff006e","✏️","KONU"),
+send: svg("#06d6a0","➤","GÖNDER"),
+cc: svg("#3d5a80","👥","CC")
+};
+
+const categories=[
+"Arama Motorları",
+"Eş Zamanlı İletişim",
+"Eş Zamansız İletişim",
+"Yeni İnternet Teknolojileri",
+"E-posta Kullanımı"
+];
+
+const questionPool=[
+{type:"Araç",text:"Google",answer:0,image:img.search,feedback:"Google bilgi aramak için kullanılan bir arama motorudur."},
+{type:"Araç",text:"Bing",answer:0,image:img.search,feedback:"Bing internette bilgi aramak için kullanılan bir arama motorudur."},
+{type:"Araç",text:"Yandex",answer:0,image:img.search,feedback:"Yandex web araması yapmak için kullanılan bir arama motorudur."},
+{type:"Araç",text:"DuckDuckGo",answer:0,image:img.search,feedback:"DuckDuckGo gizliliğe önem veren bir arama motorudur."},
+{type:"Senaryo",text:"Ödevin için güvenilir kaynaklar bulmak istiyorsun.",answer:0,image:img.search,feedback:"Bu durumda uygun anahtar kelimelerle arama motoru kullanılır."},
+
+{type:"Araç",text:"Zoom",answer:1,image:img.video,feedback:"Zoom aynı anda görüntülü görüşme yapılmasını sağlar."},
+{type:"Araç",text:"Google Meet",answer:1,image:img.video,feedback:"Google Meet eş zamanlı görüntülü iletişim aracıdır."},
+{type:"Araç",text:"Teams Toplantısı",answer:1,image:img.video,feedback:"Teams toplantıları eş zamanlı iletişim sağlar."},
+{type:"Araç",text:"Telefon Görüşmesi",answer:1,image:img.phone,feedback:"Telefon görüşmesi anlık yani eş zamanlı iletişimdir."},
+{type:"Araç",text:"Canlı Sohbet",answer:1,image:img.chat,feedback:"Canlı sohbet kişilerin aynı anda iletişim kurmasını sağlar."},
+{type:"Senaryo",text:"Öğretmeninle canlı ders yapacaksın.",answer:1,image:img.video,feedback:"Canlı ders eş zamanlı iletişim teknolojileriyle yapılır."},
+
+{type:"Araç",text:"Gmail",answer:2,image:img.mail,feedback:"Gmail e-posta göndermek için kullanılan eş zamansız iletişim aracıdır."},
+{type:"Araç",text:"Outlook",answer:2,image:img.mail,feedback:"Outlook e-posta göndermek için kullanılan eş zamansız iletişim aracıdır."},
+{type:"Araç",text:"Forum Mesajı",answer:2,image:img.forum,feedback:"Forum mesajları daha sonra okunup cevaplanabildiği için eş zamansızdır."},
+{type:"Araç",text:"Blog Yorumu",answer:2,image:img.forum,feedback:"Blog yorumları daha sonra okunup cevaplanabilir."},
+{type:"Senaryo",text:"Öğretmenine ödevini daha sonra okuması için göndereceksin.",answer:2,image:img.mail,feedback:"Bu durumda e-posta gibi eş zamansız iletişim uygundur."},
+
+{type:"Araç",text:"Bulut Depolama",answer:3,image:img.cloud,feedback:"Bulut depolama dosyalara farklı cihazlardan erişmeyi sağlar."},
+{type:"Araç",text:"Yapay Zekâ Asistanı",answer:3,image:img.ai,feedback:"Yapay zekâ asistanları yeni internet teknolojilerindendir."},
+{type:"Araç",text:"Ortak Belge Düzenleme",answer:3,image:img.doc,feedback:"Ortak belge düzenleme verimliliği artıran yeni internet teknolojilerindendir."},
+{type:"Araç",text:"Çevrim İçi Takvim",answer:3,image:img.calendar,feedback:"Çevrim içi takvim zaman yönetimini kolaylaştırır."},
+{type:"Araç",text:"Otomatik Çeviri Aracı",answer:3,image:img.translate,feedback:"Otomatik çeviri araçları verimliliği artırır."},
+{type:"Senaryo",text:"Dosyalarına okuldan ve evden ulaşmak istiyorsun.",answer:3,image:img.cloud,feedback:"Bulut depolama bu amaç için verimli bir teknolojidir."},
+
+{type:"E-posta",text:"Alıcı",answer:4,image:img.person,feedback:"Alıcı e-postanın gönderileceği kişidir."},
+{type:"E-posta",text:"Konu Başlığı",answer:4,image:img.subject,feedback:"Konu başlığı e-postanın ne hakkında olduğunu gösterir."},
+{type:"E-posta",text:"Ek Dosya",answer:4,image:img.attach,feedback:"Ek dosya e-postaya belge veya görsel eklemek için kullanılır."},
+{type:"E-posta",text:"CC",answer:4,image:img.cc,feedback:"CC e-postanın bilgi amaçlı başka kişilere de gönderilmesini sağlar."},
+{type:"E-posta",text:"BCC",answer:4,image:img.cc,feedback:"BCC alıcıları gizleyerek e-posta göndermeyi sağlar."},
+{type:"E-posta",text:"Gönder Butonu",answer:4,image:img.send,feedback:"E-postayı karşı tarafa ulaştırmak için gönder butonu kullanılır."},
+{type:"Senaryo",text:"Ödev dosyanı e-postaya ekleyerek göndereceksin.",answer:4,image:img.attach,feedback:"Bu işlem e-posta kullanımında ek dosya ile yapılır."}
+];
+
+let score=0,lives=5,correct=0,level=1,currentColumn=2,currentQuestion=null,topPosition=0,fallSpeed=1.2,gameInterval=null,gameActive=false,isPaused=false;
+
+const card=document.getElementById("fallingCard");
+const cardType=document.getElementById("cardType");
+const cardText=document.getElementById("cardText");
+const cardImage=document.getElementById("cardImage");
+const feedbackBox=document.getElementById("feedback");
+const pauseBtn=document.getElementById("pauseBtn");
+
+function startGame(){
+document.getElementById("startOverlay").classList.add("hidden");
+gameActive=true;isPaused=false;resetStats();pauseBtn.textContent="⏸️ Durdur";spawnCard();
+clearInterval(gameInterval);gameInterval=setInterval(updateGame,20);
+}
+
+function resetStats(){score=0;lives=5;correct=0;level=1;fallSpeed=1.2;updateUI()}
+
+function restartGame(){
+clearInterval(gameInterval);
+document.getElementById("startOverlay").classList.add("hidden");
+gameActive=true;isPaused=false;resetStats();pauseBtn.textContent="⏸️ Durdur";
+feedbackBox.innerHTML="Yeni oyun başladı! Kartı doğru kategoriye indir.";
+spawnCard();gameInterval=setInterval(updateGame,20);
+}
+
+function spawnCard(){
+currentQuestion=questionPool[Math.floor(Math.random()*questionPool.length)];
+currentColumn=2;topPosition=5;
+cardType.textContent=currentQuestion.type;
+cardText.textContent=currentQuestion.text;
+cardImage.src=currentQuestion.image;
+card.classList.remove("hidden");
+updateCardPosition();
+}
+
+function updateCardPosition(){
+card.style.left=`calc(${currentColumn*20}% + 0.5%)`;
+card.style.top=topPosition+"px";
+}
+
+function updateGame(){
+if(!gameActive||isPaused)return;
+topPosition+=fallSpeed;
+updateCardPosition();
+if(topPosition>390)dropCard();
+}
+
+function dropCard(){
+if(!gameActive||!currentQuestion||isPaused)return;
+
+if(currentColumn===currentQuestion.answer){
+score+=10;correct++;
+feedbackBox.innerHTML=`✅ Doğru!<br>${currentQuestion.feedback}`;
+}else{
+lives--;
+feedbackBox.innerHTML=`❌ Yanlış kategori.<br>Doğru cevap: <b>${categories[currentQuestion.answer]}</b><br>${currentQuestion.feedback}`;
+}
+
+if(correct>0&&correct%6===0){
+level++;fallSpeed+=0.35;
+feedbackBox.innerHTML+="<br><br>🚀 Seviye yükseldi! Kartlar biraz daha hızlı düşecek.";
+}
+
+updateUI();
+if(lives<=0){endGame();return}
+spawnCard();
+}
+
+function togglePause(){
+if(!gameActive)return;
+isPaused=!isPaused;
+pauseBtn.textContent=isPaused?"▶️ Devam Et":"⏸️ Durdur";
+feedbackBox.innerHTML=isPaused?"⏸️ Oyun durduruldu. Devam etmek için butona tekrar bas.":"▶️ Oyun devam ediyor. Kartı doğru kategoriye yerleştir!";
+}
+
+function updateUI(){
+document.getElementById("score").textContent=score;
+document.getElementById("lives").textContent=lives;
+document.getElementById("correct").textContent=correct;
+document.getElementById("level").textContent=level;
+}
+
+function endGame(){
+gameActive=false;isPaused=false;clearInterval(gameInterval);card.classList.add("hidden");
+document.getElementById("startOverlay").classList.remove("hidden");
+document.getElementById("startOverlay").innerHTML=`
+<div class="overlay-content">
+<h2>Oyun Bitti 🎯</h2>
+<p><b>Puanın:</b> ${score}</p>
+<p><b>Doğru sayın:</b> ${correct}</p>
+<p>Arama motorlarını, iletişim araçlarını, yeni internet teknolojilerini ve e-posta bileşenlerini sınıflandırma görevi tamamlandı.</p>
+<button onclick="restartGame()">Tekrar Oyna</button>
+</div>`;
+}
+
+document.addEventListener("keydown",e=>{
+if(!gameActive||isPaused)return;
+if(e.key==="ArrowLeft"&&currentColumn>0){currentColumn--;updateCardPosition()}
+if(e.key==="ArrowRight"&&currentColumn<4){currentColumn++;updateCardPosition()}
+if(e.key==="ArrowDown"||e.key===" ")dropCard();
+});
+</script>
+</body>
+</html>

@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Bilişim Etiği Güvenlik Labirenti</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='games/Grade6/6_unit4_w1/style.css') }}">
+</head>
+<body>
+
+<div class="game-wrapper">
+  <div id="game-container">
+
+    <div id="hud">
+      <div class="hud-item">
+        <div id="lives-container">
+          <span class="heart">❤️</span>
+          <span class="heart">❤️</span>
+          <span class="heart">❤️</span>
+        </div>
+      </div>
+      <div class="hud-item">PUAN: <span id="score">0</span></div>
+      <div class="hud-item">SORU: <span id="level">1</span>/8</div>
+    </div>
+
+    <div id="objective-banner">
+      🛡️ Güvenlik Risklerini Tanı, Önlemi Seç, Dijital Etiği Koru!
+    </div>
+
+    <div id="question-panel">
+      <h3 id="question-text">Soru yükleniyor...</h3>
+      <p id="category-text">Kategori yükleniyor...</p>
+    </div>
+
+    <div id="feedback-panel" class="hidden">
+      <strong id="feedback-title"></strong>
+      <span id="feedback-text"></span>
+    </div>
+
+    <div id="main-area">
+
+      <div id="canvas-wrapper">
+        <canvas id="gameCanvas" width="800" height="480"></canvas>
+
+        <div id="answers-overlay">
+          <button id="btn-answer-0" class="spaceship-answer"></button>
+          <button id="btn-answer-1" class="spaceship-answer"></button>
+          <button id="btn-answer-2" class="spaceship-answer"></button>
+        </div>
+      </div>
+
+      <div id="side-info-panel">
+        <div class="info-box">
+          <div class="icon">🕹️</div>
+          <div class="text">
+            <strong>HAREKET ET</strong>
+            <span>Yön tuşlarını kullan</span>
+          </div>
+        </div>
+
+        <div class="info-box">
+          <div class="icon">🛡️</div>
+          <div class="text">
+            <strong>GÖREVİN</strong>
+            <span>Doğru cevaba git veya tıkla</span>
+          </div>
+        </div>
+
+        <div class="mini-hint">
+          👾 Canavara dikkat! Yanlış cevapta can gitmez.
+        </div>
+      </div>
+
+    </div>
+
+    <div id="game-over-screen" class="hidden">
+      <h1 id="game-over-title">OYUN BİTTİ</h1>
+      <p id="final-score">PUAN: 0</p>
+      <p id="final-message"></p>
+      <button onclick="location.reload()">TEKRAR OYNA</button>
+    </div>
+
+  </div>
+</div>
+
+<script src="{{ url_for('static', filename='games/Grade6/6_unit4_w1/script.js') }}"></script>
+</body>
+</html>

@@ -277,6 +277,32 @@ LEVELS_AND_UNITS = {
     '6': ['unit1', 'unit2', 'unit3', 'unit4', 'unit5', 'unit6']
 }
 
+def get_how_to_play_from_json(game_id):
+    parts = game_id.split("_")
+
+    if len(parts) < 3:
+        return ""
+
+    level = parts[0]
+    unit = parts[1]
+
+    try:
+        with app.open_resource("static/game_data.json", mode="r", encoding="utf-8") as f:
+            data = json.load(f)
+
+        return (
+            data
+            .get(level, {})
+            .get(unit, {})
+            .get("games", {})
+            .get(game_id, {})
+            .get("howToPlay", "")
+        )
+
+    except Exception as e:
+        print("howToPlay okunamadı:", e)
+        return ""
+
 # Database Connection
 db_pool = SimpleConnectionPool(
     minconn=1,
@@ -358,8 +384,10 @@ def play(game_id):
         return "Oyun bulunamadı", 404
 
     parts = game_id.split("_")
-    level = parts[0]      
-    unit = parts[1]       
+    level = parts[0]
+    unit = parts[1]
+
+    how_to_play = get_how_to_play_from_json(game_id)
 
     return render_template(
         "game.html",
@@ -367,7 +395,8 @@ def play(game_id):
         game_id=game_id,
         source=source,
         level=level,
-        unit=unit
+        unit=unit,
+        how_to_play=how_to_play
     )
 
 @app.route("/embed/<game_id>")

@@ -1,0 +1,1209 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+<meta charset="UTF-8" />
+<title>Quiz Fight</title>
+
+<style>
+  * { box-sizing: border-box; }
+
+    html,
+    body {
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+    }
+
+    body {
+    margin: 0;
+    min-height: 0;
+    background: #111;
+    font-family: Impact, Arial, sans-serif;
+    color: white;
+    text-align: center;
+    }
+
+    .screen { 
+    display: none; 
+    width: 100%;
+    height: 100%;
+    padding: 12px;
+    overflow: hidden;
+    }
+  .active { display: block; }
+
+  button {
+    cursor: pointer;
+    border: none;
+    border-radius: 8px;
+    padding: 12px 22px;
+    font-size: 16px;
+    font-weight: bold;
+  }
+
+    #selectScreen {
+    height: 100%;
+    min-height: 0;
+    background: radial-gradient(circle, #26325f, #090b18);
+    overflow: hidden;
+    }
+
+  .title {
+    font-size: 38px;
+    color: #ffe600;
+    text-shadow: 4px 4px #d40000;
+    margin-bottom: 10px;
+  }
+
+  .character-card {
+    display: inline-block;
+    width: 270px;
+    min-height: 400px;
+    margin: 10px 16px;
+    padding: 12px;
+    background: #1c1c1c;
+    border: 5px solid #ffe600;
+    box-shadow: 8px 8px 0 #000;
+  }
+
+  .character-avatar {
+    width: 120px;
+    height: 170px;
+    margin: 0 auto 8px;
+    object-fit: contain;
+    image-rendering: pixelated;
+    filter: drop-shadow(4px 4px 0 #000);
+  }
+
+  .select-btn {
+    background: #ff2d2d;
+    color: white;
+    box-shadow: 4px 4px 0 #000;
+  }
+
+  #gameScreen {
+    padding: 0;
+    background: #050505;
+  }
+
+  .game-wrapper {
+    width: 100%;
+    height: 100%;
+    margin: 0 auto;
+    position: relative;
+    border: 6px solid #f5f5f5;
+    box-shadow: 0 0 25px #000;
+    overflow: hidden;
+    background: #222;
+
+}
+
+  .arena-bg {
+    position: absolute;
+    inset: 0;
+    background:
+      linear-gradient(rgba(255, 140, 0, 0.2), rgba(0, 0, 0, 0.45)),
+      radial-gradient(circle at 25% 65%, #ffb347 0%, transparent 18%),
+      linear-gradient(90deg, #5b3b1c, #25334d, #111827);
+  }
+
+  .arena-bg::before {
+    content: "";
+    position: absolute;
+    inset: 90px 0 80px;
+    background:
+      repeating-linear-gradient(
+        90deg,
+        rgba(255,255,255,0.12) 0 10px,
+        transparent 10px 85px
+      );
+    opacity: 0.55;
+  }
+
+  .arena-bg::after {
+    content: "";
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    height: 120px;
+    background:
+      repeating-linear-gradient(
+        45deg,
+        #b85c00 0 20px,
+        #f7c948 20px 40px
+      );
+    opacity: 0.75;
+    border-top: 5px solid #e6c75a;
+  }
+
+  .top-hud {
+    position: absolute;
+    top: 8px;
+    left: 10px;
+    right: 10px;
+    height: 92px;
+    z-index: 5;
+  }
+
+  .score {
+    position: absolute;
+    top: -4px;
+    left: 50%;
+    transform: translateX(-50%);
+    color: #35fff6;
+    font-size: 26px;
+    letter-spacing: 2px;
+    text-shadow: 2px 2px #000;
+  }
+
+  .timer {
+    position: absolute;
+    top: 20px;
+    left: 50%;
+    transform: translateX(-50%);
+    font-size: 64px;
+    color: #fff238;
+    text-shadow: 4px 4px #9c0000;
+    z-index: 10;
+  }
+
+  .health-panel {
+    position: absolute;
+    top: 32px;
+    width: 410px;
+  }
+
+  .health-panel.left { left: 0; }
+  .health-panel.right { right: 0; }
+
+  .name-box {
+    height: 28px;
+    background: #222;
+    border: 3px solid white;
+    color: white;
+    font-size: 20px;
+    letter-spacing: 1px;
+    padding: 1px 10px;
+    text-shadow: 2px 2px #000;
+  }
+
+  .health-bar-outer {
+    width: 100%;
+    height: 24px;
+    background: #111;
+    border: 4px solid white;
+    margin-bottom: 4px;
+  }
+
+  .health-bar-inner {
+    height: 100%;
+    width: 100%;
+    background: linear-gradient(90deg, #1eff00, #b6ff00);
+    transition: width 0.25s;
+  }
+
+  .small-life {
+    color: #ff3030;
+    font-size: 22px;
+    text-shadow: 2px 2px #000;
+  }
+
+  .portrait {
+    position: absolute;
+    top: 38px;
+    width: 65px;
+    height: 65px;
+    border: 4px solid white;
+    z-index: 6;
+    background: #111;
+    object-fit: contain;
+    image-rendering: pixelated;
+  }
+
+  .portrait.left { left: 5px; }
+  .portrait.right { right: 5px; transform: scaleX(-1); }
+
+  .player {
+    position: absolute;
+    z-index: 4;
+    transition: transform 0.15s, filter 0.15s;
+  }
+
+  .character-img {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+    image-rendering: pixelated;
+    filter: drop-shadow(5px 5px 0 #000);
+  }
+
+  #player2 .character-img {
+    transform: scaleX(-1);
+  }
+
+  .player-label {
+    position: absolute;
+    top: -28px;
+    left: -10px;
+    width: 180px;
+    font-size: 17px;
+    color: #ffe600;
+    text-shadow: 2px 2px #000;
+  }
+
+  .attack-panel {
+    position: absolute;
+    left: 50%;
+    bottom: 30px; /* tam alt */
+    transform: translateX(-50%);
+    z-index: 8;
+    background: rgba(0,0,0,0.85);
+    border: 3px solid #ffe600;
+    padding: 12px;
+    width: 90%;
+    max-width: 800px;
+}
+
+  .attack-panel h3 {
+    margin: 0 0 8px;
+    color: #ffe600;
+    text-shadow: 2px 2px #000;
+  }
+
+  .attack-panel button {
+    background: #d00000;
+    color: white;
+    margin: 4px 10px;
+    box-shadow: 4px 4px 0 #000;
+  }
+
+  .message {
+    position: absolute;
+    top: 105px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 760px;
+    z-index: 7;
+    font-size: 21px;
+    color: #fff238;
+    text-shadow: 2px 2px #000;
+  }
+
+  .question-box {
+    position: absolute;
+    left: 50%;
+    bottom: 95px;
+    transform: translateX(-50%);
+    width: 760px;
+    z-index: 20;
+    background: rgba(10, 10, 10, 0.95);
+    border: 4px solid #ffe600;
+    padding: 18px;
+    box-shadow: 8px 8px 0 #000;
+  }
+
+  .question-box h3 {
+    margin-top: 0;
+    color: #ffe600;
+  }
+
+  .options button {
+    display: block;
+    width: 90%;
+    margin: 8px auto;
+    background: #0057d9;
+    color: white;
+    box-shadow: 3px 3px 0 #000;
+  }
+
+  .locked-text {
+    color: #ffef63;
+    font-size: 15px;
+    margin-top: 8px;
+  }
+
+  #endScreen {
+    min-height: 100vh;
+    background: radial-gradient(circle, #3a0ca3, #050505);
+  }
+
+  #endTitle {
+    font-size: 60px;
+    color: #ffe600;
+    text-shadow: 4px 4px #d00000;
+  }
+
+  #winnerText { font-size: 34px; }
+
+  .restart-btn {
+    background: #ff2d2d;
+    color: white;
+    box-shadow: 5px 5px 0 #000;
+  }
+  .character-card {
+  transition: transform 0.25s ease, box-shadow 0.25s ease, border-color 0.25s ease;
+}
+
+.character-card:hover {
+  transform: translateY(-12px) scale(1.04);
+  border-color: #ff3b3b;
+  box-shadow: 12px 12px 0 #000, 0 0 25px #ffe600;
+}
+
+.character-card:hover .character-avatar {
+  transform: scale(1.08);
+  filter: drop-shadow(0 0 12px #ffe600);
+}
+
+.character-avatar {
+  transition: transform 0.25s ease, filter 0.25s ease;
+}
+
+.character-card:hover .select-btn {
+  background: #ffe600;
+  color: #111;
+  transform: scale(1.08);
+}
+
+.select-btn {
+  transition: transform 0.25s ease, background 0.25s ease, color 0.25s ease;
+}
+.selection-note {
+  margin: 8px auto 0;
+  padding: 8px 14px;
+  width: fit-content;
+  max-width: 650px;
+  color: #ffffff;
+  font-size: 15px;
+}
+
+@keyframes p1Walk {
+  0% {
+    left: 170px;
+    top: 150px;
+  }
+  50% {
+    left: 195px;
+    top: 150px;
+  }
+  100% {
+    left: 170px;
+    top: 150px;
+  }
+}
+
+@keyframes p2Walk {
+  0% {
+    left: 850px;
+    top: 150px;
+  }
+  50% {
+    left: 825px;
+    top: 150px;
+  }
+  100% {
+    left: 850px;
+    top: 150px;
+  }
+}
+
+#player1 {
+  left: 120px;
+  top: 150px;
+  width: 280px;
+  height: 450px;
+  animation: p1Walk 1.4s infinite ease-in-out;
+}
+
+#player2 {
+  left: 800px;
+  top: 150px;
+  width: 280px;
+  height: 450px;
+  animation: p2Walk 1.4s infinite ease-in-out;
+}
+.rules-btn {
+  position: absolute;
+  top: 25px;
+  left: 25px;
+  background: #ffe600;
+  color: #111;
+  border: 3px solid white;
+  box-shadow: 4px 4px 0 #000;
+  z-index: 50;
+  transition: transform 0.25s ease, background 0.25s ease, color 0.25s ease;
+}
+
+.rules-btn:hover {
+  background: #ff2d2d;
+  color: white;
+  transform: scale(1.08);
+}
+
+.rules-modal {
+  display: none;
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.75);
+  z-index: 999;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+}
+
+.rules-modal.active {
+  display: flex;
+}
+
+.rules-content {
+  width: 650px;
+  max-width: 90vw;
+  background: #1c1c1c;
+  border: 5px solid #ffe600;
+  box-shadow: 10px 10px 0 #000;
+  padding: 30px 38px;
+  color: white;
+  text-align: left;
+  position: relative;
+  animation: rulesPop 0.25s ease;
+}
+
+.rules-content h2 {
+  text-align: center;
+  color: #ffe600;
+  text-shadow: 3px 3px #d40000;
+  margin-top: 0;
+  font-size: 36px;
+}
+
+.rules-content ol {
+  font-family: Arial, sans-serif;
+  font-size: 19px;
+  line-height: 1.7;
+  padding-left: 28px;
+}
+
+.rules-x {
+  position: absolute;
+  top: 10px;
+  right: 12px;
+  width: 38px;
+  height: 38px;
+  padding: 0;
+  border-radius: 50%;
+  background: #ff2d2d;
+  color: white;
+  box-shadow: 3px 3px 0 #000;
+}
+
+.close-rules-btn {
+  display: block;
+  margin: 20px auto 0;
+  background: #ff2d2d;
+  color: white;
+  box-shadow: 4px 4px 0 #000;
+}
+
+@keyframes rulesPop {
+  from {
+    transform: scale(0.8);
+    opacity: 0;
+  }
+
+  to {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
+</style>
+</head>
+
+<body>
+
+<div id="selectScreen" class="screen active">
+  <h1 class="title">QUIZ FIGHT</h1>
+  <h2>KARAKTERLERE KARAR VERİN</h2>
+
+  <button class="rules-btn" onclick="openRules()">Kurallar</button>
+
+  <div class="character-card">
+    <img class="character-avatar" src="{{ url_for('static', filename='games/Grade5/5_unit2_w2/demorgo.png') }}" alt="Demorgo">
+    <h2>Demorgo</h2>
+    <p>👊 Aparkat</p>
+    <p>🦵 Yüksek Tekme</p>
+    <button class="select-btn" onclick="selectCharacter('Demorgo')">Seç</button>
+  </div>
+
+  <div class="character-card">
+    <img class="character-avatar" src="{{ url_for('static', filename='games/Grade5/5_unit2_w2/eleverte.png') }}" alt="Eleverte">
+    <h2>Eleverte</h2>
+    <p>💥 Kafa Atma</p>
+    <p>🦵 Alçak Tekme</p>
+    <button class="select-btn" onclick="selectCharacter('Eleverte')">Seç</button>
+  </div>
+  <div class="selection-note">
+  Not: Sadece 1. oyuncu karakter seçebilir. Diğer karakter otomatik olarak diğer oyuncuya ait olur.
+  <div id="rulesModal" class="rules-modal">
+  <div class="rules-content">
+    <button class="rules-x" onclick="closeRules()">×</button>
+
+    <h2>OYUN KURALLARI</h2>
+
+    <ol>
+      <li>Oyunda iki oyuncu vardır: Oyuncu 1 ve Oyuncu 2.</li>
+      <li>Sadece Oyuncu 1 karakter seçer. Diğer karakter otomatik olarak Oyuncu 2’ye verilir.</li>
+      <li>Oyuna her zaman 1. oyuncu başlar.</li>
+      <li>Oyuncu doğru cevap verirse rakibine saldırır.</li>
+      <li>Oyuncu soruya doğru cevap verirse rakibine saldırır.</li>
+      <li>Oyuncu yanlış cevap verirse hem canı azalır hem de saldırı hakkı rakibe geçer.</li>
+      <li>Canı ilk biten oyuncu oyunu kaybeder.</li>
+      <li>Oyun sonunda kazanan oyuncu K.O. ekranında gösterilir.</li>
+    </ol>
+
+  </div>
+</div>
+</div>
+</div>
+
+<div id="gameScreen" class="screen">
+  <div class="game-wrapper">
+
+    <div class="arena-bg"></div>
+
+    <div class="top-hud">
+      <div class="score">1973704</div>
+      <div class="timer">99</div>
+
+      <img id="p1Portrait" class="portrait left" src="" alt="Player 1">
+      <img id="p2Portrait" class="portrait right" src="" alt="Player 2">
+
+      <div class="health-panel left">
+        <div class="health-bar-outer">
+          <div id="p1HealthBar" class="health-bar-inner"></div>
+        </div>
+        <div class="name-box" id="p1Char">PLAYER 1</div>
+        <div id="p1Lives" class="small-life">● ● ● ● ● ●</div>
+      </div>
+
+      <div class="health-panel right">
+        <div class="health-bar-outer">
+          <div id="p2HealthBar" class="health-bar-inner"></div>
+        </div>
+        <div class="name-box" id="p2Char">PLAYER 2</div>
+        <div id="p2Lives" class="small-life">● ● ● ● ● ●</div>
+      </div>
+    </div>
+
+    <div id="message" class="message"></div>
+
+    <div id="player1" class="player">
+      <div class="player-label" id="p1Name"></div>
+      <img id="p1Image" class="character-img" src="" alt="Player 1">
+    </div>
+
+    <div id="player2" class="player">
+      <div class="player-label" id="p2Name"></div>
+      <img id="p2Image" class="character-img" src="" alt="Player 2">
+    </div>
+
+    <div class="question-box" id="questionBox" style="display:none;">
+      <h3 id="questionText"></h3>
+      <div class="options" id="options"></div>
+      <div class="locked-text">Soru cevaplanmadan oyun ilerlemez.</div>
+    </div>
+
+    <div class="attack-panel">
+      <h3>Sıra: <span id="turnText">Oyuncu 1</span> | Dövüş hareketi seç</h3>
+      <button onclick="chooseAttack(0)" id="attack1"></button>
+      <button onclick="chooseAttack(1)" id="attack2"></button>
+    </div>
+
+  </div>
+</div>
+
+<div id="endScreen" class="screen">
+  <h1 id="endTitle"></h1>
+  <div id="winnerText"></div>
+  <button class="restart-btn" onclick="restartGame()">Tekrar Oyna</button>
+</div>
+
+
+<script>
+  let player1Character = "";
+  let player2Character = "";
+
+  let player1Lives = 6;
+  let player2Lives = 6;
+
+  let currentTurn = 1;
+  let selectedAttack = "";
+  let isQuestionActive = false;
+  let gameOver = false;
+
+    const characterImages = {
+    Demorgo: "{{ url_for('static', filename='games/Grade5/5_unit2_w2/demorgo.png') }}",
+    Eleverte: "{{ url_for('static', filename='games/Grade5/5_unit2_w2/eleverte.png') }}"
+    };
+
+  const characters = {
+    Demorgo: ["Yumruk", "Tekme"],
+    Eleverte: ["Kafa Atma", "Tekme"]
+  };
+  function openRules() {
+  document.getElementById("rulesModal").classList.add("active");
+  }
+
+  function closeRules() {
+    document.getElementById("rulesModal").classList.remove("active");
+  }
+
+  const questionPool = [
+    {
+      question: "Görsel düzenleme programı nedir?",
+      options: [
+        "Sadece metin yazmak için kullanılan program",
+        "Resimleri oluşturmak, düzenlemek ve geliştirmek için kullanılan program",
+        "Sadece oyun oynamak için kullanılan program",
+        "Sadece müzik dinlemek için kullanılan program"
+      ],
+      answer: 1
+    },
+    {
+      question: "Aşağıdakilerden hangisi bir görsel düzenleme programıdır?",
+      options: ["Adobe Photoshop", "Microsoft Word", "Excel", "PowerPoint"],
+      answer: 0
+    },
+    {
+      question: "Görsel düzenleme programında katman (layer) ne işe yarar?",
+      options: [
+        "Görsellerin farklı parçalarını ayrı ayrı düzenlemeye yarar",
+        "Bilgisayarı açmaya yarar",
+        "Ekran parlaklığını ayarlar",
+        "Yazıcıyı çalıştırır"
+      ],
+      answer: 0
+    },
+    {
+      question: "Görselin çözünürlüğü neyi ifade eder?",
+      options: [
+        "Görselin netlik ve ayrıntı seviyesini",
+        "Görselin renk sayısını",
+        "Görselin boyutunu değil",
+        "Görselin masaüstünde durduğu yeri"
+      ],
+      answer: 0
+    },
+    {
+      question: "PNG formatı hangi özelliği ile bilinir?",
+      options: [
+        "Arka planı şeffaf olabilen görseller",
+        "Sadece siyah-beyaz görseller",
+        "Sadece video dosyası",
+        "Sadece metin dosyası"
+      ],
+      answer: 0
+    },
+    {
+      question: "JPEG formatı hangi amaçla daha çok kullanılır?",
+      options: [
+        "Fotoğraf ve resim paylaşımı",
+        "Sadece çizim yapmak",
+        "Video düzenlemek",
+        "Ses kaydetmek"
+      ],
+      answer: 0
+    },
+    {
+      question: "Görsel düzenleme programında fırça aracı (brush tool) ne için kullanılır?",
+      options: [
+        "Resim çizmek veya boyamak",
+        "Ekranı açmak",
+        "Yazıcıyı çalıştırmak",
+        "Klavyeyi kontrol etmek"
+      ],
+      answer: 0
+    },
+    {
+      question: "Görsel düzenleme programında silgi aracı (eraser tool) ne işe yarar?",
+      options: [
+        "Görselin istenmeyen kısımlarını silmeye yarar",
+        "Yazıcıdan çıktı alır",
+        "Bilgisayarı açar",
+        "Dosyayı kaydeder"
+      ],
+      answer: 0
+    },
+    {
+      question: "Hangi program daha çok profesyonel fotoğraf düzenleme için uygundur?",
+      options: ["Adobe Photoshop", "Paint", "Not Defteri", "Hesap Makinesi"],
+      answer: 0
+    },
+    {
+      question: "Hangi program basit ve hızlı görsel düzenlemeler için uygundur?",
+      options: ["Paint", "Illustrator", "After Effects", "Premiere Pro"],
+      answer: 0
+    },
+    {
+      question: "Görsel düzenleme programının arayüzü neyi içerir?",
+      options: [
+        "Araç çubukları, menüler, katman paneli ve tuval",
+        "Sadece masa ve sandalye",
+        "Yazıcı ve klavye",
+        "Ekran çözünürlüğü ayarı"
+      ],
+      answer: 0
+    },
+    {
+      question: "Görsel düzenleme programı ile bir resmi kırpmak (crop) neyi sağlar?",
+      options: [
+        "Resmin gereksiz kısımlarını kesip istenen alanı bırakmak",
+        "Resmin rengini değiştirmek",
+        "Resmi yazdırmak",
+        "Resmin çözünürlüğünü artırmak"
+      ],
+      answer: 0
+    },
+    {
+      question: "Görselin boyutunu küçültmek veya büyütmek hangi işlemle yapılır?",
+      options: [
+        "Yeniden boyutlandırma (resize)",
+        "Katman ekleme",
+        "Fırça aracı",
+        "Silgi aracı"
+      ],
+      answer: 0
+    },
+    {
+      question: "Görsel düzenleme programı kullanmanın en önemli avantajı nedir?",
+      options: [
+        "Görselleri geliştirmek ve istediğimiz şekilde kullanmak",
+        "Sadece bilgisayarı açmak",
+        "Yazıcıyı çalıştırmak",
+        "Masa düzenlemek"
+      ],
+      answer: 0
+    },
+    {
+      question: "Aşağıdakilerden hangisi görsel düzenleme programının kullanım alanına örnektir?",
+      options: ["Poster tasarlamak", "Mektup yazmak", "Yemek pişirmek", "Bahçe sulamak"],
+      answer: 0
+    },
+    {
+      question: "Görselin renk ayarlarını değiştirmek hangi araçla yapılır?",
+      options: [
+        "Ayarlama (Adjustments) paneli",
+        "Fırça aracı",
+        "Silgi",
+        "Katman"
+      ],
+      answer: 0
+    },
+    {
+      question: "Görsel düzenleme programlarında filtreler (filters) ne işe yarar?",
+      options: [
+        "Görsele farklı efektler eklemek",
+        "Yazıcıyı çalıştırmak",
+        "Dosyayı silmek",
+        "Bilgisayarı açmak"
+      ],
+      answer: 0
+    },
+    {
+      question: "Bir görselin netliğini artırmak veya azaltmak hangi araçla yapılır?",
+      options: [
+        "Keskinleştirme veya bulanıklaştırma (Sharpen / Blur) araçları",
+        "Fırça",
+        "Silgi",
+        "Katman ekleme"
+      ],
+      answer: 0
+    },
+    {
+      question: "Görsel düzenleme programlarında kaydetme formatı seçimi neden önemlidir?",
+      options: [
+        "Farklı kullanım amaçlarına göre uygun kalite ve boyut sağlar",
+        "Bilgisayarı açar",
+        "Yazıcıyı çalıştırır",
+        "Masa düzenler"
+      ],
+      answer: 0
+    },
+    {
+      question: "Hangi araç görseldeki belirli alanları seçip taşımanıza veya değiştirmenize yardımcı olur?",
+      options: [
+        "Seçim aracı (Selection tool)",
+        "Fırça",
+        "Silgi",
+        "Katman paneli"
+      ],
+      answer: 0
+    },
+    {
+      question: "JPEG dosya formatı hangi özellik ile bilinir?",
+      options: [
+        "Fotoğraf ve resimlerde sıkça kullanılır, boyutu küçüktür",
+        "Şeffaf arka plana sahip",
+        "Animasyonlu resim dosyası",
+        "Sadece siyah-beyaz çizimler için"
+      ],
+      answer: 0
+    },
+    {
+      question: "PNG dosya formatının en büyük avantajı nedir?",
+      options: [
+        "Arka planı şeffaf olabilir",
+        "Animasyonlu görseller oluşturur",
+        "Sadece siyah-beyaz görseller içerir",
+        "Video oynatabilir"
+      ],
+      answer: 0
+    },
+    {
+      question: "GIF dosya formatı hangi amaçla kullanılır?",
+      options: [
+        "Kısa animasyonlar veya hareketli resimler",
+        "Yüksek çözünürlüklü fotoğraflar",
+        "PDF belgeleri",
+        "Yazı tiplerini kaydetmek"
+      ],
+      answer: 0
+    },
+    {
+      question: "BMP dosya formatının özelliği nedir?",
+      options: [
+        "Çok yüksek kaliteli ve sıkıştırılmamış görseller",
+        "Şeffaf arka planlı animasyon",
+        "Video oynatma",
+        "Web sayfası oluşturma"
+      ],
+      answer: 0
+    },
+    {
+      question: "TIFF dosya formatı genellikle hangi alanda tercih edilir?",
+      options: [
+        "Profesyonel baskı ve yüksek kaliteli görseller",
+        "Sosyal medya paylaşımı",
+        "Basit çizimler",
+        "Ses dosyaları"
+      ],
+      answer: 0
+    },
+    {
+      question: "RAW dosya formatı nedir?",
+      options: [
+        "Kameradan alınan işlenmemiş ham fotoğraf verisi",
+        "Sadece siyah-beyaz çizim dosyası",
+        "Video dosyası",
+        "Metin dosyası"
+      ],
+      answer: 0
+    },
+    {
+      question: "Aşağıdakilerden hangisi vektör tabanlı görsel formatıdır?",
+      options: ["SVG", "JPEG", "PNG", "GIF"],
+      answer: 0
+    },
+    {
+      question: "Vektör görsellerin avantajı nedir?",
+      options: [
+        "Ölçeklendikçe kalite kaybı olmaz",
+        "Sadece küçük resimlerde kullanılır",
+        "Fotoğraf gibi detaylı görüntü veremez",
+        "Sadece siyah-beyazdır"
+      ],
+      answer: 0
+    },
+    {
+      question: "Raster (piksel tabanlı) görsellerin özelliği nedir?",
+      options: [
+        "Sabit çözünürlükle detaylı fotoğraflar oluşturur",
+        "Ölçeklendikçe kalite kaybı olmaz",
+        "Çizim için kullanılmaz",
+        "Sadece yazı içerir"
+      ],
+      answer: 0
+    },
+    {
+      question: "Aşağıdaki eşleştirmelerden hangisi doğrudur?",
+      options: [
+        "JPEG – Raster / SVG – Vektör",
+        "PNG – Vektör / BMP – Vektör",
+        "GIF – Vektör / TIFF – Vektör",
+        "RAW – Vektör / SVG – Raster"
+      ],
+      answer: 0
+    }
+  ];
+
+  let gameQuestions = [];
+  let questionIndex = 0;
+
+  function shuffleArray(array) {
+    const mixed = [...array];
+
+    for (let i = mixed.length - 1; i > 0; i--) {
+      const randomIndex = Math.floor(Math.random() * (i + 1));
+      [mixed[i], mixed[randomIndex]] = [mixed[randomIndex], mixed[i]];
+    }
+
+    return mixed;
+  }
+
+  function prepareQuestions() {
+    gameQuestions = shuffleArray(questionPool).slice(0, 12);
+    questionIndex = 0;
+  }
+
+  function selectCharacter(character) {
+    player1Character = character;
+    player2Character = character === "Demorgo" ? "Eleverte" : "Demorgo";
+
+      player1Lives = 6;
+      player2Lives = 6;
+      currentTurn = 1;
+      selectedAttack = "";
+      isQuestionActive = false;
+      gameOver = false;
+
+      prepareQuestions();
+
+    document.getElementById("selectScreen").classList.remove("active");
+    document.getElementById("gameScreen").classList.add("active");
+
+    document.getElementById("p1Char").innerText = player1Character.toUpperCase();
+    document.getElementById("p2Char").innerText = player2Character.toUpperCase();
+
+    document.getElementById("p1Name").innerText = "P1 - " + player1Character;
+    document.getElementById("p2Name").innerText = "P2 - " + player2Character;
+
+    document.getElementById("p1Image").src = characterImages[player1Character];
+    document.getElementById("p2Image").src = characterImages[player2Character];
+
+    document.getElementById("p1Portrait").src = characterImages[player1Character];
+    document.getElementById("p2Portrait").src = characterImages[player2Character];
+
+    document.getElementById("selectScreen").classList.remove("active");
+    document.getElementById("gameScreen").classList.add("active");
+
+    updateAttackButtons();
+    updateLives();
+  }
+
+  function updateAttackButtons() {
+    const currentCharacter = currentTurn === 1 ? player1Character : player2Character;
+    const attacks = characters[currentCharacter];
+
+    document.getElementById("attack1").innerText = attacks[0];
+    document.getElementById("attack2").innerText = attacks[1];
+    document.getElementById("turnText").innerText = "Oyuncu " + currentTurn;
+  }
+
+  function chooseAttack(index) {
+    if (isQuestionActive || gameOver) return;
+
+    const currentCharacter = currentTurn === 1 ? player1Character : player2Character;
+    selectedAttack = characters[currentCharacter][index];
+
+    showQuestion();
+  }
+
+  function showQuestion() {
+    if (questionIndex >= gameQuestions.length) {
+      const winner = player1Lives >= player2Lives ? 1 : 2;
+      endGame(winner);
+      return;
+    }
+
+    isQuestionActive = true;
+
+    const currentQuestion = gameQuestions[questionIndex];
+    questionIndex++;
+
+    document.getElementById("questionBox").style.display = "block";
+    document.getElementById("questionText").innerText = currentQuestion.question;
+
+    const optionsDiv = document.getElementById("options");
+    optionsDiv.innerHTML = "";
+
+    currentQuestion.options.forEach((option, index) => {
+      const btn = document.createElement("button");
+      btn.innerText = option;
+      btn.onclick = function () {
+        checkAnswer(index, currentQuestion.answer);
+      };
+      optionsDiv.appendChild(btn);
+    });
+  }
+
+  function checkAnswer(selected, correct) {
+    isQuestionActive = false;
+    document.getElementById("questionBox").style.display = "none";
+
+    if (selected === correct) {
+      document.getElementById("message").innerText =
+        "Doğru cevap! Oyuncu " + currentTurn + " " + selectedAttack + " kullandı!";
+      attackOpponent(currentTurn);
+    } else {
+      const opponent = currentTurn === 1 ? 2 : 1;
+      document.getElementById("message").innerText =
+        "Yanlış cevap! Saldırı hakkı Oyuncu " + opponent + " tarafına geçti!";
+      attackOpponent(opponent);
+    }
+
+    checkWinner();
+
+    if (!gameOver) {
+      currentTurn = currentTurn === 1 ? 2 : 1;
+      updateAttackButtons();
+    }
+  }
+
+  function attackOpponent(attacker) {
+    if (attacker === 1) {
+      player2Lives--;
+      animateAttack("player1");
+      animateHit("player2");
+    } else {
+      player1Lives--;
+      animateAttack("player2");
+      animateHit("player1");
+    }
+
+    updateLives();
+  }
+
+  function updateLives() {
+    document.getElementById("p1Lives").innerText = "● ".repeat(player1Lives);
+    document.getElementById("p2Lives").innerText = "● ".repeat(player2Lives);
+
+    document.getElementById("p1HealthBar").style.width = (player1Lives / 6 * 100) + "%";
+    document.getElementById("p2HealthBar").style.width = (player2Lives / 6 * 100) + "%";
+  }
+
+  function animateAttack(playerId) {
+    const player = document.getElementById(playerId);
+    const direction = playerId === "player1" ? 35 : -35;
+
+    player.style.transform = "translateX(" + direction + "px) scale(1.08)";
+
+    setTimeout(() => {
+      player.style.transform = "translateX(0) scale(1)";
+    }, 220);
+  }
+
+  function animateHit(playerId) {
+    const player = document.getElementById(playerId);
+    player.style.filter = "brightness(2)";
+
+    setTimeout(() => {
+      player.style.filter = "brightness(1)";
+    }, 220);
+  }
+
+  function checkWinner() {
+    if (player1Lives <= 0) {
+        endGame(2); // Oyuncu 2 kazanır
+    } else if (player2Lives <= 0) {
+        endGame(1); // Oyuncu 1 kazanır
+    }
+}
+
+  function endGame(winner) {
+    gameOver = true;
+    isQuestionActive = false;
+
+    const gameScreen = document.getElementById("gameScreen");
+    const endScreen = document.getElementById("endScreen");
+    const endTitle = document.getElementById("endTitle");
+    const winnerText = document.getElementById("winnerText");
+
+    gameScreen.classList.remove("active");
+    endScreen.classList.add("active");
+
+    // Arka plan animasyonu
+    endScreen.style.background = "radial-gradient(circle at center, #ffeb3b, #ff5722, #3a0ca3)";
+    endScreen.style.animation = "bgPulse 2s infinite alternate";
+
+    // K.O. animasyonu
+    endTitle.innerText = "K.O.";
+    endTitle.style.fontSize = "80px";
+    endTitle.style.color = "#ff0000";
+    endTitle.style.textShadow = "6px 6px #000";
+    endTitle.classList.add("pulseAnimation");
+
+    // Kazanan yazısı ve avatar
+    winnerText.innerHTML = `
+    <div style="font-size:40px; color:#00ffcc; text-shadow:2px 2px #000; margin-bottom:20px;">
+        Kazanan: Oyuncu ${winner} 🎉
+    </div>
+    <img src="${winner === 1 ? characterImages[player1Character] : characterImages[player2Character]}" 
+        style="width:200px; margin-top:0px; animation: bounce 1s infinite;">
+    <div id="confetti" style="position:absolute; top:0; left:0; width:100%; height:100%; pointer-events:none;"></div>
+    `;
+
+    // Konfeti animasyonu
+    createConfetti("confetti");
+}
+
+// CSS animasyonları
+  const style = document.createElement('style');
+  style.innerHTML = `
+  @keyframes pulseAnimation {
+    0% { transform: scale(1); }
+    50% { transform: scale(1.2); }
+    100% { transform: scale(1); }
+  }
+  @keyframes bounce {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-20px); }
+  }
+  @keyframes bgPulse {
+    0% { background-position: 0% 50%; }
+    100% { background-position: 100% 50%; }
+  }
+  @keyframes fall {
+    0% { transform: translateY(0); opacity:1; }
+    100% { transform: translateY(600px); opacity:0; }
+  }
+  `;
+  document.head.appendChild(style);
+
+// Basit konfeti oluşturma
+function createConfetti(containerId) {
+    const container = document.getElementById(containerId);
+    for (let i = 0; i < 50; i++) {
+        const conf = document.createElement('div');
+        conf.style.position = 'absolute';
+        conf.style.width = conf.style.height = Math.random() * 8 + 4 + 'px';
+        conf.style.background = `hsl(${Math.random()*360}, 100%, 50%)`;
+        conf.style.left = Math.random() * container.offsetWidth + 'px';
+        conf.style.top = Math.random() * container.offsetHeight + 'px';
+        conf.style.borderRadius = '50%';
+        conf.style.animation = `fall ${2+Math.random()*2}s linear infinite`;
+        container.appendChild(conf);
+    }
+}
+function restartGame() {
+    player1Lives = 6;
+    player2Lives = 6;
+    currentTurn = 1;
+    selectedAttack = "";
+    isQuestionActive = false;
+    gameOver = false;
+
+    prepareQuestions();
+
+    document.getElementById("endScreen").classList.remove("active");
+    document.getElementById("selectScreen").classList.add("active");
+
+    document.getElementById("message").innerText = "";
+    document.getElementById("questionBox").style.display = "none";
+
+    updateLives();
+  }
+  
+</script>
+
+</body>
+</html>

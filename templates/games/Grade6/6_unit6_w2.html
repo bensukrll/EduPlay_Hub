@@ -1,0 +1,460 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Mini Kod Fabrikası | EduPlay Hub</title>
+
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"/>
+  <link href="https://fonts.googleapis.com/css2?family=Rajdhani:wght@600;700&family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css"/>
+  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+  <style>
+    :root {
+      /* Genel Açık Tema */
+      --bg-main: #f0f4f8;
+      --hud-bg: #ffffff;
+      --text-dark: #2c3e50;
+      --border-soft: #e2e8f0;
+
+      /* Koyu Panel İçeriği */
+      --panel-bg-dark: #0b112c;
+      --text-light: #f8fafc;
+      
+      /* Scratch Standart Renkleri */
+      --motion-color: #4c97ff;
+      --looks-color: #9966ff;
+      --control-color: #ffab19;
+      --dance-color: #ff4baf; /* Dans kategorisi için dinamik neon pembe */
+    }
+
+    body {
+      margin: 0;
+      height: 100vh;
+      overflow: hidden;
+      font-family: 'Poppins', sans-serif;
+      background-color: var(--bg-main);
+      color: var(--text-dark);
+      user-select: none;
+    }
+
+    .rajdhani { font-family: 'Rajdhani', sans-serif; }
+
+    /* HUD ve Panel Çerçeveleri İçin Açık Stil */
+    .light-ui {
+      background-color: var(--hud-bg);
+      border: 1px solid var(--border-soft);
+      box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
+    }
+
+    /* Düzgün Dikdörtgen Blok Tasarımı */
+    .block-piece {
+      position: relative;
+      border-radius: 8px;
+      padding: 10px 14px;
+      margin-bottom: 4px;
+      cursor: grab;
+      color: white;
+      transition: transform 0.1s, box-shadow 0.2s;
+      border-bottom: 3px solid rgba(0,0,0,0.2);
+    }
+    .block-piece:active { cursor: grabbing; transform: scale(1.02); }
+    .block-piece:hover { box-shadow: 0 0 10px rgba(255,255,255,0.2); }
+
+    /* Kategori Renkleri */
+    .block-motion { background-color: var(--motion-color); }
+    .block-looks { background-color: var(--looks-color); }
+    .block-control { background-color: var(--control-color); }
+    .block-dance { background-color: var(--dance-color); }
+
+    /* Çalışma Alanındaki Blok Animasyonu */
+    .workspace-block {
+      animation: blockSnap 0.15s ease-out;
+    }
+    @keyframes blockSnap {
+      from { opacity: 0; transform: translateY(-10px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    /* Koyu Kareli Sahne Arka Planı */
+    .grid-bg {
+      background-color: #080c22;
+      background-image: 
+        linear-gradient(rgba(24, 247, 255, 0.03) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(24, 247, 255, 0.03) 1px, transparent 1px);
+      background-size: 28px 28px;
+    }
+
+    /* İnce Kaydırma Çubuğu */
+    ::-webkit-scrollbar { width: 6px; }
+    ::-webkit-scrollbar-track { background: transparent; }
+    ::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.1); border-radius: 999px; }
+    ::-webkit-scrollbar-thumb:hover { background: rgba(255,255,255,0.2); }
+  </style>
+</head>
+<body class="w-screen h-screen flex flex-col p-4 gap-4">
+
+  <header class="light-ui rounded-2xl px-6 py-3 flex justify-between items-center shrink-0">
+    <div>
+      <p class="rajdhani tracking-[0.2em] text-blue-600 text-xs font-bold">HAFTA 20 · BLOK TABANLI ORTAM BİLEŞENLERİ</p>
+      <h1 class="rajdhani text-2xl md:text-3xl font-extrabold text-slate-900 flex items-center gap-2">
+        <i class="fa-solid fa-cubes text-purple-600 animate-pulse"></i> Mini Kod Fabrikası
+      </h1>
+    </div>
+    <div class="flex items-center gap-3">
+      <button onclick="runCode()" class="bg-[#4cae4c] hover:bg-[#449d44] text-white font-bold px-5 py-2.5 rounded-xl flex items-center gap-2 transition active:scale-95 shadow-md">
+        <i class="fa-solid fa-flag text-white"></i> Başlat
+      </button>
+      <button onclick="resetStage()" class="bg-[#e61e1e] hover:bg-[#c91818] text-white font-bold px-5 py-2.5 rounded-xl flex items-center gap-2 transition active:scale-95 shadow-md">
+        <i class="fa-solid fa-circle-stop"></i> Sıfırla
+      </button>
+    </div>
+  </header>
+
+  <main class="flex-1 grid grid-cols-1 lg:grid-cols-[260px_1fr_480px] gap-4 min-h-0 overflow-hidden">
+    
+    <aside class="light-ui rounded-2xl p-1 flex flex-col min-h-0 overflow-hidden">
+        <div class="px-4 py-2 border-b border-slate-100">
+            <h2 class="rajdhani text-lg font-bold text-slate-800 flex items-center gap-2">
+                <i class="fa-solid fa-folder-open text-amber-500"></i> Kütüphane
+            </h2>
+        </div>
+        <div class="flex-1 bg-[--panel-bg-dark] rounded-b-2xl p-4 overflow-y-auto pr-1 space-y-4">
+            
+            <div class="space-y-1.5">
+              <span class="text-[11px] font-bold text-pink-400 uppercase tracking-wider block mb-1">🕺 Dans & Eğlence</span>
+              <div class="block-piece block-dance text-[11px] font-bold" draggable="true" ondragstart="drag(event)" id="block-dance-break">
+                <i class="fa-solid fa-bolt mr-1"></i> Breakdance Yap (Sola-Sağa Kıvır)
+              </div>
+              <div class="block-piece block-dance text-[11px] font-bold" draggable="true" ondragstart="drag(event)" id="block-dance-moonwalk">
+                <i class="fa-solid fa-person-walking-arrow-loop-left mr-1"></i> Moonwalk (Zıplayarak Geri Git)
+              </div>
+              <div class="block-piece block-dance text-[11px] font-bold" draggable="true" ondragstart="drag(event)" id="block-dance-spin">
+                <i class="fa-solid fa-arrows-spin mr-1"></i> Çılgın Parti Dönüşü Yap
+              </div>
+              <div class="block-piece block-dance text-[11px] font-bold" draggable="true" ondragstart="drag(event)" id="block-dance-color">
+                <i class="fa-solid fa-wand-magic-sparkles mr-1"></i> Kostüm Rengini Değiştir
+              </div>
+            </div>
+
+            <div class="space-y-1.5">
+              <span class="text-[11px] font-bold text-blue-400 uppercase tracking-wider block mb-1">Hareket</span>
+              <div class="block-piece block-motion text-[11px] font-bold" draggable="true" ondragstart="drag(event)" id="block-move-right">
+                <i class="fa-solid fa-arrow-right mr-1"></i> 20 Adım Sağa Git
+              </div>
+              <div class="block-piece block-motion text-[11px] font-bold" draggable="true" ondragstart="drag(event)" id="block-move-left">
+                <i class="fa-solid fa-arrow-left mr-1"></i> 20 Adım Sola Git
+              </div>
+              <div class="block-piece block-motion text-[11px] font-bold" draggable="true" ondragstart="drag(event)" id="block-move-up">
+                <i class="fa-solid fa-arrow-up mr-1"></i> 20 Adım Yukarı Git
+              </div>
+              <div class="block-piece block-motion text-[11px] font-bold" draggable="true" ondragstart="drag(event)" id="block-move-down">
+                <i class="fa-solid fa-arrow-down mr-1"></i> 20 Adım Aşağı Git
+              </div>
+            </div>
+
+            <div class="space-y-1.5">
+              <span class="text-[11px] font-bold text-purple-400 uppercase tracking-wider block mb-1">Görünüm</span>
+              <div class="block-piece block-looks text-[11px] font-bold" draggable="true" ondragstart="drag(event)" id="block-say-hello">
+                <i class="fa-solid fa-comment mr-1"></i> "Merhaba!" De
+              </div>
+              <div class="block-piece block-looks text-[11px] font-bold" draggable="true" ondragstart="drag(event)" id="block-say-eduplay">
+                <i class="fa-solid fa-quote-left mr-1"></i> "EduPlay Hub!" De
+              </div>
+              <div class="block-piece block-looks text-[11px] font-bold" draggable="true" ondragstart="drag(event)" id="block-grow">
+                <i class="fa-solid fa-magnifying-glass-plus mr-1"></i> Boyutu Büyüt
+              </div>
+              <div class="block-piece block-looks text-[11px] font-bold" draggable="true" ondragstart="drag(event)" id="block-shrink">
+                <i class="fa-solid fa-magnifying-glass-minus mr-1"></i> Boyutu Küçült
+              </div>
+              <div class="block-piece block-looks text-[11px] font-bold" draggable="true" ondragstart="drag(event)" id="block-hide">
+                <i class="fa-solid fa-eye-slash mr-1"></i> Karakteri Gizle
+              </div>
+              <div class="block-piece block-looks text-[11px] font-bold" draggable="true" ondragstart="drag(event)" id="block-show">
+                <i class="fa-solid fa-eye mr-1"></i> Karakteri Göster
+              </div>
+            </div>
+
+            <div class="space-y-1.5">
+              <span class="text-[11px] font-bold text-amber-400 uppercase tracking-wider block mb-1">Kontrol</span>
+              <div class="block-piece block-control text-[11px] font-bold" draggable="true" ondragstart="drag(event)" id="block-wait">
+                <i class="fa-solid fa-clock mr-1"></i> 1 Saniye Bekle
+              </div>
+              <div class="block-piece block-control text-[11px] font-bold" draggable="true" ondragstart="drag(event)" id="block-turn-right">
+                <i class="fa-solid fa-rotate-right mr-1"></i> Sağa Dön (15°)
+              </div>
+              <div class="block-piece block-control text-[11px] font-bold" draggable="true" ondragstart="drag(event)" id="block-turn-left">
+                <i class="fa-solid fa-rotate-left mr-1"></i> Sola Dön (15°)
+              </div>
+            </div>
+        </div>
+    </aside>
+
+    <section class="light-ui rounded-2xl p-1 flex flex-col min-h-0 overflow-hidden">
+        <div class="px-4 py-2 border-b border-slate-100 flex justify-between items-center">
+            <h2 class="rajdhani text-lg font-bold text-slate-800 flex items-center gap-2">
+                <i class="fa-solid fa-laptop-code text-pink-600"></i> Kodlama Alanı
+            </h2>
+            <button onclick="clearWorkspace()" class="text-xs text-rose-600 hover:text-rose-800 font-semibold transition flex items-center gap-1">
+                <i class="fa-solid fa-trash-can"></i> Temizle
+            </button>
+        </div>
+        <div id="workspace" class="flex-1 bg-[--panel-bg-dark] rounded-b-2xl p-4 overflow-y-auto space-y-1 flex flex-col items-start" ondragover="allowDrop(event)" ondrop="drop(event)">
+            <div class="bg-amber-500 text-white text-xs font-bold px-5 py-3 rounded-xl shadow-md mb-2 flex items-center gap-1.5 border-b-4 border-amber-600">
+              <i class="fa-solid fa-flag text-white"></i> Yeşil Bayrak Tıklandığında
+            </div>
+            
+            <div id="empty-hint" class="text-slate-600 text-xs text-center w-full pt-24 pointer-events-none font-medium">
+              Algoritma oluşturmak için blokları buraya ekle!
+            </div>
+        </div>
+    </section>
+
+    <aside class="light-ui rounded-2xl p-1 flex flex-col min-h-0 overflow-hidden">
+        <div class="px-4 py-2 border-b border-slate-100">
+            <h2 class="rajdhani text-lg font-bold text-slate-800 flex items-center gap-2">
+                <i class="fa-solid fa-play text-green-600"></i> Sahne (Stage)
+            </h2>
+        </div>
+        <div id="stage" class="flex-1 rounded-b-2xl relative overflow-hidden grid-bg border border-slate-950 flex items-center justify-center shadow-inner">
+            
+            <div id="sprite" class="w-16 h-16 bg-gradient-to-br from-cyan-400 to-blue-500 rounded-2xl flex items-center justify-center text-3xl absolute transition-all duration-300 shadow-[0_0_25px_rgba(34,211,238,0.3)] z-10" style="left: calc(50% - 32px); top: calc(50% - 32px); transform: translate(0px, 0px) scale(1) rotate(0deg);">
+              🤖
+              <div id="bubble" class="absolute -top-14 left-1/2 -translate-x-1/2 bg-white text-slate-800 border border-slate-200 text-xs font-bold px-4 py-2 rounded-xl shadow-xl hidden animate__animated animate__bounceIn min-w-[100px] text-center z-20">
+                Merhaba!
+                <div class="absolute bottom-0 left-1/2 -translate-x-1/2 translate-y-full w-0 h-0 border-x-4 border-x-transparent border-t-4 border-t-white"></div>
+              </div>
+            </div>
+
+        </div>
+    </aside>
+
+  </main>
+
+  <script>
+    const workspace = document.getElementById('workspace');
+    const sprite = document.getElementById('sprite');
+    const bubble = document.getElementById('bubble');
+    const emptyHint = document.getElementById('empty-hint');
+
+    // Durum Değişkenleri
+    let spritePos = { x: 0, y: 0 };
+    let spriteScale = 1;
+    let spriteRotation = 0;
+    let spriteOpacity = 1;
+    let currentGradientIndex = 0;
+
+    // Karakterin kostüm renk değişim havuzu
+    const gradients = [
+      "from-cyan-400 to-blue-500",
+      "from-pink-500 to-rose-600",
+      "from-amber-400 to-orange-500",
+      "from-emerald-400 to-teal-600",
+      "from-fuchsia-500 to-purple-600"
+    ];
+
+    // Tıklayarak ekleme desteği
+    document.querySelectorAll('.block-piece').forEach(block => {
+      block.addEventListener('click', () => {
+        addBlockToWorkspace(block.id, block.innerHTML, block.className);
+      });
+    });
+
+    // Sürükle Bırak Altyapısı
+    function allowDrop(ev) { ev.preventDefault(); }
+    function drag(ev) { ev.dataTransfer.setData("text", ev.target.id); }
+    
+    function drop(ev) {
+      ev.preventDefault();
+      const id = ev.dataTransfer.getData("text");
+      const originalBlock = document.getElementById(id);
+      if (originalBlock) {
+        addBlockToWorkspace(id, originalBlock.innerHTML, originalBlock.className);
+      }
+    }
+
+    // Çalışma Alanına Blok Ekleme
+    function addBlockToWorkspace(actionId, htmlContent, classList) {
+      emptyHint.style.display = 'none';
+
+      const blockWrapper = document.createElement('div');
+      blockWrapper.className = `workspace-block block-piece ${classList.replace('palette-piece', '')} w-max text-[11px] font-bold px-4 flex justify-between items-center shadow-md select-none z-0`;
+      blockWrapper.dataset.action = actionId;
+      blockWrapper.innerHTML = `
+        <div class="flex items-center gap-1.5">${htmlContent}</div>
+        <button onclick="this.parentElement.remove(); checkWorkspaceEmpty();" class="text-white/50 hover:text-white transition focus:outline-none z-10 ml-3"><i class="fa-solid fa-xmark text-sm"></i></button>
+      `;
+
+      workspace.appendChild(blockWrapper);
+    }
+
+    function checkWorkspaceEmpty() {
+      const blocks = workspace.querySelectorAll('.workspace-block');
+      if (blocks.length === 0) emptyHint.style.display = 'block';
+    }
+
+    function clearWorkspace() {
+      workspace.querySelectorAll('.workspace-block').forEach(b => b.remove());
+      checkWorkspaceEmpty();
+      resetStage();
+    }
+
+    // --- ALGORİTMAYI SIRAYLA ÇALIŞTIRMA (ASYNC INTERPRETER) ---
+    async function runCode() {
+      const blocks = workspace.querySelectorAll('.workspace-block');
+      if (blocks.length === 0) {
+        Swal.fire({
+          toast: true,
+          position: 'top-end',
+          icon: 'info',
+          title: 'Önce algoritmanı kurmalısın!',
+          showConfirmButton: false,
+          timer: 1800,
+          background: '#ffffff',
+          color: '#2c3e50'
+        });
+        return;
+      }
+
+      resetStage();
+
+      for (let block of blocks) {
+        const action = block.dataset.action;
+        block.classList.add('ring-2', 'ring-white', 'scale-[1.01]');
+        await executeAction(action);
+        block.classList.remove('ring-2', 'ring-white', 'scale-[1.01]');
+      }
+    }
+
+    // Komutların Kod Karşılıkları
+    function executeAction(actionId) {
+      return new Promise((resolve) => {
+        const step = 28; // Adım uzunluğu
+        
+        // Standart Hareket Blokları
+        if (actionId === 'block-move-right') {
+          spritePos.x += step;
+          applyTransformations();
+          setTimeout(resolve, 300);
+        } 
+        else if (actionId === 'block-move-left') {
+          spritePos.x -= step;
+          applyTransformations();
+          setTimeout(resolve, 300);
+        }
+        else if (actionId === 'block-move-up') {
+          spritePos.y -= step;
+          applyTransformations();
+          setTimeout(resolve, 300);
+        }
+        else if (actionId === 'block-move-down') {
+          spritePos.y += step;
+          applyTransformations();
+          setTimeout(resolve, 300);
+        }
+        
+        // Dans ve Eğlence Blok Karşılıkları (YENİ!)
+        else if (actionId === 'block-dance-break') {
+          // Kısa süreli sola ve sağa hızlı kayma (Breakdance sarsıntısı)
+          spritePos.x -= 15; applyTransformations();
+          setTimeout(() => {
+            spritePos.x += 30; applyTransformations();
+            setTimeout(() => {
+              spritePos.x -= 15; applyTransformations();
+              resolve();
+            }, 150);
+          }, 150);
+        }
+        else if (actionId === 'block-dance-moonwalk') {
+          // Yukarı zıplayarak geriye yumuşakça süzülme
+          spritePos.y -= 20; spritePos.x -= 30; applyTransformations();
+          setTimeout(() => {
+            spritePos.y += 20; applyTransformations();
+            resolve();
+          }, 250);
+        }
+        else if (actionId === 'block-dance-spin') {
+          // Kendi etrafında tam tur (360 derece) dönme animasyonu
+          spriteRotation += 360;
+          applyTransformations();
+          setTimeout(() => { resolve(); }, 400);
+        }
+        else if (actionId === 'block-dance-color') {
+          // Bir sonraki gradyan rengine geçiş yapma
+          sprite.classList.remove(...gradients[currentGradientIndex].split(' '));
+          currentGradientIndex = (currentGradientIndex + 1) % gradients.length;
+          sprite.classList.add(...gradients[currentGradientIndex].split(' '));
+          resolve();
+        }
+
+        // Görünüm ve Kontrol Blokları
+        else if (actionId === 'block-say-hello') {
+          bubble.innerHTML = 'Merhaba! <div class="absolute bottom-0 left-1/2 -translate-x-1/2 translate-y-full w-0 h-0 border-x-4 border-x-transparent border-t-4 border-t-white"></div>';
+          bubble.classList.remove('hidden');
+          setTimeout(() => { bubble.classList.add('hidden'); resolve(); }, 1200);
+        }
+        else if (actionId === 'block-say-eduplay') {
+          bubble.innerHTML = 'EduPlay Hub! <div class="absolute bottom-0 left-1/2 -translate-x-1/2 translate-y-full w-0 h-0 border-x-4 border-x-transparent border-t-4 border-t-white"></div>';
+          bubble.classList.remove('hidden');
+          setTimeout(() => { bubble.classList.add('hidden'); resolve(); }, 1200);
+        }
+        else if (actionId === 'block-grow') {
+          spriteScale = Math.min(1.6, spriteScale + 0.2);
+          applyTransformations();
+          setTimeout(resolve, 300);
+        }
+        else if (actionId === 'block-shrink') {
+          spriteScale = Math.max(0.6, spriteScale - 0.2);
+          applyTransformations();
+          setTimeout(resolve, 300);
+        }
+        else if (actionId === 'block-hide') {
+          spriteOpacity = 0;
+          sprite.style.opacity = spriteOpacity;
+          setTimeout(resolve, 300);
+        }
+        else if (actionId === 'block-show') {
+          spriteOpacity = 1;
+          sprite.style.opacity = spriteOpacity;
+          setTimeout(resolve, 300);
+        }
+        else if (actionId === 'block-turn-right') {
+          spriteRotation += 15;
+          applyTransformations();
+          setTimeout(resolve, 250);
+        }
+        else if (actionId === 'block-turn-left') {
+          spriteRotation -= 15;
+          applyTransformations();
+          setTimeout(resolve, 250);
+        }
+        else if (actionId === 'block-wait') {
+          setTimeout(resolve, 1000);
+        }
+      });
+    }
+
+    function applyTransformations() {
+      sprite.style.transform = `translate(${spritePos.x}px, ${spritePos.y}px) scale(${spriteScale}) rotate(${spriteRotation}deg)`;
+    }
+
+    function resetStage() {
+      spritePos = { x: 0, y: 0 };
+      spriteScale = 1;
+      spriteRotation = 0;
+      spriteOpacity = 1;
+      sprite.style.opacity = 1;
+      
+      // Renk kostümünü de ilk haline getir
+      sprite.className = sprite.className.replace(new RegExp(gradients.flatMap(g => g.split(' ')).join('|'), 'g'), '');
+      currentGradientIndex = 0;
+      sprite.classList.add('from-cyan-400', 'to-blue-500');
+
+      applyTransformations();
+      bubble.classList.add('hidden');
+    }
+  </script>
+</body>
+</html>

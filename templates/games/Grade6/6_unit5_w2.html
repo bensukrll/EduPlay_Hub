@@ -1,0 +1,977 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Siber Simyacı: Veri İksiri</title>
+
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"/>
+  <link href="https://fonts.googleapis.com/css2?family=Rajdhani:wght@500;600;700&family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css"/>
+  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+  <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.9.3/dist/confetti.browser.min.js"></script>
+
+  <style>
+    :root {
+      --bg1:#090821;
+      --bg2:#19103c;
+      --cyan:#18f7ff;
+      --pink:#ff37d2;
+      --green:#7dff6a;
+      --yellow:#ffe86b;
+      --danger:#ff4b6e;
+    }
+
+    * { box-sizing: border-box; }
+
+    html, body {
+      width: 100%;
+      height: 100%;
+      margin: 0;
+      overflow: hidden;
+      font-family: 'Poppins', sans-serif;
+      color: white;
+      background:
+        radial-gradient(circle at 15% 10%, rgba(255,55,210,.24), transparent 28%),
+        radial-gradient(circle at 85% 20%, rgba(24,247,255,.2), transparent 30%),
+        radial-gradient(circle at 50% 90%, rgba(125,255,106,.13), transparent 28%),
+        linear-gradient(135deg, var(--bg1), var(--bg2) 58%, #070418);
+    }
+
+    .rajdhani { font-family: 'Rajdhani', sans-serif; }
+
+    #bubbleCanvas {
+      position: fixed;
+      inset: 0;
+      z-index: 0;
+      pointer-events: none;
+    }
+
+    .game-shell {
+      position: relative;
+      z-index: 2;
+      width: 100vw;
+      height: 100vh;
+      padding: 12px;
+      display: grid;
+      grid-template-rows: auto 1fr;
+      gap: 10px;
+      overflow: hidden;
+    }
+
+    .glass {
+      background: rgba(9, 12, 34, .72);
+      border: 1px solid rgba(24,247,255,.25);
+      box-shadow: 0 0 18px rgba(24,247,255,.11), inset 0 0 22px rgba(255,255,255,.035);
+      backdrop-filter: blur(14px);
+    }
+
+    .neon-title {
+      text-shadow: 0 0 9px rgba(24,247,255,.8), 0 0 22px rgba(255,55,210,.5);
+    }
+
+    .topbar {
+      min-height: 76px;
+      max-height: 88px;
+    }
+
+    .main-grid {
+      min-height: 0;
+      height: 100%;
+    }
+
+    .grimoire, .lab {
+      height: 100%;
+      min-height: 0;
+      border-radius: 22px;
+      overflow: hidden;
+    }
+
+    .grimoire {
+      position: relative;
+      padding: 14px;
+    }
+
+    .lab {
+      position: relative;
+      padding: 14px;
+      display: grid;
+      grid-template-rows: auto auto 1fr;
+      gap: 6px;
+    }
+
+    .lab::after {
+      content:"";
+      position:absolute;
+      inset:0;
+      background-image:
+        linear-gradient(rgba(24,247,255,.04) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(24,247,255,.04) 1px, transparent 1px);
+      background-size: 30px 30px;
+      mask-image: radial-gradient(circle, black 52%, transparent 100%);
+      pointer-events:none;
+    }
+
+    .stage-content {
+      position: relative;
+      z-index: 3;
+      min-height: 0;
+      height: 100%;
+      display: grid;
+      grid-template-rows: auto auto 1fr;
+      gap: 6px;
+    }
+
+    .stage-pill {
+      border: 1px solid rgba(255,255,255,.14);
+      background: rgba(255,255,255,.055);
+      transition: .25s;
+      padding: 9px 11px;
+      border-radius: 14px;
+    }
+
+    .stage-pill.active {
+      border-color: var(--cyan);
+      box-shadow: 0 0 14px rgba(24,247,255,.34);
+      background: rgba(24,247,255,.13);
+    }
+
+    .cauldron-zone {
+      height: 180px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 0;
+    }
+
+    .cauldron-wrap {
+      position: relative;
+      width: 190px;
+      height: 175px;
+      flex-shrink: 0;
+    }
+
+    .cauldron-glow {
+      position:absolute;
+      inset:22px;
+      border-radius:50%;
+      background: radial-gradient(circle, rgba(24,247,255,.65), rgba(255,55,210,.28), transparent 67%);
+      filter: blur(16px);
+      animation: pulse 2s infinite alternate;
+    }
+
+    @keyframes pulse {
+      from { transform: scale(.94); opacity:.7; }
+      to { transform: scale(1.07); opacity:1; }
+    }
+
+    .cauldron {
+      position:absolute;
+      left:50%;
+      top:54%;
+      width:160px;
+      height:115px;
+      transform: translate(-50%, -50%);
+      border-radius: 45% 45% 38% 38%;
+      background:
+        radial-gradient(circle at 50% 10%, rgba(125,255,106,.88), rgba(24,247,255,.7) 25%, rgba(105,32,170,.9) 48%, #11102a 72%);
+      border: 2px solid rgba(24,247,255,.75);
+      box-shadow: 0 0 28px rgba(24,247,255,.5), inset 0 -18px 34px rgba(0,0,0,.48);
+      overflow:hidden;
+    }
+
+    .cauldron.bad { animation: shake .45s, redFlash .7s; }
+    .cauldron.success { animation: greenFlash .75s; }
+
+    @keyframes shake {
+      0%,100% { transform: translate(-50%, -50%); }
+      25% { transform: translate(-55%, -50%) rotate(-2deg); }
+      50% { transform: translate(-45%, -50%) rotate(2deg); }
+      75% { transform: translate(-54%, -50%) rotate(-2deg); }
+    }
+
+    @keyframes redFlash {
+      50% { box-shadow: 0 0 38px rgba(255,75,110,.9); border-color: var(--danger); }
+    }
+
+    @keyframes greenFlash {
+      50% { box-shadow: 0 0 42px rgba(125,255,106,.95); border-color: var(--green); }
+    }
+
+    .liquid {
+      position:absolute;
+      left:-20%;
+      right:-20%;
+      bottom:24px;
+      height:48px;
+      background: linear-gradient(90deg, var(--green), var(--cyan), var(--pink));
+      border-radius: 48%;
+      animation: boil 2.2s ease-in-out infinite;
+    }
+
+    @keyframes boil {
+      0%,100% { transform: translateY(4px) rotate(0deg); }
+      50% { transform: translateY(-6px) rotate(1.5deg); }
+    }
+
+    .smoke {
+      position:absolute;
+      width:12px;
+      height:12px;
+      border-radius:50%;
+      background: rgba(24,247,255,.5);
+      filter: blur(2px);
+      animation: smokeUp 3s infinite ease-in;
+    }
+
+    @keyframes smokeUp {
+      from { transform: translateY(0) scale(.65); opacity:.75; }
+      to { transform: translateY(-95px) scale(1.8); opacity:0; }
+    }
+
+    .dynamic-area {
+      min-height: 0;
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+    }
+
+    .tool-card, .element-card, .molecule-card {
+      cursor: pointer;
+      transition: .22s ease;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .tool-card:hover, .element-card:hover, .molecule-card:hover {
+      transform: translateY(-4px) scale(1.015);
+      box-shadow: 0 0 22px rgba(24,247,255,.27);
+    }
+
+    .element-orb {
+      min-height: 78px;
+      border-radius: 20px;
+      background: radial-gradient(circle at 30% 20%, rgba(255,255,255,.24), rgba(24,247,255,.17), rgba(255,55,210,.12));
+      border: 1px solid rgba(255,255,255,.17);
+      animation: floatOrb 3s ease-in-out infinite;
+      padding: 10px;
+    }
+
+    @keyframes floatOrb {
+      0%,100% { transform: translateY(0); }
+      50% { transform: translateY(-6px); }
+    }
+
+    .heart {
+      filter: drop-shadow(0 0 8px rgba(255,55,210,.85));
+    }
+
+    .btn-neon {
+      border: 1px solid rgba(24,247,255,.6);
+      background: linear-gradient(135deg, rgba(24,247,255,.18), rgba(255,55,210,.22));
+      box-shadow: 0 0 20px rgba(24,247,255,.24);
+      transition:.22s;
+    }
+
+    .btn-neon:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 0 30px rgba(255,55,210,.4);
+    }
+
+    .timer-bar {
+      height: 8px;
+      border-radius:999px;
+      background: rgba(255,255,255,.13);
+      overflow:hidden;
+    }
+
+    .timer-fill {
+      height:100%;
+      width:100%;
+      background: linear-gradient(90deg, var(--green), var(--yellow), var(--danger));
+      transition: width 1s linear;
+    }
+
+    .crystal {
+      width: 100px;
+      height: 128px;
+      margin: 4px auto;
+      clip-path: polygon(50% 0%, 88% 22%, 72% 100%, 28% 100%, 12% 22%);
+      background: linear-gradient(145deg, rgba(255,255,255,.72), rgba(24,247,255,.8), rgba(255,55,210,.75), rgba(125,255,106,.8));
+      box-shadow: 0 0 36px rgba(24,247,255,.8);
+      animation: crystalPulse 1.4s infinite alternate;
+    }
+
+    @keyframes crystalPulse {
+      from { transform: scale(.98) rotate(-1deg); filter: brightness(1); }
+      to { transform: scale(1.05) rotate(1deg); filter: brightness(1.3); }
+    }
+
+    .progress-shell {
+      height: 15px;
+      border-radius: 999px;
+      background: rgba(255,255,255,.12);
+      overflow: hidden;
+      border: 1px solid rgba(255,255,255,.17);
+    }
+
+    .progress-fill {
+      height: 100%;
+      width: 0%;
+      background: linear-gradient(90deg, var(--cyan), var(--green), var(--pink));
+      box-shadow: 0 0 18px rgba(24,247,255,.65);
+      transition: width 1s ease;
+    }
+
+    .danger-note {
+      border: 1px solid rgba(255,75,110,.55);
+      background: rgba(255,75,110,.13);
+      box-shadow: 0 0 18px rgba(255,75,110,.22);
+    }
+
+    @media(max-width: 1024px) {
+      html, body { overflow: auto; }
+      .game-shell {
+        height: auto;
+        min-height: 100vh;
+        overflow: visible;
+      }
+      .grimoire, .lab { height: auto; }
+      .cauldron-zone { height: 160px; }
+    }
+  </style>
+</head>
+
+<body>
+<canvas id="bubbleCanvas"></canvas>
+
+<div class="game-shell">
+  <header class="topbar glass rounded-[22px] px-4 py-3 flex flex-col lg:flex-row gap-2 justify-between items-center overflow-hidden">
+    <div>
+      <p class="rajdhani tracking-[.22em] text-cyan-300 text-xs font-bold">BTY.6.5.1 · YAPAY ZEKA GİRDİLERİ</p>
+      <h1 class="rajdhani neon-title text-3xl md:text-4xl font-bold leading-none">
+        <i class="fa-solid fa-flask-vial text-pink-400"></i>
+        Siber Simyacı: Veri İksiri
+      </h1>
+    </div>
+
+    <div class="flex items-center gap-3">
+      <div class="glass rounded-2xl px-4 py-2">
+        <p class="text-[10px] text-cyan-200">PUAN</p>
+        <p id="scoreText" class="rajdhani text-2xl font-bold text-green-300 leading-none">0</p>
+      </div>
+      <div class="glass rounded-2xl px-4 py-2">
+        <p class="text-[10px] text-pink-200">CAN</p>
+        <div id="livesBox" class="text-xl flex gap-2"></div>
+      </div>
+      <button onclick="restartGame()" class="btn-neon rounded-2xl px-4 py-2 font-bold text-sm">
+        <i class="fa-solid fa-rotate-right"></i> Yeniden Başlat
+      </button>
+    </div>
+  </header>
+
+  <main class="main-grid grid grid-cols-1 lg:grid-cols-[340px_1fr] gap-3">
+    <aside class="grimoire glass">
+      <h2 class="rajdhani text-2xl font-bold text-cyan-300 mb-1">
+        <i class="fa-solid fa-book-skull text-pink-400"></i>
+        Formül Kitabı
+      </h2>
+
+      <p class="text-xs text-slate-300 mb-3">
+        Doğru bilgileri seç, yanlış bilgileri ele ve yapay zekaya temiz veri hazırla.
+      </p>
+
+      <div class="glass rounded-2xl p-3 mb-3">
+        <p class="text-[10px] text-green-300 font-bold tracking-widest">AKTİF GÖREV</p>
+        <h3 id="taskTitle" class="rajdhani text-xl font-bold mt-1 leading-tight"></h3>
+        <p id="taskDescription" class="text-xs text-slate-300 mt-1 leading-relaxed"></p>
+      </div>
+
+      <div class="space-y-2">
+        <div id="stage1Pill" class="stage-pill active">
+          <b class="text-sm">1. Doğru Aracı Seç</b>
+          <p class="text-[11px] text-slate-300">Bu görev için en uygun bilgi kaynağı hangisi?</p>
+        </div>
+        <div id="stage2Pill" class="stage-pill">
+          <b class="text-sm">2. Yararlı Bilgileri Topla</b>
+          <p class="text-[11px] text-slate-300">Görevle ilgili kelimeleri kazana ekle.</p>
+        </div>
+        <div id="stage3Pill" class="stage-pill">
+          <b class="text-sm">3. Yanlış Bilgiyi Ayıkla</b>
+          <p class="text-[11px] text-slate-300">Uydurma bilgiyi bulup karışımdan çıkar.</p>
+        </div>
+        <div id="stage4Pill" class="stage-pill">
+          <b class="text-sm">4. Veriyi Kaydet</b>
+          <p class="text-[11px] text-slate-300">Temiz veriyi kristale aktar.</p>
+        </div>
+      </div>
+
+      <div class="mt-3 glass rounded-2xl p-3">
+        <p class="text-[10px] text-cyan-200 font-bold">SİMYA KURALI</p>
+        <p id="hintText" class="text-xs text-slate-300 mt-1 leading-relaxed">
+          Önce görevi oku. Sonra bu görev için en güvenilir bilgi nereden bulunur, onu seç.
+        </p>
+      </div>
+    </aside>
+
+    <section class="lab glass">
+      <div class="stage-content">
+        <div class="flex flex-col md:flex-row md:items-center justify-between gap-2">
+          <div>
+            <p class="rajdhani text-cyan-300 tracking-[.16em] font-bold text-xs">SİBER LABORATUVAR</p>
+            <h2 id="stageTitle" class="rajdhani text-3xl font-bold neon-title leading-none">Aşama 1: Doğru Aracı Seç</h2>
+          </div>
+          <div class="glass rounded-2xl px-4 py-2">
+            <span class="text-[10px] text-slate-300">Görev</span>
+            <b id="taskCounter" class="block rajdhani text-xl text-pink-300 leading-none"></b>
+          </div>
+        </div>
+
+        <div class="cauldron-zone">
+          <div class="cauldron-wrap">
+            <div class="cauldron-glow"></div>
+            <div id="cauldron" class="cauldron">
+              <div class="liquid"></div>
+              <span class="smoke" style="left:48px;top:38px;animation-delay:.1s"></span>
+              <span class="smoke" style="left:78px;top:25px;animation-delay:.7s"></span>
+              <span class="smoke" style="left:108px;top:38px;animation-delay:1.2s"></span>
+            </div>
+          </div>
+        </div>
+
+        <div id="dynamicArea" class="dynamic-area"></div>
+      </div>
+    </section>
+  </main>
+</div>
+
+<script>
+const tasks = [
+  {
+    id: 1,
+    taskTitle: "İklim Değişikliği Yapay Zekası Eğitimi",
+    taskDescription: "Bu yapay zeka; hava durumu, sıcaklık ve çevreyle ilgili doğru bilgilerle eğitilecek.",
+    correctTool: "Resmi Meteoroloji Filtresi",
+    stage2Elements: [
+      { text: "Sera Gazları", isCorrect: true },
+      { text: "Küresel Sıcaklık Verileri", isCorrect: true },
+      { text: "Yağış Ölçümleri", isCorrect: true },
+      { text: "Ünlülerin Tatil Fotoğrafları", isCorrect: false },
+      { text: "Kaynaksız Komplo Yorumu", isCorrect: false }
+    ],
+    stage3Molecules: [
+      { text: "NASA ve resmi meteoroloji verilerine dayanan iklim raporu.", source: "NASA / Resmi Meteoroloji", isReliable: true },
+      { text: "Bir blogda kaynaksız yazılmış 'iklim değişikliği yoktur' iddiası.", source: "Anonim Blog", isReliable: false }
+    ]
+  },
+  {
+    id: 2,
+    taskTitle: "Tarih ve Arkeoloji Dil Modeli Eğitimi",
+    taskDescription: "Bu yapay zeka; geçmiş uygarlıklar ve arkeolojik eserler hakkında doğru bilgiler öğrenecek.",
+    correctTool: "Müze ve Devlet Arşivi",
+    stage2Elements: [
+      { text: "Hitit Tabletleri", isCorrect: true },
+      { text: "Antik Paralar", isCorrect: true },
+      { text: "Kazı Raporları", isCorrect: true },
+      { text: "Sosyal Medya Efsanesi", isCorrect: false },
+      { text: "Fantastik Film Yorumu", isCorrect: false }
+    ],
+    stage3Molecules: [
+      { text: "Müze kataloğu ve kazı raporuyla desteklenen tarih bilgisi.", source: "Müze Arşivi", isReliable: true },
+      { text: "Kaynağı olmayan, kulaktan dolma bir şehir efsanesi.", source: "Sosyal Medya Zinciri", isReliable: false }
+    ]
+  },
+  {
+    id: 3,
+    taskTitle: "Sağlıklı Beslenme Asistanı Eğitimi",
+    taskDescription: "Bu yapay zeka; çocuklara sağlıklı ve dengeli beslenme önerileri vermeyi öğrenecek.",
+    correctTool: "Akademik Sağlık Filtresi",
+    stage2Elements: [
+      { text: "Besin Grupları", isCorrect: true },
+      { text: "Vitamin ve Mineral Bilgileri", isCorrect: true },
+      { text: "Uzman Diyetisyen Önerileri", isCorrect: true },
+      { text: "Şok Diyet Listesi", isCorrect: false },
+      { text: "Reklamlı Abur Cubur Yorumu", isCorrect: false }
+    ],
+    stage3Molecules: [
+      { text: "Uzmanlar ve sağlık kurumlarınca hazırlanmış dengeli beslenme bilgisi.", source: "Sağlık Kurumu", isReliable: true },
+      { text: "Bir fenomenin kanıtsız '3 günde mucize zayıflama' paylaşımı.", source: "Fenomen Paylaşımı", isReliable: false }
+    ]
+  }
+];
+
+const tools = [
+  { name: "Resmi Meteoroloji Filtresi", icon: "fa-cloud-sun-rain", type: "Hava ve iklim verileri için uygundur." },
+  { name: "Müze ve Devlet Arşivi", icon: "fa-landmark", type: "Tarih ve arkeoloji bilgileri için uygundur." },
+  { name: "Akademik Sağlık Filtresi", icon: "fa-heart-pulse", type: "Sağlık ve beslenme bilgileri için uygundur." },
+  { name: "Rastgele Forum Kazıyıcısı", icon: "fa-comments", type: "Herkes yazabilir, güvenilir olmayabilir." },
+  { name: "Sosyal Medya Yankı Makinesi", icon: "fa-hashtag", type: "Hızlı yayılır ama her zaman doğru değildir." }
+];
+
+let shuffledTasks = [];
+let currentTaskIndex = 0;
+let currentTask = null;
+let currentStage = 1;
+let lives = 3;
+let score = 0;
+let selectedCorrectElements = 0;
+let neededCorrectElements = 0;
+let timerInterval = null;
+let timeLeft = 12;
+
+const taskTitle = document.getElementById("taskTitle");
+const taskDescription = document.getElementById("taskDescription");
+const dynamicArea = document.getElementById("dynamicArea");
+const stageTitle = document.getElementById("stageTitle");
+const livesBox = document.getElementById("livesBox");
+const scoreText = document.getElementById("scoreText");
+const cauldron = document.getElementById("cauldron");
+const taskCounter = document.getElementById("taskCounter");
+const hintText = document.getElementById("hintText");
+
+function shuffle(arr) {
+  return [...arr].sort(() => Math.random() - 0.5);
+}
+
+function startGame() {
+  shuffledTasks = shuffle(tasks);
+  currentTaskIndex = 0;
+  lives = 3;
+  score = 0;
+  updateLives();
+  updateScore();
+  loadTask();
+}
+
+function restartGame() {
+  clearInterval(timerInterval);
+  startGame();
+}
+
+function loadTask() {
+  if (currentTaskIndex >= shuffledTasks.length) {
+    finishAllTasks();
+    return;
+  }
+
+  currentTask = shuffledTasks[currentTaskIndex];
+  currentStage = 1;
+  taskTitle.textContent = currentTask.taskTitle;
+  taskDescription.textContent = currentTask.taskDescription;
+  taskCounter.textContent = `${currentTaskIndex + 1} / ${shuffledTasks.length}`;
+  renderStage();
+}
+
+function updateLives() {
+  livesBox.innerHTML = "";
+  for (let i = 0; i < 3; i++) {
+    const heart = document.createElement("i");
+    heart.className = i < lives
+      ? "fa-solid fa-flask heart text-pink-400"
+      : "fa-solid fa-flask text-slate-600";
+    livesBox.appendChild(heart);
+  }
+}
+
+function updateScore() {
+  scoreText.textContent = score;
+}
+
+function loseLife() {
+  lives--;
+  updateLives();
+  flashCauldron("bad");
+
+  if (lives <= 0) {
+    clearInterval(timerInterval);
+    Swal.fire({
+      title: "Simya Başarısız: Kazan Patladı!",
+      text: "Canların bitti. Laboratuvar yeniden başlıyor.",
+      icon: "error",
+      background: "#120821",
+      color: "#fff",
+      confirmButtonColor: "#ff37d2",
+      confirmButtonText: "Tekrar Dene"
+    }).then(() => startGame());
+  }
+}
+
+function flashCauldron(type) {
+  cauldron.classList.remove("bad", "success");
+  void cauldron.offsetWidth;
+  cauldron.classList.add(type);
+  setTimeout(() => cauldron.classList.remove(type), 800);
+}
+
+function setStagePills() {
+  for (let i = 1; i <= 4; i++) {
+    document.getElementById(`stage${i}Pill`).classList.toggle("active", i === currentStage);
+  }
+}
+
+function renderStage() {
+  clearInterval(timerInterval);
+  setStagePills();
+
+  if (currentStage === 1) renderStage1();
+  if (currentStage === 2) renderStage2();
+  if (currentStage === 3) renderStage3();
+  if (currentStage === 4) renderStage4();
+}
+
+function renderStage1() {
+  stageTitle.textContent = "Aşama 1: Doğru Aracı Seç";
+  hintText.textContent = "Görevi oku. Bu bilgi en güvenilir hangi yerden bulunur? Doğru makineyi seç.";
+
+  const wrongTools = shuffle(tools.filter(t => t.name !== currentTask.correctTool)).slice(0, 2);
+  const correct = tools.find(t => t.name === currentTask.correctTool);
+  const stageTools = shuffle([correct, ...wrongTools]);
+
+  dynamicArea.innerHTML = `
+    <div class="text-center mb-3">
+      <p class="text-slate-300 text-sm">
+        Kazanı çalıştırmak için göreve en uygun bilgi toplama aracına tıkla.
+      </p>
+    </div>
+
+    <div class="grid md:grid-cols-3 gap-3">
+      ${stageTools.map(tool => `
+        <div class="tool-card glass rounded-2xl p-4 text-center" onclick="chooseTool('${tool.name}')">
+          <i class="fa-solid ${tool.icon} text-4xl text-cyan-300 mb-2"></i>
+          <h3 class="rajdhani text-xl font-bold leading-tight">${tool.name}</h3>
+          <p class="text-xs text-slate-300 mt-1">${tool.type}</p>
+        </div>
+      `).join("")}
+    </div>
+  `;
+}
+
+function chooseTool(toolName) {
+  if (toolName === currentTask.correctTool) {
+    score += 20;
+    updateScore();
+    flashCauldron("success");
+
+    Swal.fire({
+      toast: true,
+      position: "top-end",
+      icon: "success",
+      title: "Harika! Doğru aracı seçtin.",
+      showConfirmButton: false,
+      timer: 1100,
+      background: "#10231c",
+      color: "#fff"
+    });
+
+    currentStage = 2;
+    setTimeout(renderStage, 600);
+  } else {
+    loseLife();
+
+    Swal.fire({
+      toast: true,
+      position: "top-end",
+      icon: "warning",
+      title: "Bu araç bu görev için uygun değil.",
+      showConfirmButton: false,
+      timer: 1200,
+      background: "#2a0d20",
+      color: "#fff"
+    });
+  }
+}
+
+function renderStage2() {
+  stageTitle.textContent = "Aşama 2: Yararlı Bilgileri Topla";
+  hintText.textContent = "Sadece görevle ilgili bilgileri seç. Alakasız bilgi yapay zekanın kafasını karıştırır.";
+
+  selectedCorrectElements = 0;
+  neededCorrectElements = currentTask.stage2Elements.filter(e => e.isCorrect).length;
+
+  dynamicArea.innerHTML = `
+    <div class="text-center mb-3">
+      <p class="text-slate-300 text-sm">
+        Aşağıdaki bilgi elementlerinden göreve yarayanları seç ve kazana gönder.
+      </p>
+      <p class="rajdhani text-xl text-green-300 mt-1">
+        Doğru bilgi: <span id="elementCount">0</span> / ${neededCorrectElements}
+      </p>
+    </div>
+
+    <div class="grid grid-cols-5 gap-3">
+      ${shuffle(currentTask.stage2Elements).map((el, index) => `
+        <div id="element-${index}" class="element-card element-orb flex items-center justify-center text-center" onclick="chooseElement(${index}, ${el.isCorrect})">
+          <span class="font-bold text-sm leading-tight">${el.text}</span>
+        </div>
+      `).join("")}
+    </div>
+  `;
+}
+
+function chooseElement(index, isCorrect) {
+  const card = document.getElementById(`element-${index}`);
+  if (!card || card.classList.contains("used")) return;
+
+  if (isCorrect) {
+    card.classList.add("used", "animate__animated", "animate__zoomOutDown");
+    selectedCorrectElements++;
+    score += 10;
+    updateScore();
+
+    document.getElementById("elementCount").textContent = selectedCorrectElements;
+    flashCauldron("success");
+
+    if (selectedCorrectElements >= neededCorrectElements) {
+      currentStage = 3;
+      setTimeout(renderStage, 800);
+    }
+  } else {
+    card.classList.add("animate__animated", "animate__shakeX");
+    loseLife();
+    setTimeout(() => card.classList.remove("animate__animated", "animate__shakeX"), 700);
+  }
+}
+
+function renderStage3() {
+  stageTitle.textContent = "Aşama 3: Yanlış Bilgiyi Ayıkla";
+  hintText.textContent = "Burada amacın doğru bilgiyi seçmek değil. Uydurma ve güvenilmez bilgiyi bulup çöpe atmalısın.";
+
+  const molecules = shuffle(currentTask.stage3Molecules);
+  timeLeft = 12;
+
+  dynamicArea.innerHTML = `
+    <div class="glass rounded-2xl p-3 mb-3">
+      <div class="flex justify-between items-center gap-3 mb-2">
+        <h3 class="rajdhani text-xl font-bold text-cyan-300">
+          <i class="fa-solid fa-magnifying-glass-chart"></i>
+          Moleküler Bilgi Kontrolü
+        </h3>
+        <span class="rajdhani text-xl text-pink-300"><span id="timerText">12</span> sn</span>
+      </div>
+
+      <div class="danger-note rounded-xl p-2 mb-2 text-center">
+        <b class="text-sm text-red-200">
+          <i class="fa-solid fa-triangle-exclamation"></i>
+          DİKKAT: Burada temiz olanı değil, uydurma ve YALAN olan bilgiyi bulup ayıklamalısın!
+        </b>
+      </div>
+
+      <div class="timer-bar"><div id="timerFill" class="timer-fill"></div></div>
+    </div>
+
+    <div class="grid md:grid-cols-2 gap-3">
+      ${molecules.map((m, i) => `
+        <div class="molecule-card glass rounded-2xl p-4" onclick="chooseMolecule(${m.isReliable})">
+          <div class="text-center">
+            <i class="fa-solid fa-atom text-5xl ${m.isReliable ? 'text-green-300' : 'text-pink-400'} mb-2"></i>
+          </div>
+          <h3 class="rajdhani text-xl font-bold">Bilgi Molekülü ${i + 1}</h3>
+          <p class="text-slate-200 mt-2 text-sm leading-relaxed">${m.text}</p>
+          <p class="text-xs text-cyan-300 mt-2">
+            <i class="fa-solid fa-link"></i> Kaynak: ${m.source}
+          </p>
+          <button class="mt-3 btn-neon rounded-xl px-3 py-2 font-bold w-full text-sm">
+            <i class="fa-solid fa-trash-can"></i> Bunu Ayıkla
+          </button>
+        </div>
+      `).join("")}
+    </div>
+  `;
+
+  startTimer();
+}
+
+function startTimer() {
+  const timerText = document.getElementById("timerText");
+  const timerFill = document.getElementById("timerFill");
+
+  timerInterval = setInterval(() => {
+    timeLeft--;
+
+    if (timerText) timerText.textContent = timeLeft;
+    if (timerFill) timerFill.style.width = `${(timeLeft / 12) * 100}%`;
+
+    if (timeLeft <= 0) {
+      clearInterval(timerInterval);
+      cauldron.classList.add("animate__animated", "animate__flash");
+      setTimeout(() => cauldron.classList.remove("animate__animated", "animate__flash"), 900);
+      loseLife();
+
+      if (lives > 0) {
+        renderStage3();
+      }
+    }
+  }, 1000);
+}
+
+function chooseMolecule(isReliable) {
+  clearInterval(timerInterval);
+
+  if (isReliable) {
+    loseLife();
+
+    Swal.fire({
+      title: "Temiz Bilgiyi Sildin!",
+      text: "Bu bilgi güvenilirdi. Bu aşamada güvenilir bilgiyi değil, yalan veya şüpheli bilgiyi ayıklamalısın.",
+      icon: "warning",
+      background: "#16091f",
+      color: "#fff",
+      confirmButtonColor: "#ff37d2",
+      confirmButtonText: "Tekrar Dene"
+    }).then(() => {
+      if (lives > 0) renderStage3();
+    });
+  } else {
+    score += 30;
+    updateScore();
+    flashCauldron("success");
+
+    Swal.fire({
+      toast: true,
+      position: "top-end",
+      icon: "success",
+      title: "Doğru! Şüpheli bilgiyi ayıkladın.",
+      showConfirmButton: false,
+      timer: 1200,
+      background: "#10231c",
+      color: "#fff"
+    });
+
+    currentStage = 4;
+    setTimeout(renderStage, 650);
+  }
+}
+
+function renderStage4() {
+  stageTitle.textContent = "Aşama 4: Veriyi Kaydet";
+  hintText.textContent = "Artık elinde temiz ve güvenilir veri var. Bunu yapay zekanın veri kristaline kaydet.";
+
+  dynamicArea.innerHTML = `
+    <div class="text-center">
+      <p class="text-slate-300 text-sm mb-2">
+        İksir hazır! Şimdi temiz veriyi kristale kaydet ve yapay zeka çekirdeğine gönder.
+      </p>
+
+      <div class="crystal"></div>
+
+      <div class="max-w-xl mx-auto mt-3">
+        <div class="progress-shell">
+          <div id="saveProgress" class="progress-fill"></div>
+        </div>
+      </div>
+
+      <button id="saveBtn" onclick="saveCrystal()" class="btn-neon rounded-2xl px-7 py-3 mt-4 font-bold text-base">
+        <i class="fa-solid fa-wand-magic-sparkles"></i>
+        İksiri Kristale Enjekte Et
+      </button>
+    </div>
+  `;
+}
+
+function saveCrystal() {
+  const btn = document.getElementById("saveBtn");
+  const progress = document.getElementById("saveProgress");
+
+  btn.disabled = true;
+  btn.innerHTML = `<i class="fa-solid fa-spinner fa-spin"></i> Kaydediliyor...`;
+  progress.style.width = "100%";
+
+  setTimeout(() => {
+    score += 100;
+    updateScore();
+
+    confetti({
+      particleCount: 90,
+      spread: 75,
+      origin: { y: 0.65 }
+    });
+
+    Swal.fire({
+      title: "Veri İksiri Kaydedildi!",
+      text: "Yapay zeka çekirdeği temiz veriyle güçlendi.",
+      icon: "success",
+      background: "#081625",
+      color: "#fff",
+      confirmButtonColor: "#18f7ff",
+      confirmButtonText: "Sonraki Görev"
+    }).then(() => {
+      currentTaskIndex++;
+      loadTask();
+    });
+  }, 1200);
+}
+
+function finishAllTasks() {
+  confetti({
+    particleCount: 230,
+    spread: 115,
+    origin: { y: 0.6 }
+  });
+
+  Swal.fire({
+    title: "Baş Simyacı!",
+    html: `
+      <p>Tüm veri iksirlerini başarıyla hazırladın.</p>
+      <p style="margin-top:10px;font-size:22px;"><b>Toplam Puan: ${score}</b></p>
+    `,
+    icon: "success",
+    background: "#100720",
+    color: "#fff",
+    confirmButtonColor: "#7dff6a",
+    confirmButtonText: "Baştan Oyna"
+  }).then(() => startGame());
+}
+
+/* Arka plan baloncukları */
+const canvas = document.getElementById("bubbleCanvas");
+const ctx = canvas.getContext("2d");
+let bubbles = [];
+
+function resizeCanvas() {
+  canvas.width = window.innerWidth;
+  canvas.height = window.innerHeight;
+}
+window.addEventListener("resize", resizeCanvas);
+resizeCanvas();
+
+function createBubbles() {
+  bubbles = Array.from({ length: 70 }, () => ({
+    x: Math.random() * canvas.width,
+    y: Math.random() * canvas.height,
+    r: Math.random() * 5 + 2,
+    speed: Math.random() * 0.7 + 0.25,
+    color: Math.random() > .5 ? "24,247,255" : Math.random() > .5 ? "255,55,210" : "125,255,106"
+  }));
+}
+
+function animateBubbles() {
+  ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+  bubbles.forEach(b => {
+    ctx.beginPath();
+    ctx.arc(b.x, b.y, b.r, 0, Math.PI * 2);
+    ctx.fillStyle = `rgba(${b.color}, .28)`;
+    ctx.shadowBlur = 16;
+    ctx.shadowColor = `rgba(${b.color}, .8)`;
+    ctx.fill();
+
+    b.y -= b.speed;
+    b.x += Math.sin(b.y * .01) * .25;
+
+    if (b.y < -20) {
+      b.y = canvas.height + 20;
+      b.x = Math.random() * canvas.width;
+    }
+  });
+
+  requestAnimationFrame(animateBubbles);
+}
+
+createBubbles();
+animateBubbles();
+startGame();
+</script>
+</body>
+</html>

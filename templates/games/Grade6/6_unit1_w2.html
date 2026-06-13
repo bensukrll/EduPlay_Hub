@@ -1,0 +1,721 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Teknoloji Kahini: Geleceği Tahmin Et</title>
+    <style>
+        /* --- GLOBAL STILLER & EDUPLAY HUB RENK PALETİ --- */
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background-color: #CAD1E2; /* İstenen Açık Gri/Mavi Tonu */
+            color: #253156; /* İstenen Koyu Lacivert Tonu */
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .game-container {
+            background-color: #FFFFFF;
+            width: 100%;
+            max-width: 850px;
+            border-radius: 20px;
+            box-shadow: 0 10px 25px rgba(37, 49, 86, 0.15);
+            padding: 30px;
+            overflow: hidden;
+            transition: all 0.3s ease;
+        }
+
+        /* --- BAŞLIK VE SKOR ALANI --- */
+        header {
+            text-align: center;
+            margin-bottom: 25px;
+            border-bottom: 3px solid #CAD1E2;
+            padding-bottom: 15px;
+        }
+
+        h1 {
+            font-size: 2rem;
+            color: #253156;
+            margin-bottom: 5px;
+        }
+
+        .subtitle {
+            font-size: 1rem;
+            color: #5b6b94;
+            font-style: italic;
+        }
+
+        .stats-bar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: 15px;
+            font-weight: bold;
+            font-size: 1.1rem;
+            background-color: #f0f3fa;
+            padding: 10px 20px;
+            border-radius: 10px;
+        }
+
+        /* --- EKRAN YÖNETİMİ --- */
+        .screen {
+            display: none;
+        }
+
+        .screen.active {
+            display: block;
+            animation: fadeIn 0.5s ease;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* --- GİRİŞ EKRANI --- */
+        #welcome-screen {
+            text-align: center;
+            padding: 20px 0;
+        }
+
+        .welcome-icon {
+            font-size: 4.5rem;
+            margin-bottom: 15px;
+            animation: float 3s ease-in-out infinite;
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-10px); }
+        }
+
+        .intro-text {
+            font-size: 1.1rem;
+            line-height: 1.6;
+            margin-bottom: 25px;
+            color: #475569;
+        }
+
+        /* --- BUTONLAR --- */
+        .btn {
+            background-color: #253156;
+            color: #FFFFFF;
+            border: none;
+            padding: 14px 30px;
+            font-size: 1.1rem;
+            font-weight: bold;
+            border-radius: 30px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            box-shadow: 0 4px 6px rgba(37, 49, 86, 0.2);
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .btn:hover {
+            background-color: #38497d;
+            transform: translateY(-2px);
+            box-shadow: 0 6px 12px rgba(37, 49, 86, 0.3);
+        }
+
+        .btn:disabled {
+            background-color: #cbd5e1;
+            cursor: not-allowed;
+            transform: none;
+            box-shadow: none;
+        }
+
+        /* --- ZAMAN TÜNELİ (TIMELINE) --- */
+        .timeline-container {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin: 25px 0;
+            background-color: #f8fafc;
+            padding: 20px;
+            border-radius: 15px;
+            border: 2px dashed #CAD1E2;
+        }
+
+        .timeline-card {
+            background-color: #FFFFFF;
+            border: 2px solid #253156;
+            border-radius: 12px;
+            padding: 12px 15px;
+            min-width: 110px;
+            text-align: center;
+            font-weight: bold;
+            font-size: 0.95rem;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.05);
+            position: relative;
+        }
+
+        .timeline-card.future {
+            background-color: #253156;
+            color: #FFFFFF;
+            font-size: 1.5rem;
+            border-color: #253156;
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.05); border-color: #5b6b94; }
+        }
+
+        .timeline-arrow {
+            font-size: 1.3rem;
+            color: #253156;
+            font-weight: bold;
+        }
+
+        /* --- SORU VE SEÇENEKLER --- */
+        .question-text {
+            font-size: 1.2rem;
+            font-weight: bold;
+            margin-bottom: 20px;
+            text-align: center;
+            line-height: 1.5;
+        }
+
+        .options-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+
+        .option-btn {
+            background-color: #FFFFFF;
+            border: 2px solid #CAD1E2;
+            color: #253156;
+            padding: 15px 20px;
+            font-size: 1rem;
+            font-weight: 600;
+            border-radius: 12px;
+            cursor: pointer;
+            text-align: left;
+            transition: all 0.2s ease;
+        }
+
+        .option-btn:hover:not(:disabled) {
+            background-color: #CAD1E2;
+            border-color: #253156;
+        }
+
+        .option-btn.correct {
+            background-color: #d1fae5 !important;
+            border-color: #10b981 !important;
+            color: #065f46 !important;
+        }
+
+        .option-btn.wrong {
+            background-color: #fee2e2 !important;
+            border-color: #ef4444 !important;
+            color: #991b1b !important;
+        }
+
+        /* --- GERİ BİLDİRİM PANELİ --- */
+        .feedback-panel {
+            margin-top: 20px;
+            padding: 20px;
+            border-radius: 15px;
+            display: none;
+            animation: slideDown 0.3s ease;
+        }
+
+        .feedback-panel.correct-style {
+            display: block;
+            background-color: #ecfdf5;
+            border-left: 6px solid #10b981;
+        }
+
+        .feedback-panel.wrong-style {
+            display: block;
+            background-color: #fef2f2;
+            border-left: 6px solid #ef4444;
+        }
+
+        .feedback-title {
+            font-weight: bold;
+            font-size: 1.2rem;
+            margin-bottom: 8px;
+        }
+
+        .feedback-text, .impact-text {
+            font-size: 0.95rem;
+            line-height: 1.5;
+            margin-bottom: 10px;
+        }
+
+        .impact-text {
+            background-color: rgba(255, 255, 255, 0.6);
+            padding: 10px;
+            border-radius: 8px;
+            border-left: 3px solid #253156;
+        }
+
+        .action-container {
+            display: flex;
+            justify-content: flex-end;
+            margin-top: 15px;
+        }
+
+        /* --- SONUÇ EKRANI --- */
+        #result-screen {
+            text-align: center;
+            padding: 20px 0;
+        }
+
+        .result-score {
+            font-size: 3rem;
+            font-weight: bold;
+            color: #253156;
+            margin: 15px 0;
+        }
+
+        .evaluation-msg {
+            font-size: 1.2rem;
+            margin-bottom: 30px;
+            line-height: 1.6;
+            font-weight: 600;
+        }
+
+        /* --- RESPONSIVE --- */
+        @media (max-width: 650px) {
+            .options-grid {
+                grid-template-columns: 1fr;
+            }
+            .timeline-arrow {
+                transform: rotate(90deg);
+                margin: 5px 0;
+            }
+            .timeline-container {
+                flex-direction: column;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="game-container">
+        <header>
+            <h1>Teknoloji Kahini: Geleceği Tahmin Et 🔮</h1>
+        </header>
+
+        <div id="stats-bar" class="stats-bar" style="display: none;">
+            <span id="question-counter">Soru: 1 / 5</span>
+            <span id="score-display">Puan: 0</span>
+        </div>
+
+        <div id="welcome-screen" class="screen active">
+            <div class="welcome-icon">🧙‍♂️</div>
+            <p class="intro-text">
+                Geleceği tahmin etmeye hazır mısın?<br>
+                Bu oyunda geçmişten günümüze gelen teknolojik gelişim örüntülerini inceleyecek, mantıklı çıkarımlar yaparak bir sonraki adımda dünyayı hangi teknolojinin beklediğini bulacaksın. <br>
+                <strong>Hadi, teknoloji örüntüsünü yakala ve kehanetini gerçekleştir!</strong>
+            </p>
+            <button id="start-btn" class="btn">Oyuna Başla 🚀</button>
+        </div>
+
+        <div id="game-screen" class="screen">
+            <div id="timeline-box" class="timeline-container"></div>
+            <div id="question-text" class="question-text"></div>
+            <div id="options-grid" class="options-grid"></div>
+
+            <div id="feedback-panel" class="feedback-panel">
+                <div id="feedback-title" class="feedback-title"></div>
+                <p id="feedback-text" class="feedback-text"></p>
+                <div id="impact-text" class="impact-text"></div>
+                <div class="action-container">
+                    <button id="next-btn" class="btn">Sonraki Soru ➡️</button>
+                </div>
+            </div>
+        </div>
+
+        <div id="result-screen" class="screen">
+            <div class="welcome-icon">🏆</div>
+            <h2>Kehanet Raporu Tamamlandı!</h2>
+            <div id="result-score" class="result-score">Puan: 0</div>
+            <div id="correct-wrong-ratio" style="font-weight: bold; margin-bottom: 15px;"></div>
+            <p id="evaluation-msg" class="evaluation-msg"></p>
+            <button id="restart-btn" class="btn">Yeniden Oyna 🔄</button>
+        </div>
+    </div>
+
+    <script>
+        // --- 12 SORULUK DÜZELTİLMİŞ VE BENZERSİZLEŞTİRİLMİŞ SORU HAVUZU ---
+        const questionPool = [
+            {
+                timeline: ["💾 Disket", "💿 CD-ROM", "🔌 Flash Bellek", "☁️ Bulut Depolama"],
+                question: "Depolama teknolojilerinin gelişim örüntüsüne göre, yakın gelecekte hangi teknolojinin hayatımıza girmesi en olasıdır?",
+                options: [
+                    "🧠 Yapay zekâ destekli kişisel bulut hafızası",
+                    "📜 Taş tabletlere kazınmış veri arşivleri",
+                    "🖨️ Bilgileri sadece kağıda basarak saklayan mekanik dolaplar",
+                    "📼 Manyetik teypli kasetlerin yeniden zorunlu olması"
+                ],
+                correctAnswer: 0,
+                explanation: "Veri depolama araçları tarih boyunca her zaman daha küçük fiziksel alan kaplayıp daha büyük kapasite sunacak ve en sonunda tamamen kablosuz/fiziksel temassız hale gelecek şekilde gelişmiştir.",
+                socialImpact: "Toplum Üzerindeki Etkisi: Bilgiye erişim hızı insan düşüncesiyle eşitlenir; eğitimde ezber tamamen ortadan kalkar ve siber güvenlik doğrudan insan zihnini koruma odaklı hale gelir."
+            },
+            {
+                timeline: ["✉️ Posta Güvercini", "⚗️ Telgraf", "📞 Çevirmeli Telefon", "📱 Akıllı Telefon"],
+                question: "İletişim araçlarının örüntüsünü incelediğimizde, gelecekteki olası iletişim yöntemi ne olabilir?",
+                options: [
+                    "✨ Hologramlı ve üç boyutlu görüntülü görüşme",
+                    "🗣️ Sadece dumanla haberleşmeye geri dönülmesi",
+                    "📴 Akıllı telefonların tamamen yasaklanması",
+                    "📝 Yalnızca el yazısı mektupların kullanılması"
+                ],
+                correctAnswer: 0,
+                explanation: "İletişim teknolojileri aradaki mesafeleri ve aracı cihazları sıfırlama eğilimindedir. Ses ve görüntünün ötesinde, üç boyutlu hologram aktarımı bu gelişmenin doğal bir sonucudur.",
+                socialImpact: "Toplum Üzerindeki Etkisi: Dil bariyerleri tamamen kalkabilir, insanlar arası duygusal bağlar ve empati hızla artarken, kişisel düşünce gizliliği kavramı yeniden tartışmaya açılır."
+            },
+            {
+                timeline: ["🐎 At Arabası", "🚂 Buharlı Tren", "🚗 Benzinli Otomobil", "⚡ Elektrikli Otonom Araç"],
+                question: "Ulaşım teknolojilerinin dönüşüm örüntüsüne bakılırsa, geleceğin ulaşım aracı hangisi olmalıdır?",
+                options: [
+                    "🚲 Pedallı tahta bisikletlerin zorunlu olması",
+                    "🚀 Şehir içi tüp hatlarda ses hızında giden kapsüller (Hyperloop) ve uçan taksiler",
+                    "🚂 Kömürle çalışan dev lokomotiflerin şehirlere dönmesi",
+                    "🛶 Şehir içi ulaşımın sadece kürekli sandallarla yapılması"
+                ],
+                correctAnswer: 1,
+                explanation: "Ulaşım araçları fosil yakıtlardan yenilenebilir enerjiye, insan kontrolünden yapay zekaya ve iki boyutlu yollardan üç boyutlu (hava/tüp) alanlara doğru evrilmektedir.",
+                socialImpact: "Toplum Üzerindeki Etkisi: Trafik kazaları sıfıra yaklaşır, fosil yakıt tüketimi bittiği için şehir havası temizlenir ve uzak mesafeler yakınlaştığı için şehirleşme yapısı tamamen değişir."
+            },
+            {
+                timeline: ["🏫 Kara Tahta", "📽️ Projeksiyon Cihazı", "💻 Akıllı Tahta", "📱 Uzaktan Eğitim Platformları"],
+                question: "Bu gelişim zincirine göre, geleceğin eğitim teknolojisi toplumda en çok hangi yenilikçi duruma yol açacaktır?",
+                options: [
+                    "🎒 Okul çantalarının tamamen taş bloklardan yapılmasına",
+                    "🥽 Yapay zekâ öğretmenler eşliğinde Sanal Gerçeklik (VR) ile evden uzay laboratuvarına bağlanmaya",
+                    "📝 Sadece mürekkepli hokka ve parşömen kâğıdı kullanımına",
+                    "🎮 Derslerin tamamen kaldırılıp sadece bilgisayar oyunu oynanmasına"
+                ],
+                correctAnswer: 1,
+                explanation: "Eğitim teknolojileri eğitimi mekandan bağımsız, bireyselleştirilmiş ve deneyim odaklı hale getirmektedir. VR dünyası soyut kavramları somutlaştırır.",
+                socialImpact: "Toplum Üzerindeki Etkisi: Dünyanın her yerindeki öğrenciler eşit ve en kaliteli eğitim imkanına erişir. Eğitimde fırsat eşitliği sağlanır."
+            },
+            {
+                timeline: ["🌿 Şifalı Bitkiler", "💊 Kimyasal İlaçlar", "🔬 Röntgen ve MR Cihazları", "🧬 Robotik Cerrahi"],
+                question: "Sağlık teknolojilerindeki bu örüntüyü takip edersek, gelecekteki olası durum ne olur?",
+                options: [
+                    "🦷 Anatomi derslerinin ve tıp fakültelerinin tamamen yasaklanması",
+                    "🩺 Hastalıklara karşı önceden uyaran ve hücreleri tamir eden mikro robotlar (Nanoteknoloji)",
+                    "🧙‍♂️ Tüm hastanelerin kapatılıp geleneksel şifacılık dönemine geçilmesi",
+                    "🍬 İlaçların sadece toz şekerden üretilmeye başlanması"
+                ],
+                correctAnswer: 1,
+                explanation: "Sağlık sektörü, büyük cerrahi müdahalelerden hücresel ve mikro düzeyde hedefe yönelik nokta atışı tedavilere doğru yönelmektedir.",
+                socialImpact: "Toplum Üzerindeki Etkisi: Ortalama insan ömrü uzar, kalıtsal hastalıklar doğum öncesinde çözülebilir ve hastanede yatış süreleri neredeyse sıfıra iner."
+            },
+            {
+                timeline: ["🧮 Abaküs", "⚙️ Mekanik Hesap Makinesi", "🖥️ Masaüstü Bilgisayar", "🤖 Bulut Tabanlı Yapay Zekâ"],
+                question: "Yapay zekâ ve bilgi işlem örüntülerine göre karşılaştırma yaparsak, bir sonraki devrim ne olacaktır?",
+                options: [
+                    "🖍️ Dijital bilgisayarların yerine yeniden elle çizim yapılan dönemlere dönülmesi",
+                    "⚛️ Moleküler seviyede çalışan ve saniyede trilyonlarca işlem yapan Kuantum Bilgisayarlar",
+                    "🔌 Bilgisayarların sadece elektrik olmadan pille çalışabilen küçük versiyonları",
+                    "📺 İnternetin tamamen kapatılıp sadece kablolu televizyon yayını kullanılması"
+                ],
+                correctAnswer: 1,
+                explanation: "İşlem gücü mekanikten elektroniğe, oradan yazılıma ve şimdi de atom altı parçacıkların fiziğini kullanan kuantum teknolojisine doğru hızla sıçramaktadır.",
+                socialImpact: "Toplum Üzerindeki Etkisi: Bugün çözülmesi bin yıl sürecek matematiksel ve bilimsel problemler dakikalar içinde çözülür."
+            },
+            {
+                timeline: ["🔑 Demir Anahtar", "🎛️ Şifreli Kapı Kilidi", "💳 Kartlı Geçiş Sistemi", "👁️ Parmak İzi ve Yüz Tanıma"],
+                question: "Akıllı ev ve güvenlik sistemlerinin bu örüntüsü, gelecekte evlerimizi nasıl etkileyecektir?",
+                options: [
+                    "🚪 Ev kapılarının tamamen kaldırılarak kilit sistemlerinin bitmesine",
+                    "🧬 Yapay zekâ destekli, ses tonuna ve biyometrik veriye duyarlı otonom kilit sistemlerine",
+                    "🧱 Kapıların sadece dışarıdan büyük taş kütleleri dayayarak kilitlenmesine",
+                    "🐕 Ev güvenliğinin teknoloji olmadan sadece bekçi hayvanlarıyla sağlanmasına"
+                ],
+                correctAnswer: 1,
+                explanation: "Güvenlik sistemleri fiziksel nesneleri taşımaktan insanın biyolojik şifrelerini (biyometri) kullanmaya doğru ilerlemiştir.",
+                socialImpact: "Toplum Üzerindeki Etkisi: Ev hırsızlığı kavramı tarihe karışır, anahtar kaybetme derdi biter ancak dijital kimlik hırsızlığına karşı yeni önlemler gerekir."
+            },
+            {
+                timeline: ["⚙️ Kurmalı Oyuncak", "🏗️ Fabrikadaki Sabit Mekanik Kol", "🧹 Akıllı Robot Süpürge", "🚶 İnsansı (Humanoid) Asistan Robotlar"],
+                question: "Robotik teknolojilerin gelişim örüntüsü dikkate alındığında toplum üzerinde nasıl bir etki beklenebilir?",
+                options: [
+                    "🚫 Robotların tamamen yasaklanıp her endüstriyel üretimin elle yapılmasına",
+                    "🛠️ Ağır, tehlikeli ve rutin işlerin robotlara devredilip insanların yaratıcı alanlara yönelmesine",
+                    "🌾 Robotların sadece tarım alanında çalışıp fabrikaların tamamen kapanmasına",
+                    "🧺 Tüm ev işlerinin yeniden eski elektrikli aletler olmadan yapılması zorunluluğuna"
+                ],
+                correctAnswer: 1,
+                explanation: "Robotlar belirli bir alana bağlı olmaktan çıkıp, insan formuna ve insan çevre koşullarına uyum sağlayabilecek esnek akıllı asistanlara dönüşmektedir.",
+                socialImpact: "Toplum Üzerindeki Etkisi: İş dünyasındaki meslek tanımları değişir; tehlikeli işlerde iş kazaları biter, insanların yaratıcı alanlara ayıracağı serbest zaman artar."
+            },
+            {
+                timeline: ["📿 Mekanik Köstekli Saat", "⌚ Dijital Kol Saati", "🏃 Nabız Ölçer Spor Bandı", "👁️ Akıllı Lens ve Dijital Giysiler"],
+                question: "Giyilebilir teknolojilerin geçmişten bugüne gelişim örüntüsünü listeleyen bir öğrenci gelecekte hangisini görebilir?",
+                options: [
+                    "📦 Elektronik cihazların ağırlaşarak sırtta taşınan çuvallara dönüşmesini",
+                    "🩺 Sağlık verilerini anlık takip edip giyen kişinin enerjisiyle çalışan akıllı kumaşları",
+                    "🗼 Kol saatlerinin tamamen kalkıp sadece şehir meydanlarındaki kule saatlerine dönülmesini",
+                    "🧥 Giyilebilir teknolojilerin kıyafet sektörünü tamamen bitirip tekstili durdurmasını"
+                ],
+                correctAnswer: 1,
+                explanation: "Giyilebilir teknolojiler aksesuardan (saat, gözlük) kıyafete, kıyafetten ise deri üstü ve deri altı biyolojik entegrasyona doğru gitmektedir.",
+                socialImpact: "Toplum Üzerindeki Etkisi: İnsanlar hastalanmadan çok önce vücut sinyalleriyle uyarılır, fiziksel engeller biyonik kıyafetlerle aşılabilir."
+            },
+            {
+                timeline: ["🎲 Tahta Zar Oyunu", "🕹️ Atariler ve Tuşlu Telefon Oyunları", "🎮 Bilgisayar ve Konsol Oyunları", "🥽 Sanal Gerçeklik (VR) Dünyaları"],
+                question: "Oyun ve eğlence teknolojilerinin gelişim seyrine göre gelecekteki yeni aşama hangisi olmalıdır?",
+                options: [
+                    "🌳 Sadece tamamen doğal ortamlarda taşlarla oynanan sokak oyunlarına dönülmesi",
+                    "🌌 Yapay zekâ kodlu, tüm duyuların (koku, dokunma) hissedilebildiği tam simülasyon odaları",
+                    "📺 Oyunların grafik kalitesinin düşerek sadece siyah beyaz ekranlara gerilemesi",
+                    "🎬 Eğlence sektörünün oyunları tamamen bırakıp sadece sinema filmlerine odaklanması"
+                ],
+                correctAnswer: 1,
+                explanation: "Eğlence dünyası dışarıdan izlenen bir yapıdan, içine girilen (VR) ve en nihayetinde tüm duyularla bizzat yaşanılan sanal gerçeklik boyutlarına doğru evrilmektedir.",
+                socialImpact: "Toplum Üzerindeki Etkisi: Sanal turizm ve sanal deneyimler gerçek dünyanın önüne geçebilir, yeni dijital sosyalleşme kültürleri doğar."
+            },
+            {
+                timeline: ["📻 Kablolu Radyo Ağları", "📺 Karasal Antenli Televizyon", "🌐 Çevirmeli Kablolu İnternet", "📶 Kablosuz Wi-Fi ve 5G Teknolojisi"],
+                question: "İnternet ve bağlantı teknolojilerini karşılaştırdığımızda gelecekteki olası durum ne olacaktır?",
+                options: [
+                    "🕊️ Küresel internet ağlarının çöküp tamamen posta güvercinlerine dönülmesi",
+                    "🛰️ Dünya genelinde uydulardan sağlanan, kesintisiz ve yüksek hızlı küresel uydu internet ağları",
+                    "🏢 Bağlantıların sadece kamu binalarında kalın kablolarla sınırlandırılması",
+                    "🚂 Dijital veri akışının durdurulup bilgilerin fiziksel trenlerle taşınması"
+                ],
+                correctAnswer: 1,
+                explanation: "Bağlantı teknolojileri yerelden küresele, kabloludan tamamen görünmez atmosfere ve yüksek gecikmeden anlık veri akışına doğru gelişme örüntüsü gösterir.",
+                socialImpact: "Toplum Üzerindeki Etkisi: Dijital uçurum azalır, dünyanın en ücra köşesindeki bir insan bile saniyeler içinde küresel veri havuzuna bağlanarak her işini uzaktan halledebilir."
+            },
+            {
+                timeline: ["🔥 Odun Ateşi Isıtması", "🛢️ Gazlı Sobalar", "🌡️ Termostatlı Kaloriferler", "📱 Uzaktan Kontrollü Akıllı Kombi"],
+                question: "Ev yönetim sistemlerinin evrim örüntüsüne göre gelecekte bizi nasıl bir ev ortamı beklemektedir?",
+                options: [
+                    "🧱 Evlerin tüm modern ısıtma sistemlerini kaybedip mağara dönemine dönmesini",
+                    "🏠 Evin hava durumunu ve kullanıcı alışkanlıklarını analiz eden yapay zekâ kontrollü eko-evler",
+                    "🪵 Isınma sistemlerinin tamamen kaldırılarak sadece odun ve kömür kullanımına geçilmesini",
+                    "⚙️ Ev yönetiminin tamamen eski mekanik kollarla el yordamıyla yapılmasını"
+                ],
+                correctAnswer: 1,
+                explanation: "Ev teknolojileri insan emeğini azaltıp kararları algoritmalar ve sensörler yardımıyla otonom hale getiren sistemlere doğru bir örüntü çizer.",
+                socialImpact: "Toplum Üzerindeki Etkisi: Enerji israfı neredeyse sıfıra iner, çevre dostu yeşil binalar sayesinde karbon ayak izi azalır."
+            }
+        ];
+
+        // --- OYUN DEĞİŞKENLERİ ---
+        let selectedQuestions = [];
+        let currentQuestionIndex = 0;
+        let score = 0;
+        let correctAnswersCount = 0;
+        const totalQuestionsCount = 5; 
+
+        // --- DOM SEÇİCİLERİ ---
+        const welcomeScreen = document.getElementById("welcome-screen");
+        const gameScreen = document.getElementById("game-screen");
+        const resultScreen = document.getElementById("result-screen");
+        const startBtn = document.getElementById("start-btn");
+        const nextBtn = document.getElementById("next-btn");
+        const restartBtn = document.getElementById("restart-btn");
+        const timelineBox = document.getElementById("timeline-box");
+        const questionText = document.getElementById("question-text");
+        const optionsGrid = document.getElementById("options-grid");
+        const feedbackPanel = document.getElementById("feedback-panel");
+        const feedbackTitle = document.getElementById("feedback-title");
+        const feedbackText = document.getElementById("feedback-text");
+        const impactText = document.getElementById("impact-text");
+        const statsBar = document.getElementById("stats-bar");
+        const questionCounter = document.getElementById("question-counter");
+        const scoreDisplay = document.getElementById("score-display");
+        const resultScore = document.getElementById("result-score");
+        const correctWrongRatio = document.getElementById("correct-wrong-ratio");
+        const evaluationMsg = document.getElementById("evaluation-msg");
+
+        // --- OLAY DİNLEYİCİLERİ ---
+        startBtn.addEventListener("click", startGame);
+        nextBtn.addEventListener("click", loadNextQuestion);
+        restartBtn.addEventListener("click", restartGame);
+
+        // --- ALGORİTMALAR ---
+        function shuffle(array) {
+            for (let i = array.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [array[i], array[j]] = [array[j], array[i]];
+            }
+            return array;
+        }
+
+        function validateAndCleanPool() {
+            questionPool.forEach(q => {
+                // Doğru cevabı metin olarak koru, tekrar eden seçenekleri temizle.
+                const correctText = q.options[q.correctAnswer];
+                const uniqueOptions = [];
+
+                q.options.forEach(option => {
+                    if (!uniqueOptions.includes(option)) {
+                        uniqueOptions.push(option);
+                    }
+                });
+
+                q.options = uniqueOptions;
+                q.correctAnswer = q.options.indexOf(correctText);
+
+                // Güvenlik kontrolü: Her soruda doğru cevap mutlaka seçeneklerde olmalı.
+                if (q.correctAnswer === -1) {
+                    q.options.unshift(correctText);
+                    q.correctAnswer = 0;
+                }
+            });
+        }
+
+        // --- OYUN AKIŞI ---
+        function startGame() {
+            validateAndCleanPool();
+            welcomeScreen.classList.remove("active");
+            resultScreen.classList.remove("active");
+            gameScreen.classList.add("active");
+            statsBar.style.display = "flex";
+            
+            score = 0;
+            correctAnswersCount = 0;
+            currentQuestionIndex = 0;
+            
+            let poolCopy = [...questionPool];
+            shuffle(poolCopy);
+            selectedQuestions = poolCopy.slice(0, totalQuestionsCount);
+            
+            updateStats();
+            showQuestion();
+        }
+
+        function showQuestion() {
+            feedbackPanel.className = "feedback-panel";
+            nextBtn.disabled = true;
+            timelineBox.innerHTML = "";
+            optionsGrid.innerHTML = "";
+            
+            let currentQuestion = selectedQuestions[currentQuestionIndex];
+            
+            currentQuestion.timeline.forEach((item, index) => {
+                const card = document.createElement("div");
+                card.classList.add("timeline-card");
+                card.textContent = item;
+                timelineBox.appendChild(card);
+                
+                if (index < currentQuestion.timeline.length - 1) {
+                    const arrow = document.createElement("div");
+                    arrow.classList.add("timeline-arrow");
+                    arrow.textContent = "➔";
+                    timelineBox.appendChild(arrow);
+                }
+            });
+            
+            const futureCard = document.createElement("div");
+            futureCard.classList.add("timeline-card", "future");
+            futureCard.textContent = "🔮 ?";
+            timelineBox.appendChild(futureCard);
+            
+            questionText.textContent = currentQuestion.question;
+            
+            let optionsWithIndices = currentQuestion.options.map((opt, idx) => {
+                return { text: opt, originalIndex: idx };
+            });
+            
+            shuffle(optionsWithIndices);
+            
+            optionsWithIndices.forEach(opt => {
+                const button = document.createElement("button");
+                button.classList.add("option-btn");
+                button.textContent = opt.text;
+                button.addEventListener("click", () => handleAnswer(button, opt.originalIndex, currentQuestion.correctAnswer));
+                optionsGrid.appendChild(button);
+            });
+        }
+
+        function handleAnswer(selectedButton, chosenIndex, correctIndex) {
+            const allButtons = optionsGrid.querySelectorAll(".option-btn");
+            allButtons.forEach(btn => btn.disabled = true);
+            
+            let currentQuestion = selectedQuestions[currentQuestionIndex];
+            
+            if (chosenIndex === correctIndex) {
+                selectedButton.classList.add("correct");
+                score += 20;
+                correctAnswersCount++;
+                feedbackTitle.textContent = "🌟 Harika Çıkarım! Teknoloji Kahini Bildi!";
+                feedbackPanel.classList.add("correct-style");
+            } else {
+                selectedButton.classList.add("wrong");
+                allButtons.forEach(btn => {
+                    if (btn.textContent === currentQuestion.options[correctIndex]) {
+                        btn.classList.add("correct");
+                    }
+                });
+                feedbackTitle.textContent = "❌ Farklı Bir Gelecek İhtimali!";
+                feedbackPanel.classList.add("wrong-style");
+            }
+            
+            feedbackText.innerHTML = `<strong>Neden Mantıklı?</strong> ${currentQuestion.explanation}`;
+            impactText.innerHTML = `💡 ${currentQuestion.socialImpact}`;
+            
+            updateStats();
+            nextBtn.disabled = false;
+        }
+
+        function updateStats() {
+            questionCounter.textContent = `Soru: ${currentQuestionIndex + 1} / ${totalQuestionsCount}`;
+            scoreDisplay.textContent = `Puan: ${score}`;
+        }
+
+        function loadNextQuestion() {
+            currentQuestionIndex++;
+            if (currentQuestionIndex < totalQuestionsCount) {
+                updateStats();
+                showQuestion();
+            } else {
+                showResultScreen();
+            }
+        }
+
+        function showResultScreen() {
+            gameScreen.classList.remove("active");
+            statsBar.style.display = "none";
+            resultScreen.classList.add("active");
+            
+            resultScore.textContent = `${score} Puan`;
+            correctWrongRatio.textContent = `Toplam 5 sorudan ${correctAnswersCount} tanesini doğru tahmin ettin!`;
+            
+            if (score === 100) {
+                evaluationMsg.textContent = "🧙‍♂️ Mükemmel! Geleceğin Baş Kahini Sensin! Teknolojik gelişim örüntülerini kusursuz yakaladın ve tüm çıkarımları doğru yaptın. 🚀";
+            } else if (score === 80) {
+                evaluationMsg.textContent = "🌟 Çok iyi! Teknoloji örüntülerini büyük ölçüde doğru yorumladın. Birkaç küçük noktaya daha dikkat edersen kehanetin kusursuz olacak!";
+            } else if (score === 60) {
+                evaluationMsg.textContent = "👍 Güzel başlangıç! 5 sorudan 3 doğru yaptın. Bazı örüntüleri yakaladın, ama gelecekteki teknolojileri seçerken geçmişten bugüne değişimi biraz daha dikkatli incelemelisin.";
+            } else if (score === 40) {
+                evaluationMsg.textContent = "🔍 Fena değil, gelişiyorsun! Teknolojilerin nasıl değiştiğini fark etmeye başlamışsın. Zaman tünelindeki ipuçlarına daha çok odaklanarak tekrar deneyebilirsin.";
+            } else if (score === 20) {
+                evaluationMsg.textContent = "🧩 İlk kehanet denemen tamamlandı! Bu kez biraz zorlandın. Kartlardaki gelişim sırasını inceleyip 'bir sonraki mantıklı adım ne olabilir?' diye düşünerek yeniden deneyebilirsin.";
+            } else {
+                evaluationMsg.textContent = "💡 Henüz kahin gücün uyanmadı! Sorun değil; geçmişten günümüze teknolojilerin nasıl değiştiğini dikkatlice inceleyip tekrar dene.";
+            }
+        }
+
+        function restartGame() {
+            startGame();
+        }
+    </script>
+</body>
+</html>

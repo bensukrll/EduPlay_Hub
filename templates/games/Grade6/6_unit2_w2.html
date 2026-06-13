@@ -1,0 +1,1064 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Veri Analisti Görevde! - EduPlay Hub</title>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+  <style>
+    :root{
+      --primary:#253156;
+      --primary-dark:#171f37;
+      --secondary:#CAD1E2;
+      --white:#FFFFFF;
+      --success:#34c759;
+      --danger:#ff4d4d;
+      --warning:#ffcc00;
+      --blue:#4facfe;
+      --cyan:#00f2fe;
+      --glass:rgba(255,255,255,.15);
+      --glass-strong:rgba(255,255,255,.22);
+      --glass-border:rgba(255,255,255,.28);
+      --shadow:0 18px 45px rgba(0,0,0,.35);
+      --radius:24px;
+    }
+
+    *{box-sizing:border-box;margin:0;padding:0;font-family:'Poppins',sans-serif;}
+
+    body{
+      min-height:100vh;
+      background:
+        radial-gradient(circle at top left, rgba(79,172,254,.35), transparent 32%),
+        radial-gradient(circle at bottom right, rgba(202,209,226,.22), transparent 30%),
+        linear-gradient(135deg,var(--primary),var(--primary-dark));
+      color:var(--white);
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      padding:22px;
+      overflow-x:hidden;
+    }
+
+    body::before{
+      content:"";
+      position:fixed;
+      inset:0;
+      background-image:
+        linear-gradient(rgba(255,255,255,.035) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(255,255,255,.035) 1px, transparent 1px);
+      background-size:34px 34px;
+      pointer-events:none;
+    }
+
+    .game-container{
+      width:100%;
+      max-width:1120px;
+      min-height:680px;
+      background:var(--glass);
+      border:1px solid var(--glass-border);
+      border-radius:var(--radius);
+      box-shadow:var(--shadow);
+      backdrop-filter:blur(16px);
+      -webkit-backdrop-filter:blur(16px);
+      padding:26px;
+      position:relative;
+      overflow:hidden;
+    }
+
+    .header-bar{
+      display:flex;
+      justify-content:space-between;
+      align-items:center;
+      gap:18px;
+      padding-bottom:18px;
+      border-bottom:1px solid var(--glass-border);
+      margin-bottom:16px;
+    }
+
+    .game-title{
+      display:flex;
+      align-items:center;
+      gap:12px;
+      font-size:24px;
+      font-weight:800;
+      letter-spacing:.2px;
+    }
+
+    .logo-bubble{
+      width:48px;
+      height:48px;
+      border-radius:16px;
+      display:grid;
+      place-items:center;
+      background:linear-gradient(135deg,var(--blue),var(--cyan));
+      box-shadow:0 8px 22px rgba(79,172,254,.35);
+      font-size:24px;
+    }
+
+    .stats{display:flex;gap:10px;flex-wrap:wrap;justify-content:flex-end;}
+    .stat-badge{
+      background:rgba(255,255,255,.18);
+      border:1px solid var(--glass-border);
+      border-radius:14px;
+      padding:8px 13px;
+      font-weight:700;
+      font-size:14px;
+      white-space:nowrap;
+    }
+
+    .progress-container{
+      height:10px;
+      background:rgba(255,255,255,.14);
+      border-radius:999px;
+      overflow:hidden;
+      margin:12px 0 16px;
+    }
+
+    .progress-bar{
+      width:0%;
+      height:100%;
+      background:linear-gradient(90deg,var(--blue),var(--cyan));
+      border-radius:999px;
+      transition:width .35s ease;
+    }
+
+    .step-menu{
+      display:grid;
+      grid-template-columns:repeat(5,1fr);
+      gap:9px;
+      margin-bottom:22px;
+    }
+
+    .step-pill{
+      border:1px solid var(--glass-border);
+      background:rgba(255,255,255,.08);
+      color:rgba(255,255,255,.65);
+      border-radius:16px;
+      padding:10px 8px;
+      text-align:center;
+      font-size:12px;
+      font-weight:700;
+      transition:.25s;
+    }
+
+    .step-pill.active{
+      background:linear-gradient(135deg,var(--blue),var(--cyan));
+      color:var(--primary);
+      transform:translateY(-2px);
+    }
+
+    .step-pill.done{
+      background:rgba(52,199,89,.25);
+      color:#d8ffe2;
+      border-color:rgba(52,199,89,.55);
+    }
+
+    .screen{display:none;animation:fadeIn .35s ease both;}
+    .screen.active{display:block;}
+
+    @keyframes fadeIn{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:translateY(0)}}
+
+    h1,h2{text-align:center;line-height:1.25;}
+    h2{font-size:26px;margin:6px 0 10px;font-weight:800;}
+    .instruction{
+      color:var(--secondary);
+      text-align:center;
+      max-width:790px;
+      margin:0 auto 22px;
+      font-size:15px;
+      line-height:1.6;
+    }
+
+    .scenario-box{
+      background:rgba(255,255,255,.12);
+      border:1px solid var(--glass-border);
+      border-radius:20px;
+      padding:18px;
+      margin:0 auto 20px;
+      max-width:850px;
+      display:grid;
+      grid-template-columns:120px 1fr;
+      gap:18px;
+      align-items:center;
+    }
+
+    .scenario-box img{
+      width:120px;
+      height:94px;
+      object-fit:cover;
+      border-radius:16px;
+      border:2px solid rgba(255,255,255,.35);
+    }
+
+    .scenario-title{font-size:19px;font-weight:800;margin-bottom:6px;}
+    .scenario-desc{color:#eef3ff;line-height:1.55;font-size:15px;}
+
+    .btn-row{display:flex;justify-content:center;align-items:center;gap:12px;flex-wrap:wrap;margin-top:20px;}
+
+    .btn{
+      border:0;
+      border-radius:16px;
+      padding:12px 22px;
+      cursor:pointer;
+      font-weight:800;
+      font-size:15px;
+      transition:.22s;
+      background:var(--white);
+      color:var(--primary);
+      box-shadow:0 8px 18px rgba(0,0,0,.16);
+    }
+
+    .btn:hover{transform:translateY(-2px);background:var(--secondary);}
+    .btn.secondary{background:rgba(255,255,255,.12);color:var(--white);border:1px solid var(--glass-border);}
+    .btn.danger{background:rgba(255,77,77,.18);color:#fff;border:1px solid rgba(255,77,77,.45);}
+    .btn:disabled{opacity:.5;cursor:not-allowed;transform:none;}
+
+    .options-grid{display:grid;grid-template-columns:1fr;gap:13px;max-width:850px;margin:0 auto;}
+    .option-card{
+      background:rgba(255,255,255,.09);
+      border:1px solid var(--glass-border);
+      border-radius:18px;
+      padding:16px 18px;
+      cursor:pointer;
+      transition:.22s;
+      font-size:15px;
+      line-height:1.45;
+    }
+    .option-card:hover{background:rgba(255,255,255,.18);transform:scale(1.01);}
+    .option-card.correct{background:rgba(52,199,89,.30)!important;border-color:rgba(52,199,89,.75)!important;}
+    .option-card.wrong{background:rgba(255,77,77,.28)!important;border-color:rgba(255,77,77,.75)!important;}
+    .disabled{pointer-events:none;}
+
+    .cards-container{display:flex;flex-wrap:wrap;gap:15px;justify-content:center;margin:20px 0;}
+    .data-card{
+      width:158px;
+      min-height:188px;
+      background:var(--white);
+      color:#1c2440;
+      border-radius:20px;
+      overflow:hidden;
+      box-shadow:0 10px 25px rgba(0,0,0,.22);
+      cursor:pointer;
+      transition:.22s;
+      position:relative;
+      border:3px solid transparent;
+    }
+    .data-card:hover{transform:translateY(-4px);}
+    .data-card.selected{border-color:var(--cyan);transform:translateY(-6px) scale(1.02);}
+    .data-card img{width:100%;height:106px;object-fit:cover;display:block;}
+    .data-card .label{font-weight:800;font-size:14px;text-align:center;padding:10px 8px 2px;}
+    .data-card .value{font-size:13px;text-align:center;color:#5a6277;font-weight:700;padding-bottom:10px;}
+    .mini-chip{
+      position:absolute;top:8px;right:8px;
+      background:rgba(37,49,86,.88);color:white;
+      border-radius:999px;padding:4px 8px;font-size:11px;font-weight:800;
+    }
+
+    .drop-zones{display:grid;grid-template-columns:1fr 1fr;gap:18px;margin-top:16px;}
+    .zone{
+      min-height:220px;
+      background:rgba(255,255,255,.07);
+      border:2px dashed rgba(255,255,255,.35);
+      border-radius:22px;
+      padding:14px;
+      display:flex;
+      flex-wrap:wrap;
+      justify-content:center;
+      align-content:flex-start;
+      gap:12px;
+      transition:.2s;
+    }
+    .zone:hover{background:rgba(255,255,255,.11);}
+    .zone-title{width:100%;text-align:center;font-weight:800;color:#f1f5ff;margin:3px 0 8px;}
+
+    .excel-panel{background:rgba(255,255,255,.08);border:1px solid var(--glass-border);border-radius:22px;padding:16px;overflow-x:auto;}
+    .excel-table{width:100%;border-collapse:collapse;background:white;color:#253156;border-radius:14px;overflow:hidden;min-width:560px;}
+    .excel-table th,.excel-table td{border:1px solid #d5dae8;padding:13px;text-align:center;}
+    .excel-table th{background:#eef2fb;font-weight:800;}
+    .excel-table td.drop-cell{background:#fbfcff;cursor:pointer;font-weight:700;color:#6b7280;}
+    .excel-table td.drop-cell:hover{background:#eaf4ff;}
+    .excel-table td.filled{background:#dff4ff;color:#253156;}
+
+    .pool-item{
+      background:white;color:var(--primary);
+      border:2px solid rgba(255,255,255,.7);
+      padding:10px 14px;
+      border-radius:14px;
+      font-weight:800;
+      cursor:pointer;
+      box-shadow:0 8px 16px rgba(0,0,0,.15);
+    }
+    .pool-item.selected{outline:3px solid var(--cyan);}
+
+    .chart-types{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;max-width:860px;margin:16px auto 20px;}
+    .chart-btn{
+      border:1px solid var(--glass-border);
+      background:rgba(255,255,255,.10);
+      color:white;
+      padding:18px;
+      border-radius:20px;
+      cursor:pointer;
+      font-weight:800;
+      line-height:1.5;
+      transition:.22s;
+    }
+    .chart-btn:hover{background:rgba(255,255,255,.19);transform:translateY(-2px);}
+    .chart-btn.selected{background:linear-gradient(135deg,var(--blue),var(--cyan));color:var(--primary);}
+    .chart-wrapper{display:none;background:white;border-radius:22px;padding:16px;max-width:650px;margin:0 auto;}
+
+    .analysis-box{background:rgba(255,255,255,.08);border:1px solid var(--glass-border);border-radius:22px;padding:20px;max-width:860px;margin:0 auto;}
+    .analysis-question{font-size:18px;font-weight:800;margin-bottom:16px;line-height:1.5;}
+
+    .badge-container{font-size:72px;margin:18px 0;animation:pop .5s cubic-bezier(.17,.89,.32,1.27);}
+    @keyframes pop{from{transform:scale(.2);opacity:0}to{transform:scale(1);opacity:1}}
+
+    .result-card{max-width:760px;margin:0 auto;background:rgba(255,255,255,.09);border:1px solid var(--glass-border);border-radius:24px;padding:24px;}
+    .final-score{font-size:38px;font-weight:900;color:#fff;margin:8px 0;}
+
+    .modal-overlay{
+      position:fixed;
+      inset:0;
+      background:rgba(9,13,28,.62);
+      display:none;
+      align-items:center;
+      justify-content:center;
+      z-index:9999;
+      padding:18px;
+      backdrop-filter:blur(8px);
+      -webkit-backdrop-filter:blur(8px);
+    }
+    .modal-overlay.show{display:flex;animation:fadeIn .18s ease both;}
+    .feedback-modal{
+      width:100%;
+      max-width:460px;
+      background:linear-gradient(180deg,rgba(255,255,255,.98),rgba(236,242,255,.98));
+      color:var(--primary);
+      border-radius:26px;
+      padding:26px;
+      text-align:center;
+      box-shadow:0 24px 70px rgba(0,0,0,.42);
+      transform-origin:center;
+      animation:modalPop .25s ease both;
+    }
+    @keyframes modalPop{from{transform:scale(.9);opacity:.4}to{transform:scale(1);opacity:1}}
+    .modal-icon{font-size:54px;margin-bottom:8px;}
+    .modal-title{font-size:24px;font-weight:900;margin-bottom:8px;}
+    .modal-message{font-size:15px;line-height:1.55;color:#46506d;margin-bottom:18px;}
+    .modal-btn{background:var(--primary);color:white;border:0;border-radius:16px;padding:12px 24px;font-weight:900;cursor:pointer;}
+
+    .text-center{text-align:center;}
+    .hidden{display:none!important;}
+
+    @media(max-width:820px){
+      body{padding:12px;align-items:flex-start;}
+      .game-container{padding:18px;min-height:auto;}
+      .header-bar{flex-direction:column;align-items:flex-start;}
+      .game-title{font-size:20px;}
+      .stats{justify-content:flex-start;}
+      .step-menu{grid-template-columns:1fr 1fr;}
+      .scenario-box{grid-template-columns:1fr;text-align:center;}
+      .scenario-box img{margin:0 auto;width:100%;max-width:260px;height:135px;}
+      .drop-zones{grid-template-columns:1fr;}
+      .chart-types{grid-template-columns:1fr;}
+      .data-card{width:145px;}
+    }
+  </style>
+</head>
+<body>
+  <div class="game-container">
+    <div class="header-bar">
+      <div class="game-title"><span class="logo-bubble">📊</span><span>Veri Analisti Görevde!</span></div>
+      <div class="stats">
+        <div class="stat-badge">Aşama: <span id="phase-label">Başlangıç</span></div>
+        <div class="stat-badge">Skor: <span id="score-val">0</span></div>
+      </div>
+    </div>
+
+    <div class="progress-container"><div class="progress-bar" id="game-progress"></div></div>
+
+    <div class="step-menu" id="step-menu">
+      <div class="step-pill" data-step="1">1. Problemi Tanı</div>
+      <div class="step-pill" data-step="2">2. Veri Topla</div>
+      <div class="step-pill" data-step="3">3. Tablo Düzenle</div>
+      <div class="step-pill" data-step="4">4. Grafik Oluştur</div>
+      <div class="step-pill" data-step="5">5. Analiz Et</div>
+    </div>
+
+    <section id="screen-intro" class="screen active text-center">
+      <h2>Veri Dünyasına Hoş Geldin Analist!</h2>
+      <p class="instruction">Gerçek yaşamdan bir problemi çözmek için veri toplayacak, verileri tabloya düzenleyecek, grafik oluşturacak ve bulgulara ulaşacaksın.</p>
+      <div class="scenario-box">
+        <img src="https://images.unsplash.com/photo-1551288049-bebda4e38f71?w=500&q=80" alt="Veri analizi görseli">
+        <div>
+          <div class="scenario-title">Görevin hazır!</div>
+          <div class="scenario-desc">Her oynayışta farklı bir konu gelecek. Okul, spor, kantin, ulaşım, çevre ve teknoloji gibi alanlarda gerçek verilerle çalışacaksın.</div>
+        </div>
+      </div>
+      <div class="btn-row"><button class="btn" onclick="startGame()">Göreve Başla</button></div>
+    </section>
+
+    <section id="screen-phase1" class="screen">
+      <h2>Bölüm 1: Problemi Tanı</h2>
+      <p class="instruction">Senaryoya uygun, veriyle cevaplanabilecek araştırma sorusunu seç.</p>
+      <div class="scenario-box" id="p1-scenario-box"></div>
+      <div class="options-grid" id="p1-options"></div>
+      <div class="btn-row">
+        <button class="btn secondary" onclick="goBack()">← Geri</button>
+        <button class="btn danger" onclick="resetCurrentPhase()">Bu Bölümü Sıfırla</button>
+        <button class="btn hidden" id="p1-next" onclick="nextPhase(2)">Veri Toplama Bölümüne Geç</button>
+      </div>
+    </section>
+
+    <section id="screen-phase2" class="screen">
+      <h2>Bölüm 2: Veri Toplama</h2>
+      <p class="instruction">Kartları seçip doğru kutuya aktar. Problem için gerekli olan verileri ayır, gereksiz bilgileri ayrı kutuya koy.</p>
+      <div class="cards-container" id="p2-cards"></div>
+      <div class="drop-zones">
+        <div class="zone" id="zone-needed" onclick="handleZoneClick('needed')"><div class="zone-title">Gerekli Veriler</div></div>
+        <div class="zone" id="zone-unneeded" onclick="handleZoneClick('unneeded')"><div class="zone-title">Gereksiz Bilgiler</div></div>
+      </div>
+      <div class="btn-row">
+        <button class="btn secondary" onclick="goBack()">← Geri</button>
+        <button class="btn danger" onclick="resetCurrentPhase()">Bu Bölümü Sıfırla</button>
+        <button class="btn" onclick="checkPhase2()">Verileri Kontrol Et</button>
+      </div>
+    </section>
+
+    <section id="screen-phase3" class="screen">
+      <h2>Bölüm 3: Veri Düzenleme</h2>
+      <p class="instruction">Verileri mini elektronik tabloya yerleştir. Önce üstteki kartı seç, sonra uygun tablo hücresine tıkla.</p>
+      <div class="cards-container" id="p3-pool"></div>
+      <div class="excel-panel">
+        <table class="excel-table">
+          <thead><tr><th>A Sütunu: Öğe / Kategori</th><th>B Sütunu: Sayısal Veri</th></tr></thead>
+          <tbody id="excel-body"></tbody>
+        </table>
+      </div>
+      <div class="btn-row">
+        <button class="btn secondary" onclick="goBack()">← Geri</button>
+        <button class="btn danger" onclick="resetCurrentPhase()">Bu Bölümü Sıfırla</button>
+        <button class="btn" onclick="checkPhase3()">Tabloyu Onayla</button>
+      </div>
+    </section>
+
+    <section id="screen-phase4" class="screen">
+      <h2>Bölüm 4: Grafik Oluştur</h2>
+      <p class="instruction">Tablodaki verileri en anlaşılır biçimde gösterecek grafik türünü seç.</p>
+      <div class="chart-types">
+        <button class="chart-btn" id="chart-bar" onclick="selectChart('bar')">📊 Sütun Grafik<br><small>Kategorileri karşılaştırmak için</small></button>
+        <button class="chart-btn" id="chart-pie" onclick="selectChart('pie')">🥧 Pasta Grafik<br><small>Dağılımı göstermek için</small></button>
+        <button class="chart-btn" id="chart-line" onclick="selectChart('line')">📈 Çizgi Grafik<br><small>Zamanla değişimi göstermek için</small></button>
+      </div>
+      <div class="chart-wrapper" id="chart-container"><canvas id="myChart"></canvas></div>
+      <div class="btn-row">
+        <button class="btn secondary" onclick="goBack()">← Geri</button>
+        <button class="btn danger" onclick="resetCurrentPhase()">Bu Bölümü Sıfırla</button>
+        <button class="btn hidden" id="p4-next" onclick="nextPhase(5)">Analiz Sorularına Geç</button>
+      </div>
+    </section>
+
+    <section id="screen-phase5" class="screen">
+      <h2>Bölüm 5: Veri Analizi</h2>
+      <p class="instruction">Grafiğe ve tabloya bakarak bulgulara ulaş. Her cevap, veri yorumlama becerini güçlendirir.</p>
+      <div class="analysis-box">
+        <div class="analysis-question" id="p5-question"></div>
+        <div class="options-grid" id="p5-options"></div>
+      </div>
+      <div class="btn-row">
+        <button class="btn secondary" onclick="goBack()">← Geri</button>
+        <button class="btn danger" onclick="resetCurrentPhase()">Bu Bölümü Sıfırla</button>
+        <button class="btn hidden" id="p5-next" onclick="handleAnalysisFlow()">Sonraki Soru</button>
+      </div>
+    </section>
+
+    <section id="screen-end" class="screen text-center">
+      <div class="result-card">
+        <h2>Görev Tamamlandı!</h2>
+        <div class="badge-container" id="end-badge">🏆</div>
+        <h3 id="end-title"></h3>
+        <div class="final-score"><span id="final-score-val">0</span> Puan</div>
+        <p id="end-feedback" class="instruction"></p>
+        <div class="btn-row"><button class="btn" onclick="restartGame()">Yeni Bir Göreve Başla</button></div>
+      </div>
+    </section>
+  </div>
+
+  <div class="modal-overlay" id="feedback-overlay">
+    <div class="feedback-modal">
+      <div class="modal-icon" id="modal-icon">✨</div>
+      <div class="modal-title" id="modal-title">Geri Bildirim</div>
+      <div class="modal-message" id="modal-message"></div>
+      <button class="modal-btn" id="modal-ok">Tamam</button>
+    </div>
+  </div>
+
+  <script>
+    const ALL_SCENARIOS = [
+      {
+        category:"Kantin",
+        title:"Kantin Görevlisi Ayhan Bey'in Sorusu",
+        desc:"Kantin görevlisi, okulda en çok hangi ürünün satıldığını bularak stok yenilemek istiyor.",
+        hero:"https://images.unsplash.com/photo-1555396273-367ea4eb4db5?w=600&q=80",
+        correctQuestion:"Kantin reyonlarında en çok satılan ürün hangisidir?",
+        wrongQuestions:["Kantin tezgahının rengi nedir?","Kantin çalışanlarının ayakkabı numarası kaçtır?","Kantin binası kaç metrekaredir?"],
+        items:[
+          {name:"Tost",val:45,img:"https://images.unsplash.com/photo-1528735602780-2552fd46c7af?w=400&q=80"},
+          {name:"Ayran",val:38,img:"https://images.unsplash.com/photo-1550583724-b2692b85b150?w=400&q=80"},
+          {name:"Simit",val:55,img:"https://images.unsplash.com/photo-1608198093002-ad4e005484ec?w=400&q=80"},
+          {name:"Meyve Suyu",val:22,img:"https://images.unsplash.com/photo-1621506289937-a8e4df240d0b?w=400&q=80"}
+        ],
+        noise:[
+          {name:"Duvar Rengi",img:"https://images.unsplash.com/photo-1562259949-e8e7689d7828?w=400&q=80"},
+          {name:"Hava Sıcaklığı",img:"https://images.unsplash.com/photo-1534088568595-a066f410bcda?w=400&q=80"}
+        ],
+        bestChart:"bar"
+      },
+      {
+        category:"Kitap",
+        title:"Kütüphaneci Selen Hanım'ın Merakı",
+        desc:"Okul kütüphanecisi, 6. sınıfların en çok hangi kitap türünü tercih ettiğini araştırıyor.",
+        hero:"https://images.unsplash.com/photo-1521587760476-6c12a4b040da?w=600&q=80",
+        correctQuestion:"6. sınıf öğrencileri en çok hangi tür kitabı ödünç almaktadır?",
+        wrongQuestions:["Kütüphanedeki raflar hangi ağaçtan yapılmıştır?","En ağır kitap kaç kilodur?","Kitap kapaklarının rengi nedir?"],
+        items:[
+          {name:"Macera",val:62,img:"https://images.unsplash.com/photo-1512820790803-83ca734da794?w=400&q=80"},
+          {name:"Bilim Kurgu",val:41,img:"https://images.unsplash.com/photo-1451187580459-43490279c0fa?w=400&q=80"},
+          {name:"Tarih",val:19,img:"https://images.unsplash.com/photo-1461360370896-922624d12aa1?w=400&q=80"},
+          {name:"Şiir",val:12,img:"https://images.unsplash.com/photo-1471107340929-a87cd0f5b5f3?w=400&q=80"}
+        ],
+        noise:[
+          {name:"Rafların Boyu",img:"https://images.unsplash.com/photo-1524995997946-a1c2e315a42f?w=400&q=80"},
+          {name:"Yazarın Saç Rengi",img:"https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=400&q=80"}
+        ],
+        bestChart:"bar"
+      },
+      {
+        category:"Spor",
+        title:"Hakan Hoca'nın Turnuva Planı",
+        desc:"Beden eğitimi öğretmeni, okul turnuvası için öğrencilerin en çok istediği spor branşını öğrenmek istiyor.",
+        hero:"https://images.unsplash.com/photo-1461896836934-ffe607ba8211?w=600&q=80",
+        correctQuestion:"Öğrencilerin en çok katılmak istediği spor branşı hangisidir?",
+        wrongQuestions:["Topların markası nedir?","Spor salonunun duvar rengi nedir?","Okul bahçesindeki çizgiler kaç cm'dir?"],
+        items:[
+          {name:"Futbol",val:85,img:"https://images.unsplash.com/photo-1508098682722-e99c43a406b2?w=400&q=80"},
+          {name:"Basketbol",val:64,img:"https://images.unsplash.com/photo-1546519638-68e109498ffc?w=400&q=80"},
+          {name:"Voleybol",val:72,img:"https://images.unsplash.com/photo-1612872087720-bb876e2e67d1?w=400&q=80"},
+          {name:"Tenis",val:21,img:"https://images.unsplash.com/photo-1622279457486-62dce4a44506?w=400&q=80"}
+        ],
+        noise:[
+          {name:"Ayakkabı Numarası",img:"https://images.unsplash.com/photo-1542291026-7eec264c27ff?w=400&q=80"},
+          {name:"Forma Kumaşı",img:"https://images.unsplash.com/photo-1523398002811-999ca8dec234?w=400&q=80"}
+        ],
+        bestChart:"bar"
+      },
+      {
+        category:"Ulaşım",
+        title:"Okul Meclisi Ulaşımı İnceliyor",
+        desc:"Okul meclisi, öğrencilerin okula en çok hangi ulaşım yoluyla geldiğini öğrenmek istiyor.",
+        hero:"https://images.unsplash.com/photo-1544620347-c4fd4a3d5957?w=600&q=80",
+        correctQuestion:"Öğrenciler okula ulaşım için en çok hangi aracı kullanmaktadır?",
+        wrongQuestions:["Servis araçlarının motor hacmi nedir?","Yoldaki asfaltın türü nedir?","Otobüs şoförünün sevdiği müzik nedir?"],
+        items:[
+          {name:"Yürüyüş",val:30,img:"https://images.unsplash.com/photo-1476480862126-209bfaa8edc8?w=400&q=80"},
+          {name:"Bisiklet",val:15,img:"https://images.unsplash.com/photo-1485965120184-e220f721d03e?w=400&q=80"},
+          {name:"Okul Servisi",val:95,img:"https://images.unsplash.com/photo-1570125909232-eb263c188f7e?w=400&q=80"},
+          {name:"Halk Otobüsü",val:40,img:"https://images.unsplash.com/photo-1544620347-c4fd4a3d5957?w=400&q=80"}
+        ],
+        noise:[
+          {name:"Benzin İstasyonu",img:"https://images.unsplash.com/photo-1545558014-8692077e9b5c?w=400&q=80"},
+          {name:"Trafik Lambası",img:"https://images.unsplash.com/photo-1518509562904-e7ef99cdcc86?w=400&q=80"}
+        ],
+        bestChart:"pie"
+      },
+      {
+        category:"Çevre",
+        title:"Sıfır Atık Kulübü Görevde",
+        desc:"Okul çevre kulübü, bir ay boyunca geri dönüşüm kutularında en çok hangi atığın biriktiğini hesaplamak istiyor.",
+        hero:"https://images.unsplash.com/photo-1532996122724-e3c354a0b15b?w=600&q=80",
+        correctQuestion:"Geri dönüşüm kutularında atık türlerine göre dağılım nasıldır?",
+        wrongQuestions:["Çöp kamyonunun rengi neden sarıdır?","Kutuların üretildiği fabrika nerededir?","Bahçedeki çiçeklerin boyu kaç cm'dir?"],
+        items:[
+          {name:"Plastik",val:120,img:"https://images.unsplash.com/photo-1618477388954-7852f32655ec?w=400&q=80"},
+          {name:"Kağıt",val:140,img:"https://images.unsplash.com/photo-1583522862616-c7c425b8b829?w=400&q=80"},
+          {name:"Cam",val:45,img:"https://images.unsplash.com/photo-1605647540924-852290f6b0d5?w=400&q=80"},
+          {name:"Metal",val:60,img:"https://images.unsplash.com/photo-1536697246787-1f7ae568d89a?w=400&q=80"}
+        ],
+        noise:[
+          {name:"Bulut Oranı",img:"https://images.unsplash.com/photo-1534088568595-a066f410bcda?w=400&q=80"},
+          {name:"Bahçıvanın Yaşı",img:"https://images.unsplash.com/photo-1531427186611-ecfd6d936c79?w=400&q=80"}
+        ],
+        bestChart:"pie"
+      },
+      {
+        category:"Teknoloji",
+        title:"Teknoloji Kulübü Kullanımı Araştırıyor",
+        desc:"Teknoloji kulübü, öğrencilerin en çok hangi dijital aracı kullandığını öğrenmek istiyor.",
+        hero:"https://images.unsplash.com/photo-1516321318423-f06f85e504b3?w=600&q=80",
+        correctQuestion:"Öğrenciler günlük yaşamda en çok hangi dijital aracı kullanmaktadır?",
+        wrongQuestions:["Tabletlerin kutu rengi nedir?","Bilgisayarların vida sayısı kaçtır?","Telefon kılıfları hangi malzemeden yapılmıştır?"],
+        items:[
+          {name:"Telefon",val:96,img:"https://images.unsplash.com/photo-1511707171634-5f897ff02aa9?w=400&q=80"},
+          {name:"Tablet",val:42,img:"https://images.unsplash.com/photo-1544244015-0df4b3ffc6b0?w=400&q=80"},
+          {name:"Bilgisayar",val:74,img:"https://images.unsplash.com/photo-1496181133206-80ce9b88a853?w=400&q=80"},
+          {name:"Akıllı Saat",val:18,img:"https://images.unsplash.com/photo-1523275335684-37898b6baf30?w=400&q=80"}
+        ],
+        noise:[
+          {name:"Kablo Uzunluğu",img:"https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=400&q=80"},
+          {name:"Masa Rengi",img:"https://images.unsplash.com/photo-1518455027359-f3f8164ba6bd?w=400&q=80"}
+        ],
+        bestChart:"bar"
+      }
+    ];
+
+    const phaseNames = {0:"Başlangıç",1:"Problemi Tanı",2:"Veri Topla",3:"Tablo Düzenle",4:"Grafik Oluştur",5:"Analiz Et"};
+    let currentScenario = null;
+    let activePhase = 0;
+    let score = 0;
+    let scored = {p1:false,p2:false,p3:false,p4:false,p5:{}};
+    let completed = {1:false,2:false,3:false,4:false,5:false};
+    let p1Answered = false;
+    let p1OptionsCache = [];
+    let activeCardId = null;
+    let p2CardsCache = [];
+    let p3PoolCache = [];
+    let activePoolItem = null;
+    let tableData = {};
+    let chosenChart = null;
+    let myChartInstance = null;
+    let analysisQuestions = [];
+    let currentAnalysisIdx = 0;
+    let analysisAnswered = {};
+    let pendingModalAction = null;
+
+    const $ = id => document.getElementById(id);
+
+    function shuffle(arr){ return [...arr].sort(() => Math.random() - 0.5); }
+
+    function showFeedback(type, title, message, afterClose = null){
+      const icons = {success:"🎉", error:"🤔", info:"✨", warning:"🔎"};
+      $("modal-icon").innerText = icons[type] || "✨";
+      $("modal-title").innerText = title;
+      $("modal-message").innerText = message;
+      pendingModalAction = afterClose;
+      $("feedback-overlay").classList.add("show");
+    }
+
+    $("modal-ok").onclick = () => {
+      $("feedback-overlay").classList.remove("show");
+      const action = pendingModalAction;
+      pendingModalAction = null;
+      if(typeof action === "function") action();
+    };
+
+    function setScore(newScore){
+      score = newScore;
+      $("score-val").innerText = score;
+    }
+
+    function addScoreOnce(key, points){
+      if(key === "p5") return;
+      if(!scored[key]){
+        scored[key] = true;
+        setScore(score + points);
+      }
+    }
+
+    function addAnalysisScoreOnce(idx, points){
+      if(!scored.p5[idx]){
+        scored.p5[idx] = true;
+        setScore(score + points);
+      }
+    }
+
+    function startGame(){
+      currentScenario = JSON.parse(JSON.stringify(ALL_SCENARIOS[Math.floor(Math.random()*ALL_SCENARIOS.length)]));
+      activePhase = 0;
+      setScore(0);
+      scored = {p1:false,p2:false,p3:false,p4:false,p5:{}};
+      completed = {1:false,2:false,3:false,4:false,5:false};
+      p1Answered = false;
+      activeCardId = null;
+      activePoolItem = null;
+      tableData = {};
+      chosenChart = null;
+      currentAnalysisIdx = 0;
+      analysisAnswered = {};
+      if(myChartInstance) myChartInstance.destroy();
+      setupPhase1Options();
+      setupPhase2Cards();
+      setupAnalysisQuestions();
+      nextPhase(1);
+    }
+
+    function updateUI(){
+      $("phase-label").innerText = phaseNames[activePhase] || "Başlangıç";
+      const progress = activePhase === 0 ? 0 : (activePhase / 5) * 100;
+      $("game-progress").style.width = progress + "%";
+      document.querySelectorAll(".step-pill").forEach(pill => {
+        const step = Number(pill.dataset.step);
+        pill.classList.toggle("active", step === activePhase);
+        pill.classList.toggle("done", completed[step]);
+      });
+    }
+
+    function showScreen(screenId){
+      document.querySelectorAll(".screen").forEach(s => s.classList.remove("active"));
+      $(screenId).classList.add("active");
+      updateUI();
+    }
+
+    function nextPhase(phaseNum){
+      activePhase = phaseNum;
+      if(phaseNum === 1) initPhase1();
+      if(phaseNum === 2) initPhase2();
+      if(phaseNum === 3) initPhase3();
+      if(phaseNum === 4) initPhase4();
+      if(phaseNum === 5) initPhase5();
+    }
+
+    function goBack(){
+      if(activePhase <= 1){ showScreen("screen-intro"); activePhase = 0; updateUI(); return; }
+      nextPhase(activePhase - 1);
+    }
+
+    function resetCurrentPhase(){
+      if(activePhase === 1){ p1Answered=false; scored.p1=false; setupPhase1Options(); initPhase1(); }
+      if(activePhase === 2){ scored.p2=false; activeCardId=null; setupPhase2Cards(); initPhase2(); }
+      if(activePhase === 3){ scored.p3=false; activePoolItem=null; tableData={}; initPhase3(true); }
+      if(activePhase === 4){ scored.p4=false; chosenChart=null; if(myChartInstance) myChartInstance.destroy(); initPhase4(); }
+      if(activePhase === 5){ scored.p5={}; currentAnalysisIdx=0; analysisAnswered={}; initPhase5(true); }
+      showFeedback("info","Bölüm Sıfırlandı","Bu aşama yeniden denemen için temizlendi. Genel oyun devam ediyor.");
+    }
+
+    function setupPhase1Options(){
+      p1OptionsCache = shuffle([
+        {text:currentScenario.correctQuestion, correct:true},
+        ...currentScenario.wrongQuestions.map(q => ({text:q, correct:false}))
+      ]);
+    }
+
+    function initPhase1(){
+      showScreen("screen-phase1");
+      $("p1-scenario-box").innerHTML = `
+        <img src="${currentScenario.hero}" alt="${currentScenario.category}">
+        <div><div class="scenario-title">${currentScenario.title}</div><div class="scenario-desc">${currentScenario.desc}</div></div>`;
+      $("p1-next").classList.toggle("hidden", !p1Answered);
+      const box = $("p1-options");
+      box.innerHTML = "";
+      box.classList.toggle("disabled", p1Answered);
+      p1OptionsCache.forEach(opt => {
+        const card = document.createElement("div");
+        card.className = "option-card";
+        card.innerText = opt.text;
+        if(p1Answered && opt.correct) card.classList.add("correct");
+        card.onclick = () => {
+          if(p1Answered) return;
+          p1Answered = true;
+          box.classList.add("disabled");
+          if(opt.correct){
+            card.classList.add("correct");
+            addScoreOnce("p1",20);
+            completed[1] = true;
+            $("p1-next").classList.remove("hidden");
+            showFeedback("success","Doğru Araştırma Sorusu!","Bu soru veriyle cevaplanabilir. Şimdi bu problemi çözmek için hangi verilere ihtiyacımız olduğunu belirleyelim.");
+          } else {
+            card.classList.add("wrong");
+            [...box.children].forEach(c => { if(c.innerText === currentScenario.correctQuestion) c.classList.add("correct"); });
+            $("p1-next").classList.remove("hidden");
+            showFeedback("warning","Dikkat Edelim","Seçtiğin soru veri analizi için uygun değil. Yeşil işaretlenen soru, veriyle cevaplanabilecek doğru araştırma sorusudur.");
+          }
+          updateUI();
+        };
+        box.appendChild(card);
+      });
+    }
+
+    function setupPhase2Cards(){
+      p2CardsCache = shuffle([
+        ...currentScenario.items.map((i,idx) => ({...i, id:`need-${idx}`, target:true, zone:"pool"})),
+        ...currentScenario.noise.map((n,idx) => ({...n, id:`noise-${idx}`, target:false, zone:"pool"}))
+      ]);
+    }
+
+    function makeDataCard(item, phase){
+      const card = document.createElement("div");
+      card.className = "data-card";
+      card.id = phase + "-" + item.id;
+      card.dataset.id = item.id;
+      card.dataset.target = item.target;
+      card.innerHTML = `<img src="${item.img}" alt="${item.name}"><div class="label">${item.name}</div>${item.val ? `<div class="value">Değer: ${item.val}</div>` : `<div class="value">Bilgi kartı</div>`}`;
+      card.onclick = (e) => {
+        e.stopPropagation();
+        document.querySelectorAll("#p2-cards .data-card, #zone-needed .data-card, #zone-unneeded .data-card").forEach(c => c.classList.remove("selected"));
+        card.classList.add("selected");
+        activeCardId = item.id;
+      };
+      return card;
+    }
+
+    function initPhase2(){
+      showScreen("screen-phase2");
+      activeCardId = null;
+      $("p2-cards").innerHTML = "";
+      $("zone-needed").innerHTML = '<div class="zone-title">Gerekli Veriler</div>';
+      $("zone-unneeded").innerHTML = '<div class="zone-title">Gereksiz Bilgiler</div>';
+      p2CardsCache.forEach(item => {
+        const card = makeDataCard(item,"p2");
+        if(item.zone === "needed") $("zone-needed").appendChild(card);
+        else if(item.zone === "unneeded") $("zone-unneeded").appendChild(card);
+        else $("p2-cards").appendChild(card);
+      });
+    }
+
+    function handleZoneClick(zoneType){
+      if(!activeCardId){ showFeedback("info","Önce Kart Seç","Lütfen önce taşımak istediğin veri kartına tıkla, sonra uygun kutuya tıkla."); return; }
+      const item = p2CardsCache.find(c => c.id === activeCardId);
+      if(!item) return;
+      item.zone = zoneType;
+      activeCardId = null;
+      initPhase2();
+    }
+
+    function checkPhase2(){
+      const allPlaced = p2CardsCache.every(c => c.zone !== "pool");
+      if(!allPlaced){ showFeedback("warning","Eksik Kart Var","Tüm kartları gerekli veya gereksiz bilgi kutularından birine yerleştirmelisin."); return; }
+      const correct = p2CardsCache.every(c => (c.target && c.zone === "needed") || (!c.target && c.zone === "unneeded"));
+      if(correct){
+        addScoreOnce("p2",20);
+        completed[2]=true;
+        showFeedback("success","Veriler Doğru Toplandı!","Problem için gerekli verileri başarıyla ayırdın. Şimdi bu verileri tabloya düzenleyelim.", () => nextPhase(3));
+      } else {
+        showFeedback("warning","Biraz Daha İncele","Bazı kartlar yanlış kutuda olabilir. Problemimizi çözmek için gerçekten gerekli olan verileri düşünerek tekrar düzenle.");
+      }
+      updateUI();
+    }
+
+    function initPhase3(forceFresh=false){
+      showScreen("screen-phase3");
+      activePoolItem = null;
+      if(forceFresh || p3PoolCache.length === 0){
+        tableData = {};
+        p3PoolCache = [];
+        currentScenario.items.forEach((item,idx) => {
+          p3PoolCache.push({id:`label-${idx}`, type:"label", text:item.name, placed:false});
+          p3PoolCache.push({id:`value-${idx}`, type:"value", text:String(item.val), placed:false});
+        });
+        p3PoolCache = shuffle(p3PoolCache);
+      }
+      renderPhase3();
+    }
+
+    function renderPhase3(){
+      const pool = $("p3-pool");
+      pool.innerHTML = "";
+      p3PoolCache.filter(i => !i.placed).forEach(item => {
+        const el = document.createElement("div");
+        el.className = "pool-item";
+        el.innerText = item.text;
+        el.dataset.id = item.id;
+        el.onclick = () => {
+          document.querySelectorAll(".pool-item").forEach(p => p.classList.remove("selected"));
+          el.classList.add("selected");
+          activePoolItem = item;
+        };
+        pool.appendChild(el);
+      });
+      const tbody = $("excel-body");
+      tbody.innerHTML = "";
+      for(let i=0;i<currentScenario.items.length;i++){
+        const tr = document.createElement("tr");
+        const labelCell = document.createElement("td");
+        const valueCell = document.createElement("td");
+        labelCell.className = "drop-cell" + (tableData[`label-${i}`] ? " filled" : "");
+        valueCell.className = "drop-cell" + (tableData[`value-${i}`] ? " filled" : "");
+        labelCell.innerText = tableData[`label-${i}`] || "[Öğe Seç]";
+        valueCell.innerText = tableData[`value-${i}`] || "[Değer Seç]";
+        labelCell.onclick = () => handleTableCellClick(`label-${i}`, "label");
+        valueCell.onclick = () => handleTableCellClick(`value-${i}`, "value");
+        tr.appendChild(labelCell); tr.appendChild(valueCell); tbody.appendChild(tr);
+      }
+    }
+
+    function handleTableCellClick(cellKey, type){
+      if(!activePoolItem){ showFeedback("info","Önce Veri Seç","Tabloya yerleştirmek için önce üstteki veri parçalarından birini seçmelisin."); return; }
+      if(activePoolItem.type !== type){ showFeedback("warning","Yanlış Hücre Türü", type === "label" ? "Bu hücreye kategori/öğe adı yerleşebilir. Sayısal değeri B sütununa koymalısın." : "Bu hücreye sayısal değer yerleşebilir. Öğe adını A sütununa koymalısın."); return; }
+      if(tableData[cellKey]){
+        const old = p3PoolCache.find(i => i.text === tableData[cellKey] && i.type === type && i.placed);
+        if(old) old.placed = false;
+      }
+      tableData[cellKey] = activePoolItem.text;
+      activePoolItem.placed = true;
+      activePoolItem = null;
+      renderPhase3();
+    }
+
+    function checkPhase3(){
+      let correctRows = 0;
+      for(let i=0;i<currentScenario.items.length;i++){
+        const label = tableData[`label-${i}`];
+        const val = tableData[`value-${i}`];
+        if(currentScenario.items.some(item => item.name === label && String(item.val) === val)) correctRows++;
+      }
+      if(correctRows === currentScenario.items.length){
+        addScoreOnce("p3",20);
+        completed[3]=true;
+        showFeedback("success","Tablo Hazır!","Verileri elektronik tablo mantığıyla doğru düzenledin. Şimdi bu verileri görselleştirelim.", () => nextPhase(4));
+      } else {
+        showFeedback("warning","Tabloyu Kontrol Et","Bazı öğe-değer eşleşmeleri yanlış olabilir. Örneğin her ürün kendi sayısal değeriyle aynı satırda olmalı.");
+      }
+      updateUI();
+    }
+
+    function initPhase4(){
+      showScreen("screen-phase4");
+      document.querySelectorAll(".chart-btn").forEach(b => b.classList.remove("selected"));
+      if(chosenChart){
+        $("chart-"+chosenChart).classList.add("selected");
+        drawChart(chosenChart);
+        $("p4-next").classList.remove("hidden");
+      } else {
+        $("chart-container").style.display = "none";
+        $("p4-next").classList.add("hidden");
+      }
+    }
+
+    function selectChart(type){
+      chosenChart = type;
+      document.querySelectorAll(".chart-btn").forEach(b => b.classList.remove("selected"));
+      $("chart-"+type).classList.add("selected");
+      drawChart(type);
+      $("p4-next").classList.remove("hidden");
+      if(type === currentScenario.bestChart){
+        addScoreOnce("p4",20);
+        completed[4]=true;
+        showFeedback("success","Harika Grafik Seçimi!","Bu veri seti için seçtiğin grafik oldukça anlaşılır. Şimdi grafikten bulgular çıkarabiliriz.");
+      } else {
+        showFeedback("info","Grafik Oluşturuldu","Bu grafik de veri hakkında fikir verir; ancak bu veri seti için daha anlaşılır bir grafik türü olabilir. Yine de analiz bölümüne geçebilirsin.");
+      }
+      updateUI();
+    }
+
+    function drawChart(type){
+      $("chart-container").style.display = "block";
+      const ctx = $("myChart").getContext("2d");
+      if(myChartInstance) myChartInstance.destroy();
+      myChartInstance = new Chart(ctx,{
+        type:type,
+        data:{
+          labels:currentScenario.items.map(i => i.name),
+          datasets:[{
+            label:currentScenario.category + " Veri Seti",
+            data:currentScenario.items.map(i => i.val),
+            backgroundColor:["#253156","#4facfe","#00f2fe","#CAD1E2","#7a89b8","#b8c4e8"],
+            borderColor:"#253156",
+            borderWidth:1
+          }]
+        },
+        options:{
+          responsive:true,
+          plugins:{legend:{display:type !== "bar"}},
+          scales:type === "pie" ? {} : {y:{beginAtZero:true}}
+        }
+      });
+    }
+
+    function setupAnalysisQuestions(){
+      const sorted = [...currentScenario.items].sort((a,b) => b.val - a.val);
+      const max = sorted[0], min = sorted[sorted.length-1];
+      const total = currentScenario.items.reduce((s,i)=>s+i.val,0);
+      const diff = max.val - min.val;
+      const avg = Math.round(total / currentScenario.items.length);
+      const second = sorted[1];
+      analysisQuestions = shuffle([
+        {q:"Grafiğe göre en yüksek değere sahip seçenek hangisidir?", ans:max.name, wrongs:sorted.slice(1).map(i=>i.name)},
+        {q:"Grafiğe göre en düşük değere sahip seçenek hangisidir?", ans:min.name, wrongs:sorted.slice(0,-1).map(i=>i.name)},
+        {q:`${max.name} ile ${min.name} arasındaki fark kaçtır?`, ans:String(diff), wrongs:[String(diff+5),String(Math.max(1,diff-7)),String(diff+12)]},
+        {q:"Tüm kategorilerin toplam değeri kaçtır?", ans:String(total), wrongs:[String(total+20),String(Math.max(1,total-15)),String(total+35)]},
+        {q:"Yaklaşık ortalama değer kaçtır?", ans:String(avg), wrongs:[String(avg+8),String(Math.max(1,avg-6)),String(avg+14)]},
+        {q:`${max.name} seçeneğinden sonra ikinci en yüksek değer hangisidir?`, ans:second.name, wrongs:sorted.filter(i=>i.name!==second.name).map(i=>i.name)}
+      ]).slice(0,3);
+      currentAnalysisIdx = 0;
+    }
+
+    function initPhase5(fresh=false){
+      showScreen("screen-phase5");
+      if(fresh) currentAnalysisIdx = 0;
+      showAnalysisQuestion();
+    }
+
+    function showAnalysisQuestion(){
+      const q = analysisQuestions[currentAnalysisIdx];
+      $("p5-next").classList.add("hidden");
+      $("p5-question").innerText = `Soru ${currentAnalysisIdx+1}: ${q.q}`;
+      const box = $("p5-options");
+      box.innerHTML = "";
+      box.classList.toggle("disabled", !!analysisAnswered[currentAnalysisIdx]);
+      const opts = shuffle([{text:q.ans, correct:true}, ...q.wrongs.slice(0,3).map(w => ({text:w, correct:false}))]);
+      opts.forEach(opt => {
+        const card = document.createElement("div");
+        card.className = "option-card";
+        card.innerText = opt.text;
+        if(analysisAnswered[currentAnalysisIdx]){
+          if(opt.text === q.ans) card.classList.add("correct");
+          if(opt.text === analysisAnswered[currentAnalysisIdx].selected && !opt.correct) card.classList.add("wrong");
+        }
+        card.onclick = () => {
+          if(analysisAnswered[currentAnalysisIdx]) return;
+          analysisAnswered[currentAnalysisIdx] = {selected:opt.text, correct:opt.correct};
+          box.classList.add("disabled");
+          if(opt.correct){
+            card.classList.add("correct");
+            addAnalysisScoreOnce(currentAnalysisIdx,10);
+            showFeedback("success","Doğru Analiz!","Grafiği ve tabloyu doğru yorumladın. Verilerden bulguya ulaşmak tam olarak böyle olur.");
+          } else {
+            card.classList.add("wrong");
+            [...box.children].forEach(c => { if(c.innerText === q.ans) c.classList.add("correct"); });
+            showFeedback("warning","Tekrar Düşünelim","Doğru cevap yeşil olarak gösterildi. Grafikteki en yüksek, en düşük veya toplam değerlere dikkat ederek yorum yapmalısın.");
+          }
+          $("p5-next").classList.remove("hidden");
+        };
+        box.appendChild(card);
+      });
+      if(analysisAnswered[currentAnalysisIdx]) $("p5-next").classList.remove("hidden");
+    }
+
+    function handleAnalysisFlow(){
+      currentAnalysisIdx++;
+      if(currentAnalysisIdx < analysisQuestions.length){
+        showAnalysisQuestion();
+      } else {
+        completed[5]=true;
+        updateUI();
+        endGame();
+      }
+    }
+
+    function endGame(){
+      activePhase = 5;
+      showScreen("screen-end");
+      const maxPossible = 110;
+      const pct = Math.round((score/maxPossible)*100);
+      $("final-score-val").innerText = score;
+      const badge = $("end-badge"), title = $("end-title"), feedback = $("end-feedback");
+      if(pct <= 20){ badge.innerText="🔍"; title.innerText="Veri Çırağı"; feedback.innerText="Veri toplarken bazı ipuçlarını kaçırmış olabilirsin. Bir kez daha deneyerek hangi verinin gerekli olduğunu daha iyi ayırt edebilirsin."; }
+      else if(pct <= 40){ badge.innerText="📈"; title.innerText="Veri Kaşifi"; feedback.innerText="Analiz yolculuğun başladı. Tablo düzenleme ve grafik yorumlama becerilerin gelişiyor."; }
+      else if(pct <= 60){ badge.innerText="📊"; title.innerText="Veri Analizörü"; feedback.innerText="Verileri anlamaya başladın. Biraz daha dikkatle çok daha güçlü sonuçlara ulaşabilirsin."; }
+      else if(pct <= 80){ badge.innerText="🧠"; title.innerText="Kıdemli Analist"; feedback.innerText="Harika analizler yaptın. Verileri toplayıp düzenleyerek anlamlı sonuçlara ulaşabildin."; }
+      else { badge.innerText="🏆"; title.innerText="Baş Analist"; feedback.innerText="Muhteşem! Problemi belirledin, verileri topladın, tabloyu düzenledin, grafik oluşturdun ve bulgulara ulaştın."; }
+    }
+
+    function restartGame(){
+      if(myChartInstance) myChartInstance.destroy();
+      document.querySelectorAll(".screen").forEach(s => s.classList.remove("active"));
+      $("screen-intro").classList.add("active");
+      activePhase = 0;
+      p3PoolCache = [];
+      updateUI();
+    }
+
+    updateUI();
+  </script>
+</body>
+</html>

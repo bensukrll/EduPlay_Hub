@@ -1,0 +1,934 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Siber Kaşif: Güvenli İnternet Koşusu</title>
+
+<style>
+*{box-sizing:border-box;margin:0;padding:0;font-family:"Segoe UI",sans-serif}
+body{min-height:100vh;background:#16203d;color:white;overflow:hidden}
+
+.screen{position:absolute;inset:0;display:none;align-items:center;justify-content:center;text-align:center;padding:30px}
+.screen.active{display:flex}
+
+.panel{
+  background:rgba(255,255,255,.14);
+  backdrop-filter:blur(14px);
+  border:2px solid rgba(255,255,255,.25);
+  border-radius:28px;
+  padding:32px;
+  max-width:1000px;
+  width:100%;
+  box-shadow:0 20px 50px rgba(0,0,0,.4)
+}
+
+h1{font-size:42px;margin-bottom:14px}
+h2{font-size:30px;margin-bottom:20px}
+p{font-size:18px;line-height:1.5}
+
+.characters{display:grid;grid-template-columns:repeat(4,1fr);gap:18px;margin-top:28px}
+
+.character-card{
+  background:white;
+  color:#253156;
+  border-radius:22px;
+  padding:24px 18px;
+  cursor:pointer;
+  transition:.25s;
+  border:4px solid transparent;
+  min-height:260px;
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  justify-content:center;
+}
+
+.character-card:hover{
+  transform:translateY(-8px) scale(1.03);
+  border-color:#ffd166;
+}
+
+.character-emoji{
+  font-size:96px;
+  margin-bottom:14px;
+  text-shadow:0 8px 18px rgba(0,0,0,.25);
+}
+
+.small{font-size:15px;opacity:.9;margin-top:14px}
+
+button{
+  margin-top:22px;
+  border:none;
+  background:#ffd166;
+  color:#253156;
+  padding:14px 26px;
+  border-radius:999px;
+  font-size:17px;
+  font-weight:800;
+  cursor:pointer
+}
+
+#gameScreen{
+  display:none;
+  position:relative;
+  width:100vw;
+  height:100vh;
+  overflow:hidden;
+  background:linear-gradient(#071c48 0%,#073d68 45%,#042f45 100%);
+}
+#gameScreen.active{display:block}
+
+/* ARKA PLAN - ŞEHİR / GECE */
+.city{
+  position:absolute;
+  inset:0;
+  overflow:hidden;
+  z-index:1;
+  pointer-events:none;
+  background:
+    radial-gradient(circle at 50% 12%,rgba(52,205,255,.28),transparent 28%),
+    linear-gradient(to bottom,#081b46 0%,#073d68 45%,#042f45 100%);
+}
+
+/* Uzak bina katmanı */
+.city::before{
+  content:"";
+  position:absolute;
+  inset:0;
+  background:
+    linear-gradient(90deg,
+      transparent 0 3%,
+      #102c63 3% 8%,
+      transparent 8% 12%,
+      #164077 12% 18%,
+      transparent 18% 23%,
+      #0e2a5a 23% 29%,
+      transparent 29% 34%,
+      #173f76 34% 41%,
+      transparent 41% 58%,
+      #12366b 58% 65%,
+      transparent 65% 70%,
+      #18477f 70% 77%,
+      transparent 77% 82%,
+      #102c63 82% 88%,
+      transparent 88% 92%,
+      #164077 92% 98%,
+      transparent 98% 100%
+    );
+  opacity:.85;
+}
+
+/* Bina ışıkları */
+.city::after{
+  content:"";
+  position:absolute;
+  inset:0;
+  background:
+    repeating-linear-gradient(
+      90deg,
+      transparent 0 34px,
+      rgba(255,215,95,.75) 35px 41px,
+      transparent 42px 70px
+    ),
+    repeating-linear-gradient(
+      0deg,
+      transparent 0 42px,
+      rgba(91,218,255,.28) 43px 48px,
+      transparent 49px 90px
+    );
+  opacity:.35;
+}
+
+/* Ön şehir dekorları */
+.building-front{
+  position:absolute;
+  bottom:0;
+  width:130px;
+  background:linear-gradient(#123d72,#061c38);
+  border-left:2px solid rgba(112,218,255,.24);
+  border-right:2px solid rgba(112,218,255,.24);
+  box-shadow:0 0 20px rgba(0,0,0,.35);
+  z-index:2;
+}
+
+.bf1{left:2%;height:62%}
+.bf2{left:12%;height:48%}
+.bf3{left:23%;height:58%}
+.bf4{right:2%;height:62%}
+.bf5{right:12%;height:48%}
+.bf6{right:23%;height:58%}
+
+.building-front::before{
+  content:"";
+  position:absolute;
+  inset:18px 18px;
+  background:
+    repeating-linear-gradient(
+      0deg,
+      rgba(255,216,98,.9) 0 10px,
+      transparent 11px 36px
+    );
+  opacity:.75;
+}
+
+.bush{
+  position:absolute;
+  bottom:-35px;
+  border-radius:50%;
+  z-index:3;
+  filter:drop-shadow(0 8px 12px rgba(0,0,0,.25));
+}
+
+.bush.b1{left:1.5%;width:120px;height:120px;background:#06a954}
+.bush.b2{left:7%;width:185px;height:185px;background:#39c775}
+.bush.b3{left:18%;width:135px;height:135px;background:#05a24c}
+.bush.b4{right:1.5%;width:120px;height:120px;background:#06a954}
+.bush.b5{right:7%;width:185px;height:185px;background:#39c775}
+.bush.b6{right:18%;width:135px;height:135px;background:#05a24c}
+
+/* YOL */
+.road{
+  position:absolute;
+  left:50%;
+  bottom:-25px;
+  transform:translateX(-50%);
+  width:740px;
+  height:112vh;
+  z-index:5;
+  overflow:hidden;
+  clip-path:polygon(30% 0,70% 0,100% 100%,0 100%);
+  background:
+    linear-gradient(90deg,transparent 32%,rgba(255,255,255,.75) 32.5%,transparent 33.4%,
+    transparent 65.5%,rgba(255,255,255,.75) 66%,transparent 67%),
+    linear-gradient(#46506a,#172033);
+  box-shadow:0 0 40px rgba(0,0,0,.45), inset 0 0 40px rgba(0,0,0,.45);
+}
+
+.road::before{
+  content:"";
+  position:absolute;
+  inset:-20%;
+  background:repeating-linear-gradient(
+    to bottom,
+    transparent 0,
+    transparent 65px,
+    rgba(255,255,255,.55) 66px,
+    rgba(255,255,255,.55) 120px,
+    transparent 121px,
+    transparent 190px
+  );
+  animation:roadMove 1.45s linear infinite;
+  opacity:.65
+}
+
+.road::after{
+  content:"";
+  position:absolute;
+  inset:0;
+  border-left:4px solid rgba(255,255,255,.16);
+  border-right:4px solid rgba(255,255,255,.16);
+}
+
+@keyframes roadMove{
+  from{transform:translateY(-190px)}
+  to{transform:translateY(190px)}
+}
+
+.hud{
+  position:absolute;
+  top:14px;
+  left:50%;
+  transform:translateX(-50%);
+  z-index:30;
+  display:flex;
+  gap:12px;
+  flex-wrap:wrap;
+  justify-content:center;
+  align-items:center;
+}
+
+.hud div{
+  background:#071d45;
+  border:2px solid #13cfff;
+  padding:12px 22px;
+  border-radius:14px;
+  font-weight:900;
+  font-size:22px;
+  box-shadow:0 0 18px rgba(19,207,255,.4);
+}
+
+.pause-btn{
+  position:absolute;
+  top:14px;
+  right:24px;
+  z-index:35;
+  background:#ff4d5e;
+  color:white;
+  width:64px;
+  height:64px;
+  border-radius:16px;
+  padding:0;
+  margin:0;
+  font-size:30px;
+  box-shadow:0 0 18px rgba(255,77,94,.55);
+}
+
+.side-panel{
+  position:absolute;
+  left:10px;
+  z-index:20;
+  width:255px;
+  background:rgba(2,25,48,.82);
+  border:2px solid #10e0a0;
+  border-radius:16px;
+  padding:20px 22px;
+  box-shadow:0 0 14px rgba(16,224,160,.35);
+}
+
+.side-panel.collect{top:80px}
+.side-panel.avoid{top:330px;border-color:#ff5c70;box-shadow:0 0 14px rgba(255,92,112,.35)}
+
+.side-panel h3{
+  font-size:23px;
+  margin-bottom:18px;
+  text-align:center;
+}
+
+.side-panel p{
+  font-size:19px;
+  font-weight:800;
+  margin:16px 0;
+}
+
+.infoBox{
+  position:absolute;
+  right:30px;
+  bottom:60px;
+  z-index:20;
+  width:285px;
+  background:rgba(2,55,95,.86);
+  border:2px solid #13cfff;
+  border-radius:18px;
+  padding:22px;
+  box-shadow:0 0 18px rgba(19,207,255,.45);
+}
+
+.infoBox h3{
+  color:#ffd166;
+  font-size:25px;
+  margin-bottom:12px;
+}
+
+.infoBox p{
+  font-size:17px;
+  font-weight:700;
+}
+
+.player{
+  position:absolute;
+  bottom:75px;
+  width:92px;
+  height:92px;
+  border-radius:50%;
+  background:white;
+  color:#253156;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  font-size:64px;
+  z-index:20;
+  transition:left .18s,bottom .25s;
+  box-shadow:0 10px 25px rgba(0,0,0,.45)
+}
+.player.jump{bottom:160px}
+
+.item{
+  position:absolute;
+  width:96px;
+  min-height:90px;
+  border-radius:22px;
+  background:white;
+  color:#253156;
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  justify-content:center;
+  font-size:36px;
+  font-weight:800;
+  z-index:15;
+  box-shadow:0 8px 22px rgba(0,0,0,.4);
+  padding:8px;
+  text-align:center
+}
+.good{border:5px solid #62d26f}
+.bad{border:5px solid #ff5c70}
+
+.label{
+  font-size:12px;
+  line-height:1.15;
+  margin-top:5px;
+  color:#253156
+}
+
+.questionBox,.pauseOverlay{
+  position:absolute;
+  inset:0;
+  display:none;
+  align-items:center;
+  justify-content:center;
+  z-index:50;
+  background:rgba(0,0,0,.72);
+  padding:25px
+}
+
+.questionPanel,.pausePanel{
+  max-width:850px;
+  width:100%;
+  background:white;
+  color:#253156;
+  border-radius:28px;
+  padding:30px;
+  text-align:center;
+  box-shadow:0 20px 45px rgba(0,0,0,.4)
+}
+
+.answers{
+  display:grid;
+  grid-template-columns:repeat(3,1fr);
+  gap:14px;
+  margin-top:22px
+}
+
+.answer{
+  background:#cad1e2;
+  color:#253156;
+  padding:18px;
+  border-radius:18px;
+  cursor:pointer;
+  font-weight:800;
+  min-height:90px;
+  display:flex;
+  align-items:center;
+  justify-content:center
+}
+
+.answer:hover{background:#ffd166}
+
+.feedback{
+  margin-top:18px;
+  font-weight:700;
+  font-size:17px;
+  line-height:1.5;
+  padding:14px 18px;
+  border-radius:16px;
+  display:none
+}
+.feedback.correct{display:block;background:#d9f7df;color:#176b2c;border:2px solid #62d26f}
+.feedback.wrong{display:block;background:#ffe0e5;color:#9b1c31;border:2px solid #ff5c70}
+
+.finalScore{font-size:28px;margin:20px 0;font-weight:900}
+
+@media(max-width:1000px){
+  .side-panel,.infoBox{display:none}
+  .road{width:500px}
+}
+
+@media(max-width:800px){
+  .characters,.answers{grid-template-columns:1fr 1fr}
+  .road{width:370px}
+  h1{font-size:32px}
+}
+
+@media(max-width:520px){
+  .characters,.answers{grid-template-columns:1fr}
+  .road{width:315px}
+}
+</style>
+</head>
+
+<body>
+
+<section id="startScreen" class="screen active">
+  <div class="panel">
+    <h1>🏃 Siber Kaşif: Güvenli İnternet Koşusu</h1>
+    <p>
+      Dijital şehirde koş, güvenli davranışları topla, telif hakkı ihlallerinden ve siber tehlikelerden kaç!
+      Bilgi kapılarında doğru kararlar vererek siber uzman rozetine yaklaş.
+    </p>
+
+    <h2>Karakterini Seç</h2>
+
+    <div class="characters">
+      <div class="character-card" onclick="selectCharacter('🧑‍💻','Kod Kaşifi')">
+        <div class="character-emoji">🧑‍💻</div>
+        <h3>Kod Kaşifi</h3>
+        <p class="small">Dijital ipuçlarını hızlı yakalar.</p>
+      </div>
+
+      <div class="character-card" onclick="selectCharacter('🦸','Siber Kahraman')">
+        <div class="character-emoji">🦸</div>
+        <h3>Siber Kahraman</h3>
+        <p class="small">Siber risklere karşı cesurdur.</p>
+      </div>
+
+      <div class="character-card" onclick="selectCharacter('🕵️','Dijital Dedektif')">
+        <div class="character-emoji">🕵️</div>
+        <h3>Dijital Dedektif</h3>
+        <p class="small">Bilgiyi araştırır ve sorgular.</p>
+      </div>
+
+      <div class="character-card" onclick="selectCharacter('👩‍🚀','Veri Gezgini')">
+        <div class="character-emoji">👩‍🚀</div>
+        <h3>Veri Gezgini</h3>
+        <p class="small">Siber evrende güvenle ilerler.</p>
+      </div>
+    </div>
+
+    <p class="small">Kontroller: A-D veya Sol-Sağ ok ile şerit değiştir. W veya Yukarı ok ile zıpla.</p>
+  </div>
+</section>
+
+<section id="gameScreen">
+  <div class="city">
+    <div class="building-front bf1"></div>
+    <div class="building-front bf2"></div>
+    <div class="building-front bf3"></div>
+    <div class="building-front bf4"></div>
+    <div class="building-front bf5"></div>
+    <div class="building-front bf6"></div>
+
+    <div class="bush b1"></div>
+    <div class="bush b2"></div>
+    <div class="bush b3"></div>
+    <div class="bush b4"></div>
+    <div class="bush b5"></div>
+    <div class="bush b6"></div>
+  </div>
+
+  <button class="pause-btn" id="pauseBtn" onclick="togglePause()">⏸</button>
+
+  <div class="hud">
+    <div>⭐ Puan: <span id="score">0</span></div>
+    <div>❤️ Can: <span id="lives">3</span></div>
+    <div>🛡️ Kalkan: <span id="shield">Kapalı</span></div>
+  </div>
+
+  <div class="side-panel collect">
+    <h3>TOPLA</h3>
+    <p>🔐 Güçlü Şifre</p>
+    <p>🛡️ Antivirüs</p>
+    <p>📚 Kaynak Göster</p>
+    <p>🔄 Güncelleme</p>
+  </div>
+
+  <div class="side-panel avoid">
+    <h3>KAÇIN</h3>
+    <p>🦠 Virüs</p>
+    <p>🎣 Oltalama</p>
+    <p>🔓 Zayıf Şifre</p>
+    <p>❌ Korsan İçerik</p>
+  </div>
+
+  <div class="infoBox">
+    <h3>💡 BİLGİ KAPISI</h3>
+    <p>Her 20 saniyede bir soru gelir. Doğru cevapla puan kazan, yanlış cevapla can kaybet!</p>
+  </div>
+
+  <div class="road" id="road">
+    <div class="player" id="player">🧑‍💻</div>
+  </div>
+
+  <div class="questionBox" id="questionBox">
+    <div class="questionPanel">
+      <h2 id="questionText"></h2>
+      <div class="answers" id="answers"></div>
+      <div class="feedback" id="feedback"></div>
+    </div>
+  </div>
+
+  <div class="pauseOverlay" id="pauseOverlay">
+    <div class="pausePanel">
+      <h1>Oyun Duraklatıldı ⏸️</h1>
+      <p>Devam etmek için butona bas.</p>
+      <button onclick="togglePause()">Devam Et</button>
+    </div>
+  </div>
+</section>
+
+<section id="endScreen" class="screen">
+  <div class="panel">
+    <h1>Oyun Bitti 🎮</h1>
+    <div class="finalScore">Toplam Puan: <span id="finalScore">0</span></div>
+    <p id="finalMessage"></p>
+    <button onclick="restartGame()">Yeniden Oyna</button>
+  </div>
+</section>
+
+<script>
+let selectedCharacter = "🧑‍💻";
+let selectedName = "Kod Kaşifi";
+
+let lane = 1;
+let score = 0;
+let lives = 3;
+let speed = 2.95;
+let isJumping = false;
+let gameRunning = false;
+let shieldActive = false;
+let correctAnswers = 0;
+let questionOpen = false;
+let paused = false;
+
+let spawnTimer;
+let questionTimer;
+
+const road = document.getElementById("road");
+const player = document.getElementById("player");
+const scoreEl = document.getElementById("score");
+const livesEl = document.getElementById("lives");
+const shieldEl = document.getElementById("shield");
+const pauseOverlay = document.getElementById("pauseOverlay");
+const pauseBtn = document.getElementById("pauseBtn");
+
+const goodItems = [
+  {emoji:"🔒", label:"Güçlü Şifre"},
+  {emoji:"🔐", label:"İki Aşamalı Doğrulama"},
+  {emoji:"🛡️", label:"Antivirüs"},
+  {emoji:"🔄", label:"Güncelleme"},
+  {emoji:"📚", label:"Kaynak Göster"},
+  {emoji:"🎵", label:"Telifsiz Müzik"},
+  {emoji:"📷", label:"Kendi Fotoğrafın"},
+  {emoji:"✍️", label:"Özgün İçerik"}
+];
+
+const badItems = [
+  {emoji:"🎣", label:"Oltalama"},
+  {emoji:"🦠", label:"Virüs"},
+  {emoji:"🔓", label:"Zayıf Şifre"},
+  {emoji:"👤", label:"Sahte Hesap"},
+  {emoji:"❌", label:"Korsan İçerik"},
+  {emoji:"📋", label:"Kopyala-Yapıştır"},
+  {emoji:"🚫", label:"Lisanssız Yazılım"},
+  {emoji:"📩", label:"Şüpheli Link"}
+];
+
+const questions = [
+  {
+    q:"Bir görseli ödevinde kullanmadan önce ne yapmalısın?",
+    a:["Kaynağını kontrol edip belirtmeliyim","Kendi çekmişim gibi göstermeliyim","Hiç düşünmeden kullanmalıyım"],
+    correct:0,
+    info:"Telif hakkına dikkat etmek için içeriğin kaynağı kontrol edilmeli ve gerekiyorsa kaynak belirtilmelidir."
+  },
+  {
+    q:"Aşağıdakilerden hangisi güçlü şifre örneğine daha yakındır?",
+    a:["123456","Adım123","Kedi!92Bulut#"],
+    correct:2,
+    info:"Güçlü şifre; harf, sayı ve sembol içermeli, kolay tahmin edilmemelidir."
+  },
+  {
+    q:"Şüpheli bir e-posta bağlantısı geldiğinde ne yapılmalıdır?",
+    a:["Hemen tıklanmalıdır","Gönderen ve bağlantı kontrol edilmelidir","Arkadaşlara da gönderilmelidir"],
+    correct:1,
+    info:"Şüpheli bağlantılar oltalama saldırısı olabilir. Önce güvenilirlik kontrol edilmelidir."
+  },
+  {
+    q:"Telif hakkı neyi korur?",
+    a:["Üretilen özgün eserleri","Sadece bilgisayarları","Sadece oyun skorlarını"],
+    correct:0,
+    info:"Telif hakkı; yazı, görsel, müzik, video gibi özgün eserlerin izinsiz kullanımını önlemeye yardımcı olur."
+  },
+  {
+    q:"Bilgi güvenliğinin temel amaçlarından biri hangisidir?",
+    a:["Bilgiyi herkese açık yapmak","Bilginin gizliliğini korumak","Şifreleri paylaşmak"],
+    correct:1,
+    info:"Bilgi güvenliği; gizlilik, bütünlük ve erişilebilirlik ilkelerini korumayı amaçlar."
+  },
+  {
+    q:"Bir müziği videonda kullanmak istiyorsan en güvenli davranış hangisidir?",
+    a:["Telifsiz veya izinli müzik kullanmak","Her müzik serbesttir diye düşünmek","Kaynağı silmek"],
+    correct:0,
+    info:"Telifsiz, lisanslı veya izin alınmış müzik kullanmak telif hakkına uygun davranıştır."
+  },
+  {
+    q:"Siber ortamda kişisel bilgileri korumak için hangisi yapılmalıdır?",
+    a:["Şifre herkese söylenmelidir","Güvenilir olmayan sitelere bilgi girilmemelidir","Tüm bilgiler sosyal medyada paylaşılmalıdır"],
+    correct:1,
+    info:"Kişisel bilgiler yalnızca güvenilir ortamlarda paylaşılmalıdır."
+  },
+  {
+    q:"Bir bilginin doğru olup olmadığını anlamak için ne yapılabilir?",
+    a:["Tek kaynağa bakmak yeterlidir","Farklı güvenilir kaynaklardan kontrol edilir","En renkli siteye inanılır"],
+    correct:1,
+    info:"Bilginin doğruluğu farklı ve güvenilir kaynaklarla karşılaştırılarak değerlendirilmelidir."
+  }
+];
+
+function selectCharacter(emoji,name){
+  selectedCharacter = emoji;
+  selectedName = name;
+  document.getElementById("startScreen").classList.remove("active");
+  document.getElementById("gameScreen").classList.add("active");
+  player.textContent = selectedCharacter;
+  startGame();
+}
+
+function startGame(){
+  gameRunning = true;
+  paused = false;
+  score = 0;
+  lives = 3;
+  speed = 2.95;
+  lane = 1;
+  correctAnswers = 0;
+  shieldActive = false;
+  updateHUD();
+  updatePlayerPosition();
+
+  spawnTimer = setInterval(() => {
+    if(gameRunning && !questionOpen && !paused) spawnItem();
+  }, 1750);
+
+  questionTimer = setInterval(() => {
+    if(gameRunning && !questionOpen && !paused) openQuestion();
+  }, 20000);
+
+  requestAnimationFrame(gameLoop);
+}
+
+function updatePlayerPosition(){
+  const roadWidth = road.offsetWidth;
+  const laneWidth = roadWidth / 3;
+  const x = laneWidth * lane + laneWidth / 2 - 46;
+  player.style.left = x + "px";
+}
+
+document.addEventListener("keydown", e => {
+  if(!gameRunning || questionOpen || paused) return;
+
+  if((e.key === "ArrowLeft" || e.key.toLowerCase() === "a") && lane > 0){
+    lane--;
+    updatePlayerPosition();
+  }
+
+  if((e.key === "ArrowRight" || e.key.toLowerCase() === "d") && lane < 2){
+    lane++;
+    updatePlayerPosition();
+  }
+
+  if((e.key === "ArrowUp" || e.key.toLowerCase() === "w") && !isJumping){
+    jump();
+  }
+});
+
+function jump(){
+  isJumping = true;
+  player.classList.add("jump");
+
+  setTimeout(() => {
+    player.classList.remove("jump");
+    isJumping = false;
+  }, 650);
+}
+
+function spawnItem(){
+  const isGood = Math.random() > 0.45;
+  const data = isGood
+    ? goodItems[Math.floor(Math.random()*goodItems.length)]
+    : badItems[Math.floor(Math.random()*badItems.length)];
+
+  const item = document.createElement("div");
+  item.className = "item " + (isGood ? "good" : "bad");
+  item.dataset.type = isGood ? "good" : "bad";
+  item.dataset.y = -110;
+  item.dataset.lane = Math.floor(Math.random()*3);
+
+  item.innerHTML = `${data.emoji}<div class="label">${data.label}</div>`;
+
+  const roadWidth = road.offsetWidth;
+  const laneWidth = roadWidth / 3;
+  const x = laneWidth * item.dataset.lane + laneWidth / 2 - 48;
+
+  item.style.left = x + "px";
+  item.style.top = "-110px";
+
+  road.appendChild(item);
+}
+
+function gameLoop(){
+  if(!gameRunning) return;
+
+  if(!questionOpen && !paused){
+    const items = document.querySelectorAll(".item");
+
+    items.forEach(item => {
+      let y = Number(item.dataset.y);
+      y += speed;
+      item.dataset.y = y;
+      item.style.top = y + "px";
+
+      if(checkCollision(item)) handleCollision(item);
+
+      if(y > window.innerHeight + 120) item.remove();
+    });
+
+    score += 1;
+
+    if(score % 1200 === 0){
+      speed += 0.28;
+    }
+
+    updateHUD();
+  }
+
+  requestAnimationFrame(gameLoop);
+}
+
+function checkCollision(item){
+  const p = player.getBoundingClientRect();
+  const i = item.getBoundingClientRect();
+
+  return !(p.right < i.left || p.left > i.right || p.bottom < i.top || p.top > i.bottom);
+}
+
+function handleCollision(item){
+  const type = item.dataset.type;
+
+  if(type === "good"){
+    score += 100;
+  }else{
+    if(shieldActive){
+      score += 20;
+    }else if(isJumping){
+      score += 30;
+    }else{
+      lives--;
+    }
+  }
+
+  item.remove();
+  updateHUD();
+
+  if(lives <= 0) endGame();
+}
+
+function openQuestion(){
+  questionOpen = true;
+
+  const box = document.getElementById("questionBox");
+  const qText = document.getElementById("questionText");
+  const answers = document.getElementById("answers");
+  const feedback = document.getElementById("feedback");
+
+  const q = questions[Math.floor(Math.random()*questions.length)];
+
+  qText.textContent = q.q;
+  answers.innerHTML = "";
+  feedback.textContent = "";
+  feedback.className = "feedback";
+  box.style.display = "flex";
+
+  q.a.forEach((answer,index) => {
+    const div = document.createElement("div");
+    div.className = "answer";
+    div.textContent = answer;
+
+    div.onclick = () => {
+      feedback.className = "feedback";
+
+      if(index === q.correct){
+        score += 250;
+        correctAnswers++;
+        feedback.classList.add("correct");
+        feedback.innerHTML = `
+          ✅ <strong>Doğru seçim!</strong><br>
+          ${q.info}<br>
+          ⭐ +250 puan kazandın.
+        `;
+
+        if(correctAnswers % 3 === 0){
+          feedback.innerHTML += `<br>🛡️ Üst üste doğru kararlar verdiğin için Siber Kalkan aktifleşti.`;
+          activateShield();
+        }
+      }else{
+        lives--;
+        feedback.classList.add("wrong");
+        feedback.innerHTML = `
+          ❌ <strong>Dikkat et!</strong><br>
+          ${q.info}<br>
+          ❤️ 1 can kaybettin.
+        `;
+      }
+
+      updateHUD();
+
+      setTimeout(() => {
+        box.style.display = "none";
+        questionOpen = false;
+
+        if(lives <= 0) endGame();
+      }, 2300);
+    };
+
+    answers.appendChild(div);
+  });
+}
+
+function activateShield(){
+  shieldActive = true;
+  shieldEl.textContent = "Açık";
+  player.style.boxShadow = "0 0 30px 12px #62d26f";
+
+  setTimeout(() => {
+    shieldActive = false;
+    shieldEl.textContent = "Kapalı";
+    player.style.boxShadow = "0 10px 25px rgba(0,0,0,.45)";
+  }, 9000);
+}
+
+function togglePause(){
+  if(!gameRunning || questionOpen) return;
+
+  paused = !paused;
+  pauseOverlay.style.display = paused ? "flex" : "none";
+  pauseBtn.textContent = paused ? "▶" : "⏸";
+}
+
+function updateHUD(){
+  scoreEl.textContent = score;
+  livesEl.textContent = lives;
+  shieldEl.textContent = shieldActive ? "Açık" : "Kapalı";
+}
+
+function endGame(){
+  gameRunning = false;
+  clearInterval(spawnTimer);
+  clearInterval(questionTimer);
+
+  document.querySelectorAll(".item").forEach(i => i.remove());
+  document.getElementById("gameScreen").classList.remove("active");
+  document.getElementById("endScreen").classList.add("active");
+  document.getElementById("finalScore").textContent = score;
+
+  let message = "";
+
+  if(score >= 3000){
+    message = `${selectedName}, dijital şehirde harika ilerledin! Telif hakkı ve siber güvenlik konusunda çok güçlü kararlar verdin.`;
+  }else if(score >= 1500){
+    message = `${selectedName}, güzel bir koşuydu! Bazı riskleri fark ettin, biraz daha dikkatle tam bir siber uzman olabilirsin.`;
+  }else{
+    message = `${selectedName}, dijital dünyada dikkatli olmak önemli. Telif hakkı, güçlü şifre ve şüpheli bağlantılar konularını tekrar gözden geçirebilirsin.`;
+  }
+
+  document.getElementById("finalMessage").textContent = message;
+}
+
+function restartGame(){
+  location.reload();
+}
+
+window.addEventListener("resize", updatePlayerPosition);
+</script>
+
+</body>
+</html>

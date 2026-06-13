@@ -81,11 +81,33 @@
 
         <!-- GAME IFRAME -->
         <div class="game-display-container">
-            <iframe
-                src="{{ url_for('embed', game_id=game_id) }}"
-                class="game-iframe"
-                allowfullscreen>
-            </iframe>
+
+            {% if how_to_play %}
+            <div class="how-to-play-overlay" id="howToPlayOverlay">
+                <div class="how-to-play-card">
+
+                    <div class="how-to-play-icon">
+                        🎮
+                    </div>
+
+                    <h2>Nasıl Oynanır?</h2>
+
+                    <p>{{ how_to_play }}</p>
+
+                    <button class="how-to-play-start-btn" id="startGameOverlayBtn">
+                        Oyuna Başla 🚀
+                    </button>
+
+                </div>
+            </div>
+            {% endif %}
+
+<iframe 
+    id="gameFrame"
+    class="game-iframe"
+    src="{{ url_for('embed', game_id=game_id) }}">
+</iframe>
+
         </div>
 
     </div>
@@ -102,5 +124,16 @@
 </footer>
 
 </div>
+
+    <script>
+        const overlay = document.getElementById("howToPlayOverlay");
+        const startBtn = document.getElementById("startGameOverlayBtn");
+
+        if (startBtn && overlay) {
+            startBtn.addEventListener("click", function () {
+                overlay.style.display = "none";
+            });
+        }
+    </script>
 </body>
 </html>

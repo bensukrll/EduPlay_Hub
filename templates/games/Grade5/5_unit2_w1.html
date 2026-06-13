@@ -1,0 +1,1412 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Görsel Düzenleme Araçları Oyunu</title>
+  <style>
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      min-height: 100vh;
+      font-family: Arial, Helvetica, sans-serif;
+      background: linear-gradient(135deg, #dff7ff, #fff7d6);
+      color: #1f2937;
+      display: flex;
+      justify-content: center;
+      align-items: flex-start;
+      padding: 8px;
+    }
+
+    .game-shell {
+      width: min(960px, 100%);
+      background: rgba(255, 255, 255, 0.92);
+      border: 3px solid #9ad7ff;
+      border-radius: 24px;
+      box-shadow: 0 20px 45px rgba(31, 41, 55, 0.18);
+      padding: 16px;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .game-title {
+      text-align: center;
+      margin: 0 0 12px;
+      font-size: clamp(20px, 3vw, 30px);
+      color: #0f4770;
+    }
+
+    .toolbar {
+      display: flex;
+      justify-content: center;
+      gap: 10px;
+      flex-wrap: wrap;
+      margin: 6px auto 11px;
+      padding: 10px;
+      width: fit-content;
+      max-width: 100%;
+      background: #eefcff;
+      border: 2px solid #b7ecff;
+      border-radius: 18px;
+    }
+
+    .tool-btn {
+      width: 78px;
+      min-height: 64px;
+      border: 2px solid #a8d7ea;
+      border-radius: 16px;
+      background: #ffffff;
+      cursor: pointer;
+      transition: 0.2s;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 5px;
+      font-weight: 700;
+      color: #24465c;
+    }
+
+    .tool-icon {
+      font-size: 25px;
+      line-height: 1;
+    }
+
+    .tool-btn.active {
+      opacity: 1;
+      transform: translateY(-3px) scale(1.04);
+      border-color: #0ea5e9;
+      box-shadow: 0 8px 16px rgba(14, 165, 233, 0.28);
+      background: #e1f6ff;
+    }
+
+    .tool-btn.passive {
+      opacity: 0.25;
+      filter: grayscale(0.8);
+      pointer-events: none;
+    }
+
+    .tool-btn.final-mode {
+      opacity: 1;
+      filter: none;
+      pointer-events: auto;
+    }
+
+    .status-card {
+      display: grid;
+      grid-template-columns: 1fr auto;
+      gap: 14px;
+      align-items: center;
+      background: #f8fbff;
+      border: 2px solid #d7ecff;
+      border-radius: 18px;
+      padding: 10px 14px;
+      margin-bottom: 10px;
+    }
+
+    .stage-title {
+      margin: 0 0 4px;
+      color: #0f4770;
+      font-size: 18px;
+    }
+
+    .stage-text {
+      margin: 0;
+      line-height: 1.45;
+      color: #334155;
+      font-size: 14px;
+    }
+
+    .tries-box {
+      min-width: 120px;
+      background: #fff3cd;
+      color: #7a4b00;
+      border: 2px solid #ffd166;
+      border-radius: 16px;
+      text-align: center;
+      padding: 6px 10px;
+      font-weight: 800;
+    }
+
+    .paper-wrap {
+      position: relative;
+      width: min(620px, 100%);
+      margin: 0 auto;
+      margin-top: 20px;
+      border-radius: 20px;
+      padding: 8px;
+      background: #cbd5e1;
+      box-shadow: inset 0 0 0 2px #94a3b8;
+    }
+
+    canvas {
+      display: block;
+      width: 100%;
+      height: auto;
+      max-height: 350px;
+      background: #ffffff;
+      border: 3px solid #64748b;
+      border-radius: 14px;
+      touch-action: none;
+    }
+
+    #htmlLayer {
+      position: absolute;
+      left: 12px;
+      top: 12px;
+      width: calc(100% - 24px);
+      height: calc(100% - 24px);
+      pointer-events: none;
+    }
+
+    .stage-input {
+      position: absolute;
+      pointer-events: auto;
+      min-width: 190px;
+      padding: 10px 12px;
+      border: 3px solid #0ea5e9;
+      border-radius: 12px;
+      font-size: 20px;
+      outline: none;
+      background: #ffffff;
+      box-shadow: 0 8px 18px rgba(15, 71, 112, 0.18);
+    }
+
+    .controls {
+      min-height: 40px;
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+      justify-content: center;
+      align-items: center;
+      margin-top: 8px;
+    }
+
+    .game-btn {
+      border: 0;
+      border-radius: 999px;
+      padding: 8px 14px;
+      background: #0ea5e9;
+      color: #ffffff;
+      font-weight: 800;
+      cursor: pointer;
+      font-size: 13px;
+      box-shadow: 0 8px 15px rgba(14, 165, 233, 0.25);
+      transition: 0.2s;
+    }
+
+    .game-btn:hover {
+      transform: translateY(-2px);
+      background: #0284c7;
+    }
+
+    .game-btn.secondary {
+      background: #64748b;
+      box-shadow: 0 8px 15px rgba(100, 116, 139, 0.22);
+    }
+
+    .message {
+      min-height: 20px;
+      margin-top: 6px;
+      text-align: center;
+      font-weight: 700;
+      color: #0f4770;
+    }
+
+    .final-progress {
+      width: 100%;
+      display: flex;
+      justify-content: center;
+      gap: 8px;
+      flex-wrap: wrap;
+      margin-bottom: 4px;
+    }
+
+    .progress-pill {
+      background: #e2e8f0;
+      color: #334155;
+      border-radius: 999px;
+      padding: 8px 12px;
+      font-weight: 800;
+      font-size: 13px;
+      border: 2px solid #cbd5e1;
+    }
+
+    .progress-pill.done {
+      background: #dcfce7;
+      border-color: #22c55e;
+      color: #166534;
+    }
+
+    #blackFlash {
+      position: fixed;
+      inset: 0;
+      background: #000000;
+      opacity: 0;
+      pointer-events: none;
+      z-index: 30;
+      transition: opacity 0.18s;
+    }
+
+    #blackFlash.show {
+      opacity: 0.92;
+    }
+
+    .modal {
+      position: fixed;
+      inset: 0;
+      display: none;
+      justify-content: center;
+      align-items: center;
+      background: rgba(15, 23, 42, 0.72);
+      z-index: 50;
+      padding: 20px;
+    }
+
+    .modal.show {
+      display: flex;
+    }
+
+    .modal-box {
+      width: min(520px, 100%);
+      background: #ffffff;
+      border-radius: 24px;
+      padding: 28px;
+      text-align: center;
+      border: 4px solid #7dd3fc;
+      box-shadow: 0 22px 55px rgba(0, 0, 0, 0.35);
+    }
+
+    .modal-box h2 {
+      margin: 0 0 8px;
+      color: #0f4770;
+      font-size: 34px;
+    }
+
+    .modal-box p {
+      margin: 0 0 20px;
+      font-size: 17px;
+      line-height: 1.5;
+      color: #334155;
+    }
+
+    @media (max-width: 700px) {
+      body {
+        padding: 10px;
+      }
+
+      .game-shell {
+        padding: 14px;
+      }
+
+      .tool-btn {
+        width: 70px;
+        min-height: 66px;
+        font-size: 12px;
+      }
+
+      .status-card {
+        grid-template-columns: 1fr;
+      }
+
+      .tries-box {
+        width: 100%;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div id="blackFlash"></div>
+
+  <main class="game-shell">
+    <h1 class="game-title">🎨 Görsel Düzenleme Araçları Oyunu</h1>
+
+    <section class="toolbar" id="toolbar" aria-label="Araçlar">
+      <button class="tool-btn" data-tool="pencil" type="button"><span class="tool-icon">✏️</span><span>Kalem</span></button>
+      <button class="tool-btn" data-tool="bucket" type="button"><span class="tool-icon">🪣</span><span>Boya</span></button>
+      <button class="tool-btn" data-tool="text" type="button"><span class="tool-icon">A</span><span>Metin</span></button>
+      <button class="tool-btn" data-tool="eraser" type="button"><span class="tool-icon">🧽</span><span>Silgi</span></button>
+      <button class="tool-btn" data-tool="dropper" type="button"><span class="tool-icon">💧</span><span>Damla</span></button>
+      <button class="tool-btn" data-tool="zoom" type="button"><span class="tool-icon">🔍</span><span>Büyüteç</span></button>
+    </section>
+
+    <section class="status-card">
+      <div>
+        <h2 class="stage-title" id="stageTitle"></h2>
+        <p class="stage-text" id="stageText"></p>
+      </div>
+      <div class="tries-box" id="triesBox">Deneme: 3</div>
+    </section>
+
+    <section class="paper-wrap" id="paperWrap">
+      <canvas id="paintCanvas" width="760" height="420"></canvas>
+      <div id="htmlLayer"></div>
+    </section>
+
+    <section class="controls" id="controls"></section>
+    <div class="message" id="message"></div>
+  </main>
+
+  <section class="modal" id="modal">
+    <div class="modal-box">
+      <h2 id="modalTitle"></h2>
+      <p id="modalText"></p>
+      <button class="game-btn" id="restartGameBtn" type="button">Baştan Oyna</button>
+      <button class="game-btn secondary" id="retryStageBtn" type="button">Aşamayı Yeniden Dene</button>
+    </div>
+  </section>
+
+  <script>
+    const canvas = document.getElementById("paintCanvas");
+    const ctx = canvas.getContext("2d");
+    const paperWrap = document.getElementById("paperWrap");
+    const htmlLayer = document.getElementById("htmlLayer");
+    const toolbar = document.getElementById("toolbar");
+    const stageTitle = document.getElementById("stageTitle");
+    const stageText = document.getElementById("stageText");
+    const triesBox = document.getElementById("triesBox");
+    const controls = document.getElementById("controls");
+    const message = document.getElementById("message");
+    const modal = document.getElementById("modal");
+    const modalTitle = document.getElementById("modalTitle");
+    const modalText = document.getElementById("modalText");
+    const restartGameBtn = document.getElementById("restartGameBtn");
+    const retryStageBtn = document.getElementById("retryStageBtn");
+    const blackFlash = document.getElementById("blackFlash");
+
+    const WIDTH = canvas.width;
+    const HEIGHT = canvas.height;
+    const RED = "#e53935";
+
+    const drawLayer = document.createElement("canvas");
+    drawLayer.width = WIDTH;
+    drawLayer.height = HEIGHT;
+    const dctx = drawLayer.getContext("2d");
+
+    const stageInfo = {
+      1: {
+        tool: "pencil",
+        maxTries: 3,
+        title: "1. Aşama: Kalem Kullanma",
+        text: "Kalem aracı şu anda aktif. Beyaz kağıttaki soluk kalp çizgisinin üzerinden kalp çiz. Bitirince Kontrol Et düğmesine bas."
+      },
+      2: {
+        tool: "bucket",
+        maxTries: 3,
+        title: "2. Aşama: Boya Kutusu Kullanma",
+        text: "Boya kutusu şu anda aktif. Karenin içine bir kez tıkla ve karenin tamamını siyaha boya. Kare dışına tıklarsan boya dökülür."
+      },
+      3: {
+        tool: "text",
+        maxTries: 0,
+        title: "3. Aşama: Metin Ekleme",
+        text: "Metin aracı şu anda aktif. Kağıttaki Buraya tıkla alanına tıkla, kelimeyi doğrudan kutunun içine yaz ve Enter'a bas. Boş kelimeyle geçemezsin."
+      },
+      4: {
+        tool: "eraser",
+        maxTries: 3,
+        title: "4. Aşama: Silgi Kullanma",
+        text: "Silgi aracı şu anda aktif. Kağıttaki BENİ SİL! yazısını tamamen sil. Bitirince Kontrol Et düğmesine bas."
+      },
+      5: {
+        tool: "dropper",
+        maxTries: 3,
+        title: "5. Aşama: Damla İmleci Kullanma",
+        text: "Damla aracı şu anda aktif. Önce kırmızı kareye tıklayıp kırmızı rengi seç, sonra diğer üç kareyi de kırmızı yap."
+      },
+      6: {
+        tool: "zoom",
+        maxTries: 0,
+        title: "6. Aşama: Büyüteç Kullanma",
+        text: "Büyüteç aracı şu anda aktif. Kağıttaki küçük kareye tıkla ve kareyi büyüt."
+      },
+      7: {
+        tool: "pencil",
+        maxTries: 0,
+        title: "Final Aşaması: Tüm Araçları Kullan",
+        text: "Fİnal aşamasında aşağıdaki görevleri tamamlamak için yukarıdan uygun görsel düzenleme aracını seçmelisin. UNUTMA! Her aşamada farklı araçları kullanman gerekiyor bunun için üstteki araç çubuğunu kullan."
+      }
+    };
+
+    let stage = 1;
+    let currentTool = "pencil";
+    let triesLeft = 3;
+    let isPointerDown = false;
+    let lastPoint = null;
+    let selectedColor = null;
+    let textInput = null;
+    let stage3TypedText = "";
+    let stage3TypingActive = false;
+
+    const stage2Square = { x: 280, y: 110, size: 200, filled: false };
+    const stage3TextBox = { x: 120, y: 110, w: 520, h: 190 };
+    const stage4TextBox = { x: 210, y: 145, w: 340, h: 105 };
+    let stage5Squares = [];
+    let stage6Square = { cx: 380, cy: 205, size: 86, scale: 1 };
+
+    let finalState = null;
+
+    function clearCanvas() {
+      ctx.clearRect(0, 0, WIDTH, HEIGHT);
+      ctx.fillStyle = "#ffffff";
+      ctx.fillRect(0, 0, WIDTH, HEIGHT);
+    }
+
+    function clearHtmlLayer() {
+      htmlLayer.innerHTML = "";
+      textInput = null;
+    }
+
+    function setMessage(text, type = "info") {
+      message.textContent = text;
+      if (type === "bad") message.style.color = "#b91c1c";
+      else if (type === "good") message.style.color = "#15803d";
+      else message.style.color = "#0f4770";
+    }
+
+    function updateStatus() {
+      stageTitle.textContent = stageInfo[stage].title;
+      stageText.textContent = stageInfo[stage].text;
+
+      if (stageInfo[stage].maxTries > 0) {
+        triesBox.style.display = "block";
+        triesBox.textContent = "Deneme: " + triesLeft;
+      } else {
+        triesBox.style.display = "none";
+      }
+    }
+
+    function updateCursor() {
+      const cursors = {
+        pencil: "crosshair",
+        bucket: "copy",
+        text: "text",
+        eraser: "cell",
+        dropper: "copy",
+        zoom: "zoom-in"
+      };
+      canvas.style.cursor = cursors[currentTool] || "default";
+    }
+
+    function updateToolbar() {
+      const buttons = toolbar.querySelectorAll(".tool-btn");
+      buttons.forEach(btn => {
+        const tool = btn.dataset.tool;
+        btn.classList.remove("active", "passive", "final-mode");
+        btn.onclick = null;
+
+        if (stage === 7) {
+          btn.classList.add("final-mode");
+          if (tool === currentTool) btn.classList.add("active");
+          btn.onclick = () => {
+            currentTool = tool;
+            updateToolbar();
+            updateCursor();
+            setMessage("Seçilen araç: " + getToolName(tool));
+          };
+        } else {
+          if (tool === currentTool) btn.classList.add("active");
+          else btn.classList.add("passive");
+        }
+      });
+      updateCursor();
+    }
+
+    function getToolName(tool) {
+      const names = {
+        pencil: "Kalem",
+        bucket: "Boya Kutusu",
+        text: "Metin",
+        eraser: "Silgi",
+        dropper: "Damla İmleci",
+        zoom: "Büyüteç"
+      };
+      return names[tool] || tool;
+    }
+
+    function setControls() {
+      controls.innerHTML = "";
+
+      if (stage === 1) {
+        addControlButton("Kontrol Et", checkStage1);
+        addControlButton("Çizimi Temizle", () => {
+          dctx.clearRect(0, 0, WIDTH, HEIGHT);
+          drawStage1();
+          setMessage("Kağıt temizlendi. Kalbi tekrar çizebilirsin.");
+        }, "secondary");
+      }
+
+      if (stage === 3) {
+        addControlButton("Kelimeyi Onayla", checkStage3);
+      }
+
+      if (stage === 4) {
+        addControlButton("Kontrol Et", checkStage4);
+        addControlButton("Yazıyı Geri Getir", drawStage4, "secondary");
+      }
+
+      if (stage === 5) {
+        addControlButton("Kontrol Et", checkStage5);
+      }
+
+      if (stage === 7) {
+        const progress = document.createElement("div");
+        progress.className = "final-progress";
+        progress.innerHTML = `
+          <span class="progress-pill" id="final-pencil">Kalem</span>
+          <span class="progress-pill" id="final-bucket">Boya</span>
+          <span class="progress-pill" id="final-text">Metin</span>
+          <span class="progress-pill" id="final-eraser">Silgi</span>
+          <span class="progress-pill" id="final-dropper">Damla</span>
+          <span class="progress-pill" id="final-zoom">Büyüteç</span>
+        `;
+        controls.appendChild(progress);
+        addControlButton("Eksik Görevleri Göster", showMissingFinalTasks, "secondary");
+        addControlButton("Finali Yeniden Dene", retryCurrentStage, "secondary");
+      }
+    }
+
+    function addControlButton(label, action, styleName = "") {
+      const btn = document.createElement("button");
+      btn.type = "button";
+      btn.className = "game-btn" + (styleName ? " " + styleName : "");
+      btn.textContent = label;
+      btn.addEventListener("click", action);
+      controls.appendChild(btn);
+    }
+
+    function loadStage(nextStage) {
+      stage = nextStage;
+      currentTool = stageInfo[stage].tool;
+      triesLeft = stageInfo[stage].maxTries;
+      selectedColor = null;
+      stage3TypedText = "";
+      stage3TypingActive = false;
+      isPointerDown = false;
+      lastPoint = null;
+      clearHtmlLayer();
+      dctx.clearRect(0, 0, WIDTH, HEIGHT);
+      updateStatus();
+      updateToolbar();
+      setControls();
+      setMessage("");
+
+      if (stage === 1) drawStage1();
+      if (stage === 2) drawStage2();
+      if (stage === 3) drawStage3();
+      if (stage === 4) drawStage4();
+      if (stage === 5) resetStage5();
+      if (stage === 6) {
+        stage6Square.scale = 1;
+        drawStage6();
+      }
+      if (stage === 7) startFinalStage();
+    }
+
+    function nextStage() {
+      if (stage < 7) {
+        loadStage(stage + 1);
+      }
+    }
+
+    function useAttempt(reason, resetFunction) {
+      triesLeft--;
+      updateStatus();
+
+      if (triesLeft <= 0) {
+        showGameOver(reason + " Deneme hakkın bitti.");
+        return;
+      }
+
+      setMessage(reason + " Kalan deneme: " + triesLeft, "bad");
+      if (resetFunction) {
+        setTimeout(resetFunction, 700);
+      }
+    }
+
+    function showGameOver(reason) {
+      modalTitle.textContent = "Oyun Bitti";
+      modalText.textContent = reason;
+      retryStageBtn.style.display = stage === 7 ? "inline-block" : "none";
+      modal.classList.add("show");
+    }
+
+    function showWin() {
+      modalTitle.textContent = "Tebrikler! 🎉";
+      modalText.textContent = "Görsel Düzenleme araçlarının hepsini doğru şekilde kullandın. Artık kalem, boya kutusu, metin, silgi, damla imleci ve büyüteç görevlerini biliyorsun.";
+      retryStageBtn.style.display = "none";
+      modal.classList.add("show");
+    }
+
+    restartGameBtn.addEventListener("click", () => {
+      modal.classList.remove("show");
+      loadStage(1);
+    });
+
+    retryStageBtn.addEventListener("click", () => {
+      modal.classList.remove("show");
+      retryCurrentStage();
+    });
+
+    function retryCurrentStage() {
+      const sameStage = stage;
+      loadStage(sameStage);
+      setMessage("Bu aşama yeniden başlatıldı. Tekrar deneyebilirsin.");
+    }
+
+    function getPos(event) {
+      const rect = canvas.getBoundingClientRect();
+      return {
+        x: (event.clientX - rect.left) * (WIDTH / rect.width),
+        y: (event.clientY - rect.top) * (HEIGHT / rect.height)
+      };
+    }
+
+    function insideRect(p, rect) {
+      const w = rect.w || rect.size;
+      const h = rect.h || rect.size;
+      return p.x >= rect.x && p.x <= rect.x + w && p.y >= rect.y && p.y <= rect.y + h;
+    }
+
+    function drawLine(targetCtx, from, to, color, width) {
+      targetCtx.strokeStyle = color;
+      targetCtx.lineWidth = width;
+      targetCtx.lineCap = "round";
+      targetCtx.lineJoin = "round";
+      targetCtx.beginPath();
+      targetCtx.moveTo(from.x, from.y);
+      targetCtx.lineTo(to.x, to.y);
+      targetCtx.stroke();
+    }
+
+    function getHeartPoints(cx, cy, scale, count = 240) {
+      const points = [];
+      for (let i = 0; i <= count; i++) {
+        const t = (Math.PI * 2 * i) / count;
+        const x = 16 * Math.pow(Math.sin(t), 3);
+        const y = -(13 * Math.cos(t) - 5 * Math.cos(2 * t) - 2 * Math.cos(3 * t) - Math.cos(4 * t));
+        points.push({ x: cx + x * scale, y: cy + y * scale });
+      }
+      return points;
+    }
+
+    function drawHeartGuide(targetCtx, cx, cy, scale) {
+      const points = getHeartPoints(cx, cy, scale);
+      targetCtx.save();
+      targetCtx.strokeStyle = "rgba(239, 68, 68, 0.28)";
+      targetCtx.lineWidth = 13;
+      targetCtx.lineCap = "round";
+      targetCtx.lineJoin = "round";
+      targetCtx.beginPath();
+      targetCtx.moveTo(points[0].x, points[0].y);
+      points.forEach(p => targetCtx.lineTo(p.x, p.y));
+      targetCtx.closePath();
+      targetCtx.stroke();
+      targetCtx.restore();
+    }
+
+    function drawStage1() {
+      clearCanvas();
+      ctx.fillStyle = "#64748b";
+      ctx.font = "bold 20px Arial";
+      ctx.fillText("Görev: Kalemle kalp çiz", 24, 35);
+      drawHeartGuide(ctx, 380, 215, 10.8);
+      ctx.drawImage(drawLayer, 0, 0);
+    }
+
+    function checkHeartCoverageFromLayer(layerCtx, cx, cy, scale, needsDarkPixel = false) {
+      const points = getHeartPoints(cx, cy, scale, 110);
+      const img = layerCtx.getImageData(0, 0, WIDTH, HEIGHT).data;
+      let covered = 0;
+
+      points.forEach(p => {
+        let found = false;
+        for (let dx = -8; dx <= 8 && !found; dx += 3) {
+          for (let dy = -8; dy <= 8 && !found; dy += 3) {
+            const x = Math.round(p.x + dx);
+            const y = Math.round(p.y + dy);
+            if (x < 0 || y < 0 || x >= WIDTH || y >= HEIGHT) continue;
+            const index = (y * WIDTH + x) * 4;
+            const r = img[index];
+            const g = img[index + 1];
+            const b = img[index + 2];
+            const a = img[index + 3];
+            if (needsDarkPixel) {
+              if (a > 0 && r < 90 && g < 90 && b < 90) found = true;
+            } else {
+              if (a > 0) found = true;
+            }
+          }
+        }
+        if (found) covered++;
+      });
+
+      return covered / points.length;
+    }
+
+    function checkStage1() {
+      const coverage = checkHeartCoverageFromLayer(dctx, 380, 215, 10.8, false);
+      if (coverage >= 0.34) {
+        setMessage("Harika! Kalemle kalp çizdin.", "good");
+        setTimeout(nextStage, 700);
+      } else {
+        dctx.clearRect(0, 0, WIDTH, HEIGHT);
+        drawStage1();
+        useAttempt("Kalp çizgisi yeterince tamamlanmadı.", null);
+      }
+    }
+
+    function drawStage2() {
+      clearCanvas();
+      stage2Square.filled = false;
+      ctx.fillStyle = "#64748b";
+      ctx.font = "bold 20px Arial";
+      ctx.fillText("Görev: Karenin içine tıklayarak içini siyaha boya", 24, 35);
+      ctx.strokeStyle = "#111827";
+      ctx.lineWidth = 5;
+      ctx.strokeRect(stage2Square.x, stage2Square.y, stage2Square.size, stage2Square.size);
+      ctx.fillStyle = "#94a3b8";
+      ctx.font = "16px Arial";
+      ctx.fillText("Boya sadece karenin içine dökülmeli.", 260, 345);
+    }
+
+    function flashBlack() {
+      blackFlash.classList.add("show");
+      setTimeout(() => blackFlash.classList.remove("show"), 450);
+    }
+
+    function handleStage2Click(p) {
+      if (insideRect(p, stage2Square)) {
+        ctx.fillStyle = "#000000";
+        ctx.fillRect(stage2Square.x + 3, stage2Square.y + 3, stage2Square.size - 6, stage2Square.size - 6);
+        stage2Square.filled = true;
+        setMessage("Doğru! Boya kutusu şeklin içini tamamen boyadı.", "good");
+        setTimeout(nextStage, 800);
+      } else {
+        clearCanvas();
+        ctx.fillStyle = "#000000";
+        ctx.fillRect(0, 0, WIDTH, HEIGHT);
+        flashBlack();
+        useAttempt("Kare dışına tıkladın, boya tüm ekrana döküldü.", drawStage2);
+      }
+    }
+
+    function drawTextArea(box, value, active, placeholder) {
+      ctx.fillStyle = "#ffffff";
+      ctx.fillRect(box.x - 3, box.y - 3, box.w + 6, box.h + 6);
+
+      ctx.strokeStyle = active ? "#0ea5e9" : "#cbd5e1";
+      ctx.lineWidth = active ? 4 : 3;
+      ctx.setLineDash(active ? [] : [10, 8]);
+      ctx.strokeRect(box.x, box.y, box.w, box.h);
+      ctx.setLineDash([]);
+
+      if (value.trim().length > 0) {
+        ctx.save();
+        ctx.beginPath();
+        ctx.rect(box.x + 16, box.y + 16, box.w - 32, box.h - 32);
+        ctx.clip();
+        ctx.fillStyle = "#111827";
+        ctx.font = "bold 30px Arial";
+        ctx.fillText(value, box.x + 20, box.y + 62);
+
+        if (active) {
+          const textWidth = Math.min(ctx.measureText(value).width, box.w - 52);
+          ctx.fillStyle = "#0ea5e9";
+          ctx.fillRect(box.x + 23 + textWidth, box.y + 31, 3, 36);
+        }
+        ctx.restore();
+      } else {
+        ctx.fillStyle = active ? "#0ea5e9" : "#94a3b8";
+        ctx.font = "22px Arial";
+        const label = active ? "Yazmaya başla..." : placeholder;
+        const textWidth = ctx.measureText(label).width;
+        ctx.fillText(label, box.x + box.w / 2 - textWidth / 2, box.y + box.h / 2 + 8);
+      }
+    }
+
+    function drawStage3() {
+      clearCanvas();
+      ctx.fillStyle = "#64748b";
+      ctx.font = "bold 20px Arial";
+      ctx.fillText("Görev: Buraya tıkla alanının içine doğrudan bir kelime yaz", 24, 35);
+      drawTextArea(stage3TextBox, stage3TypedText, stage3TypingActive, "Buraya tıkla");
+    }
+
+    function activateStage3Text(p) {
+      if (!insideRect(p, stage3TextBox)) {
+        setMessage("Metin yazmak için Buraya tıkla yazısının olduğu kutunun içine tıkla.", "bad");
+        return;
+      }
+
+      stage3TypingActive = true;
+      drawStage3();
+      setMessage("Şimdi klavyeden kelimeni yaz. Bitirince Enter'a bas veya Kelimeyi Onayla düğmesine tıkla.");
+    }
+
+    function handleTyping(event, getValue, setValue, redraw, submit) {
+      if (event.ctrlKey || event.metaKey || event.altKey) return;
+
+      if (event.key === "Enter") {
+        event.preventDefault();
+        submit();
+        return;
+      }
+
+      if (event.key === "Backspace") {
+        event.preventDefault();
+        setValue(getValue().slice(0, -1));
+        redraw();
+        return;
+      }
+
+      if (event.key.length === 1) {
+        event.preventDefault();
+        if (getValue().length < 28) {
+          setValue(getValue() + event.key);
+          redraw();
+        }
+      }
+    }
+
+    function checkStage3() {
+      if (!stage3TypingActive && stage3TypedText.trim().length === 0) {
+        setMessage("Önce Buraya tıkla yazısının olduğu kutuya tıkla ve kelime yaz.", "bad");
+        return;
+      }
+
+      if (stage3TypedText.trim().length === 0) {
+        setMessage("Kelime yazmadan bu aşama geçilmez.", "bad");
+        return;
+      }
+
+      stage3TypingActive = false;
+      drawStage3();
+      setMessage("Güzel! Metin aracıyla kutunun içine kelime yazdın.", "good");
+      setTimeout(nextStage, 800);
+    }
+
+    function drawStage4() {
+      clearCanvas();
+      ctx.fillStyle = "#64748b";
+      ctx.font = "bold 20px Arial";
+      ctx.fillText("Görev: Silgiyle yazıyı tamamen sil", 24, 35);
+      ctx.fillStyle = "#111827";
+      ctx.font = "bold 58px Arial";
+      ctx.fillText("BENİ SİL!", 225, 215);
+      setMessage("Silmek için yazının üzerinde basılı tutup sürükle.");
+    }
+
+    function eraseAt(p, radius = 22) {
+      ctx.fillStyle = "#ffffff";
+      ctx.beginPath();
+      ctx.arc(p.x, p.y, radius, 0, Math.PI * 2);
+      ctx.fill();
+    }
+
+    function checkDarkPixels(box) {
+      const image = ctx.getImageData(box.x, box.y, box.w, box.h).data;
+      let dark = 0;
+      for (let i = 0; i < image.length; i += 4) {
+        const r = image[i];
+        const g = image[i + 1];
+        const b = image[i + 2];
+        const a = image[i + 3];
+        if (a > 0 && r < 120 && g < 120 && b < 120) dark++;
+      }
+      return dark;
+    }
+
+    function checkStage4() {
+      const darkPixels = checkDarkPixels(stage4TextBox);
+      if (darkPixels < 260) {
+        setMessage("Başardın! Silgi yazıyı temizledi.", "good");
+        setTimeout(nextStage, 700);
+      } else {
+        useAttempt("Yazı hala görünüyor. Biraz daha dikkatli silmelisin.", drawStage4);
+      }
+    }
+
+    function resetStage5() {
+      clearCanvas();
+      selectedColor = null;
+      const colors = [RED, "#facc15", "#3b82f6", "#22c55e"];
+      stage5Squares = colors.map((color, index) => ({
+        x: 130 + index * 135,
+        y: 135,
+        size: 95,
+        color
+      }));
+      drawStage5();
+    }
+
+    function drawStage5() {
+      clearCanvas();
+      ctx.fillStyle = "#64748b";
+      ctx.font = "bold 20px Arial";
+      ctx.fillText("Görev: Kırmızı rengi seç ve tüm kareleri kırmızı yap", 24, 35);
+
+      stage5Squares.forEach(square => {
+        ctx.fillStyle = square.color;
+        ctx.fillRect(square.x, square.y, square.size, square.size);
+        ctx.strokeStyle = "#111827";
+        ctx.lineWidth = 4;
+        ctx.strokeRect(square.x, square.y, square.size, square.size);
+      });
+
+      ctx.fillStyle = "#334155";
+      ctx.font = "18px Arial";
+      if (selectedColor === RED) {
+        ctx.fillText("Seçilen renk: kırmızı. Şimdi diğer karelere tıkla.", 205, 300);
+      } else {
+        ctx.fillText("Önce kırmızı kareye tıkla.", 280, 300);
+      }
+    }
+
+    function handleStage5Click(p) {
+      const square = stage5Squares.find(item => insideRect(p, item));
+      if (!square) {
+        setMessage("Damla imleciyle karelerin üzerine tıklamalısın.", "bad");
+        return;
+      }
+
+      if (!selectedColor) {
+        if (square.color === RED) {
+          selectedColor = RED;
+          drawStage5();
+          setMessage("Kırmızı renk seçildi.", "good");
+        } else {
+          useAttempt("Önce kırmızı kareden renk seçmelisin.", resetStage5);
+        }
+        return;
+      }
+
+      square.color = RED;
+      drawStage5();
+      setMessage("Kare kırmızı oldu.", "good");
+
+      if (stage5Squares.every(item => item.color === RED)) {
+        setMessage("Harika! Tüm kareler kırmızı oldu.", "good");
+        setTimeout(nextStage, 800);
+      }
+    }
+
+    function checkStage5() {
+      if (stage5Squares.every(item => item.color === RED)) {
+        setMessage("Tüm kareler kırmızı. Başardın!", "good");
+        setTimeout(nextStage, 700);
+      } else {
+        useAttempt("Henüz 4 karenin tamamı kırmızı değil.", resetStage5);
+      }
+    }
+
+    function drawStage6() {
+      clearCanvas();
+      const size = stage6Square.size * stage6Square.scale;
+      const x = stage6Square.cx - size / 2;
+      const y = stage6Square.cy - size / 2;
+
+      ctx.fillStyle = "#64748b";
+      ctx.font = "bold 20px Arial";
+      ctx.fillText("Görev: Büyüteçle kareyi büyüt", 24, 35);
+      ctx.fillStyle = "#e0f2fe";
+      ctx.fillRect(x, y, size, size);
+      ctx.strokeStyle = "#0f172a";
+      ctx.lineWidth = 4;
+      ctx.strokeRect(x, y, size, size);
+      ctx.fillStyle = "#334155";
+      ctx.font = "18px Arial";
+      ctx.fillText("Kareye tıkla", 335, 320);
+    }
+
+    function handleStage6Click(p) {
+      const size = stage6Square.size * stage6Square.scale;
+      const square = {
+        x: stage6Square.cx - size / 2,
+        y: stage6Square.cy - size / 2,
+        size
+      };
+
+      if (!insideRect(p, square)) {
+        setMessage("Büyütmek için karenin üzerine tıkla.", "bad");
+        return;
+      }
+
+      let start = null;
+      function animate(timestamp) {
+        if (!start) start = timestamp;
+        const progress = Math.min((timestamp - start) / 450, 1);
+        stage6Square.scale = 1 + progress * 1.35;
+        drawStage6();
+        if (progress < 1) {
+          requestAnimationFrame(animate);
+        } else {
+          setMessage("Kare büyüdü! Final aşamasına geçiyorsun.", "good");
+          setTimeout(nextStage, 800);
+        }
+      }
+      requestAnimationFrame(animate);
+    }
+
+    function startFinalStage() {
+      finalState = {
+        selectedColor: null,
+        done: {
+          pencil: false,
+          bucket: false,
+          text: false,
+          eraser: false,
+          dropper: false,
+          zoom: false
+        },
+        bucket: { x: 320, y: 88, size: 96, filled: false },
+        textBox: { x: 535, y: 88, w: 180, h: 78 },
+        typedText: "",
+        textActive: false,
+        redSample: { x: 315, y: 292, size: 62 },
+        target: { x: 415, y: 292, size: 62, color: "#3b82f6" },
+        magnifier: { x: 615, y: 298, size: 46, scale: 1 },
+        eraseBox: { x: 63, y: 278, w: 174, h: 86 },
+        heart: { cx: 108, cy: 137, scale: 4.0 }
+      };
+      drawFinalStage();
+      updateFinalProgress();
+      setMessage("Finalde önce bir araç seç, sonra kağıttaki uygun görevi yap.");
+    }
+
+    function drawFinalStage() {
+      clearCanvas();
+
+      // ÜST SIRA: 1, 2, 3
+      ctx.fillStyle = "#0f4770";
+      ctx.font = "bold 18px Arial";
+      ctx.fillText("1) Kalem: kalbi çiz", 35, 50);
+      drawHeartGuide(ctx, finalState.heart.cx, finalState.heart.cy, finalState.heart.scale);
+
+      ctx.fillStyle = "#0f4770";
+      ctx.font = "bold 18px Arial";
+      ctx.fillText("2) Boya: kareyi boya", 282, 50);
+      ctx.strokeStyle = "#111827";
+      ctx.lineWidth = 4;
+      ctx.strokeRect(finalState.bucket.x, finalState.bucket.y, finalState.bucket.size, finalState.bucket.size);
+      if (finalState.bucket.filled) {
+        ctx.fillStyle = "#000000";
+        ctx.fillRect(finalState.bucket.x + 3, finalState.bucket.y + 3, finalState.bucket.size - 6, finalState.bucket.size - 6);
+      }
+
+      ctx.fillStyle = "#0f4770";
+      ctx.font = "bold 18px Arial";
+      ctx.fillText("3) Metin yaz", 565, 50);
+      drawFinalTextArea();
+
+      // ALT SIRA: 4, 5, 6
+      ctx.fillStyle = "#64748b";
+      ctx.font = "bold 17px Arial";
+      ctx.fillText("4) Silgiyle sil", 88, 268);
+      ctx.fillStyle = "#111827";
+      ctx.font = "bold 48px Arial";
+      ctx.fillText("SİL", 105, 334);
+
+      ctx.fillStyle = "#0f4770";
+      ctx.font = "bold 18px Arial";
+      ctx.fillText("5) Damla: kırmızıyı seç", 285, 268);
+      ctx.fillStyle = RED;
+      ctx.fillRect(finalState.redSample.x, finalState.redSample.y, finalState.redSample.size, finalState.redSample.size);
+      ctx.strokeStyle = "#111827";
+      ctx.lineWidth = 4;
+      ctx.strokeRect(finalState.redSample.x, finalState.redSample.y, finalState.redSample.size, finalState.redSample.size);
+      ctx.fillStyle = finalState.target.color;
+      ctx.fillRect(finalState.target.x, finalState.target.y, finalState.target.size, finalState.target.size);
+      ctx.strokeRect(finalState.target.x, finalState.target.y, finalState.target.size, finalState.target.size);
+
+      ctx.fillStyle = "#0f4770";
+      ctx.font = "bold 18px Arial";
+      ctx.fillText("6) Büyüteç", 595, 268);
+      drawFinalMagnifierSquare();
+    }
+
+    function drawFinalTextArea() {
+      if (!finalState) return;
+      const box = finalState.textBox;
+      drawTextArea(box, finalState.typedText, finalState.textActive, "Buraya tıkla");
+
+      ctx.fillStyle = "#ffffff";
+      ctx.fillRect(box.x - 6, box.y + box.h + 4, box.w + 12, 32);
+
+      if (finalState.textActive && !finalState.done.text) {
+        ctx.fillStyle = "#64748b";
+        ctx.font = "12px Arial";
+        ctx.fillText("Kelimeyi yazdıktan sonra Enter'a basınız.", box.x + 6, box.y + box.h + 23);
+      }
+    }
+
+    function drawFinalMagnifierSquare() {
+      const sq = finalState.magnifier;
+      const size = sq.size * sq.scale;
+      const cx = sq.x + sq.size / 2;
+      const cy = sq.y + sq.size / 2;
+      const x = cx - size / 2;
+      const y = cy - size / 2;
+      ctx.fillStyle = "#e0f2fe";
+      ctx.fillRect(x, y, size, size);
+      ctx.strokeStyle = "#111827";
+      ctx.lineWidth = 4;
+      ctx.strokeRect(x, y, size, size);
+    }
+
+    function updateFinalProgress() {
+      if (!finalState) return;
+      Object.keys(finalState.done).forEach(key => {
+        const pill = document.getElementById("final-" + key);
+        if (pill) pill.classList.toggle("done", finalState.done[key]);
+      });
+
+      if (Object.values(finalState.done).every(Boolean)) {
+        setTimeout(showWin, 550);
+      }
+    }
+
+    function markFinalDone(key, successMessage) {
+      if (!finalState.done[key]) {
+        finalState.done[key] = true;
+        setMessage(successMessage, "good");
+        updateFinalProgress();
+      }
+    }
+
+    function showMissingFinalTasks() {
+      const names = {
+        pencil: "kalemle kalp çizme",
+        bucket: "boya kutusuyla kare boyama",
+        text: "metin ekleme",
+        eraser: "silgiyle SİL yazısını silme",
+        dropper: "damla ile kırmızıyı seçip hedef kareyi boyama",
+        zoom: "büyüteçle kareyi büyütme"
+      };
+      const missing = Object.keys(finalState.done).filter(key => !finalState.done[key]).map(key => names[key]);
+      if (missing.length === 0) {
+        setMessage("Finaldeki tüm görevler tamamlandı!", "good");
+      } else {
+        setMessage("Eksik görevler: " + missing.join(", "), "bad");
+      }
+    }
+
+    function activateFinalText(p) {
+      if (!insideRect(p, finalState.textBox)) {
+        setMessage("Metin aracını finaldeki Buraya tıkla kutusunun içinde kullanmalısın.", "bad");
+        return;
+      }
+
+      finalState.textActive = true;
+      drawFinalTextArea();
+      setMessage("Final metin alanına doğrudan yaz. Kutunun altındaki yönergeyi takip et.");
+    }
+
+    function submitFinalText() {
+      if (!finalState || finalState.typedText.trim().length === 0) {
+        setMessage("Finalde metin görevi için kutunun içine boş olmayan bir kelime yazmalısın.", "bad");
+        return;
+      }
+
+      finalState.textActive = false;
+      drawFinalTextArea();
+      markFinalDone("text", "Final metin görevi tamamlandı.");
+    }
+
+    function handleFinalClick(p) {
+      if (currentTool === "bucket") {
+        if (insideRect(p, finalState.bucket)) {
+          finalState.bucket.filled = true;
+          ctx.fillStyle = "#000000";
+          ctx.fillRect(finalState.bucket.x + 3, finalState.bucket.y + 3, finalState.bucket.size - 6, finalState.bucket.size - 6);
+          markFinalDone("bucket", "Boya kutusu görevi tamamlandı.");
+        } else {
+          setMessage("Boya kutusunu finaldeki boş kareye uygulamalısın.", "bad");
+        }
+      }
+
+      if (currentTool === "text") {
+        activateFinalText(p);
+      }
+
+      if (currentTool === "dropper") {
+        if (insideRect(p, finalState.redSample)) {
+          finalState.selectedColor = RED;
+          setMessage("Kırmızı renk seçildi. Şimdi mavi hedef kareye tıkla.", "good");
+          return;
+        }
+
+        if (insideRect(p, finalState.target) && finalState.selectedColor === RED) {
+          finalState.target.color = RED;
+          ctx.fillStyle = RED;
+          ctx.fillRect(finalState.target.x, finalState.target.y, finalState.target.size, finalState.target.size);
+          ctx.strokeStyle = "#111827";
+          ctx.lineWidth = 4;
+          ctx.strokeRect(finalState.target.x, finalState.target.y, finalState.target.size, finalState.target.size);
+          markFinalDone("dropper", "Damla imleci görevi tamamlandı.");
+        } else {
+          setMessage("Önce kırmızı örnek kareden rengi seçmelisin.", "bad");
+        }
+      }
+
+      if (currentTool === "zoom") {
+        const sq = finalState.magnifier;
+        const size = sq.size * sq.scale;
+        const clickArea = {
+          x: sq.x + sq.size / 2 - size / 2,
+          y: sq.y + sq.size / 2 - size / 2,
+          size
+        };
+        if (insideRect(p, clickArea)) {
+          finalState.magnifier.scale = 2.2;
+          drawFinalMagnifierSquare();
+          markFinalDone("zoom", "Büyüteç görevi tamamlandı.");
+        } else {
+          setMessage("Büyüteci küçük kareye uygulamalısın.", "bad");
+        }
+      }
+    }
+
+    function checkFinalHeart() {
+      const ratio = checkHeartCoverageFromLayer(ctx, finalState.heart.cx, finalState.heart.cy, finalState.heart.scale, true);
+      if (ratio >= 0.28) {
+        markFinalDone("pencil", "Final kalem görevi tamamlandı.");
+      }
+    }
+
+    function checkFinalErase() {
+      const dark = checkDarkPixels(finalState.eraseBox);
+      if (dark < 210) {
+        markFinalDone("eraser", "Final silgi görevi tamamlandı.");
+      }
+    }
+
+    canvas.addEventListener("pointerdown", event => {
+      const p = getPos(event);
+
+      if (stage === 1 && currentTool === "pencil") {
+        isPointerDown = true;
+        lastPoint = p;
+        drawLine(dctx, p, p, "#111827", 9);
+        drawStage1();
+        return;
+      }
+
+      if (stage === 2) {
+        handleStage2Click(p);
+        return;
+      }
+
+      if (stage === 3) {
+        activateStage3Text(p);
+        return;
+      }
+
+      if (stage === 4 && currentTool === "eraser") {
+        isPointerDown = true;
+        lastPoint = p;
+        eraseAt(p);
+        return;
+      }
+
+      if (stage === 5) {
+        handleStage5Click(p);
+        return;
+      }
+
+      if (stage === 6) {
+        handleStage6Click(p);
+        return;
+      }
+
+      if (stage === 7) {
+        if (currentTool === "pencil") {
+          isPointerDown = true;
+          lastPoint = p;
+          drawLine(ctx, p, p, "#111827", 7);
+          return;
+        }
+
+        if (currentTool === "eraser") {
+          isPointerDown = true;
+          lastPoint = p;
+          eraseAt(p, 20);
+          return;
+        }
+
+        handleFinalClick(p);
+      }
+    });
+
+    canvas.addEventListener("pointermove", event => {
+      if (!isPointerDown) return;
+      const p = getPos(event);
+
+      if (stage === 1 && currentTool === "pencil") {
+        drawLine(dctx, lastPoint, p, "#111827", 9);
+        lastPoint = p;
+        drawStage1();
+        return;
+      }
+
+      if (stage === 4 && currentTool === "eraser") {
+        drawLine(ctx, lastPoint, p, "#ffffff", 42);
+        lastPoint = p;
+        return;
+      }
+
+      if (stage === 7 && currentTool === "pencil") {
+        drawLine(ctx, lastPoint, p, "#111827", 7);
+        lastPoint = p;
+        return;
+      }
+
+      if (stage === 7 && currentTool === "eraser") {
+        drawLine(ctx, lastPoint, p, "#ffffff", 40);
+        lastPoint = p;
+      }
+    });
+
+    canvas.addEventListener("pointerup", () => {
+      if (stage === 7 && currentTool === "pencil") checkFinalHeart();
+      if (stage === 7 && currentTool === "eraser") checkFinalErase();
+      isPointerDown = false;
+      lastPoint = null;
+    });
+
+    canvas.addEventListener("pointerleave", () => {
+      if (stage === 7 && currentTool === "pencil") checkFinalHeart();
+      if (stage === 7 && currentTool === "eraser") checkFinalErase();
+      isPointerDown = false;
+      lastPoint = null;
+    });
+
+    window.addEventListener("keydown", event => {
+      if (stage === 3 && stage3TypingActive) {
+        handleTyping(
+          event,
+          () => stage3TypedText,
+          value => { stage3TypedText = value; },
+          drawStage3,
+          checkStage3
+        );
+      }
+
+      if (stage === 7 && currentTool === "text" && finalState && finalState.textActive) {
+        handleTyping(
+          event,
+          () => finalState.typedText,
+          value => { finalState.typedText = value; },
+          drawFinalTextArea,
+          submitFinalText
+        );
+      }
+    });
+
+    loadStage(1);
+  </script>
+</body>
+</html>

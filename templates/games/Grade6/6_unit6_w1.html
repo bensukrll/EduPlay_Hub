@@ -1,0 +1,420 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Blok Ustası: Algoritma Eşleştirme | EduPlay Hub</title>
+  
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"/>
+  <link href="https://fonts.googleapis.com/css2?family=Rajdhani:wght@600;700&family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css"/>
+  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+  <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.9.3/dist/confetti.browser.min.js"></script>
+
+  <style>
+    :root {
+      --bg-main: #f0f4f8;
+      --hud-bg: #ffffff;
+      --text-dark: #2c3e50;
+      --border-soft: #e2e8f0;
+      --panel-bg-dark: #0b112c;
+      --text-light: #f8fafc;
+      --cyan: #18f7ff;
+    }
+
+    body {
+      margin: 0;
+      height: 100vh;
+      overflow: hidden;
+      font-family: 'Poppins', sans-serif;
+      background-color: var(--bg-main);
+      color: var(--text-dark);
+      user-select: none;
+    }
+
+    .rajdhani { font-family: 'Rajdhani', sans-serif; }
+
+    .light-ui {
+      background-color: var(--hud-bg);
+      border: 1px solid var(--border-soft);
+      box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
+    }
+
+    /* Kartların Eşleştirme Alanındaki Stilleri */
+    .match-card {
+      cursor: pointer;
+      transition: all 0.25s ease;
+      border: 2px solid #1e293b;
+    }
+    .match-card:hover:not(.selected):not(.matched) {
+      transform: translateY(-4px);
+      border-color: var(--cyan);
+      box-shadow: 0 0 15px rgba(24, 247, 255, 0.3);
+    }
+
+    /* Aktif Seçim ve Eşleşme Durumları */
+    .match-card.selected {
+      border-color: #a855f7 !important;
+      background-color: #1e1b4b !important;
+      box-shadow: 0 0 20px rgba(168, 85, 247, 0.4);
+    }
+    .match-card.matched {
+      border-color: #22c55e !important;
+      background-color: #064e3b !important;
+      opacity: 0.4;
+      cursor: default;
+      transform: scale(0.96);
+    }
+
+    /* Scratch Gerçek Kod Blok Resimleri İçin */
+    .scratch-block-img {
+      width: 100%;
+      height: auto;
+      max-height: 85px;
+      object-fit: contain;
+      border-radius: 6px;
+    }
+
+    /* Sahne / Animasyon Alanı */
+    .grid-bg {
+      background-color: #0c1233;
+      background-image: 
+        linear-gradient(rgba(24, 247, 255, 0.03) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(24, 247, 255, 0.03) 1px, transparent 1px);
+      background-size: 20px 20px;
+    }
+
+    .star-gold { color: #ffd166; filter: drop-shadow(0 0 4px rgba(255,209,102,0.5)); }
+  </style>
+</head>
+<body class="w-screen h-screen flex flex-col p-4 gap-4">
+
+  <header class="light-ui rounded-2xl px-6 py-3 flex justify-between items-center shrink-0">
+    <div>
+      <p class="rajdhani tracking-[0.2em] text-blue-600 text-xs font-bold">HAFTA 20 · BLOK TABANLI ORTAM BİLEŞENLERİNİ DEĞERLENDİRME</p>
+      <h1 class="rajdhani text-2xl md:text-3xl font-extrabold text-slate-900 flex items-center gap-2">
+        <i class="fa-solid fa-layer-group text-purple-600 animate-pulse"></i> Blok Ustası: Algoritma Eşleştirme
+      </h1>
+    </div>
+    <div class="flex items-center gap-4">
+      <div class="bg-slate-50 border border-slate-200 px-4 py-2 rounded-xl text-sm font-bold text-slate-700">
+        Hamle: <span id="moveCount" class="text-blue-600 font-mono">0</span>
+      </div>
+      <div class="bg-slate-50 border border-slate-200 px-4 py-2 rounded-xl flex items-center gap-1 text-xl" id="starContainer">
+        <i class="fa-regular fa-star text-slate-300"></i>
+        <i class="fa-regular fa-star text-slate-300"></i>
+        <i class="fa-regular fa-star text-slate-300"></i>
+      </div>
+      <button onclick="initGame()" class="bg-blue-600 hover:bg-blue-700 text-white font-bold px-4 py-2.5 rounded-xl flex items-center gap-2 transition active:scale-95 shadow-sm text-sm">
+        <i class="fa-solid fa-rotate-right"></i> Yeniden Başlat
+      </button>
+    </div>
+  </header>
+
+  <main class="flex-1 grid grid-cols-1 lg:grid-cols-[300px_1fr] gap-4 min-h-0 overflow-hidden">
+    
+    <aside class="light-ui rounded-2xl p-4 flex flex-col justify-between min-h-0">
+      <div>
+        <h2 class="rajdhani text-xl font-bold text-slate-800 mb-2 pb-1 border-b flex items-center gap-2">
+          <i class="fa-solid fa-robot text-blue-500"></i> Görev Değerlendirmesi
+        </h2>
+        <p class="text-xs text-slate-500 leading-relaxed mb-4">
+          Aşağıdaki matriste robotun <b>Sahnede yaptığı hareketler</b> ile o hareketleri sağlayan <b>Scratch Kod Blokları</b> karışık halde duruyor.
+        </p>
+        
+        <div class="space-y-3">
+          <div class="bg-slate-50 border border-slate-200 rounded-xl p-3 flex gap-2 items-start text-xs text-slate-600">
+            <span class="bg-blue-100 text-blue-600 w-5 h-5 rounded-full flex items-center justify-center font-bold shrink-0">1</span>
+            <span>Bir robotun <b>Hareket Durumunu</b> seç ve canlı simülasyonunu izle.</span>
+          </div>
+          <div class="bg-slate-50 border border-slate-200 rounded-xl p-3 flex gap-2 items-start text-xs text-slate-600">
+            <span class="bg-purple-100 text-purple-600 w-5 h-5 rounded-full flex items-center justify-center font-bold shrink-0">2</span>
+            <span>O hareketi birebir üreten <b>Gerçek Scratch Algoritma Bloğunu</b> bul ve eşleştir!</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="bg-slate-900 text-slate-400 rounded-xl p-3 text-xs leading-relaxed border border-slate-800">
+        <b class="text-green-400 block mb-1 uppercase tracking-wider font-bold"><i class="fa-solid fa-circle-check"></i> Değerlendirme Notu:</b>
+        Yazılımdaki blokların dizilim sırasını (algoritmayı) doğru okumak, bileşenleri en verimli şekilde değerlendirmenizi sağlar.
+      </div>
+    </aside>
+
+    <section class="light-ui rounded-2xl p-1 flex flex-col min-h-0 overflow-hidden">
+      
+      <div id="stage" class="h-44 bg-[--panel-bg-dark] grid-bg relative flex items-center justify-center border-b border-slate-950">
+        <div class="absolute top-2 left-4 text-[10px] text-cyan-400 font-bold tracking-wider uppercase"><i class="fa-solid fa-display"></i> Canlı Önizleme Sahnesi</div>
+        
+        <div id="stageSprite" class="w-14 h-14 bg-gradient-to-br from-cyan-400 to-purple-500 rounded-xl flex items-center justify-center text-2xl shadow-lg transition-all duration-300 relative">
+          🤖
+          <div id="stageBubble" class="absolute -top-10 left-1/2 -translate-x-1/2 bg-white text-slate-800 text-[10px] font-bold px-2 py-1 rounded-md shadow-md hidden text-center min-w-[60px]">
+            Merhaba!
+            <div class="absolute bottom-0 left-1/2 -translate-x-1/2 translate-y-full w-0 h-0 border-x-4 border-x-transparent border-t-4 border-t-white"></div>
+          </div>
+        </div>
+      </div>
+
+      <div id="matrixGrid" class="flex-1 bg-[--panel-bg-dark] p-4 grid grid-cols-2 md:grid-cols-4 gap-3 overflow-y-auto content-start">
+        </div>
+    </section>
+
+  </main>
+
+  <script>
+    // --- GERÇEK SCRATCH ALGORİTMA RESİMLERİ VE HAREKET TANIMLARI HAVUZU ---
+    const baseItems = [
+      {
+        matchId: "dance",
+        type: "behavior",
+        content: "💃 Robot Kendi Etrafında Hızla Dönüyor ve Çılgın Dans Gösterisi Yapıyor.",
+        action: "dance"
+      },
+      {
+        matchId: "dance",
+        type: "blockImage",
+        content: "https://upload.wikimedia.org/wikipedia/commons/c/cc/Scratch_3.0_Script_Area.png", // Temsili Algoritma Bloğu Görseli
+        title: "[Sağa Dön 15°] + [Breakdance Yap]"
+      },
+      {
+        matchId: "talk-wait",
+        type: "behavior",
+        content: "💬 Robot Önce 'Merhaba!' Diye Sesleniyor, Ardından 1 Saniye Hareketsiz Bekliyor.",
+        action: "talk"
+      },
+      {
+        matchId: "talk-wait",
+        type: "blockImage",
+        content: "https://upload.wikimedia.org/wikipedia/commons/e/ee/Scratch_3.0_Blocks_Palette.png",
+        title: "['Merhaba!' De] + [1 Saniye Bekle]"
+      },
+      {
+        matchId: "walk-right",
+        type: "behavior",
+        content: "🚀 Robot Sırasıyla Sağa Doğru Gidiyor ve Hemen Arkasından Boyutunu Büyütüyor.",
+        action: "walk"
+      },
+      {
+        matchId: "walk-right",
+        type: "blockImage",
+        content: "https://upload.wikimedia.org/wikipedia/commons/2/23/Scratch_3.0_Stage_Region.png",
+        title: "[20 Adım Sağa Git] + [Boyutu Büyüt]"
+      },
+      {
+        matchId: "hide-walk",
+        type: "behavior",
+        content: "👻 Robot Birden Ortadan Kayboluyor (Gizleniyor) ve Sahnede Görünmezce Yukarı Çıkıyor.",
+        action: "hide"
+      },
+      {
+        matchId: "hide-walk",
+        type: "blockImage",
+        content: "https://upload.wikimedia.org/wikipedia/commons/c/c4/Scratch_3.0_Sprite_List.png",
+        title: "[Karakteri Gizle] + [20 Adım Yukarı Git]"
+      }
+    ];
+
+    let cardsData = [];
+    let selectedCards = [];
+    let moves = 0;
+    let matchCount = 0;
+    let animInterval = null;
+
+    const matrixGrid = document.getElementById('matrixGrid');
+    const moveCountDisplay = document.getElementById('moveCount');
+    const starContainer = document.getElementById('starContainer');
+    const stageSprite = document.getElementById('stageSprite');
+    const stageBubble = document.getElementById('stageBubble');
+
+    function shuffle(array) { return array.sort(() => Math.random() - 0.5); }
+
+    function initGame() {
+      matrixGrid.innerHTML = "";
+      selectedCards = [];
+      moves = 0;
+      matchCount = 0;
+      moveCountDisplay.textContent = moves;
+      updateStars();
+      stopStageAnimation();
+      resetSpriteToCenter();
+
+      cardsData = shuffle([...baseItems]);
+
+      cardsData.forEach((item, index) => {
+        const card = document.createElement('div');
+        card.className = "match-card bg-slate-900/50 rounded-xl p-3 flex flex-col justify-between text-slate-200 min-h-[110px] animate__animated animate__fadeIn select-none";
+        card.dataset.matchId = item.matchId;
+        card.dataset.index = index;
+
+        if (item.type === 'blockImage') {
+          // Solunda ve Sağında Yapboz Dişleri Olan Gerçek Scratch Kod Görseli Alanı
+          card.innerHTML = `
+            <div class="text-[9px] text-cyan-400 font-bold tracking-wider mb-1 uppercase"><i class="fa-solid fa-puzzle-piece"></i> Algoritma Bloğu</div>
+            <div class="bg-[#050818] p-2 rounded border border-slate-800 flex flex-col items-center justify-center flex-1">
+              <span class="text-[11px] text-amber-400 font-mono text-center font-bold">${item.title}</span>
+              <p class="text-[9px] text-slate-500 mt-1 font-sans">Scratch Code Block</p>
+            </div>
+          `;
+        } else {
+          // Sahne Davranış Tanımı
+          card.innerHTML = `
+            <div class="text-[9px] text-purple-400 font-bold tracking-wider mb-1 uppercase"><i class="fa-solid fa-robot"></i> Sahne Hareketi</div>
+            <p class="text-xs text-slate-300 leading-relaxed font-semibold flex-1 flex items-center">${item.content}</p>
+          `;
+        }
+
+        card.addEventListener('click', () => onCardClick(card, item));
+        matrixGrid.appendChild(card);
+      });
+    }
+
+    function onCardClick(card, item) {
+      if (card.classList.contains('matched') || card.classList.contains('selected') || selectedCards.length >= 2) return;
+
+      card.classList.add('selected');
+      selectedCards.push(card);
+
+      // Eğer tıklandığı şey bir Sahne Hareketi ise, yukarıdaki sahnede simülasyonunu başlat
+      if (item.type === 'behavior') {
+        runStageAnimation(item.action);
+      }
+
+      if (selectedCards.length === 2) {
+        moves++;
+        moveCountDisplay.textContent = moves;
+        checkMatch();
+      }
+    }
+
+    function checkMatch() {
+      const [card1, card2] = selectedCards;
+
+      if (card1.dataset.matchId === card2.dataset.matchId) {
+        // DOĞRU EŞLEŞME
+        setTimeout(() => {
+          card1.classList.remove('selected');
+          card2.classList.remove('selected');
+          card1.classList.add('matched', 'animate__animated', 'animate__pulse');
+          card2.classList.add('matched', 'animate__animated', 'animate__pulse');
+          
+          selectedCards = [];
+          matchCount++;
+          stopStageAnimation();
+
+          Swal.fire({
+            toast: true, position: 'top-end', icon: 'success', title: 'Doğru Eşleşme!',
+            showConfirmButton: false, timer: 1000, background: '#064e3b', color: '#fff'
+          });
+
+          if (matchCount === baseItems.length / 2) {
+            triggerWin();
+          }
+        }, 400);
+      } else {
+        // YANLIŞ EŞLEŞME
+        setTimeout(() => {
+          card1.classList.add('animate__animated', 'animate__headShake', 'border-red-500');
+          card2.classList.add('animate__animated', 'animate__headShake', 'border-red-500');
+
+          setTimeout(() => {
+            card1.classList.remove('selected', 'animate__animated', 'animate__headShake', 'border-red-500');
+            card2.classList.remove('selected', 'animate__animated', 'animate__headShake', 'border-red-500');
+            selectedCards = [];
+            stopStageAnimation();
+          }, 500);
+        }, 300);
+      }
+    }
+
+    // --- SAHNE CANLI SİMÜLASYON MOTORU ---
+    function runStageAnimation(action) {
+      stopStageAnimation();
+      resetSpriteToCenter();
+
+      if (action === 'dance') {
+        let rot = 0;
+        animInterval = setInterval(() => {
+          rot += 45;
+          stageSprite.style.transform = `translate(0px, 0px) scale(1) rotate(${rot}deg)`;
+        }, 100);
+      } 
+      else if (action === 'talk') {
+        stageBubble.classList.remove('hidden');
+        animInterval = setInterval(() => {
+          stageSprite.classList.toggle('scale-105');
+        }, 300);
+      } 
+      else if (action === 'walk') {
+        let posX = 0;
+        let scale = 1;
+        animInterval = setInterval(() => {
+          posX += 15;
+          if(posX > 60) scale = 1.4;
+          if(posX > 120) { posX = 0; scale = 1; }
+          stageSprite.style.transform = `translate(${posX}px, 0px) scale(${scale}) rotate(0deg)`;
+        }, 250);
+      } 
+      else if (action === 'hide') {
+        let posY = 0;
+        animInterval = setInterval(() => {
+          posY -= 10;
+          stageSprite.style.opacity = '0.15'; // Gizlenme illüzyonu
+          if(posY < -50) { posY = 0; stageSprite.style.opacity = '1'; }
+          stageSprite.style.transform = `translate(0px, ${posY}px) scale(1) rotate(0deg)`;
+        }, 200);
+      }
+    }
+
+    function stopStageAnimation() {
+      clearInterval(animInterval);
+      stageBubble.classList.add('hidden');
+    }
+
+    function resetSpriteToCenter() {
+      stageSprite.style.transform = "translate(0px, 0px) scale(1) rotate(0deg)";
+      stageSprite.style.opacity = "1";
+    }
+
+    function updateStars() {
+      starContainer.innerHTML = "";
+      let starCount = 3;
+      if (moves > 6) starCount = 2;
+      if (moves > 10) starCount = 1;
+      if (matchCount === 0) starCount = 0;
+
+      for (let i = 0; i < 3; i++) {
+        if (i < starCount) {
+          starContainer.innerHTML += `<i class="fa-solid fa-star star-gold animate__animated animate__bounceIn"></i>`;
+        } else {
+          starContainer.innerHTML += `<i class="fa-regular fa-star text-slate-300"></i>`;
+        }
+      }
+    }
+
+    function triggerWin() {
+      updateStars();
+      confetti({ particleCount: 100, spread: 70, origin: { y: 0.6 } });
+
+      Swal.fire({
+        title: 'Algoritma Uzmanı!',
+        html: `
+          <div class="text-slate-300 text-sm font-sans">
+            <p>Sahnede yürütülen tüm kod çıktılarını başarıyla inceledin ve doğru Scratch blok mimarileriyle eşleştirdin!</p>
+            <p class="text-2xl text-green-400 font-bold mt-3 rajdhani">Toplam Hamle Sayın: ${moves}</p>
+          </div>
+        `,
+        icon: 'success',
+        background: '#0b112c',
+        color: '#fff',
+        confirmButtonText: 'Laboratuvarı Yeniden Başlat',
+        confirmButtonColor: '#2563eb',
+        allowOutsideClick: false
+      }).then(() => {
+        initGame();
+      });
+    }
+
+    window.onload = initGame;
+  </script>
+</body>
+</html>

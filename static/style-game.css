@@ -171,6 +171,7 @@ body {
 
 /* iframe alanı */
 .game-display-container {
+    position: relative;
     width: 100%;
     height: 650px;
     border-radius: 18px;
@@ -451,3 +452,127 @@ body {
     }
 }
 
+
+
+/* =====================================================
+   NASIL OYNANIR OVERLAY
+===================================================== */
+
+.how-to-play-overlay {
+    position: absolute;
+    inset: 0;
+
+    background: rgba(15, 23, 42, 0.55);
+
+    /* backdrop-filter iframe üzerinde çalışmaz, onun yerine: */
+    backdrop-filter: none;
+    -webkit-backdrop-filter: none;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    z-index: 20;
+
+    border-radius: 0 0 22px 22px;
+}
+
+.how-to-play-card {
+    width: 420px;
+    max-width: 90%;
+
+    padding: 30px 28px;
+
+    border-radius: 28px;
+
+    background: white;
+
+    text-align: center;
+
+    font-family: "Poppins", sans-serif;
+
+    box-shadow: 0 24px 60px rgba(0, 0, 0, 0.28);
+
+    animation: rulesPop 0.25s ease;
+}
+
+.how-to-play-icon {
+    width: 58px;
+    height: 58px;
+
+    margin: 0 auto 14px;
+
+    border-radius: 18px;
+
+    background: linear-gradient(135deg, #7c3aed, #ec4899);
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    font-size: 28px;
+}
+
+.how-to-play-card h2 {
+    margin: 0 0 12px;
+
+    color: #4c1d95;
+
+    font-size: 27px;
+    font-weight: 900;
+}
+
+.how-to-play-card p {
+    margin: 0;
+
+    color: #475569;
+
+    font-size: 15px;
+    line-height: 1.6;
+    font-weight: 600;
+}
+
+.how-to-play-start-btn {
+    margin-top: 22px;
+
+    width: 100%;
+
+    padding: 15px 18px;
+
+    border: none;
+    border-radius: 18px;
+
+    background: linear-gradient(135deg, #22c55e, #15803d);
+    color: white;
+
+    font-size: 18px;
+    font-weight: 900;
+    font-family: "Poppins", sans-serif;
+
+    cursor: pointer;
+
+    box-shadow: 0 6px 0 #14532d;
+
+    transition: transform 0.15s ease, box-shadow 0.15s ease;
+}
+
+.how-to-play-start-btn:hover {
+    transform: translateY(-2px);
+}
+
+.how-to-play-start-btn:active {
+    transform: translateY(3px);
+    box-shadow: 0 3px 0 #14532d;
+}
+
+@keyframes rulesPop {
+    from {
+        opacity: 0;
+        transform: scale(0.92);
+    }
+
+    to {
+        opacity: 1;
+        transform: scale(1);
+    }
+}

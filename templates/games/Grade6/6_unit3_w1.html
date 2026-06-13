@@ -1,0 +1,1345 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Arama Dedektifi – İnternet Görevleri</title>
+    <style>
+        :root {
+            --color-primary: #2563eb;
+            --color-primary-dark: #1d4ed8;
+            --color-success: #10b981;
+            --color-error: #ef4444;
+            --color-warning: #f59e0b;
+            --color-background: #eef2ff;
+            --color-card-bg: #ffffff;
+            --color-text-default: #1f2937;
+            --color-text-muted: #6b7280;
+            --color-border: #e5e7eb;
+            --color-top-bar-start: #6d5dfc;
+            --color-top-bar-end: #22c1c3;
+        }
+
+        * { box-sizing: border-box; }
+
+        html, body {
+            margin: 0;
+            padding: 0;
+            min-height: 100vh;
+            font-family: 'Segoe UI', Roboto, Arial, sans-serif;
+            background: radial-gradient(circle at top left, #dbeafe, transparent 35%),
+                        radial-gradient(circle at bottom right, #ccfbf1, transparent 35%),
+                        #f8fafc;
+            color: var(--color-text-default);
+        }
+
+        #background-image {
+            position: fixed;
+            inset: 0;
+            background-image:
+                linear-gradient(rgba(37, 99, 235, 0.05) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(37, 99, 235, 0.05) 1px, transparent 1px);
+            background-size: 38px 38px;
+            z-index: -1;
+        }
+
+        .page-container {
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .top-bar {
+            background: linear-gradient(90deg, var(--color-top-bar-start), var(--color-top-bar-end));
+            padding: 18px 0;
+            box-shadow: 0 8px 22px rgba(37, 99, 235, 0.18);
+        }
+
+        .top-bar-inner, .bottom-inner {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 12px 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 14px;
+            background-color: rgba(255, 255, 255, 0.94);
+            border-radius: 16px;
+            box-shadow: 0 8px 18px rgba(15, 23, 42, 0.08);
+        }
+
+        .logo-text {
+            color: var(--color-primary);
+            font-weight: 900;
+            font-size: 24px;
+            letter-spacing: -0.5px;
+        }
+
+        .top-menu {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            flex-wrap: wrap;
+            justify-content: flex-end;
+        }
+
+        .bt-code {
+            color: var(--color-text-muted);
+            font-size: 14px;
+            font-weight: 700;
+        }
+
+        .main-content {
+            flex-grow: 1;
+            max-width: 1200px;
+            width: 100%;
+            margin: 28px auto;
+            padding: 0 20px;
+        }
+
+        .text-box {
+            background: rgba(255, 255, 255, 0.92);
+            padding: 24px 30px;
+            border-radius: 22px;
+            max-width: 980px;
+            margin: 0 auto;
+            text-align: center;
+            box-shadow: 0 12px 28px rgba(15, 23, 42, 0.08);
+            border: 1px solid rgba(226, 232, 240, 0.9);
+        }
+
+        .section-label {
+            display: inline-block;
+            padding: 7px 14px;
+            border-radius: 999px;
+            background: #eff6ff;
+            color: var(--color-primary);
+            font-size: 12px;
+            font-weight: 900;
+            text-transform: uppercase;
+            letter-spacing: 0.6px;
+            margin-bottom: 12px;
+        }
+
+        .section-title h1 {
+            margin: 0 0 10px;
+            font-size: clamp(28px, 4vw, 42px);
+            color: #111827;
+        }
+
+        .card-text {
+            font-size: 16px;
+            color: var(--color-text-muted);
+            max-width: 750px;
+            margin: 0 auto;
+            line-height: 1.65;
+        }
+
+        .game-layout {
+            margin-top: 30px;
+            display: grid;
+            grid-template-columns: minmax(280px, 0.9fr) minmax(320px, 1.1fr);
+            gap: 28px;
+            align-items: stretch;
+        }
+
+        .card {
+            background-color: rgba(255, 255, 255, 0.96);
+            border-radius: 24px;
+            padding: 24px;
+            box-shadow: 0 16px 34px rgba(15, 23, 42, 0.08);
+            border: 1px solid var(--color-border);
+        }
+
+        .game-visual {
+            min-height: 470px;
+            position: relative;
+            overflow: hidden;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: linear-gradient(135deg, #ffffff, #eff6ff);
+        }
+
+        .game-visual-badge {
+            position: absolute;
+            top: 18px;
+            left: 18px;
+            z-index: 4;
+            background: rgba(15, 23, 42, 0.78);
+            color: #fff;
+            padding: 7px 13px;
+            border-radius: 999px;
+            font-size: 12px;
+            font-weight: 800;
+            backdrop-filter: blur(6px);
+        }
+
+        .visual-stage {
+            width: 100%;
+            min-height: 410px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            position: relative;
+            padding: 22px;
+        }
+
+        .stage-icon {
+            font-size: 116px;
+            margin-bottom: 22px;
+            filter: drop-shadow(0 16px 22px rgba(15, 23, 42, 0.18));
+            position: relative;
+            z-index: 2;
+            animation: floatIcon 3s ease-in-out infinite;
+        }
+
+        .stage-description {
+            position: relative;
+            z-index: 2;
+            font-size: 19px;
+            line-height: 1.45;
+            font-weight: 900;
+            max-width: 92%;
+        }
+
+        .stage-description span {
+            display: block;
+            font-size: 14px;
+            font-weight: 600;
+            opacity: 0.82;
+            margin-top: 6px;
+        }
+
+        .search-ring, .tech-ring, .source-ring {
+            position: absolute;
+            width: 310px;
+            height: 310px;
+            border-radius: 50%;
+            border: 5px dashed rgba(37, 99, 235, 0.18);
+            animation: spin 20s linear infinite;
+        }
+
+        .theme-purpose { background: linear-gradient(135deg, #eff6ff, #ffffff); }
+        .theme-purpose .search-ring { background: rgba(37, 99, 235, 0.08); border-style: solid; animation: pulse 2.5s ease-in-out infinite; }
+
+        .theme-engine { background: linear-gradient(135deg, #ecfeff, #ffffff); }
+        .theme-engine .search-ring { border-color: rgba(6, 182, 212, 0.25); }
+
+        .theme-advanced { background: linear-gradient(135deg, #fef3c7, #ffffff); }
+        .theme-advanced .tech-ring { border-color: rgba(245, 158, 11, 0.30); }
+
+        .theme-source { background: linear-gradient(135deg, #ecfdf5, #ffffff); }
+        .theme-source .source-ring { border-color: rgba(16, 185, 129, 0.25); animation: pulse 2.8s ease-in-out infinite; }
+
+        .theme-tech { background: linear-gradient(135deg, #f5f3ff, #ffffff); }
+        .theme-tech .tech-ring { border-color: rgba(124, 58, 237, 0.24); }
+
+        .theme-finish { background: linear-gradient(135deg, #d1fae5, #eff6ff); }
+
+        @keyframes spin { from { transform: rotate(0); } to { transform: rotate(360deg); } }
+        @keyframes pulse { 0%, 100% { transform: scale(0.88); opacity: .55; } 50% { transform: scale(1.08); opacity: .18; } }
+        @keyframes floatIcon { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-12px); } }
+        @keyframes popIn { 0% { opacity: 0; transform: scale(.92) translateY(8px); } 100% { opacity: 1; transform: scale(1) translateY(0); } }
+        .stage-enter { animation: popIn .45s ease forwards; }
+
+        .game-panel {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            min-height: 470px;
+        }
+
+        .game-step-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 6px;
+        }
+
+        .step-section-pill {
+            font-size: 12px;
+            font-weight: 900;
+            color: var(--color-text-muted);
+            text-transform: uppercase;
+            letter-spacing: .45px;
+        }
+
+        .step-counter {
+            font-size: 14px;
+            color: var(--color-primary);
+            font-weight: 800;
+            white-space: nowrap;
+        }
+
+        .game-step-title {
+            margin: 0;
+            font-size: 24px;
+            color: #111827;
+        }
+
+        .game-story {
+            font-size: 16px;
+            line-height: 1.65;
+            color: #4b5563;
+            margin: 0 0 8px;
+        }
+
+        .sequence-hint {
+            background: #fffbeb;
+            border: 1px solid #fde68a;
+            color: #92400e;
+            border-radius: 14px;
+            padding: 10px 12px;
+            font-size: 14px;
+            line-height: 1.45;
+        }
+
+        .options-container {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .option-button {
+            border-radius: 15px;
+            border: 1px solid var(--color-border);
+            padding: 13px 15px;
+            background: var(--color-card-bg);
+            color: var(--color-text-default);
+            font-size: 15px;
+            text-align: left;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            transition: all .16s ease;
+            width: 100%;
+            font-family: inherit;
+        }
+
+        .option-button:hover {
+            background: #f9fafb;
+            border-color: #cbd5e1;
+            transform: translateY(-2px);
+            box-shadow: 0 10px 16px rgba(15, 23, 42, 0.06);
+        }
+
+        .option-key {
+            min-width: 30px;
+            height: 30px;
+            border-radius: 999px;
+            background: #eff6ff;
+            color: var(--color-primary);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 14px;
+            font-weight: 900;
+            flex-shrink: 0;
+        }
+
+        .option-selected {
+            border-width: 2px;
+            border-color: var(--color-primary);
+            background: #eef4ff;
+        }
+
+        .option-correct {
+            border-width: 2px;
+            border-color: var(--color-success);
+            background: #e8f9f0;
+        }
+
+        .option-correct .option-key { background: var(--color-success); color: #fff; }
+        .option-wrong {
+            border-width: 2px;
+            border-color: var(--color-error);
+            background: #fee7e7;
+        }
+        .option-wrong .option-key { background: var(--color-error); color: #fff; }
+
+        .multi-selected {
+            border-width: 2px;
+            border-color: var(--color-success);
+            background: #ecfdf5;
+        }
+
+        .sequence-picked {
+            border-width: 2px;
+            border-color: var(--color-warning);
+            background: #fffbeb;
+        }
+
+        .sequence-picked .option-key {
+            background: var(--color-warning);
+            color: #fff;
+            position: relative;
+        }
+
+        .sequence-picked .option-key::after {
+            content: attr(data-order);
+            position: absolute;
+            top: -8px;
+            right: -8px;
+            width: 18px;
+            height: 18px;
+            background: #fff;
+            border: 1px solid var(--color-warning);
+            border-radius: 999px;
+            color: var(--color-warning);
+            font-size: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .sequence-order {
+            font-size: 14px;
+            color: #92400e;
+            background: #fffbeb;
+            border: 1px dashed #fbbf24;
+            border-radius: 12px;
+            padding: 10px 12px;
+        }
+
+        .feedback {
+            margin-top: 4px;
+            padding: 11px 12px;
+            border-radius: 12px;
+            font-size: 14px;
+            font-weight: 700;
+            min-height: 44px;
+            display: flex;
+            align-items: center;
+        }
+
+        .feedback:empty { display: none; }
+        .feedback-success { background-color: #d1fae5; color: #065f46; border: 1px solid #a7f3d0; }
+        .feedback-error { background-color: #fee2e2; color: #991b1b; border: 1px solid #fecaca; }
+
+        .game-controls {
+            margin-top: auto;
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+
+        .btn {
+            padding: 10px 18px;
+            border-radius: 12px;
+            font-size: 15px;
+            font-weight: 900;
+            cursor: pointer;
+            transition: all .2s ease;
+            border: 1px solid transparent;
+            font-family: inherit;
+        }
+
+        .btn-primary { background-color: var(--color-primary); color: #fff; }
+        .btn-primary:hover { background-color: var(--color-primary-dark); }
+        .btn-success { background-color: var(--color-success); color: #fff; }
+        .btn-outline { background-color: transparent; border-color: var(--color-border); color: var(--color-text-default); }
+        .top-action-btn { background-color: var(--color-primary); color: #fff; padding: 8px 15px; font-size: 13px; border-radius: 10px; }
+        .btn:disabled { opacity: .55; cursor: not-allowed; transform: none; }
+
+        .game-progress {
+            margin-top: 16px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .progress-bar-bg {
+            flex-grow: 1;
+            height: 10px;
+            background: #e5e7eb;
+            border-radius: 999px;
+            overflow: hidden;
+        }
+
+        .progress-bar-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #10b981, #22c55e);
+            width: 0%;
+            transition: width .35s ease;
+        }
+
+        .progress-text {
+            font-size: 12px;
+            color: var(--color-text-muted);
+            white-space: nowrap;
+            font-weight: 800;
+        }
+
+        .bottom-bar {
+            padding: 12px 0 20px;
+            font-size: 12px;
+        }
+
+        .bottom-inner {
+            color: var(--color-text-muted);
+            font-weight: 700;
+        }
+
+        .finish-actions { display: flex; gap: 10px; flex-wrap: wrap; margin-top: 14px; }
+        .game-finish-title { font-size: 28px; margin: 0 0 8px; }
+        .game-finish-text { color: var(--color-text-muted); line-height: 1.7; font-size: 16px; }
+
+        @media (max-width: 850px) {
+            .game-layout { grid-template-columns: 1fr; }
+            .game-visual { min-height: 320px; }
+            .visual-stage { min-height: 270px; }
+            .stage-icon { font-size: 92px; }
+            .search-ring, .tech-ring, .source-ring { width: 240px; height: 240px; }
+        }
+
+        @media (max-width: 600px) {
+            .top-bar-inner, .bottom-inner { flex-direction: column; align-items: flex-start; }
+            .top-menu { justify-content: flex-start; }
+            .bt-code { font-size: 12px; }
+            .text-box { padding: 18px; }
+            .card { padding: 18px; }
+            .game-controls { flex-direction: column; }
+            .game-controls .btn { width: 100%; }
+            .game-step-header { flex-direction: column; align-items: flex-start; }
+        }
+    </style>
+</head>
+<body>
+    <div id="background-image"></div>
+
+    <div class="page-container">
+        <header class="top-bar">
+            <div class="top-bar-inner">
+                <div class="logo-text">EduPlay Hub</div>
+                <div class="top-menu">
+                    <span class="bt-code">BTY.6.3.1 • İnternet ile amacına uygun olarak çalışabilme</span>
+                    <button class="btn top-action-btn" type="button">Ara. Bul. Değerlendir.</button>
+                </div>
+            </div>
+        </header>
+
+        <main class="main-content">
+            <section class="game-section">
+                <div class="text-box">
+                    <div class="section-label">3. Tema • 1. Hafta • 9. Hafta</div>
+                    <div class="section-title">
+                        <h1>Arama Dedektifi – İnternet Görevleri 🔎</h1>
+                        <p class="card-text">
+                            Doğru arama motorunu seç, ileri arama ipuçlarını kullan, güvenilir bilgiye ulaş ve yeni internet teknolojilerini verimlilik açısından değerlendir. Her oyunda soru havuzundan farklı görevler karşına çıkabilir!
+                        </p>
+                    </div>
+                </div>
+
+                <div class="game-layout">
+                    <div class="card game-visual">
+                        <div class="game-visual-badge">BTY.6.3.1</div>
+                        <div class="game-visual-inner"></div>
+                    </div>
+
+                    <div class="card game-panel">
+                        <div class="game-step-header">
+                            <span id="stepSection" class="step-section-pill"></span>
+                            <span id="stepCounter" class="step-counter"></span>
+                        </div>
+
+                        <h2 id="stepTitle" class="game-step-title"></h2>
+                        <p id="stepStory" class="game-story"></p>
+
+                        <div id="sequenceHint" class="sequence-hint" hidden>
+                            👆 Bu görevde seçeneklere doğru sırayla tıklayarak bir arama planı oluşturmalısın. Yanlış olursa sıfırlayıp tekrar deneyebilirsin.
+                        </div>
+
+                        <div id="optionsContainer" class="options-container"></div>
+                        <div id="sequenceOrder" class="sequence-order" hidden></div>
+                        <div id="feedback" class="feedback"></div>
+
+                        <div class="game-controls">
+                            <button id="prevButton" class="btn btn-outline" type="button" disabled>← Önceki Soru</button>
+                            <button id="resetSequenceButton" class="btn btn-outline" type="button" hidden>Cevabı Sıfırla</button>
+                            <button id="checkButton" class="btn btn-primary" type="button">Cevabı Kontrol Et</button>
+                            <button id="nextButton" class="btn btn-success" type="button" disabled>Sonraki Soru →</button>
+                        </div>
+
+                        <div class="game-progress">
+                            <div class="progress-bar-bg">
+                                <div id="progressBar" class="progress-bar-fill"></div>
+                            </div>
+                            <span id="progressText" class="progress-text"></span>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </main>
+
+        <footer class="bottom-bar">
+            <div class="bottom-inner">
+                <span>EduPlay Hub – Arama Dedektifi Modülü</span>
+                <span>BTY.6.3.1 • Amaçlı İnternet Kullanımı</span>
+            </div>
+        </footer>
+    </div>
+
+    <script>
+        document.addEventListener("DOMContentLoaded", () => initSearchDetectiveGame());
+
+        function initSearchDetectiveGame() {
+            const TOTAL_QUESTIONS_PER_GAME = 10;
+
+            const questionPool = [
+                {
+                    section: "Bölüm 1 • Amaca Uygun Arama",
+                    visualTheme: "purpose",
+                    visualIcon: "🎯🔎",
+                    type: "single",
+                    title: "Araştırma Amacını Belirle",
+                    story: "Ada, 'Geri dönüşüm nedir?' konusunda ödev hazırlayacak. İlk yapması gereken en doğru adım hangisidir?",
+                    options: [
+                        { id: "a", text: "Arama amacını belirleyip anahtar kelimeleri seçmek." },
+                        { id: "b", text: "İlk çıkan her siteyi kopyalamak." },
+                        { id: "c", text: "Konu ile ilgisiz görsellere bakmak." }
+                    ],
+                    correctId: "a",
+                    success: "Süper! Amaç belirlemek doğru bilgiye daha hızlı ulaşmayı sağlar. 🎯",
+                    error: "Arama başlamadan önce amaç ve anahtar kelimeler netleşmeli. Tekrar dene."
+                },
+                {
+                    section: "Bölüm 1 • Amaca Uygun Arama",
+                    visualTheme: "purpose",
+                    visualIcon: "🧠💡",
+                    type: "single",
+                    title: "En Uygun Anahtar Kelime",
+                    story: "Bir öğrenci 'Ankara'daki tarihi müzeler' hakkında bilgi arıyor. Hangi arama ifadesi daha amaca uygundur?",
+                    options: [
+                        { id: "a", text: "müze" },
+                        { id: "b", text: "Ankara tarihi müzeler ziyaret bilgileri" },
+                        { id: "c", text: "çok güzel yerler" }
+                    ],
+                    correctId: "b",
+                    success: "Harika! Daha net anahtar kelimeler, daha ilgili sonuçlar getirir. 🔎",
+                    error: "Çok genel kelimeler sonucu dağıtabilir. Daha net ifadeyi seçmelisin."
+                },
+                {
+                    section: "Bölüm 1 • Amaca Uygun Arama",
+                    visualTheme: "purpose",
+                    visualIcon: "🗺️🔍",
+                    type: "sequence",
+                    title: "Doğru Arama Planı",
+                    story: "Bir araştırma yaparken adımları doğru sıraya koy. Böylece interneti amacına uygun kullanabilirsin.",
+                    options: ["Amacı belirle", "Anahtar kelimeleri seç", "Arama motorunda ara", "Kaynakları karşılaştır"],
+                    correctOrder: ["Amacı belirle", "Anahtar kelimeleri seç", "Arama motorunda ara", "Kaynakları karşılaştır"],
+                    success: "Mükemmel bir arama planı! Bu sıra bilgiye ulaşmayı kolaylaştırır. 🧭",
+                    error: "Sıralama biraz karıştı. Önce amaç, sonra anahtar kelime gelmeli."
+                },
+                {
+                    section: "Bölüm 2 • Arama Motorları",
+                    visualTheme: "engine",
+                    visualIcon: "🌐🔎",
+                    type: "single",
+                    title: "Arama Motoru Hangisi?",
+                    story: "Aşağıdakilerden hangisi internette bilgi aramak için kullanılan bir arama motorudur?",
+                    options: [
+                        { id: "a", text: "Google" },
+                        { id: "b", text: "Paint" },
+                        { id: "c", text: "Hesap Makinesi" }
+                    ],
+                    correctId: "a",
+                    success: "Doğru! Google bir arama motorudur. 🌐",
+                    error: "Paint ve hesap makinesi bilgi aramak için kullanılan arama motorları değildir."
+                },
+                {
+                    section: "Bölüm 2 • Arama Motorları",
+                    visualTheme: "engine",
+                    visualIcon: "🧭🌍",
+                    type: "multi",
+                    title: "Arama Motorlarını Belirle",
+                    story: "Aşağıdakilerden hangileri arama motoru olarak kullanılabilir? Birden fazla doğru cevap var.",
+                    options: [
+                        { id: "a", text: "Google" },
+                        { id: "b", text: "Bing" },
+                        { id: "c", text: "Yandex" },
+                        { id: "d", text: "Word" }
+                    ],
+                    correctIds: ["a", "b", "c"],
+                    success: "Çok iyi! Google, Bing ve Yandex arama motoru örnekleridir. 🚀",
+                    error: "Word yazı yazma programıdır; arama motoru değildir. Doğru seçenekleri tekrar düşün."
+                },
+                {
+                    section: "Bölüm 2 • Arama Motorları",
+                    visualTheme: "engine",
+                    visualIcon: "🖼️🔎",
+                    type: "single",
+                    title: "Görsel Arama Görevi",
+                    story: "Ece, bir bitkinin fotoğrafına benzer görseller bulmak istiyor. Hangi özellik en uygundur?",
+                    options: [
+                        { id: "a", text: "Görsel arama / resimle arama özelliği" },
+                        { id: "b", text: "Rastgele video izleme" },
+                        { id: "c", text: "Sadece oyun sitelerine girme" }
+                    ],
+                    correctId: "a",
+                    success: "Aynen! Görsel arama, fotoğraf üzerinden benzer sonuçları bulmaya yardım eder. 🖼️",
+                    error: "Bu görevde metinden çok görsel benzerlik önemli. Görsel arama daha uygundur."
+                },
+                {
+                    section: "Bölüm 3 • İleri Düzey Arama",
+                    visualTheme: "advanced",
+                    visualIcon: "⚙️🔍",
+                    type: "single",
+                    title: "Tırnak İşareti Ne İşe Yarar?",
+                    story: "Mert, tam olarak 'yapay zeka etiği' ifadesini aramak istiyor. Hangisi daha uygundur?",
+                    options: [
+                        { id: "a", text: "\"yapay zeka etiği\"" },
+                        { id: "b", text: "yapay veya zeka veya etiği" },
+                        { id: "c", text: "zeka oyunları" }
+                    ],
+                    correctId: "a",
+                    success: "Harika! Tırnak işareti, kelime grubunu birlikte aramaya yardım eder. ✨",
+                    error: "Tam ifade aranacaksa kelime grubunu tırnak içine almak daha doğrudur."
+                },
+                {
+                    section: "Bölüm 3 • İleri Düzey Arama",
+                    visualTheme: "advanced",
+                    visualIcon: "📄🔎",
+                    type: "single",
+                    title: "Dosya Türüyle Arama",
+                    story: "Öğretmen, 'güvenli internet' konulu PDF kaynak arıyor. Hangi arama ifadesi en uygundur?",
+                    options: [
+                        { id: "a", text: "güvenli internet filetype:pdf" },
+                        { id: "b", text: "güvenli internet komik video" },
+                        { id: "c", text: "pdf nedir oyun" }
+                    ],
+                    correctId: "a",
+                    success: "Süper! filetype:pdf belirli dosya türündeki sonuçları bulmayı kolaylaştırır. 📄",
+                    error: "PDF kaynak istendiği için aramaya filetype:pdf eklemek gerekir."
+                },
+                {
+                    section: "Bölüm 3 • İleri Düzey Arama",
+                    visualTheme: "advanced",
+                    visualIcon: "🏛️🔍",
+                    type: "single",
+                    title: "Belirli Sitede Arama",
+                    story: "Defne, yalnızca meb.gov.tr içinde 'dijital vatandaşlık' aramak istiyor. Hangisi en uygundur?",
+                    options: [
+                        { id: "a", text: "dijital vatandaşlık site:meb.gov.tr" },
+                        { id: "b", text: "dijital vatandaşlık her yerde" },
+                        { id: "c", text: "site oyun dijital" }
+                    ],
+                    correctId: "a",
+                    success: "Tam isabet! site: komutu belirli bir web sitesi içinde arama yapmayı sağlar. 🏛️",
+                    error: "Sadece belirli bir sitede aramak için site: komutu kullanılmalı."
+                },
+                {
+                    section: "Bölüm 3 • İleri Düzey Arama",
+                    visualTheme: "advanced",
+                    visualIcon: "➖🔍",
+                    type: "single",
+                    title: "İstenmeyen Sonucu Çıkarma",
+                    story: "Ali, jaguar hayvanı hakkında arama yapmak istiyor ama araba sonuçları çıkmasın istiyor. Hangisi daha uygundur?",
+                    options: [
+                        { id: "a", text: "jaguar hayvan -araba" },
+                        { id: "b", text: "jaguar araba" },
+                        { id: "c", text: "araba modelleri" }
+                    ],
+                    correctId: "a",
+                    success: "Çok iyi! Eksi işareti istenmeyen kelimeleri sonuçlardan uzaklaştırabilir. ➖",
+                    error: "Araba sonuçlarını azaltmak için aramaya -araba eklenmelidir."
+                },
+                {
+                    section: "Bölüm 3 • İleri Düzey Arama",
+                    visualTheme: "advanced",
+                    visualIcon: "🧩🔎",
+                    type: "sequence",
+                    title: "İleri Arama Stratejisi",
+                    story: "Bir konuda güvenilir ve net sonuçlara ulaşmak için ileri arama adımlarını sırala.",
+                    options: ["Net anahtar kelime yaz", "Gerekirse tırnak/site/filetype kullan", "Sonuçları aç", "Kaynakların tarih ve güvenilirliğini kontrol et"],
+                    correctOrder: ["Net anahtar kelime yaz", "Gerekirse tırnak/site/filetype kullan", "Sonuçları aç", "Kaynakların tarih ve güvenilirliğini kontrol et"],
+                    success: "Efsane! İleri arama sadece bulmak değil, bulduğunu değerlendirmektir. 🧩",
+                    error: "Önce arama ifadesi hazırlanır, sonra sonuçların güvenilirliği kontrol edilir."
+                },
+                {
+                    section: "Bölüm 4 • Güvenilir Bilgi",
+                    visualTheme: "source",
+                    visualIcon: "🛡️📚",
+                    type: "single",
+                    title: "Güvenilir Kaynak Seçimi",
+                    story: "Bir sağlık bilgisi araştırılırken hangi kaynak daha güvenilir kabul edilir?",
+                    options: [
+                        { id: "a", text: "Resmi kurum veya uzman kaynaklı güncel sayfa" },
+                        { id: "b", text: "Yorumu çok olan rastgele paylaşım" },
+                        { id: "c", text: "Başlığı çok şaşırtıcı olan reklam sitesi" }
+                    ],
+                    correctId: "a",
+                    success: "Doğru! Resmi, uzman ve güncel kaynaklar daha güvenilir değerlendirilir. 🛡️",
+                    error: "Yorum sayısı veya şaşırtıcı başlık tek başına güvenilirlik göstermez."
+                },
+                {
+                    section: "Bölüm 4 • Güvenilir Bilgi",
+                    visualTheme: "source",
+                    visualIcon: "🕵️‍♀️✅",
+                    type: "multi",
+                    title: "Bilgiyi Değerlendir",
+                    story: "Bir internet sonucunu kullanmadan önce hangilerine bakmak gerekir? Birden fazla doğru cevap var.",
+                    options: [
+                        { id: "a", text: "Yazar veya kurum bilgisi" },
+                        { id: "b", text: "Yayınlanma/güncellenme tarihi" },
+                        { id: "c", text: "Bilginin başka kaynaklarla uyuşması" },
+                        { id: "d", text: "Sayfadaki renklerin çok parlak olması" }
+                    ],
+                    correctIds: ["a", "b", "c"],
+                    success: "Çok iyi! Kaynağı, tarihi ve başka kaynaklarla tutarlılığı kontrol etmek gerekir. ✅",
+                    error: "Parlak tasarım güvenilirlik kanıtı değildir. Kaynak, tarih ve tutarlılık daha önemlidir."
+                },
+                {
+                    section: "Bölüm 4 • Güvenilir Bilgi",
+                    visualTheme: "source",
+                    visualIcon: "📅🔎",
+                    type: "single",
+                    title: "Güncellik Neden Önemli?",
+                    story: "Teknoloji haberleri araştırılırken neden güncel tarihli kaynaklar tercih edilmelidir?",
+                    options: [
+                        { id: "a", text: "Çünkü teknoloji bilgileri zamanla değişebilir." },
+                        { id: "b", text: "Çünkü eski bilgi her zaman daha doğrudur." },
+                        { id: "c", text: "Çünkü tarih bilgisi hiçbir işe yaramaz." }
+                    ],
+                    correctId: "a",
+                    success: "Aynen! Değişebilen konularda güncellik çok önemlidir. 📅",
+                    error: "Teknoloji gibi konularda bilgiler hızla değişebilir; tarih kontrol edilmelidir."
+                },
+                {
+                    section: "Bölüm 5 • Yeni İnternet Teknolojileri",
+                    visualTheme: "tech",
+                    visualIcon: "🤖⚡",
+                    type: "single",
+                    title: "Verimlilik Dedektifi",
+                    story: "Bir öğrenci, uzun bir metindeki ana fikri daha hızlı anlamak için yapay zekâ destekli özetleme aracını kullanıyor. Bu teknoloji hangi açıdan verimlilik sağlar?",
+                    options: [
+                        { id: "a", text: "Zaman kazandırabilir ve bilgiyi düzenlemeye yardım edebilir." },
+                        { id: "b", text: "Her zaman düşünmeden kopyalamayı sağlar." },
+                        { id: "c", text: "Kaynak kontrolüne gerek bırakmaz." }
+                    ],
+                    correctId: "a",
+                    success: "Harika! Yeni teknolojiler verimlilik sağlar ama bilgi yine kontrol edilmelidir. 🤖",
+                    error: "Yeni araçlar yardımcı olabilir; fakat kaynak kontrolü ve düşünme süreci devam etmelidir."
+                },
+                {
+                    section: "Bölüm 5 • Yeni İnternet Teknolojileri",
+                    visualTheme: "tech",
+                    visualIcon: "☁️🤝",
+                    type: "single",
+                    title: "Bulutla İş Birliği",
+                    story: "Bir grup öğrenci aynı sunum dosyasını internet üzerinden birlikte düzenliyor. Bu durumun verimlilik katkısı nedir?",
+                    options: [
+                        { id: "a", text: "Aynı dosya üzerinde hızlı iş birliği yapılmasını sağlar." },
+                        { id: "b", text: "Dosyanın tamamen kaybolmasını kesinleştirir." },
+                        { id: "c", text: "İnternette araştırmayı imkânsız hâle getirir." }
+                    ],
+                    correctId: "a",
+                    success: "Süper! Bulut tabanlı araçlar birlikte çalışmayı hızlandırabilir. ☁️",
+                    error: "Bulut araçlarının güçlü yönlerinden biri ortak çalışmayı kolaylaştırmasıdır."
+                },
+                {
+                    section: "Bölüm 5 • Yeni İnternet Teknolojileri",
+                    visualTheme: "tech",
+                    visualIcon: "🧰📈",
+                    type: "multi",
+                    title: "Verimli Teknoloji Kullanımı",
+                    story: "Yeni internet teknolojilerini verimlilik açısından değerlendirirken hangileri dikkate alınmalıdır? Birden fazla doğru cevap var.",
+                    options: [
+                        { id: "a", text: "Zaman kazandırması" },
+                        { id: "b", text: "Bilgiyi düzenlemeyi kolaylaştırması" },
+                        { id: "c", text: "Güvenli ve etik kullanılabilmesi" },
+                        { id: "d", text: "Sadece popüler olması" }
+                    ],
+                    correctIds: ["a", "b", "c"],
+                    success: "Çok iyi! Verimlilik; hız, düzen, güvenlik ve etik kullanımla birlikte düşünülür. 📈",
+                    error: "Bir aracın popüler olması tek başına verimli olduğu anlamına gelmez."
+                },
+                {
+                    section: "Bölüm 5 • Yeni İnternet Teknolojileri",
+                    visualTheme: "tech",
+                    visualIcon: "🎙️🔎",
+                    type: "single",
+                    title: "Sesli Arama",
+                    story: "Bir öğrenci yazı yazmakta zorlanıyor ve arama yapmak için konuşarak komut veriyor. Bu hangi internet teknolojisine örnektir?",
+                    options: [
+                        { id: "a", text: "Sesli arama" },
+                        { id: "b", text: "Dosya silme" },
+                        { id: "c", text: "Ekran kapatma" }
+                    ],
+                    correctId: "a",
+                    success: "Doğru! Sesli arama erişimi kolaylaştırabilir ve zaman kazandırabilir. 🎙️",
+                    error: "Konuşarak arama yapmak sesli arama teknolojisine örnektir."
+                },
+                {
+                    section: "Bölüm 6 • Görev Senaryosu",
+                    visualTheme: "advanced",
+                    visualIcon: "🏆🔍",
+                    type: "single",
+                    title: "En Akıllı Arama",
+                    story: "Ödev konusu: 'Türkiye'de güvenli internet haftası'. Öğrenci resmi ve PDF bir kaynak bulmak istiyor. Hangisi en güçlü arama ifadesidir?",
+                    options: [
+                        { id: "a", text: "güvenli internet haftası Türkiye site:gov.tr filetype:pdf" },
+                        { id: "b", text: "internet güzel mi" },
+                        { id: "c", text: "hafta pdf oyun araba" }
+                    ],
+                    correctId: "a",
+                    success: "Müthiş! Hem site hem dosya türü filtresiyle hedefe çok daha yakınsın. 🏆",
+                    error: "Resmi ve PDF kaynak istendiği için site: ve filetype: birlikte kullanılabilir."
+                }
+            ];
+
+            const steps = shuffleArray(questionPool).slice(0, TOTAL_QUESTIONS_PER_GAME);
+
+            const stepSectionEl = document.getElementById("stepSection");
+            const stepCounterEl = document.getElementById("stepCounter");
+            const stepTitleEl = document.getElementById("stepTitle");
+            const stepStoryEl = document.getElementById("stepStory");
+            const optionsContainer = document.getElementById("optionsContainer");
+            const feedbackEl = document.getElementById("feedback");
+            const checkButton = document.getElementById("checkButton");
+            const nextButton = document.getElementById("nextButton");
+            const prevButton = document.getElementById("prevButton");
+            const progressBar = document.getElementById("progressBar");
+            const progressText = document.getElementById("progressText");
+            const sequenceHint = document.getElementById("sequenceHint");
+            const sequenceOrder = document.getElementById("sequenceOrder");
+            const resetSequenceButton = document.getElementById("resetSequenceButton");
+            const gamePanel = document.querySelector(".game-panel");
+            const visualInnerEl = document.querySelector(".game-visual-inner");
+            const visualCardEl = document.querySelector(".game-visual");
+
+            let currentStepIndex = 0;
+            let selectedSingle = null;
+            let selectedMulti = new Set();
+            let selectedSequence = [];
+
+            const history = new Array(steps.length).fill(null).map(() => ({
+                selection: null,
+                isAnswered: false,
+                isCorrect: false
+            }));
+
+            function shuffleArray(array) {
+                const copy = [...array];
+                for (let i = copy.length - 1; i > 0; i--) {
+                    const j = Math.floor(Math.random() * (i + 1));
+                    [copy[i], copy[j]] = [copy[j], copy[i]];
+                }
+                return copy;
+            }
+
+            function updateVisualStage(step) {
+                visualCardEl.className = "card game-visual";
+                visualCardEl.classList.add(`theme-${step.visualTheme}`);
+
+                let ringClass = "search-ring";
+                if (step.visualTheme === "tech" || step.visualTheme === "advanced") ringClass = "tech-ring";
+                if (step.visualTheme === "source") ringClass = "source-ring";
+
+                visualInnerEl.innerHTML = `
+                    <div class="visual-stage stage-enter">
+                        <div class="${ringClass}"></div>
+                        <div class="stage-icon">${step.visualIcon}</div>
+                        <div class="stage-description">
+                            ${getThemeTitle(step.visualTheme)}
+                            <span>${getThemeSubtitle(step.visualTheme)}</span>
+                        </div>
+                    </div>
+                `;
+            }
+
+            function getThemeTitle(theme) {
+                const titles = {
+                    purpose: "Amaca Uygun Arama",
+                    engine: "Arama Motoru Seçimi",
+                    advanced: "İleri Arama Taktikleri",
+                    source: "Güvenilir Bilgi Kontrolü",
+                    tech: "Yeni İnternet Teknolojileri"
+                };
+                return titles[theme] || "Arama Dedektifi";
+            }
+
+            function getThemeSubtitle(theme) {
+                const subtitles = {
+                    purpose: "Önce hedefini belirle, sonra araştırmaya başla.",
+                    engine: "Doğru aracı seç, bilgiye daha hızlı ulaş.",
+                    advanced: "Tırnak, site ve dosya türü filtrelerini akıllıca kullan.",
+                    source: "Kaynağı, tarihi ve doğruluğu kontrol et.",
+                    tech: "Yeni araçları hız, güvenlik ve etik açıdan değerlendir."
+                };
+                return subtitles[theme] || "Doğru cevabı bul ve görevi tamamla.";
+            }
+
+            function renderStep() {
+                if (currentStepIndex >= steps.length) {
+                    showFinishScreen();
+                    return;
+                }
+
+                const step = steps[currentStepIndex];
+                const currentHistory = history[currentStepIndex];
+
+                updateVisualStage(step);
+                feedbackEl.textContent = "";
+                feedbackEl.className = "feedback";
+
+                sequenceHint.hidden = step.type !== "sequence";
+                sequenceOrder.hidden = step.type !== "sequence";
+
+                stepSectionEl.textContent = step.section;
+                stepCounterEl.textContent = `Soru ${currentStepIndex + 1} / ${steps.length}`;
+                stepTitleEl.textContent = step.title;
+                stepStoryEl.textContent = step.story;
+
+                updateProgress();
+                optionsContainer.innerHTML = "";
+                sequenceOrder.textContent = "";
+
+                if (step.type === "sequence") {
+                    renderSequenceOptions(step, currentHistory.selection);
+                } else {
+                    renderChoiceOptions(step, currentHistory.selection);
+                }
+
+                if (currentHistory.isAnswered) {
+                    if (currentHistory.isCorrect) {
+                        nextButton.disabled = false;
+                        checkButton.disabled = true;
+                        checkButton.hidden = false;
+                        resetSequenceButton.hidden = true;
+                        showFeedback(true, "Bu görevi doğru tamamladın 🎉");
+                    } else {
+                        nextButton.disabled = true;
+                        checkButton.hidden = true;
+                        resetSequenceButton.hidden = false;
+                        updateResetButtonText(step.type);
+                        showFeedback(false, "Bu görevde hata vardı. Cevabını sıfırlayıp tekrar dene.");
+                    }
+                } else {
+                    nextButton.disabled = true;
+                    checkButton.disabled = false;
+                    checkButton.hidden = false;
+                    resetSequenceButton.hidden = true;
+                }
+
+                prevButton.disabled = currentStepIndex === 0;
+
+                if (currentHistory.isAnswered) {
+                    if (step.type === "single") markSingleChoices(step, currentHistory.isCorrect);
+                    if (step.type === "multi") markMultiChoices(step, new Set(step.correctIds), currentHistory.isCorrect);
+                    if (step.type === "sequence") markSequenceChoices(currentHistory.isCorrect);
+                }
+            }
+
+            function renderChoiceOptions(step, storedSelection) {
+                if (step.type === "single" && storedSelection) {
+                    selectedSingle = storedSelection;
+                } else if (step.type === "multi" && storedSelection) {
+                    selectedMulti = new Set(storedSelection);
+                } else if (!history[currentStepIndex].isAnswered) {
+                    selectedSingle = null;
+                    selectedMulti = new Set();
+                }
+
+                const shuffledOptions = history[currentStepIndex].optionOrder || shuffleArray(step.options);
+                history[currentStepIndex].optionOrder = shuffledOptions;
+
+                shuffledOptions.forEach((opt, index) => {
+                    const btn = document.createElement("button");
+                    btn.type = "button";
+                    btn.className = "option-button";
+                    btn.dataset.id = opt.id;
+
+                    const keySpan = document.createElement("span");
+                    keySpan.className = "option-key";
+                    keySpan.textContent = String.fromCharCode(65 + index);
+
+                    const textSpan = document.createElement("span");
+                    textSpan.className = "option-text";
+                    textSpan.textContent = opt.text;
+
+                    btn.append(keySpan, textSpan);
+
+                    if ((step.type === "single" && selectedSingle === opt.id) ||
+                        (step.type === "multi" && selectedMulti.has(opt.id))) {
+                        btn.classList.add("option-selected");
+                        if (step.type === "multi") btn.classList.add("multi-selected");
+                    }
+
+                    btn.addEventListener("click", () => {
+                        if (history[currentStepIndex].isAnswered) return;
+                        feedbackEl.textContent = "";
+                        feedbackEl.className = "feedback";
+
+                        if (step.type === "single") {
+                            selectedSingle = opt.id;
+                            Array.from(optionsContainer.children).forEach(el => el.classList.remove("option-selected"));
+                            btn.classList.add("option-selected");
+                        } else if (step.type === "multi") {
+                            if (selectedMulti.has(opt.id)) {
+                                selectedMulti.delete(opt.id);
+                                btn.classList.remove("option-selected", "multi-selected");
+                            } else {
+                                selectedMulti.add(opt.id);
+                                btn.classList.add("option-selected", "multi-selected");
+                            }
+                        }
+                    });
+
+                    optionsContainer.appendChild(btn);
+                });
+            }
+
+            function renderSequenceOptions(step, storedSelection) {
+                selectedSequence = storedSelection ? [...storedSelection] : [];
+
+                const sequenceOptions = history[currentStepIndex].optionOrder || shuffleArray(step.options);
+                history[currentStepIndex].optionOrder = sequenceOptions;
+
+                sequenceOptions.forEach((label, index) => {
+                    const btn = document.createElement("button");
+                    btn.type = "button";
+                    btn.className = "option-button";
+                    btn.dataset.value = label;
+
+                    const keySpan = document.createElement("span");
+                    keySpan.className = "option-key";
+                    keySpan.textContent = String.fromCharCode(65 + index);
+
+                    const textSpan = document.createElement("span");
+                    textSpan.className = "option-text";
+                    textSpan.textContent = label;
+
+                    btn.append(keySpan, textSpan);
+
+                    const seqIndex = selectedSequence.indexOf(label);
+                    if (seqIndex !== -1) {
+                        btn.classList.add("sequence-picked");
+                        btn.querySelector(".option-key").dataset.order = seqIndex + 1;
+                    }
+
+                    btn.addEventListener("click", () => {
+                        if (history[currentStepIndex].isAnswered) return;
+                        resetSequenceButton.hidden = false;
+                        updateResetButtonText("sequence");
+                        feedbackEl.textContent = "";
+                        feedbackEl.className = "feedback";
+
+                        const value = btn.dataset.value;
+                        if (!selectedSequence.includes(value)) {
+                            selectedSequence.push(value);
+                            btn.classList.add("sequence-picked");
+                            btn.querySelector(".option-key").dataset.order = selectedSequence.length;
+                            updateSequenceOrderText();
+                        }
+                    });
+
+                    optionsContainer.appendChild(btn);
+                });
+                updateSequenceOrderText();
+            }
+
+            function updateSequenceOrderText() {
+                sequenceOrder.textContent = selectedSequence.length === 0
+                    ? "Seçtiğin sıra: Henüz bir seçim yapmadın."
+                    : "Seçtiğin sıra: " + selectedSequence.join(" → ");
+            }
+
+            function showFeedback(isCorrect, message) {
+                feedbackEl.textContent = message;
+                feedbackEl.className = "feedback " + (isCorrect ? "feedback-success" : "feedback-error");
+            }
+
+            function arraysEqual(a, b) {
+                if (a.length !== b.length) return false;
+                return a.every((item, index) => item === b[index]);
+            }
+
+            function setsEqual(setA, setB) {
+                if (setA.size !== setB.size) return false;
+                for (const val of setA) if (!setB.has(val)) return false;
+                return true;
+            }
+
+            checkButton.addEventListener("click", () => {
+                const step = steps[currentStepIndex];
+                let isCorrect = false;
+                let selectionData = null;
+
+                if (step.type === "single") {
+                    if (!selectedSingle) { showFeedback(false, "Önce bir seçenek seçmelisin."); return; }
+                    isCorrect = selectedSingle === step.correctId;
+                    selectionData = selectedSingle;
+                    markSingleChoices(step, isCorrect);
+                } else if (step.type === "multi") {
+                    if (selectedMulti.size === 0) { showFeedback(false, "En az bir seçenek işaretlemelisin."); return; }
+                    const correctSet = new Set(step.correctIds);
+                    isCorrect = setsEqual(selectedMulti, correctSet);
+                    selectionData = Array.from(selectedMulti);
+                    markMultiChoices(step, correctSet, isCorrect);
+                } else if (step.type === "sequence") {
+                    if (selectedSequence.length !== step.options.length) { showFeedback(false, "Tüm adımları sırayla seçmelisin."); return; }
+                    isCorrect = arraysEqual(selectedSequence, step.correctOrder);
+                    selectionData = [...selectedSequence];
+                    markSequenceChoices(isCorrect);
+                }
+
+                history[currentStepIndex].isAnswered = true;
+                history[currentStepIndex].selection = selectionData;
+                history[currentStepIndex].isCorrect = isCorrect;
+
+                if (isCorrect) {
+                    showFeedback(true, step.success || "Harika! Doğru cevap 🎉");
+                    nextButton.disabled = false;
+                    checkButton.disabled = true;
+                    checkButton.hidden = false;
+                    resetSequenceButton.hidden = true;
+                    updateProgress();
+                } else {
+                    showFeedback(false, step.error || "Yanlış cevap. Cevabını sıfırlayıp tekrar dene.");
+                    checkButton.hidden = true;
+                    resetSequenceButton.hidden = false;
+                    updateResetButtonText(step.type);
+                    nextButton.disabled = true;
+                }
+            });
+
+            function markSingleChoices(step, isCorrect) {
+                Array.from(optionsContainer.children).forEach(btn => {
+                    const id = btn.dataset.id;
+                    btn.classList.remove("option-wrong", "option-correct");
+                    if (isCorrect && id === step.correctId) btn.classList.add("option-correct");
+                    else if (!isCorrect && id === selectedSingle) btn.classList.add("option-wrong");
+                });
+            }
+
+            function markMultiChoices(step, correctSet, isCorrect) {
+                Array.from(optionsContainer.children).forEach(btn => {
+                    const id = btn.dataset.id;
+                    btn.classList.remove("option-wrong", "option-correct");
+                    if (isCorrect && correctSet.has(id)) btn.classList.add("option-correct");
+                    else if (!isCorrect && selectedMulti.has(id) && !correctSet.has(id)) btn.classList.add("option-wrong");
+                    if (selectedMulti.has(id)) btn.classList.add("multi-selected");
+                    else btn.classList.remove("multi-selected");
+                });
+            }
+
+            function markSequenceChoices(isCorrect) {
+                Array.from(optionsContainer.children).forEach(btn => {
+                    btn.classList.remove("option-wrong", "option-correct");
+                    if (btn.classList.contains("sequence-picked")) {
+                        btn.classList.add(isCorrect ? "option-correct" : "option-wrong");
+                    }
+                });
+            }
+
+            function updateProgress() {
+                const correctCount = history.filter(h => h.isCorrect).length;
+                const progressPercent = (correctCount / steps.length) * 100;
+                progressBar.style.width = `${progressPercent}%`;
+                progressText.textContent = `${correctCount} / ${steps.length} görev tamamlandı`;
+            }
+
+            function updateResetButtonText(type) {
+                resetSequenceButton.textContent = type === "sequence" ? "Sıralamayı Sıfırla" : "Cevabı Sıfırla";
+            }
+
+            nextButton.addEventListener("click", () => {
+                if (currentStepIndex < steps.length - 1) {
+                    currentStepIndex++;
+                    renderStep();
+                } else if (history[currentStepIndex].isCorrect) {
+                    showFinishScreen();
+                }
+            });
+
+            prevButton.addEventListener("click", () => {
+                if (currentStepIndex > 0) {
+                    currentStepIndex--;
+                    renderStep();
+                }
+            });
+
+            resetSequenceButton.addEventListener("click", () => {
+                history[currentStepIndex].selection = null;
+                history[currentStepIndex].isAnswered = false;
+                history[currentStepIndex].isCorrect = false;
+
+                selectedSingle = null;
+                selectedMulti = new Set();
+                selectedSequence = [];
+
+                Array.from(optionsContainer.children).forEach(btn => {
+                    btn.classList.remove("sequence-picked", "option-wrong", "option-correct", "option-selected", "multi-selected");
+                    const key = btn.querySelector(".option-key");
+                    if (key) key.removeAttribute("data-order");
+                });
+
+                updateSequenceOrderText();
+                feedbackEl.textContent = "";
+                feedbackEl.className = "feedback";
+                nextButton.disabled = true;
+                checkButton.disabled = false;
+                checkButton.hidden = false;
+                resetSequenceButton.hidden = true;
+                updateProgress();
+            });
+
+            function showFinishScreen() {
+                const totalSteps = steps.length;
+                gamePanel.innerHTML = "";
+                visualCardEl.className = "card game-visual theme-finish";
+                visualInnerEl.innerHTML = `
+                    <div class="visual-stage stage-enter">
+                        <div class="source-ring"></div>
+                        <div class="stage-icon">🏅🔎</div>
+                        <div class="stage-description">
+                            Arama Dedektifi Rozeti
+                            <span>İnterneti amacına uygun kullanma görevlerini tamamladın.</span>
+                        </div>
+                    </div>
+                `;
+
+                const finishHeader = document.createElement("div");
+                finishHeader.className = "game-step-header";
+
+                const finishBadge = document.createElement("span");
+                finishBadge.className = "step-section-pill";
+                finishBadge.textContent = "Tebrikler";
+
+                const finishCounter = document.createElement("span");
+                finishCounter.className = "step-counter";
+                finishCounter.textContent = `${totalSteps} / ${totalSteps} tamamlandı`;
+                finishHeader.append(finishBadge, finishCounter);
+
+                const finishTitle = document.createElement("h2");
+                finishTitle.className = "game-finish-title";
+                finishTitle.textContent = "Arama Dedektifi Rozetini Kazandın! 🏅";
+
+                const finishText = document.createElement("p");
+                finishText.className = "game-finish-text";
+                finishText.textContent = "Artık arama motorlarını daha bilinçli seçebilir, ileri arama yöntemlerini kullanabilir ve yeni internet teknolojilerini verimlilik açısından değerlendirebilirsin.";
+
+                const actions = document.createElement("div");
+                actions.className = "finish-actions";
+
+                const restartBtn = document.createElement("button");
+                restartBtn.type = "button";
+                restartBtn.className = "btn btn-primary";
+                restartBtn.textContent = "Yeni Sorularla Baştan Oyna";
+                restartBtn.addEventListener("click", () => window.location.reload());
+
+                actions.appendChild(restartBtn);
+                gamePanel.append(finishHeader, finishTitle, finishText, actions);
+                progressBar.style.width = "100%";
+            }
+
+            renderStep();
+        }
+    </script>
+</body>
+</html>

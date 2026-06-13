@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Tablolama Kaçış Odası</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='games/Grade6/6_unit2_w1/style.css') }}">
+</head>
+<body>
+
+  <div class="container">
+    <header>
+      <div class="badge">EduPlay Hub</div>
+      <h1>📊 Tablolama Kaçış Odası</h1>
+      <p class="outcome">BTY.6.2.1. Tablolama programlarından yararlanabilme</p>
+      <p class="story">
+        Okulun dijital not sistemi kilitlendi! Sistemi açmak için önce çengel bulmacayı çöz,
+        sonra tablolama görevlerini tamamla.
+      </p>
+    </header>
+
+    <section class="progress-panel">
+      <div class="progress-card active" id="step-crossword">1. Aşama: Bulmaca</div>
+      <div class="progress-card" id="step-mission">2. Aşama: Görevler</div>
+      <div class="progress-card" id="step-result">3. Aşama: Rozet</div>
+    </section>
+
+    <main>
+      <section id="crossword-section">
+        <h2>🧩 Gizli Kavramları Bul</h2>
+
+        <div class="game-area">
+          <div id="crossword-board"></div>
+
+          <div class="clues-container">
+            <div class="clue-column">
+              <h3>Soldan Sağa</h3>
+              <ul id="across-clues"></ul>
+            </div>
+
+            <div class="clue-column">
+              <h3>Yukarıdan Aşağıya</h3>
+              <ul id="down-clues"></ul>
+            </div>
+          </div>
+        </div>
+
+        <div class="controls">
+          <button onclick="checkAnswers()" class="btn check-btn">Kontrol Et</button>
+          <button onclick="resetGame()" class="btn reset-btn">Tekrar Oyna</button>
+        </div>
+
+        <div id="message-box"></div>
+      </section>
+
+      <section id="mission-section" class="hidden">
+        <h2>🚪 Kaçış Odası Görevleri</h2>
+        <p class="mission-info">
+          Bulmacayı çözdün! Şimdi tablolama programlarını hangi durumda kullanacağını göster.
+        </p>
+
+        <div id="mission-card" class="mission-card"></div>
+
+        <div class="mission-buttons" id="mission-options"></div>
+
+        <div id="mission-feedback"></div>
+
+        <button id="next-mission-btn" class="btn next-btn hidden" onclick="nextMission()">Sonraki Görev</button>
+      </section>
+
+      <section id="result-section" class="hidden">
+        <h2>🏆 Sonuç Ekranı</h2>
+        <div class="result-box">
+          <div id="result-icon">🏅</div>
+          <h3 id="result-title"></h3>
+          <p id="result-text"></p>
+          <p id="score-text"></p>
+        </div>
+
+        <button onclick="restartAll()" class="btn reset-btn">Baştan Başla</button>
+      </section>
+    </main>
+  </div>
+
+<script src="{{ url_for('static', filename='games/Grade6/6_unit2_w1/script.js') }}"></script>
+</body>
+</html>
