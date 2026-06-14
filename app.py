@@ -43,8 +43,8 @@ GAME_INFO = {
     # 5. SINIF - ÜNİTE 2
     # =========================
     "5_unit2_w1": {
-        "title": "Görsel Düzenleme Araçları",
-        "subtitle": "Görsel düzenleme programlarının temel özelliklerini keşfet!",
+        "title": "Görsel Düzenleme Araçları Oyunu",
+        "subtitle": "Kalem, boya, metin, silgi, damla ve büyüteç araçlarını kullan!",
         "unit": "Dijital Ürün Tasarım ve Geliştirme",
         "level": "5. Sınıf",
         "icon": "🎨",
@@ -52,11 +52,11 @@ GAME_INFO = {
     },
 
     "5_unit2_w2": {
-        "title": "Tasarım Sıralaması",
-        "subtitle": "Dijital ürün tasarlama adımlarını doğru sıraya koy!",
+        "title": "Görsel Düzenleme Quiz Fight",
+        "subtitle": "Görsel düzenleme sorularını cevapla, doğru cevaplarla rakibini yen!",
         "unit": "Dijital Ürün Tasarım ve Geliştirme",
         "level": "5. Sınıf",
-        "icon": "🖌️",
+        "icon": "🎨",
         "template": "5_unit2_w2"
     },
 
@@ -169,12 +169,12 @@ GAME_INFO = {
     # 6. SINIF - ÜNİTE 2
     # =========================
     "6_unit2_w1": {
-        "title": "Dijital Vatandaşlık",
-        "subtitle": "Dijital ortamda sorumlu ve bilinçli davranışları seç!",
-        "unit": "Bilişim Etiği ve Siber Güvenlik",
-        "level": "6. Sınıf",
-        "icon": "🧑‍💻",
-        "template": "6_unit2_w1"
+    "title": "Tablolama Kaçış Odası 📊",
+    "subtitle": "Dijital ortamda sorumlu ve bilinçli davranışları seç!",
+    "unit": "Dijital Ürün Tasarım ve Geliştirme",
+    "level": "6. Sınıf",
+    "icon": "📊",
+    "template": "6_unit2_w1"
     },
 
     "6_unit2_w2": {

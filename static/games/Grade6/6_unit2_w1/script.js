@@ -178,19 +178,36 @@ function renderBoard() {
   const boardElement = document.getElementById("crossword-board");
   boardElement.innerHTML = "";
 
-  for (let i = 0; i < gridSize; i++) {
-    for (let j = 0; j < gridSize; j++) {
+  let minRow = gridSize, maxRow = 0, minCol = gridSize, maxCol = 0;
+
+  crosswordData.forEach(item => {
+    for (let i = 0; i < item.word.length; i++) {
+      let row = item.direction === "down" ? item.y + i : item.y;
+      let col = item.direction === "across" ? item.x + i : item.x;
+      minRow = Math.min(minRow, row);
+      maxRow = Math.max(maxRow, row);
+      minCol = Math.min(minCol, col);
+      maxCol = Math.max(maxCol, col);
+    }
+  });
+
+  const rows = maxRow - minRow + 1;
+  const cols = maxCol - minCol + 1;
+
+  boardElement.style.gridTemplateColumns = `repeat(${cols}, 48px)`;
+  boardElement.style.gridTemplateRows = `repeat(${rows}, 48px)`;
+
+  for (let i = minRow; i <= maxRow; i++) {
+    for (let j = minCol; j <= maxCol; j++) {
       const cellDiv = document.createElement("div");
       cellDiv.className = "cell";
 
       if (grid[i][j]) {
         const input = document.createElement("input");
-
         input.maxLength = 1;
         input.dataset.row = i;
         input.dataset.col = j;
         input.dataset.answer = grid[i][j].letter;
-
         input.addEventListener("focus", () => highlightWord(i, j));
 
         if (grid[i][j].numbers.length > 0) {
@@ -504,13 +521,14 @@ function checkMissionAnswer(button, selectedOption) {
     }
   } else {
     button.classList.add("wrong-option");
+    button.disabled = true;
 
     feedback.style.color = "#e63946";
-    feedback.innerText =
-      "❌ Bu cevap tam uygun olmadı. İpucunu tekrar düşün ve başka bir seçenek dene.";
+    feedback.innerText = "❌ Bu cevap tam uygun olmadı. İpucunu tekrar düşün ve başka bir seçenek dene.";
 
     setTimeout(() => {
       button.classList.remove("wrong-option");
+      button.disabled = false;
     }, 900);
   }
 }
@@ -537,7 +555,9 @@ function showResult() {
   const resultText = document.getElementById("result-text");
   const scoreText = document.getElementById("score-text");
 
-  scoreText.innerText = `Görev puanın: ${missionScore} / ${missions.length}`;
+  const finalScore = Math.round((missionScore / missions.length) * 1000);
+
+  scoreText.innerText = `Görev puanın: ${missionScore} / ${missions.length} (${finalScore} puan)`;
 
   if (missionScore === missions.length) {
     resultIcon.innerText = "🏆";
@@ -560,6 +580,22 @@ function showResult() {
     resultText.innerText =
       "Sorun değil! İpuçlarını tekrar okuyup oyunu yeniden oynarsan kavramları daha kolay hatırlarsın.";
   }
+
+  fetch("/save-progress", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    credentials: "same-origin",
+    body: JSON.stringify({
+      game_key: "6_unit2_w1",
+      score: finalScore
+    })
+  })
+  .then(res => res.json())
+  .then(data => {
+    if (data.success) console.log("Skor kaydedildi:", data);
+    else console.warn("Skor kaydedilemedi:", data.error);
+  })
+  .catch(err => console.error("Fetch hatası:", err));
 }
 
 function restartAll() {

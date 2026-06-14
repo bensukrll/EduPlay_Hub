@@ -30,18 +30,18 @@
       "description": "Dijital ürün oluşturma ve tasarım sürecini keşfet.",
       "games": {
         "5_unit2_w1": {
-          "title": "Tasarım Sıralaması",
+          "title": "Görsel Düzenleme Araçları Oyunu 🎨",
           "week": "1. Hafta",
-          "description": "Bir dijital ürün oluştururken izlenmesi gereken adımları doğru sıraya koy.",
-          "outcome": "Dijital ürün tasarlama sürecindeki temel aşamaları sıralar.",
-          "howToPlay": "Bu oyunda verilen görevleri dikkatle oku, doğru seçimleri yap ve oyunu tamamlamak için yönergeleri takip et. Hazır olduğunda Oyuna Başla butonuna tıkla!"
+          "description": "Kalem, boya kutusu, metin, silgi, damla ve büyüteç araçlarını kullanarak görsel düzenleme görevlerini tamamla.",
+          "outcome": "BTY.5.2.1 - Görsel düzenleme araçlarını tanır ve amacına uygun kullanır.",
+          "howToPlay": "Her aşamada aktif olan görsel düzenleme aracını kullan. Kalp çiz, şekil boya, metin ekle, yazı sil, renk seç ve görseli büyüt. Finalde tüm araçları doğru görevlerde kullanarak oyunu tamamla!"
         },
         "5_unit2_w2": {
-          "title": "Tasarım Kartları",
-          "week": "2. Hafta",
-          "description": "Dijital ürün tasarımında kullanılan kavramları doğru açıklamalarla eşleştir.",
-          "outcome": "Dijital ürün geliştirme sürecindeki temel kavramları açıklar.",
-          "howToPlay": "Bu oyunda verilen görevleri dikkatle oku, doğru seçimleri yap ve oyunu tamamlamak için yönergeleri takip et. Hazır olduğunda Oyuna Başla butonuna tıkla!"
+        "title": "Görsel Düzenleme Quiz Fight 🎨",
+        "week": "2. Hafta",
+        "description": "Görsel düzenleme programları, araçları ve dosya formatlarıyla ilgili soruları cevaplayarak rakibini yen!",
+        "outcome": "BTY.5.2.1 - Görsel düzenleme programlarını ve temel özelliklerini tanır.",
+        "howToPlay": "Karakterini seç ve dövüş hareketini belirle. Her saldırı için görsel düzenleme konulu bir soruyu cevapla. Doğru cevap verirsen rakibinin canı azalır, yanlış cevap verirsen saldırı hakkı rakibe geçer. Canı biten oyuncu oyunu kaybeder!"
         }
       }
     },
@@ -166,15 +166,15 @@
     "unit2": {
       "grade": "6. Sınıf",
       "unitNumber": "Ünite 2",
-      "title": "Bilişim Etiği ve Siber Güvenlik",
+      "title": "Dijital Ürün Tasarım ve Geliştirme",
       "description": "Dijital ortamda güvenli ve etik davranışları öğren.",
       "games": {
         "6_unit2_w1": {
-          "title": "Dijital Vatandaşlık",
+          "title": "Tablolama Kaçış Odası 📊",
           "week": "1. Hafta",
-          "description": "İnternette sorumlu, güvenli ve bilinçli davranışları keşfet.",
-          "outcome": "Dijital ortamda güvenli ve sorumlu davranışları açıklar.",
-          "howToPlay": "Bu oyunda verilen görevleri dikkatle oku, doğru seçimleri yap ve oyunu tamamlamak için yönergeleri takip et. Hazır olduğunda Oyuna Başla butonuna tıkla!"
+          "description": "Tablolama programlarının gizli dünyasına gir, hücreleri keşfet, satır ve sütunların izini takip et, doğru kavramları bularak kilitli sistemi aç!",
+          "outcome": "BTY.6.2.1. Tablolama programlarından yararlanabilme",
+          "howToPlay": "İpuçlarını okuyarak çengel bulmacayı çöz. Hücre, satır, sütun, formül, grafik ve veri kavramlarını doğru yerlere yaz. Bulmacayı tamamlayınca görevler açılır. Doğru seçenekleri seçerek Tablolama Uzmanı rozetine ulaş!"
         },
         "6_unit2_w2": {
           "title": "Siber Güvenlik Avı",

@@ -636,9 +636,29 @@
 
     function showWin() {
       modalTitle.textContent = "Tebrikler! 🎉";
-      modalText.textContent = "Görsel Düzenleme araçlarının hepsini doğru şekilde kullandın. Artık kalem, boya kutusu, metin, silgi, damla imleci ve büyüteç görevlerini biliyorsun.";
+      modalText.textContent =
+        "Görsel Düzenleme araçlarının hepsini doğru şekilde kullandın. Artık kalem, boya kutusu, metin, silgi, damla imleci ve büyüteç görevlerini biliyorsun.";
       retryStageBtn.style.display = "none";
       modal.classList.add("show");
+
+      // PUANI VERİTABANINA GÖNDER
+      const finalScore = 100; // Tamamlanmış tüm görevler için maksimum puan
+
+      fetch("/save-progress", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        credentials: "same-origin", // session cookie gönderimi için
+        body: JSON.stringify({
+          game_key: "5_unit2_w1", // GAME_INFO ile eşleşmeli
+          score: finalScore
+        })
+      })
+      .then(res => res.json())
+      .then(data => {
+        if (data.success) console.log("Skor kaydedildi:", data);
+        else console.warn("Skor kaydedilemedi:", data.error);
+      })
+      .catch(err => console.error("Fetch hatası:", err));
     }
 
     restartGameBtn.addEventListener("click", () => {
@@ -1169,13 +1189,33 @@
       }
     }
 
-    function markFinalDone(key, successMessage) {
-      if (!finalState.done[key]) {
-        finalState.done[key] = true;
-        setMessage(successMessage, "good");
-        updateFinalProgress();
-      }
+  function markFinalDone(key, successMessage) {
+    if (!finalState.done[key]) {
+      finalState.done[key] = true;
+      setMessage(successMessage, "good");
+      updateFinalProgress();
+
+      // -------------------------
+      // ANLIK PUAN KAYDI
+      // -------------------------
+      const completedTasks = Object.values(finalState.done).filter(v => v).length;
+      const totalTasks = Object.keys(finalState.done).length;
+      const score = Math.round((completedTasks / totalTasks) * 100);
+
+      fetch("/save-progress", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        credentials: "same-origin", // session cookie gönderimi
+        body: JSON.stringify({
+          game_key: "5_unit2_w1", // GAME_INFO ile birebir eşleşmeli
+          score: score
+        })
+      })
+      .then(res => res.json())
+      .then(data => console.log("Anlık skor kaydedildi:", score, data))
+      .catch(err => console.error("Fetch hatası:", err));
     }
+  }
 
     function showMissingFinalTasks() {
       const names = {

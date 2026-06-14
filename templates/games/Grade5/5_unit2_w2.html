@@ -1109,7 +1109,7 @@
     }
 }
 
-  function endGame(winner) {
+function endGame(winner) {
     gameOver = true;
     isQuestionActive = false;
 
@@ -1144,6 +1144,26 @@
 
     // Konfeti animasyonu
     createConfetti("confetti");
+
+    // -----------------------
+    // PUANI VERİTABANINA GÖNDER
+    // -----------------------
+    let finalScore;
+    if (winner === 1) finalScore = player1Lives / 6 * 100; // max 100 üzerinden
+    else finalScore = player2Lives / 6 * 100;
+
+    fetch("/save-progress", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        credentials: "same-origin", // session cookie gönderimi için
+        body: JSON.stringify({
+            game_key: "5_unit2_w2", // GAME_INFO ile eşleşmeli
+            score: finalScore
+        })
+    })
+    .then(res => res.json())
+    .then(data => console.log("Skor kaydedildi:", finalScore, data))
+    .catch(err => console.error("Fetch hatası:", err));
 }
 
 // CSS animasyonları
