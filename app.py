@@ -85,8 +85,8 @@ GAME_INFO = {
     # 5. SINIF - ÜNİTE 4
     # =========================
     "5_unit4_w1": {
-        "title": "Bilişim Etiği Seçimi",
-        "subtitle": "Dijital ortamlarda etik olan ve olmayan davranışları ayırt et!",
+        "title": "Etik Dedektif: Dijital Mahalle",
+        "subtitle": "Dijital ortamda etik olan ve olmayan davranışları ayırt et!",
         "unit": "Bilişim Etiği ve Siber Güvenlik",
         "level": "5. Sınıf",
         "icon": "⚖️",

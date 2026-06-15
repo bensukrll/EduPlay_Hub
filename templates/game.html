@@ -40,17 +40,15 @@
     <!-- SAĞ -->
     <div class="top-right">
         <a class="icon-btn"
-           data-tooltip="Oyun Listesine Dön"
-           href="
-           {% if source == 'ortaokul' %}
-               {{ url_for('ortaokul') }}
-           {% elif source == 'ilkokul' %}
-               {{ url_for('ilkokul') }}
-           {% else %}
-               {{ url_for('home') }}
-           {% endif %}
-           ">
+        data-tooltip="Oyun Listesine Dön"
+        href="{{ url_for('map_page', level=level, unit=unit) }}">
             <i class="fa-solid fa-gamepad"></i>
+        </a>
+
+        <a class="icon-btn"
+            data-tooltip="Hesabım"
+            href="{{ url_for('account') }}">
+                <i class="fa-solid fa-user"></i>
         </a>
 
         <a class="icon-btn"

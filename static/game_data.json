@@ -76,11 +76,11 @@
       "description": "Dijital ortamda güvenli, etik ve sorumlu davranmayı öğren.",
       "games": {
         "5_unit4_w1": {
-          "title": "Güvenli mi Riskli mi?",
+          "title": "Etik Dedektif: Dijital Mahalle",
           "week": "1. Hafta",
-          "description": "Dijital ortamdaki davranışları güvenli ve riskli olarak ayır.",
-          "outcome": "Dijital ortamda güvenli ve riskli davranışları ayırt eder.",
-          "howToPlay": "Bu oyunda verilen görevleri dikkatle oku, doğru seçimleri yap ve oyunu tamamlamak için yönergeleri takip et. Hazır olduğunda Oyuna Başla butonuna tıkla!"
+          "description": "Bilişim etiği kapsamında güvenli ve etik dijital davranışlar geliştir. Görevleri tamamlayarak dijital mahalleyi daha güvenli hâle getir.",
+          "outcome": "BTY.5.4.1 — Bilişim etiği kurallarını tanıma ve uygulama",
+          "howToPlay": "Her karakterin üzerindeki etik olayları incele. İpuçlarını topla ve hangi etik ilke ile ilişkili olduğunu seç. Doğru seçimlerde puan kazan, tüm görevleri tamamlayarak Dijital Etik Uzmanı rozetine ulaş."
         },
         "5_unit4_w2": {
           "title": "Dijital Güvenlik Kalkanı",
@@ -95,8 +95,8 @@
     "unit5": {
       "grade": "5. Sınıf",
       "unitNumber": "Ünite 5",
-      "title": "Bilişim Teknolojilerinin Temelleri",
-      "description": "Bilgisayarın temel parçalarını, donanım birimlerini ve kullanım alanlarını öğren.",
+      "title": "Yapay Zekâ",
+      "description": "Yapay zekâyı keşfet, uygulamalarını sınıflandır ve güvenli kullanım kurallarını öğren.",
       "games": {
         "5_unit5_w1": {
           "title": "Dosya Yönetimi",
@@ -109,7 +109,7 @@
           "title": "Güvenli Yapay Zekâ Labirenti",
           "week": "2. Hafta",
           "description": "Etik, kişisel veri, gizlilik ve güvenlik sorularını cevaplayarak kristalleri topla ve labirentten çık.",
-          "outcome": "Yapay zekâ uygulamalarını etik ilkeler ile e-güvenlik/e-gizlilik açısından değerlendirir.",
+          "outcome": "BTY.5.5.2. Yapay zekâya ilişkin etik ve güvenlik/gizlilik önlemlerini yönetebilme",
           "howToPlay": "Bu oyunda verilen görevleri dikkatle oku, doğru seçimleri yap ve oyunu tamamlamak için yönergeleri takip et. Hazır olduğunda Oyuna Başla butonuna tıkla!"
         }
       }
@@ -118,8 +118,8 @@
     "unit6": {
       "grade": "5. Sınıf",
       "unitNumber": "Ünite 6",
-      "title": "Algoritma ve Programlama",
-      "description": "Problem çözme, algoritmik düşünme ve temel programlama mantığını öğren.",
+      "title": "Yazılım Tasarımı ve Programlama",
+      "description": "Problemleri algoritmalarla çöz, hataları ayıkla ve blok tabanlı yazılımlar geliştir.",
       "games": {
         "5_unit6_w1": {
           "title": "Algoritma Sıralaması",
@@ -149,7 +149,7 @@
         "6_unit1_w1": {
           "title": "Yenilikçi Bilişim Teknolojileri Eşleştirme Oyunu",
           "week": "1. Hafta",
-          "description": "Teknoloji dünyasında eğlenceli bir keşif başlıyor! Bu oyunda yapay zekâdan artırılmış gerçekliğe, bulut depolamadan giyilebilir teknolojilere kadar birçok yenilikçi bilişim teknolojisiyle tanışılır.",
+          "description": "Yapay zekâ, artırılmış gerçeklik, bulut depolama ve giyilebilir teknolojiler gibi yenilikçi bilişim teknolojilerini keşfet.",
           "outcome": "BTY.6.1.1. Yenilikçi bilişim teknolojilerini sınıflandırabilme",
           "howToPlay": "Açıklama kartları doğru teknoloji kutularıyla eşleştirilir, ardından Cevapları Kontrol Et butonuyla sonuç görülür. Her yeni oyunda farklı açıklamalar gelir; Yeniden Oyna butonuyla keşif devam eder!"
         },

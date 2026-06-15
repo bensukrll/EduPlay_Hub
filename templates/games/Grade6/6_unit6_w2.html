@@ -234,261 +234,356 @@
   </main>
 
   <script>
-    const workspace = document.getElementById('workspace');
-    const sprite = document.getElementById('sprite');
-    const bubble = document.getElementById('bubble');
-    const emptyHint = document.getElementById('empty-hint');
+  const GAME_KEY = "6_unit6_w2";
 
-    // Durum Değişkenleri
-    let spritePos = { x: 0, y: 0 };
-    let spriteScale = 1;
-    let spriteRotation = 0;
-    let spriteOpacity = 1;
-    let currentGradientIndex = 0;
+  const workspace = document.getElementById('workspace');
+  const sprite = document.getElementById('sprite');
+  const bubble = document.getElementById('bubble');
+  const emptyHint = document.getElementById('empty-hint');
 
-    // Karakterin kostüm renk değişim havuzu
-    const gradients = [
-      "from-cyan-400 to-blue-500",
-      "from-pink-500 to-rose-600",
-      "from-amber-400 to-orange-500",
-      "from-emerald-400 to-teal-600",
-      "from-fuchsia-500 to-purple-600"
-    ];
+  let spritePos = { x: 0, y: 0 };
+  let spriteScale = 1;
+  let spriteRotation = 0;
+  let spriteOpacity = 1;
+  let currentGradientIndex = 0;
+  let isRunning = false;
 
-    // Tıklayarak ekleme desteği
-    document.querySelectorAll('.block-piece').forEach(block => {
-      block.addEventListener('click', () => {
-        addBlockToWorkspace(block.id, block.innerHTML, block.className);
+  const gradients = [
+    "from-cyan-400 to-blue-500",
+    "from-pink-500 to-rose-600",
+    "from-amber-400 to-orange-500",
+    "from-emerald-400 to-teal-600",
+    "from-fuchsia-500 to-purple-600"
+  ];
+
+  document.querySelectorAll('.block-piece').forEach(block => {
+    block.addEventListener('click', () => {
+      addBlockToWorkspace(block.id, block.innerHTML, block.className);
+    });
+  });
+
+  function allowDrop(ev) {
+    ev.preventDefault();
+  }
+
+  function drag(ev) {
+    ev.dataTransfer.setData("text", ev.target.id);
+  }
+
+  function drop(ev) {
+    ev.preventDefault();
+
+    const id = ev.dataTransfer.getData("text");
+    const originalBlock = document.getElementById(id);
+
+    if (originalBlock) {
+      addBlockToWorkspace(id, originalBlock.innerHTML, originalBlock.className);
+    }
+  }
+
+  function addBlockToWorkspace(actionId, htmlContent, classList) {
+    emptyHint.style.display = 'none';
+
+    const blockWrapper = document.createElement('div');
+    blockWrapper.className = `workspace-block block-piece ${classList.replace('palette-piece', '')} w-max text-[11px] font-bold px-4 flex justify-between items-center shadow-md select-none z-0`;
+    blockWrapper.dataset.action = actionId;
+
+    blockWrapper.innerHTML = `
+      <div class="flex items-center gap-1.5">${htmlContent}</div>
+      <button onclick="this.parentElement.remove(); checkWorkspaceEmpty();" class="text-white/50 hover:text-white transition focus:outline-none z-10 ml-3">
+        <i class="fa-solid fa-xmark text-sm"></i>
+      </button>
+    `;
+
+    workspace.appendChild(blockWrapper);
+  }
+
+  function checkWorkspaceEmpty() {
+    const blocks = workspace.querySelectorAll('.workspace-block');
+
+    if (blocks.length === 0) {
+      emptyHint.style.display = 'block';
+    }
+  }
+
+  function clearWorkspace() {
+    workspace.querySelectorAll('.workspace-block').forEach(b => b.remove());
+    checkWorkspaceEmpty();
+    resetStage();
+  }
+
+  async function runCode() {
+    if (isRunning) return;
+
+    const blocks = workspace.querySelectorAll('.workspace-block');
+
+    if (blocks.length === 0) {
+      Swal.fire({
+        toast: true,
+        position: 'top-end',
+        icon: 'info',
+        title: 'Önce algoritmanı kurmalısın!',
+        showConfirmButton: false,
+        timer: 1800,
+        background: '#ffffff',
+        color: '#2c3e50'
       });
+      return;
+    }
+
+    isRunning = true;
+    resetStage();
+
+    for (let block of blocks) {
+      const action = block.dataset.action;
+
+      block.classList.add('ring-2', 'ring-white', 'scale-[1.01]');
+      await executeAction(action);
+      block.classList.remove('ring-2', 'ring-white', 'scale-[1.01]');
+    }
+
+    const finalScore = calculateMiniCodeScore(blocks);
+    saveMiniCodeScore(finalScore);
+
+    Swal.fire({
+      title: "Algoritma Çalıştı!",
+      html: `
+        <p>Blokların sırayla çalıştırıldı.</p>
+        <p style="margin-top:10px;font-size:22px;"><b>Puan: ${finalScore}</b></p>
+        <p style="margin-top:6px;font-size:13px;">Skor veritabanına gönderildi.</p>
+      `,
+      icon: "success",
+      background: "#ffffff",
+      color: "#2c3e50",
+      confirmButtonColor: "#4cae4c",
+      confirmButtonText: "Tamam"
     });
 
-    // Sürükle Bırak Altyapısı
-    function allowDrop(ev) { ev.preventDefault(); }
-    function drag(ev) { ev.dataTransfer.setData("text", ev.target.id); }
-    
-    function drop(ev) {
-      ev.preventDefault();
-      const id = ev.dataTransfer.getData("text");
-      const originalBlock = document.getElementById(id);
-      if (originalBlock) {
-        addBlockToWorkspace(id, originalBlock.innerHTML, originalBlock.className);
-      }
-    }
+    isRunning = false;
+  }
 
-    // Çalışma Alanına Blok Ekleme
-    function addBlockToWorkspace(actionId, htmlContent, classList) {
-      emptyHint.style.display = 'none';
+  function calculateMiniCodeScore(blocks) {
+    let score = 40;
 
-      const blockWrapper = document.createElement('div');
-      blockWrapper.className = `workspace-block block-piece ${classList.replace('palette-piece', '')} w-max text-[11px] font-bold px-4 flex justify-between items-center shadow-md select-none z-0`;
-      blockWrapper.dataset.action = actionId;
-      blockWrapper.innerHTML = `
-        <div class="flex items-center gap-1.5">${htmlContent}</div>
-        <button onclick="this.parentElement.remove(); checkWorkspaceEmpty();" class="text-white/50 hover:text-white transition focus:outline-none z-10 ml-3"><i class="fa-solid fa-xmark text-sm"></i></button>
-      `;
+    const blockCount = blocks.length;
 
-      workspace.appendChild(blockWrapper);
-    }
+    if (blockCount >= 2) score += 20;
+    if (blockCount >= 4) score += 20;
+    if (blockCount >= 6) score += 20;
 
-    function checkWorkspaceEmpty() {
-      const blocks = workspace.querySelectorAll('.workspace-block');
-      if (blocks.length === 0) emptyHint.style.display = 'block';
-    }
+    const usedCategories = new Set();
 
-    function clearWorkspace() {
-      workspace.querySelectorAll('.workspace-block').forEach(b => b.remove());
-      checkWorkspaceEmpty();
-      resetStage();
-    }
-
-    // --- ALGORİTMAYI SIRAYLA ÇALIŞTIRMA (ASYNC INTERPRETER) ---
-    async function runCode() {
-      const blocks = workspace.querySelectorAll('.workspace-block');
-      if (blocks.length === 0) {
-        Swal.fire({
-          toast: true,
-          position: 'top-end',
-          icon: 'info',
-          title: 'Önce algoritmanı kurmalısın!',
-          showConfirmButton: false,
-          timer: 1800,
-          background: '#ffffff',
-          color: '#2c3e50'
-        });
-        return;
-      }
-
-      resetStage();
-
-      for (let block of blocks) {
-        const action = block.dataset.action;
-        block.classList.add('ring-2', 'ring-white', 'scale-[1.01]');
-        await executeAction(action);
-        block.classList.remove('ring-2', 'ring-white', 'scale-[1.01]');
-      }
-    }
-
-    // Komutların Kod Karşılıkları
-    function executeAction(actionId) {
-      return new Promise((resolve) => {
-        const step = 28; // Adım uzunluğu
-        
-        // Standart Hareket Blokları
-        if (actionId === 'block-move-right') {
-          spritePos.x += step;
-          applyTransformations();
-          setTimeout(resolve, 300);
-        } 
-        else if (actionId === 'block-move-left') {
-          spritePos.x -= step;
-          applyTransformations();
-          setTimeout(resolve, 300);
-        }
-        else if (actionId === 'block-move-up') {
-          spritePos.y -= step;
-          applyTransformations();
-          setTimeout(resolve, 300);
-        }
-        else if (actionId === 'block-move-down') {
-          spritePos.y += step;
-          applyTransformations();
-          setTimeout(resolve, 300);
-        }
-        
-        // Dans ve Eğlence Blok Karşılıkları (YENİ!)
-        else if (actionId === 'block-dance-break') {
-          // Kısa süreli sola ve sağa hızlı kayma (Breakdance sarsıntısı)
-          spritePos.x -= 15; applyTransformations();
-          setTimeout(() => {
-            spritePos.x += 30; applyTransformations();
-            setTimeout(() => {
-              spritePos.x -= 15; applyTransformations();
-              resolve();
-            }, 150);
-          }, 150);
-        }
-        else if (actionId === 'block-dance-moonwalk') {
-          // Yukarı zıplayarak geriye yumuşakça süzülme
-          spritePos.y -= 20; spritePos.x -= 30; applyTransformations();
-          setTimeout(() => {
-            spritePos.y += 20; applyTransformations();
-            resolve();
-          }, 250);
-        }
-        else if (actionId === 'block-dance-spin') {
-          // Kendi etrafında tam tur (360 derece) dönme animasyonu
-          spriteRotation += 360;
-          applyTransformations();
-          setTimeout(() => { resolve(); }, 400);
-        }
-        else if (actionId === 'block-dance-color') {
-          // Bir sonraki gradyan rengine geçiş yapma
-          sprite.classList.remove(...gradients[currentGradientIndex].split(' '));
-          currentGradientIndex = (currentGradientIndex + 1) % gradients.length;
-          sprite.classList.add(...gradients[currentGradientIndex].split(' '));
-          resolve();
-        }
-
-        // Görünüm ve Kontrol Blokları
-        else if (actionId === 'block-say-hello') {
-          bubble.innerHTML = 'Merhaba! <div class="absolute bottom-0 left-1/2 -translate-x-1/2 translate-y-full w-0 h-0 border-x-4 border-x-transparent border-t-4 border-t-white"></div>';
-          bubble.classList.remove('hidden');
-          setTimeout(() => { bubble.classList.add('hidden'); resolve(); }, 1200);
-        }
-        else if (actionId === 'block-say-eduplay') {
-          bubble.innerHTML = 'EduPlay Hub! <div class="absolute bottom-0 left-1/2 -translate-x-1/2 translate-y-full w-0 h-0 border-x-4 border-x-transparent border-t-4 border-t-white"></div>';
-          bubble.classList.remove('hidden');
-          setTimeout(() => { bubble.classList.add('hidden'); resolve(); }, 1200);
-        }
-        else if (actionId === 'block-grow') {
-          spriteScale = Math.min(1.6, spriteScale + 0.2);
-          applyTransformations();
-          setTimeout(resolve, 300);
-        }
-        else if (actionId === 'block-shrink') {
-          spriteScale = Math.max(0.6, spriteScale - 0.2);
-          applyTransformations();
-          setTimeout(resolve, 300);
-        }
-        else if (actionId === 'block-hide') {
-          spriteOpacity = 0;
-          sprite.style.opacity = spriteOpacity;
-          setTimeout(resolve, 300);
-        }
-        else if (actionId === 'block-show') {
-          spriteOpacity = 1;
-          sprite.style.opacity = spriteOpacity;
-          setTimeout(resolve, 300);
-        }
-        else if (actionId === 'block-turn-right') {
-          spriteRotation += 15;
-          applyTransformations();
-          setTimeout(resolve, 250);
-        }
-        else if (actionId === 'block-turn-left') {
-          spriteRotation -= 15;
-          applyTransformations();
-          setTimeout(resolve, 250);
-        }
-        else if (actionId === 'block-wait') {
-          setTimeout(resolve, 1000);
-        }
-      });
-    }
-
-    function applyTransformations() {
-      sprite.style.transform = `translate(${spritePos.x}px, ${spritePos.y}px) scale(${spriteScale}) rotate(${spriteRotation}deg)`;
-    }
-
-    function resetStage() {
-      spritePos = { x: 0, y: 0 };
-      spriteScale = 1;
-      spriteRotation = 0;
-      spriteOpacity = 1;
-      sprite.style.opacity = 1;
-      
-      // Renk kostümünü de ilk haline getir
-      sprite.className = sprite.className.replace(new RegExp(gradients.flatMap(g => g.split(' ')).join('|'), 'g'), '');
-      currentGradientIndex = 0;
-      sprite.classList.add('from-cyan-400', 'to-blue-500');
-
-      applyTransformations();
-      bubble.classList.add('hidden');
-    }
-
-
-    // PUANI DATABASE'E GÖNDER
-function saveMiniCodeScore() {
-    // Tüm bloklar doğru mu kontrol et veya mevcut skor değişkenini kullan
-    const blocks = document.querySelectorAll('.workspace-block');
-    let correctCount = 0;
     blocks.forEach(block => {
-        if (block.dataset.correct === "true") correctCount++;
+      const action = block.dataset.action;
+
+      if (action.includes("move")) usedCategories.add("motion");
+      if (action.includes("say") || action.includes("grow") || action.includes("shrink") || action.includes("hide") || action.includes("show")) usedCategories.add("looks");
+      if (action.includes("wait") || action.includes("turn")) usedCategories.add("control");
+      if (action.includes("dance")) usedCategories.add("dance");
     });
 
-    const score = Math.round((correctCount / blocks.length) * 100); // 0-100 arası puan
+    score += usedCategories.size * 5;
 
+    return Math.min(score, 100);
+  }
+
+  function saveMiniCodeScore(finalScore) {
     fetch("/save-progress", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        credentials: "same-origin",
-        body: JSON.stringify({
-            game_key: "6_unit6_w2", // GAME_INFO ile eşleşmeli
-            score: score
-        })
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      credentials: "same-origin",
+      body: JSON.stringify({
+        game_key: GAME_KEY,
+        score: finalScore
+      })
     })
     .then(res => res.json())
     .then(data => {
-        if (data.success) console.log("Skor kaydedildi:", score, data);
-        else console.warn("Skor kaydedilemedi:", data.error);
+      if (data.success) {
+        console.log("Skor kaydedildi:", finalScore, data);
+      } else {
+        console.warn("Skor kaydedilemedi:", data.error);
+      }
     })
     .catch(err => console.error("Fetch hatası:", err));
-}
+  }
 
-// Örneğin Yeşil Bayrak tıklandığında veya oyunun bitiminde çağır
-document.getElementById('greenFlagBtn').addEventListener('click', () => {
-    saveMiniCodeScore();
-});
-  </script>
+  function executeAction(actionId) {
+    return new Promise((resolve) => {
+      const step = 28;
+
+      if (actionId === 'block-move-right') {
+        spritePos.x += step;
+        applyTransformations();
+        setTimeout(resolve, 300);
+      }
+
+      else if (actionId === 'block-move-left') {
+        spritePos.x -= step;
+        applyTransformations();
+        setTimeout(resolve, 300);
+      }
+
+      else if (actionId === 'block-move-up') {
+        spritePos.y -= step;
+        applyTransformations();
+        setTimeout(resolve, 300);
+      }
+
+      else if (actionId === 'block-move-down') {
+        spritePos.y += step;
+        applyTransformations();
+        setTimeout(resolve, 300);
+      }
+
+      else if (actionId === 'block-dance-break') {
+        spritePos.x -= 15;
+        applyTransformations();
+
+        setTimeout(() => {
+          spritePos.x += 30;
+          applyTransformations();
+
+          setTimeout(() => {
+            spritePos.x -= 15;
+            applyTransformations();
+            resolve();
+          }, 150);
+        }, 150);
+      }
+
+      else if (actionId === 'block-dance-moonwalk') {
+        spritePos.y -= 20;
+        spritePos.x -= 30;
+        applyTransformations();
+
+        setTimeout(() => {
+          spritePos.y += 20;
+          applyTransformations();
+          resolve();
+        }, 250);
+      }
+
+      else if (actionId === 'block-dance-spin') {
+        spriteRotation += 360;
+        applyTransformations();
+
+        setTimeout(resolve, 400);
+      }
+
+      else if (actionId === 'block-dance-color') {
+        sprite.classList.remove(...gradients[currentGradientIndex].split(' '));
+
+        currentGradientIndex = (currentGradientIndex + 1) % gradients.length;
+
+        sprite.classList.add(...gradients[currentGradientIndex].split(' '));
+        resolve();
+      }
+
+      else if (actionId === 'block-say-hello') {
+        bubble.innerHTML = `
+          Merhaba!
+          <div class="absolute bottom-0 left-1/2 -translate-x-1/2 translate-y-full w-0 h-0 border-x-4 border-x-transparent border-t-4 border-t-white"></div>
+        `;
+
+        bubble.classList.remove('hidden');
+
+        setTimeout(() => {
+          bubble.classList.add('hidden');
+          resolve();
+        }, 1200);
+      }
+
+      else if (actionId === 'block-say-eduplay') {
+        bubble.innerHTML = `
+          EduPlay Hub!
+          <div class="absolute bottom-0 left-1/2 -translate-x-1/2 translate-y-full w-0 h-0 border-x-4 border-x-transparent border-t-4 border-t-white"></div>
+        `;
+
+        bubble.classList.remove('hidden');
+
+        setTimeout(() => {
+          bubble.classList.add('hidden');
+          resolve();
+        }, 1200);
+      }
+
+      else if (actionId === 'block-grow') {
+        spriteScale = Math.min(1.6, spriteScale + 0.2);
+        applyTransformations();
+
+        setTimeout(resolve, 300);
+      }
+
+      else if (actionId === 'block-shrink') {
+        spriteScale = Math.max(0.6, spriteScale - 0.2);
+        applyTransformations();
+
+        setTimeout(resolve, 300);
+      }
+
+      else if (actionId === 'block-hide') {
+        spriteOpacity = 0;
+        sprite.style.opacity = spriteOpacity;
+
+        setTimeout(resolve, 300);
+      }
+
+      else if (actionId === 'block-show') {
+        spriteOpacity = 1;
+        sprite.style.opacity = spriteOpacity;
+
+        setTimeout(resolve, 300);
+      }
+
+      else if (actionId === 'block-turn-right') {
+        spriteRotation += 15;
+        applyTransformations();
+
+        setTimeout(resolve, 250);
+      }
+
+      else if (actionId === 'block-turn-left') {
+        spriteRotation -= 15;
+        applyTransformations();
+
+        setTimeout(resolve, 250);
+      }
+
+      else if (actionId === 'block-wait') {
+        setTimeout(resolve, 1000);
+      }
+
+      else {
+        resolve();
+      }
+    });
+  }
+
+  function applyTransformations() {
+    sprite.style.transform = `translate(${spritePos.x}px, ${spritePos.y}px) scale(${spriteScale}) rotate(${spriteRotation}deg)`;
+  }
+
+  function resetStage() {
+    spritePos = { x: 0, y: 0 };
+    spriteScale = 1;
+    spriteRotation = 0;
+    spriteOpacity = 1;
+
+    sprite.style.opacity = 1;
+
+    sprite.className = sprite.className.replace(
+      new RegExp(gradients.flatMap(g => g.split(' ')).join('|'), 'g'),
+      ''
+    );
+
+    currentGradientIndex = 0;
+
+    sprite.classList.add('from-cyan-400', 'to-blue-500');
+
+    applyTransformations();
+    bubble.classList.add('hidden');
+  }
+</script>
 </body>
 </html>

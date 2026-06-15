@@ -15,7 +15,11 @@
 
 <header class="top-bar">
     <div class="top-bar-inner">
-        <div class="logo-text">EduPlay Hub</div>
+            <div class="logo-text">
+                <a href="{{ url_for('home') }}" style="text-decoration:none; color:inherit;">
+                    EduPlay Hub
+                </a>
+            </div>
         <nav class="top-nav">
             <a href="{{ url_for('home') }}" class="nav-link">Ana Sayfa</a>
             <a href="{{ url_for('about') }}" class="nav-link">Hakkımızda</a>
@@ -121,18 +125,20 @@
 {% endif %}
 
 <!-- BUTON KONTEYNERI -->
+<!-- BUTON KONTEYNERI -->
 <div class="game-btn-container">
 
     {% if unit %}
         <div class="week-selection-hint">
             <span class="week-selection-icon">✨</span>
-            <span>Kaldığın haftayı seç</span>
+            <span>Oyunu seç</span>
         </div>
 
-        <!-- ÜNİTE SEÇİLDİ → HAFTA BUTONLARI -->
+        <!-- ÜNİTE SEÇİLDİ → SADECE VAR OLAN HAFTA BUTONLARI -->
         {% for game_key in week_slots %}
             {% if game_key %}
-                <button class="game-level-btn week-map-btn" id="game{{ loop.index }}-btn"
+                <button class="game-level-btn week-map-btn"
+                        id="game{{ loop.index }}-btn"
                         data-game-key="{{ game_key }}"
                         data-index="{{ loop.index }}"
                         onclick="showGameInfo(this)">
@@ -142,14 +148,6 @@
 
                     <span class="week-button-label">{{ loop.index }}. Hafta</span>
                 </button>
-            {% else %}
-                <button class="game-level-btn week-map-btn" id="game{{ loop.index }}-btn" disabled>
-                    <span class="base-layer">
-                        <span class="top-layer">{{ loop.index }}</span>
-                    </span>
-
-                    <span class="week-button-label locked-label">{{ loop.index }}. Hafta</span>
-                </button>
             {% endif %}
         {% endfor %}
 
@@ -157,7 +155,8 @@
         <!-- ÜNİTE SEÇİLMEDİ → ÜNİTE BUTONLARI -->
         {% for unit_item in units %}
             {% set map_url = url_for('map_page', level=level, unit=unit_item) %}
-            <button class="game-level-btn" id="level{{ loop.index }}-btn"
+            <button class="game-level-btn"
+                    id="level{{ loop.index }}-btn"
                     onclick="window.location.href='{{ map_url }}'">
                 <span class="base-layer">
                     <span class="top-layer">{{ loop.index }}</span>

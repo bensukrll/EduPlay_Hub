@@ -30,6 +30,7 @@
     * { box-sizing: border-box; }
 
     html, body {
+      width: 100%;
       height: 100%;
       margin: 0;
       overflow: hidden;
@@ -94,14 +95,19 @@
 
     .game-shell {
       position: relative;
-      width: min(1220px, 96vw);
-      height: min(760px, 96vh);
-      margin: 2vh auto;
+      width: 100%;
+      height: 100%;
+      margin: 0;
+      max-width: none;
+      max-height: none;
       border: 1px solid rgba(95,251,255,.24);
-      border-radius: 34px;
+      border-radius: 24px;
       background: linear-gradient(145deg, rgba(8,13,36,.84), rgba(19,17,54,.76));
       box-shadow: 0 0 60px rgba(95,251,255,.10), inset 0 0 40px rgba(155,92,255,.10);
       overflow: hidden;
+
+      display: flex;
+      flex-direction: column;
     }
 
     .corner-light {
@@ -115,15 +121,16 @@
     }
     .corner-light.one { top: -100px; left: -80px; background: var(--cyan); }
     .corner-light.two { right: -110px; bottom: -100px; background: var(--purple); }
-
+    
     .hud {
       position: relative;
       z-index: 3;
       display: grid;
       grid-template-columns: 1fr auto 1fr;
       align-items: center;
-      gap: 18px;
-      padding: 20px 26px 12px;
+      gap: 14px;
+      padding: 12px 20px 8px;
+      flex: 0 0 auto;
     }
 
     .brand {
@@ -162,8 +169,8 @@
     }
 
     .timer-orb {
-      width: 132px;
-      height: 132px;
+      width: 96px;
+      height: 96px;
       position: relative;
       display: grid;
       place-items: center;
@@ -178,8 +185,8 @@
     .timer-orb::after {
       content: "SANİYE";
       position: absolute;
-      bottom: 28px;
-      font-size: 10px;
+      bottom: 18px;
+      font-size: 8px;
       color: rgba(255,255,255,.65);
       letter-spacing: .2em;
       font-weight: 800;
@@ -187,10 +194,10 @@
 
     #timeText {
       font-family: 'Rajdhani', sans-serif;
-      font-size: 48px;
+      font-size: 38px;
       font-weight: 700;
       color: #fff;
-      transform: translateY(-8px);
+      transform: translateY(-6px);
       text-shadow: 0 0 14px rgba(95,251,255,.7);
     }
 
@@ -249,9 +256,11 @@
 
     .arena {
       position: relative;
-      height: 432px;
-      margin: 2px 26px 0;
-      border-radius: 30px;
+      flex: 1 1 auto;
+      min-height: 0;
+      height: auto;
+      margin: 4px 20px 0;
+      border-radius: 24px;
       border: 1px solid rgba(95,251,255,.18);
       background: linear-gradient(180deg, rgba(5,8,24,.18), rgba(255,255,255,.035));
       overflow: hidden;
@@ -259,10 +268,10 @@
 
     .belt-wrap {
       position: absolute;
-      left: 32px;
-      right: 32px;
-      top: 40px;
-      height: 182px;
+      left: 28px;
+      right: 28px;
+      top: 26px;
+      height: 150px;
       perspective: 900px;
       z-index: 3;
     }
@@ -314,13 +323,13 @@
 
     .drop-zone {
       position: absolute;
-      left: 42px;
-      right: 42px;
-      top: 250px;
-      height: 140px;
+      left: 32px;
+      right: 32px;
+      bottom: 20px;
+      height: 118px;
       display: grid;
       grid-template-columns: repeat(3, 1fr);
-      gap: 18px;
+      gap: 14px;
       z-index: 2;
     }
 
@@ -459,18 +468,19 @@
       z-index: 8;
       display: grid;
       grid-template-columns: 1fr 1fr;
-      gap: 22px;
-      padding: 19px 26px 0;
+      gap: 16px;
+      padding: 10px 20px 14px;
+      flex: 0 0 auto;
     }
 
     .action-btn {
       position: relative;
-      min-height: 102px;
+      min-height: 76px;
       border: 1px solid rgba(255,255,255,.22);
-      border-radius: 30px;
+      border-radius: 24px;
       color: white;
       font-family: 'Rajdhani', sans-serif;
-      font-size: clamp(28px, 4vw, 48px);
+      font-size: clamp(26px, 3vw, 38px);
       font-weight: 700;
       letter-spacing: .06em;
       cursor: pointer;
@@ -561,11 +571,12 @@
       display: grid;
       place-items: center;
       background: radial-gradient(circle at center, rgba(16,22,62,.70), rgba(3,6,20,.92));
-      padding: 26px;
+      padding: 18px;
     }
 
+
     .start-panel {
-      width: min(760px, 94vw);
+      width: min(680px, 92%);
       padding: 34px;
       border-radius: 34px;
       background: rgba(255,255,255,.09);
@@ -576,13 +587,13 @@
     }
 
     .robot-face {
-      width: 128px;
-      height: 128px;
-      margin: 0 auto 16px;
-      border-radius: 38px;
+      width: 92px;
+      height: 92px;
+      margin: 0 auto 12px;
+      border-radius: 28px;
       display: grid;
       place-items: center;
-      font-size: 72px;
+      font-size: 52px;
       background: linear-gradient(135deg, rgba(95,251,255,.22), rgba(155,92,255,.22));
       border: 1px solid rgba(95,251,255,.28);
       box-shadow: 0 0 34px rgba(95,251,255,.18);
@@ -597,16 +608,16 @@
     .start-panel h2 {
       margin: 0;
       font-family: 'Rajdhani', sans-serif;
-      font-size: clamp(38px, 6vw, 70px);
+      font-size: clamp(34px, 5vw, 54px);
       line-height: .9;
       font-weight: 700;
     }
 
     .start-panel p {
-      margin: 17px auto 24px;
+      margin: 12px auto 16px;
       max-width: 640px;
       color: var(--soft);
-      line-height: 1.55;
+      line-height: 1.45;
       font-weight: 600;
     }
 
@@ -615,7 +626,7 @@
       gap: 10px;
       justify-content: center;
       flex-wrap: wrap;
-      margin-bottom: 26px;
+      margin-bottom: 18px;
     }
 
     .mission-tags span {
@@ -631,10 +642,10 @@
     .start-btn {
       border: none;
       border-radius: 999px;
-      padding: 17px 30px;
+      padding: 13px 28px;
       color: #07101e;
       font-family: 'Rajdhani', sans-serif;
-      font-size: 28px;
+      font-size: 24px;
       font-weight: 700;
       letter-spacing: .05em;
       cursor: pointer;
@@ -714,6 +725,26 @@
       .start-panel { padding: 24px 18px; }
       .mobile-warning { display: block; color: var(--gold); font-weight: 800; margin-top: 10px; }
     }
+
+    .archive-box,
+.destroy-box,
+.neutral-box {
+  border-radius: 22px;
+  padding: 12px;
+}
+
+.drop-zone i {
+  font-size: 26px;
+  margin-bottom: 5px;
+}
+
+.drop-zone strong {
+  font-size: 20px;
+}
+
+.drop-zone small {
+  font-size: 11px;
+}
   </style>
 </head>
 
@@ -820,469 +851,618 @@
   </main>
 
   <script>
-    const questionPool = [
-      {
-        id: 1,
-        text: "Yapay zekâya meteoroloji tahmini yaptırmak için geçmiş sıcaklık, yağış ve rüzgâr verileri kullanılabilir.",
-        type: "Metin",
-        source: "Meteoroloji Genel Müdürlüğü veri açıklaması",
-        isReliable: true
-      },
-      {
-        id: 2,
-        text: "Bir troll hesabın paylaştığı görsele göre tüm robotlar insanların duygularını kesin olarak okuyabilir.",
-        type: "Görsel",
-        source: "Anonim troll sosyal medya hesabı",
-        isReliable: false
-      },
-      {
-        id: 3,
-        text: "Sesli asistanların konuşmayı anlaması için farklı yaş ve ses tonlarından ses örnekleri kullanılabilir.",
-        type: "Ses",
-        source: "TÜBİTAK Bilim Genç yazısı",
-        isReliable: true
-      },
-      {
-        id: 4,
-        text: "Şaka sitesindeki habere göre yapay zekâ sadece tek bir fotoğrafla tüm canlıları hatasız tanıyabilir.",
-        type: "Link",
-        source: "Şaka haber sitesi",
-        isReliable: false
-      },
-      {
-        id: 5,
-        text: "EBA'daki yapay zekâ etkinliğinde örnek girdiler; metin, görsel ve ses verileri olarak sınıflandırılmıştır.",
-        type: "Metin",
-        source: "EBA eğitim içeriği",
-        isReliable: true
-      },
-      {
-        id: 6,
-        text: "Kaynağı belli olmayan bir deepfake videosu, yapay zekâ eğitimi için doğrulanmış gerçek veri kabul edilmelidir.",
-        type: "Görsel",
-        source: "Kaynağı belirsiz deepfake paylaşımı",
-        isReliable: false
-      },
-      {
-        id: 7,
-        text: "Görsel tanıma yapan yapay zekâların eğitimi için doğru etiketlenmiş fotoğraflar önemlidir.",
-        type: "Görsel",
-        source: "Üniversite eğitim sayfası",
-        isReliable: true
-      },
-      {
-        id: 8,
-        text: "Bir forum kullanıcısı, yapay zekânın yanlış verilerden hiç etkilenmeyeceğini ve her zaman doğru sonuç vereceğini yazıyor.",
-        type: "Metin",
-        source: "Kişisel forum yorumu",
-        isReliable: false
-      },
-      {
-        id: 9,
-        text: "Bir çeviri yapay zekâsı, farklı dillerdeki örnek cümleleri inceleyerek dil örüntülerini öğrenebilir.",
-        type: "Metin",
-        source: "Dil teknolojileri makalesi",
-        isReliable: true
-      },
-      {
-        id: 10,
-        text: "Bir reklam linki, tıklayan herkesin yapay zekâ uzmanı olacağını ve veriye gerek olmadığını iddia ediyor.",
-        type: "Link",
-        source: "Abartılı reklam bağlantısı",
-        isReliable: false
-      },
-      {
-        id: 11,
-        text: "Yapay zekâ girdileri hakkında bilgi toplarken birden fazla güvenilir kaynaktan kontrol yapmak doğru bir yöntemdir.",
-        type: "Link",
-        source: "Resmî güvenli internet rehberi",
-        isReliable: true
-      },
-      {
-        id: 12,
-        text: "Sadece beğeni sayısı yüksek olduğu için bir sosyal medya paylaşımı kesin doğru kaynak sayılır.",
-        type: "Link",
-        source: "Popüler ama doğrulanmamış paylaşım",
-        isReliable: false
-      },
-      {
-        id: 13,
-        text: "Bir sağlık yapay zekâsında kullanılan verilerin güvenilir, güncel ve etik şekilde toplanmış olması gerekir.",
-        type: "Metin",
-        source: "Sağlık Bakanlığı bilgilendirme sayfası",
-        isReliable: true
-      },
-      {
-        id: 14,
-        text: "Bir ses kaydı, kesilip birleştirildiği belli olduğu halde kesin kanıt ve güvenilir yapay zekâ girdisi sayılmalıdır.",
-        type: "Ses",
-        source: "Düzenlenmiş viral ses kaydı",
-        isReliable: false
-      },
-      {
-        id: 15,
-        text: "Yapay zekâ girdilerini kaydederken veri türü, kaynak ve doğrulama durumu not edilmelidir.",
-        type: "Metin",
-        source: "Bilişim teknolojileri ders notu",
-        isReliable: true
-      },
-      {
-        id: 16,
-        text: "Bir yapay zekânın adil sonuç vermesi için örnek verilerin tek bir kişiden değil, çeşitli örneklerden oluşması önemlidir.",
-        type: "Görsel",
-        source: "TÜBİTAK popüler bilim içeriği",
-        isReliable: true
-      }
-    ];
+  const questionPool = [
+    {
+      id: 1,
+      text: "Yapay zekâya meteoroloji tahmini yaptırmak için geçmiş sıcaklık, yağış ve rüzgâr verileri kullanılabilir.",
+      type: "Metin",
+      source: "Meteoroloji Genel Müdürlüğü veri açıklaması",
+      isReliable: true
+    },
+    {
+      id: 2,
+      text: "Bir troll hesabın paylaştığı görsele göre tüm robotlar insanların duygularını kesin olarak okuyabilir.",
+      type: "Görsel",
+      source: "Anonim troll sosyal medya hesabı",
+      isReliable: false
+    },
+    {
+      id: 3,
+      text: "Sesli asistanların konuşmayı anlaması için farklı yaş ve ses tonlarından ses örnekleri kullanılabilir.",
+      type: "Ses",
+      source: "TÜBİTAK Bilim Genç yazısı",
+      isReliable: true
+    },
+    {
+      id: 4,
+      text: "Şaka sitesindeki habere göre yapay zekâ sadece tek bir fotoğrafla tüm canlıları hatasız tanıyabilir.",
+      type: "Link",
+      source: "Şaka haber sitesi",
+      isReliable: false
+    },
+    {
+      id: 5,
+      text: "EBA'daki yapay zekâ etkinliğinde örnek girdiler; metin, görsel ve ses verileri olarak sınıflandırılmıştır.",
+      type: "Metin",
+      source: "EBA eğitim içeriği",
+      isReliable: true
+    },
+    {
+      id: 6,
+      text: "Kaynağı belli olmayan bir deepfake videosu, yapay zekâ eğitimi için doğrulanmış gerçek veri kabul edilmelidir.",
+      type: "Görsel",
+      source: "Kaynağı belirsiz deepfake paylaşımı",
+      isReliable: false
+    },
+    {
+      id: 7,
+      text: "Görsel tanıma yapan yapay zekâların eğitimi için doğru etiketlenmiş fotoğraflar önemlidir.",
+      type: "Görsel",
+      source: "Üniversite eğitim sayfası",
+      isReliable: true
+    },
+    {
+      id: 8,
+      text: "Bir forum kullanıcısı, yapay zekânın yanlış verilerden hiç etkilenmeyeceğini ve her zaman doğru sonuç vereceğini yazıyor.",
+      type: "Metin",
+      source: "Kişisel forum yorumu",
+      isReliable: false
+    },
+    {
+      id: 9,
+      text: "Bir çeviri yapay zekâsı, farklı dillerdeki örnek cümleleri inceleyerek dil örüntülerini öğrenebilir.",
+      type: "Metin",
+      source: "Dil teknolojileri makalesi",
+      isReliable: true
+    },
+    {
+      id: 10,
+      text: "Bir reklam linki, tıklayan herkesin yapay zekâ uzmanı olacağını ve veriye gerek olmadığını iddia ediyor.",
+      type: "Link",
+      source: "Abartılı reklam bağlantısı",
+      isReliable: false
+    },
+    {
+      id: 11,
+      text: "Yapay zekâ girdileri hakkında bilgi toplarken birden fazla güvenilir kaynaktan kontrol yapmak doğru bir yöntemdir.",
+      type: "Link",
+      source: "Resmî güvenli internet rehberi",
+      isReliable: true
+    },
+    {
+      id: 12,
+      text: "Sadece beğeni sayısı yüksek olduğu için bir sosyal medya paylaşımı kesin doğru kaynak sayılır.",
+      type: "Link",
+      source: "Popüler ama doğrulanmamış paylaşım",
+      isReliable: false
+    },
+    {
+      id: 13,
+      text: "Bir sağlık yapay zekâsında kullanılan verilerin güvenilir, güncel ve etik şekilde toplanmış olması gerekir.",
+      type: "Metin",
+      source: "Sağlık Bakanlığı bilgilendirme sayfası",
+      isReliable: true
+    },
+    {
+      id: 14,
+      text: "Bir ses kaydı, kesilip birleştirildiği belli olduğu halde kesin kanıt ve güvenilir yapay zekâ girdisi sayılmalıdır.",
+      type: "Ses",
+      source: "Düzenlenmiş viral ses kaydı",
+      isReliable: false
+    },
+    {
+      id: 15,
+      text: "Yapay zekâ girdilerini kaydederken veri türü, kaynak ve doğrulama durumu not edilmelidir.",
+      type: "Metin",
+      source: "Bilişim teknolojileri ders notu",
+      isReliable: true
+    },
+    {
+      id: 16,
+      text: "Bir yapay zekânın adil sonuç vermesi için örnek verilerin tek bir kişiden değil, çeşitli örneklerden oluşması önemlidir.",
+      type: "Görsel",
+      source: "TÜBİTAK popüler bilim içeriği",
+      isReliable: true
+    }
+  ];
 
-    const typeMeta = {
-      "Metin": { icon: "fa-file-lines", chip: "Metin girdisi" },
-      "Görsel": { icon: "fa-images", chip: "Görsel girdisi" },
-      "Ses": { icon: "fa-volume-high", chip: "Ses girdisi" },
-      "Link": { icon: "fa-link", chip: "Bağlantı kaynağı" }
-    };
+  const typeMeta = {
+    "Metin": { icon: "fa-file-lines", chip: "Metin girdisi" },
+    "Görsel": { icon: "fa-images", chip: "Görsel girdisi" },
+    "Ses": { icon: "fa-volume-high", chip: "Ses girdisi" },
+    "Link": { icon: "fa-link", chip: "Bağlantı kaynağı" }
+  };
 
-    const gameShell = document.getElementById('gameShell');
-    const startScreen = document.getElementById('startScreen');
-    const startBtn = document.getElementById('startBtn');
-    const arena = document.getElementById('arena');
-    const saveBtn = document.getElementById('saveBtn');
-    const destroyBtn = document.getElementById('destroyBtn');
-    const scoreText = document.getElementById('scoreText');
-    const savedText = document.getElementById('savedText');
-    const timeText = document.getElementById('timeText');
-    const timerOrb = document.getElementById('timerOrb');
-    const hearts = document.getElementById('hearts');
+  const gameShell = document.getElementById('gameShell');
+  const startScreen = document.getElementById('startScreen');
+  const startBtn = document.getElementById('startBtn');
+  const arena = document.getElementById('arena');
+  const saveBtn = document.getElementById('saveBtn');
+  const destroyBtn = document.getElementById('destroyBtn');
+  const scoreText = document.getElementById('scoreText');
+  const savedText = document.getElementById('savedText');
+  const timeText = document.getElementById('timeText');
+  const timerOrb = document.getElementById('timerOrb');
+  const hearts = document.getElementById('hearts');
 
-    let deck = [];
-    let currentCard = null;
-    let currentQuestion = null;
-    let score = 0;
-    let saved = 0;
-    let lives = 3;
-    let timeLeft = 60;
-    let gameActive = false;
-    let paused = false;
-    let timerInterval = null;
-    let spawnTimeout = null;
-    let cardSpeed = 6200;
-    let roundCount = 0;
+  let deck = [];
+  let currentCard = null;
+  let currentQuestion = null;
+  let score = 0;
+  let saved = 0;
+  let lives = 3;
+  let timeLeft = 60;
+  let gameActive = false;
+  let paused = false;
+  let gameEnded = false;
+  let timerInterval = null;
+  let spawnTimeout = null;
+  let cardSpeed = 6200;
+  let roundCount = 0;
 
-    function shuffle(array) {
-      const copy = [...array];
-      for (let i = copy.length - 1; i > 0; i--) {
-        const j = Math.floor(Math.random() * (i + 1));
-        [copy[i], copy[j]] = [copy[j], copy[i]];
-      }
-      return copy;
+  function shuffle(array) {
+    const copy = [...array];
+
+    for (let i = copy.length - 1; i > 0; i--) {
+      const j = Math.floor(Math.random() * (i + 1));
+      [copy[i], copy[j]] = [copy[j], copy[i]];
     }
 
-    function startGame() {
-      resetGame();
-      startScreen.style.display = 'none';
-      gameActive = true;
-      paused = false;
-      gameShell.classList.remove('paused');
-      showToast('Veri bandı aktif! Kaynağı incele, doğru kararı ver.');
-      timerInterval = setInterval(tickTimer, 1000);
-      spawnCard();
+    return copy;
+  }
+
+  function startGame() {
+    resetGame();
+
+    startScreen.style.display = 'none';
+    gameActive = true;
+    paused = false;
+    gameEnded = false;
+
+    gameShell.classList.remove('paused');
+
+    showToast('Veri bandı aktif! Kaynağı incele, doğru kararı ver.');
+
+    timerInterval = setInterval(tickTimer, 1000);
+    spawnCard();
+  }
+
+  function resetGame() {
+    clearInterval(timerInterval);
+    clearTimeout(spawnTimeout);
+
+    removeCurrentCard();
+
+    deck = shuffle(questionPool);
+    currentCard = null;
+    currentQuestion = null;
+
+    score = 0;
+    saved = 0;
+    lives = 3;
+    timeLeft = 60;
+    cardSpeed = 6200;
+    roundCount = 0;
+
+    gameActive = false;
+    paused = false;
+    gameEnded = false;
+
+    gameShell.classList.remove('paused');
+
+    updateHud();
+
+    document.querySelectorAll('.feedback-float, .toast-line').forEach(el => el.remove());
+  }
+
+  function tickTimer() {
+    if (!gameActive || paused || gameEnded) return;
+
+    timeLeft--;
+
+    if (timeLeft <= 0) {
+      timeLeft = 0;
+      updateHud();
+      endGame('time');
+      return;
     }
 
-    function resetGame() {
-      clearInterval(timerInterval);
-      clearTimeout(spawnTimeout);
-      removeCurrentCard();
+    updateHud();
+  }
+
+  function updateHud() {
+    scoreText.textContent = score;
+    savedText.textContent = saved;
+    timeText.textContent = timeLeft;
+
+    const deg = Math.max(0, (timeLeft / 60) * 360);
+    timerOrb.style.setProperty('--timerDeg', deg + 'deg');
+
+    if (timeLeft <= 15) {
+      timerOrb.style.filter = 'drop-shadow(0 0 14px rgba(255,56,100,.65))';
+    } else {
+      timerOrb.style.filter = 'none';
+    }
+
+    const heartIcons = hearts.querySelectorAll('.heart');
+
+    heartIcons.forEach((heart, index) => {
+      heart.classList.toggle('lost', index >= lives);
+    });
+  }
+
+  function spawnCard() {
+    if (!gameActive || paused || gameEnded) return;
+
+    removeCurrentCard();
+
+    if (deck.length === 0) {
       deck = shuffle(questionPool);
-      currentCard = null;
-      currentQuestion = null;
-      score = 0;
-      saved = 0;
-      lives = 3;
-      timeLeft = 60;
-      cardSpeed = 6200;
-      roundCount = 0;
-      gameActive = false;
-      paused = false;
-      updateHud();
-      document.querySelectorAll('.feedback-float, .toast-line').forEach(el => el.remove());
     }
 
-    function tickTimer() {
-      if (!gameActive || paused) return;
-      timeLeft--;
-      if (timeLeft <= 0) {
-        timeLeft = 0;
-        updateHud();
-        endGame('time');
-        return;
-      }
-      updateHud();
-    }
+    currentQuestion = deck.pop();
+    roundCount++;
+    cardSpeed = Math.max(3900, 6200 - (roundCount * 110));
 
-    function updateHud() {
-      scoreText.textContent = score;
-      savedText.textContent = saved;
-      timeText.textContent = timeLeft;
-      
-      const deg = Math.max(0, (timeLeft / 60) * 360);
-      timerOrb.style.setProperty('--timerDeg', deg + 'deg');
-      if (timeLeft <= 15) {
-        timerOrb.style.filter = 'drop-shadow(0 0 14px rgba(255,56,100,.65))';
-      } else {
-        timerOrb.style.filter = 'none';
-      }
+    const meta = typeMeta[currentQuestion.type] || typeMeta['Metin'];
 
-      // Kalpleri doğru şekilde güncellemek için düzeltilen döngü
-      const heartIcons = hearts.querySelectorAll('.heart');
-      heartIcons.forEach((heart, index) => {
-        heart.classList.toggle('lost', index >= lives);
-      });
-    }
+    const card = document.createElement('article');
+    card.className = 'data-card animate__animated animate__fadeInRight';
+    card.style.setProperty('--cardSpeed', cardSpeed + 'ms');
 
-    function spawnCard() {
-      if (!gameActive || paused) return;
-      removeCurrentCard();
-      if (deck.length === 0) deck = shuffle(questionPool);
-      currentQuestion = deck.pop();
-      roundCount++;
-      cardSpeed = Math.max(3900, 6200 - (roundCount * 110));
+    card.innerHTML = `
+      <div class="card-top">
+        <div class="type-icon">
+          <i class="fa-solid ${meta.icon}"></i>
+        </div>
 
-      const meta = typeMeta[currentQuestion.type] || typeMeta['Metin'];
-      const card = document.createElement('article');
-      card.className = 'data-card animate__animated animate__fadeInRight';
-      card.style.setProperty('--cardSpeed', cardSpeed + 'ms');
-      card.innerHTML = `
-        <div class="card-top">
-          <div class="type-icon"><i class="fa-solid ${meta.icon}"></i></div>
-          <div>
-            <div class="card-type">${currentQuestion.type}</div>
-            <div class="card-source"><i class="fa-solid fa-satellite-dish"></i> ${currentQuestion.source}</div>
+        <div>
+          <div class="card-type">${currentQuestion.type}</div>
+          <div class="card-source">
+            <i class="fa-solid fa-satellite-dish"></i> ${currentQuestion.source}
           </div>
         </div>
-        <div class="card-text">${currentQuestion.text}</div>
-        <div class="card-chip"><i class="fa-solid fa-magnifying-glass-chart"></i> ${meta.chip}</div>
-      `;
+      </div>
 
-      card.addEventListener('animationend', (event) => {
-        if (!gameActive || paused) return;
-        if (event.animationName === 'travel' && card === currentCard) {
-          missCard();
-        }
-      });
+      <div class="card-text">${currentQuestion.text}</div>
 
-      arena.appendChild(card);
-      currentCard = card;
+      <div class="card-chip">
+        <i class="fa-solid fa-magnifying-glass-chart"></i> ${meta.chip}
+      </div>
+    `;
+
+    card.addEventListener('animationend', (event) => {
+      if (!gameActive || paused || gameEnded) return;
+
+      if (event.animationName === 'travel' && card === currentCard) {
+        missCard();
+      }
+    });
+
+    arena.appendChild(card);
+    currentCard = card;
+  }
+
+  function removeCurrentCard() {
+    if (currentCard && currentCard.parentNode) {
+      currentCard.remove();
     }
 
-    function removeCurrentCard() {
-      if (currentCard && currentCard.parentNode) currentCard.remove();
-      currentCard = null;
-    }
+    currentCard = null;
+  }
 
-    function makeDecision(saveIt) {
-      if (!gameActive || paused || !currentCard || !currentQuestion) return;
+  function makeDecision(saveIt) {
+    if (!gameActive || paused || gameEnded || !currentCard || !currentQuestion) return;
 
-      const isCorrect = saveIt === currentQuestion.isReliable;
-      const targetClass = saveIt ? 'saved' : 'destroyed';
-      currentCard.classList.add(targetClass);
+    const isCorrect = saveIt === currentQuestion.isReliable;
+    const targetClass = saveIt ? 'saved' : 'destroyed';
 
-      if (isCorrect) {
-        score += 10;
-        if (saveIt) saved++;
-        showScoreFloat('+10', 'plus');
-        showToast(saveIt ? 'Güvenilir veri arşive kaydedildi.' : 'Şüpheli veri başarıyla imha edildi.');
-      } else {
-        score = Math.max(0, score - 5);
-        loseLife(false);
-        showScoreFloat('-5', 'minus');
-        gameShell.classList.add('animate__animated', 'animate__headShake');
-        showToast(currentQuestion.isReliable ? 'Bu kaynak güvenilirdi; kaydedilmeliydi.' : 'Bu bilgi şüpheliydi; imha edilmeliydi.');
-        setTimeout(() => gameShell.classList.remove('animate__animated', 'animate__headShake'), 800);
+    currentCard.classList.add(targetClass);
+
+    if (isCorrect) {
+      score += 10;
+
+      if (saveIt) {
+        saved++;
       }
 
-      pulseButton(saveIt ? saveBtn : destroyBtn);
-      updateHud();
-      const oldCard = currentCard;
-      currentCard = null;
-      currentQuestion = null;
-
-      setTimeout(() => oldCard.remove(), 520);
-      if (lives <= 0) {
-        setTimeout(() => endGame('lives'), 620);
-      } else {
-        spawnTimeout = setTimeout(spawnCard, 610);
-      }
-    }
-
-    function missCard() {
-      if (!currentCard) return;
-      currentCard.classList.add('falling');
-      showScoreFloat('KAÇTI!', 'minus');
-      showToast('Veri kartı müdahale edilmeden düştü. 1 can kaybedildi.');
-      gameShell.classList.add('animate__animated', 'animate__shakeX');
-      setTimeout(() => gameShell.classList.remove('animate__animated', 'animate__shakeX'), 800);
-      loseLife(true);
-      updateHud();
-
-      const oldCard = currentCard;
-      currentCard = null;
-      currentQuestion = null;
-      setTimeout(() => oldCard.remove(), 760);
-
-      if (lives <= 0) {
-        setTimeout(() => endGame('lives'), 820);
-      } else {
-        spawnTimeout = setTimeout(spawnCard, 850);
-      }
-    }
-
-    function loseLife(fromMiss) {
-      lives = Math.max(0, lives - 1);
-      
-      // Can azalınca kalplerin titreme animasyonu
-      hearts.classList.add('animate__animated', 'animate__heartBeat');
-      setTimeout(() => hearts.classList.remove('animate__animated', 'animate__heartBeat'), 750);
-    }
-
-    function showScoreFloat(text, type) {
-      const el = document.createElement('div');
-      el.className = `feedback-float ${type}`;
-      el.textContent = text;
-      gameShell.appendChild(el);
-      setTimeout(() => el.remove(), 950);
-    }
-
-    function showToast(message) {
-      const old = document.querySelector('.toast-line');
-      if (old) old.remove();
-      const toast = document.createElement('div');
-      toast.className = 'toast-line';
-      toast.innerHTML = `<i class="fa-solid fa-circle-info"></i> ${message}`;
-      gameShell.appendChild(toast);
-      setTimeout(() => toast.remove(), 1600);
-    }
-
-    function pulseButton(btn) {
-      btn.classList.add('pressed');
-      setTimeout(() => btn.classList.remove('pressed'), 170);
-    }
-
-    function togglePause() {
-      if (!gameActive) return;
-      paused = !paused;
-      gameShell.classList.toggle('paused', paused);
-      showToast(paused ? 'Sistem duraklatıldı. P ile devam edebilirsin.' : 'Sistem yeniden aktif!');
-    }
-
-    function endGame() {
-    // Oyun bitişi durumunu ayarla
-    gameRunning = false;
-    clearInterval(spawnTimer);
-    clearInterval(questionTimer);
-
-    // Oyun ekranını ve bitiş ekranını göster
-    document.querySelectorAll(".item").forEach(i => i.remove());
-    document.getElementById("gameScreen").classList.remove("active");
-    document.getElementById("endScreen").classList.add("active");
-
-    // Skoru ve mesajları güncelle
-    document.getElementById("finalScore").textContent = score;
-    let message = "";
-    if (score >= 3000) {
-        message = `${selectedName}, siber veri deposunda harika ilerledin! Tüm güvenilir verileri topladın.`;
-    } else if (score >= 1500) {
-        message = `${selectedName}, iyi iş çıkardın! Bazı veriler gözden kaçmış olabilir.`;
+      showScoreFloat('+10', 'plus');
+      showToast(saveIt ? 'Güvenilir veri arşive kaydedildi.' : 'Şüpheli veri başarıyla imha edildi.');
     } else {
-        message = `${selectedName}, biraz dikkatli ol! Doğru verileri toplayarak tekrar dene.`;
-    }
-    document.getElementById("finalMessage").textContent = message;
+      score = Math.max(0, score - 5);
+      loseLife();
 
-    // -----------------------
-    // PUANI VERİTABANINA GÖNDER
-    // -----------------------
+      showScoreFloat('-5', 'minus');
+
+      gameShell.classList.add('animate__animated', 'animate__headShake');
+      showToast(currentQuestion.isReliable ? 'Bu kaynak güvenilirdi; kaydedilmeliydi.' : 'Bu bilgi şüpheliydi; imha edilmeliydi.');
+
+      setTimeout(() => {
+        gameShell.classList.remove('animate__animated', 'animate__headShake');
+      }, 800);
+    }
+
+    pulseButton(saveIt ? saveBtn : destroyBtn);
+    updateHud();
+
+    const oldCard = currentCard;
+    currentCard = null;
+    currentQuestion = null;
+
+    setTimeout(() => {
+      if (oldCard && oldCard.parentNode) {
+        oldCard.remove();
+      }
+    }, 520);
+
+    if (lives <= 0) {
+      setTimeout(() => endGame('lives'), 620);
+    } else {
+      spawnTimeout = setTimeout(spawnCard, 610);
+    }
+  }
+
+  function missCard() {
+    if (!currentCard || gameEnded) return;
+
+    currentCard.classList.add('falling');
+
+    showScoreFloat('KAÇTI!', 'minus');
+    showToast('Veri kartı müdahale edilmeden düştü. 1 can kaybedildi.');
+
+    gameShell.classList.add('animate__animated', 'animate__shakeX');
+
+    setTimeout(() => {
+      gameShell.classList.remove('animate__animated', 'animate__shakeX');
+    }, 800);
+
+    loseLife();
+    updateHud();
+
+    const oldCard = currentCard;
+    currentCard = null;
+    currentQuestion = null;
+
+    setTimeout(() => {
+      if (oldCard && oldCard.parentNode) {
+        oldCard.remove();
+      }
+    }, 760);
+
+    if (lives <= 0) {
+      setTimeout(() => endGame('lives'), 820);
+    } else {
+      spawnTimeout = setTimeout(spawnCard, 850);
+    }
+  }
+
+  function loseLife() {
+    lives = Math.max(0, lives - 1);
+
+    hearts.classList.add('animate__animated', 'animate__heartBeat');
+
+    setTimeout(() => {
+      hearts.classList.remove('animate__animated', 'animate__heartBeat');
+    }, 750);
+  }
+
+  function showScoreFloat(text, type) {
+    const el = document.createElement('div');
+    el.className = `feedback-float ${type}`;
+    el.textContent = text;
+
+    gameShell.appendChild(el);
+
+    setTimeout(() => {
+      el.remove();
+    }, 950);
+  }
+
+  function showToast(message) {
+    const old = document.querySelector('.toast-line');
+
+    if (old) {
+      old.remove();
+    }
+
+    const toast = document.createElement('div');
+    toast.className = 'toast-line';
+    toast.innerHTML = `<i class="fa-solid fa-circle-info"></i> ${message}`;
+
+    gameShell.appendChild(toast);
+
+    setTimeout(() => {
+      toast.remove();
+    }, 1600);
+  }
+
+  function pulseButton(btn) {
+    btn.classList.add('pressed');
+
+    setTimeout(() => {
+      btn.classList.remove('pressed');
+    }, 170);
+  }
+
+  function togglePause() {
+    if (!gameActive || gameEnded) return;
+
+    paused = !paused;
+
+    gameShell.classList.toggle('paused', paused);
+    showToast(paused ? 'Sistem duraklatıldı. P ile devam edebilirsin.' : 'Sistem yeniden aktif!');
+  }
+
+  function endGame(reason = 'time') {
+    if (gameEnded) return;
+
+    gameEnded = true;
+    gameActive = false;
+    paused = false;
+
+    clearInterval(timerInterval);
+    clearTimeout(spawnTimeout);
+
+    gameShell.classList.remove('paused');
+
+    if (currentCard && currentCard.parentNode) {
+      currentCard.remove();
+    }
+
+    currentCard = null;
+    currentQuestion = null;
+
+    updateHud();
+
+    let title = "Oyun Bitti!";
+    let iconType = "info";
+
+    if (reason === "lives") {
+      title = "Canların Bitti!";
+    } else if (reason === "time") {
+      title = "Süre Doldu!";
+    }
+
+    if (score >= 50) {
+      iconType = "success";
+      fireConfetti();
+    }
+
     fetch("/save-progress", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        credentials: "same-origin", // session cookie gönderimi
-        body: JSON.stringify({
-            game_key: "6_unit5_w1",  // GAME_INFO ile eşleşmeli
-            score: score             // JS’deki skor değişkeni
-        })
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      credentials: "same-origin",
+      body: JSON.stringify({
+        game_key: "6_unit5_w1",
+        score: score
+      })
     })
     .then(res => res.json())
     .then(data => {
-        if (data.success) console.log("Skor kaydedildi:", score, data);
-        else console.warn("Skor kaydedilemedi:", data.error);
+      if (data.success) {
+        console.log("Skor kaydedildi:", score, data);
+      } else {
+        console.warn("Skor kaydedilemedi:", data.error);
+      }
     })
     .catch(err => console.error("Fetch hatası:", err));
-}
 
-    function fireConfetti() {
-      const duration = 1800;
-      const end = Date.now() + duration;
-      (function frame() {
-        confetti({
-          particleCount: 4,
-          angle: 60,
-          spread: 70,
-          origin: { x: 0 },
-          colors: ['#39ff9a', '#5ffbff', '#9b5cff', '#ffd166']
-        });
-        confetti({
-          particleCount: 4,
-          angle: 120,
-          spread: 70,
-          origin: { x: 1 },
-          colors: ['#39ff9a', '#5ffbff', '#9b5cff', '#ffd166']
-        });
-        if (Date.now() < end) requestAnimationFrame(frame);
-      })();
-    }
+    const resultHtml = `
+      <div style="font-size:18px; line-height:1.7;">
+        <strong>Skorun:</strong> ${score}<br>
+        <strong>Arşivlenen güvenilir veri:</strong> ${saved}<br>
+        <strong>Kalan can:</strong> ${lives}
+      </div>
+    `;
 
-    saveBtn.addEventListener('click', () => makeDecision(true));
-    destroyBtn.addEventListener('click', () => makeDecision(false));
-    startBtn.addEventListener('click', startGame);
-
-    document.addEventListener('keydown', (event) => {
-      if (event.key === 'ArrowRight') makeDecision(true);
-      if (event.key === 'ArrowLeft') makeDecision(false);
-      if (event.key.toLowerCase() === 'p') togglePause();
+    Swal.fire({
+      title: title,
+      html: resultHtml,
+      icon: iconType,
+      confirmButtonText: "Tekrar Oyna",
+      confirmButtonColor: "#39ff9a",
+      background: "#101737",
+      color: "#ffffff"
+    }).then(() => {
+      startScreen.style.display = "grid";
+      resetGame();
     });
+  }
 
-    // Animated matrix-like background canvas
-    const canvas = document.getElementById('matrixCanvas');
-    const ctx = canvas.getContext('2d');
-    let width, height, columns, drops;
-    const chars = '01AI VERI DATA BTY 6';
+  function fireConfetti() {
+    const duration = 1800;
+    const end = Date.now() + duration;
 
-    function resizeCanvas() {
-      width = canvas.width = window.innerWidth;
-      height = canvas.height = window.innerHeight;
-      columns = Math.floor(width / 18);
-      drops = Array.from({ length: columns }, () => Math.random() * height);
-    }
+    (function frame() {
+      confetti({
+        particleCount: 4,
+        angle: 60,
+        spread: 70,
+        origin: { x: 0 },
+        colors: ['#39ff9a', '#5ffbff', '#9b5cff', '#ffd166']
+      });
 
-    function drawMatrix() {
-      ctx.fillStyle = 'rgba(7, 11, 31, 0.08)';
-      ctx.fillRect(0, 0, width, height);
-      ctx.font = '700 15px Rajdhani';
-      for (let i = 0; i < columns; i++) {
-        const char = chars[Math.floor(Math.random() * chars.length)];
-        const x = i * 18;
-        const y = drops[i] * 18;
-        ctx.fillStyle = Math.random() > 0.88 ? 'rgba(95,251,255,.85)' : 'rgba(57,255,154,.55)';
-        ctx.fillText(char, x, y);
-        if (y > height && Math.random() > 0.975) drops[i] = 0;
-        drops[i]++;
+      confetti({
+        particleCount: 4,
+        angle: 120,
+        spread: 70,
+        origin: { x: 1 },
+        colors: ['#39ff9a', '#5ffbff', '#9b5cff', '#ffd166']
+      });
+
+      if (Date.now() < end) {
+        requestAnimationFrame(frame);
       }
-      requestAnimationFrame(drawMatrix);
+    })();
+  }
+
+  saveBtn.addEventListener('click', () => makeDecision(true));
+  destroyBtn.addEventListener('click', () => makeDecision(false));
+  startBtn.addEventListener('click', startGame);
+
+  document.addEventListener('keydown', (event) => {
+    if (event.key === 'ArrowRight') {
+      makeDecision(true);
     }
 
-    window.addEventListener('resize', resizeCanvas);
-    resizeCanvas();
-    drawMatrix();
+    if (event.key === 'ArrowLeft') {
+      makeDecision(false);
+    }
 
-    updateHud();
-  </script>
+    if (event.key.toLowerCase() === 'p') {
+      togglePause();
+    }
+  });
+
+  const canvas = document.getElementById('matrixCanvas');
+  const ctx = canvas.getContext('2d');
+
+  let width;
+  let height;
+  let columns;
+  let drops;
+
+  const chars = '01AI VERI DATA BTY 6';
+
+  function resizeCanvas() {
+    width = canvas.width = window.innerWidth;
+    height = canvas.height = window.innerHeight;
+    columns = Math.floor(width / 18);
+    drops = Array.from({ length: columns }, () => Math.random() * height);
+  }
+
+  function drawMatrix() {
+    ctx.fillStyle = 'rgba(7, 11, 31, 0.08)';
+    ctx.fillRect(0, 0, width, height);
+
+    ctx.font = '700 15px Rajdhani';
+
+    for (let i = 0; i < columns; i++) {
+      const char = chars[Math.floor(Math.random() * chars.length)];
+      const x = i * 18;
+      const y = drops[i] * 18;
+
+      ctx.fillStyle = Math.random() > 0.88
+        ? 'rgba(95,251,255,.85)'
+        : 'rgba(57,255,154,.55)';
+
+      ctx.fillText(char, x, y);
+
+      if (y > height && Math.random() > 0.975) {
+        drops[i] = 0;
+      }
+
+      drops[i]++;
+    }
+
+    requestAnimationFrame(drawMatrix);
+  }
+
+  window.addEventListener('resize', resizeCanvas);
+
+  resizeCanvas();
+  drawMatrix();
+  updateHud();
+</script>
 </body>
 </html>

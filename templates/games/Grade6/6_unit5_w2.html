@@ -520,6 +520,8 @@ let selectedCorrectElements = 0;
 let neededCorrectElements = 0;
 let timerInterval = null;
 let timeLeft = 12;
+const GAME_KEY = "6_unit5_w2";
+let gameOver = false;
 
 const taskTitle = document.getElementById("taskTitle");
 const taskDescription = document.getElementById("taskDescription");
@@ -540,6 +542,8 @@ function startGame() {
   currentTaskIndex = 0;
   lives = 3;
   score = 0;
+  gameOver = false;
+
   updateLives();
   updateScore();
   loadTask();
@@ -579,16 +583,47 @@ function updateScore() {
   scoreText.textContent = score;
 }
 
+function saveProgressToDatabase(finalScore = score) {
+  fetch("/save-progress", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    credentials: "same-origin",
+    body: JSON.stringify({
+      game_key: GAME_KEY,
+      score: finalScore
+    })
+  })
+  .then(res => res.json())
+  .then(data => {
+    if (data.success) {
+      console.log("Skor kaydedildi:", finalScore, data);
+    } else {
+      console.warn("Skor kaydedilemedi:", data.error);
+    }
+  })
+  .catch(err => console.error("Fetch hatası:", err));
+}
+
 function loseLife() {
-  lives--;
+  if (gameOver) return;
+
+  lives = Math.max(0, lives - 1);
   updateLives();
   flashCauldron("bad");
 
   if (lives <= 0) {
+    gameOver = true;
     clearInterval(timerInterval);
+
+    const finalScore = score;
+    saveProgressToDatabase(finalScore);
+
     Swal.fire({
       title: "Simya Başarısız: Kazan Patladı!",
-      text: "Canların bitti. Laboratuvar yeniden başlıyor.",
+      html: `
+        <p>Canların bitti. Skorun kaydedildi.</p>
+        <p style="margin-top:10px;font-size:22px;"><b>Toplam Puan: ${finalScore}</b></p>
+      `,
       icon: "error",
       background: "#120821",
       color: "#fff",
@@ -904,6 +939,15 @@ function saveCrystal() {
 }
 
 function finishAllTasks() {
+  if (gameOver) return;
+
+  gameOver = true;
+  clearInterval(timerInterval);
+
+  const finalScore = score;
+
+  saveProgressToDatabase(finalScore);
+
   confetti({
     particleCount: 230,
     spread: 115,
@@ -914,7 +958,8 @@ function finishAllTasks() {
     title: "Baş Simyacı!",
     html: `
       <p>Tüm veri iksirlerini başarıyla hazırladın.</p>
-      <p style="margin-top:10px;font-size:22px;"><b>Toplam Puan: ${score}</b></p>
+      <p style="margin-top:10px;font-size:22px;"><b>Toplam Puan: ${finalScore}</b></p>
+      <p style="margin-top:8px;font-size:14px;">Skorun veritabanına kaydedildi.</p>
     `,
     icon: "success",
     background: "#100720",
@@ -923,25 +968,6 @@ function finishAllTasks() {
     confirmButtonText: "Baştan Oyna"
   }).then(() => {
     startGame();
-
-    // -----------------------
-    // PUANI VERİTABANINA GÖNDER
-    // -----------------------
-    fetch("/save-progress", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      credentials: "same-origin",
-      body: JSON.stringify({
-        game_key: "6_unit5_w1",  // GAME_INFO ile eşleşmeli
-        score: score
-      })
-    })
-    .then(res => res.json())
-    .then(data => {
-      if(data.success) console.log("Skor kaydedildi:", score, data);
-      else console.warn("Skor kaydedilemedi:", data.error);
-    })
-    .catch(err => console.error("Fetch hatası:", err));
   });
 }
 

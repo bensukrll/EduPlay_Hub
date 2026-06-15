@@ -1,0 +1,1226 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Etik Dedektif: Dijital Mahalle</title>
+
+  <style>
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      font-family: "Trebuchet MS", Arial, sans-serif;
+      background: #09264a;
+      color: #1f2937;
+      overflow: hidden;
+    }
+
+    .game-shell {
+      width: 100vw;
+      height: 100vh;
+      background: #0b3b6f;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .top-bar {
+      height: 82px;
+      background: linear-gradient(180deg, #84994F, #84994F);
+      border-bottom: 4px solid #84994F;
+      display: flex;
+      align-items: center;
+      gap: 18px;
+      padding: 10px 22px;
+      color: white;
+      box-shadow: 0 4px 20px rgba(0,0,0,0.35);
+      z-index: 10;
+    }
+
+    .grade-badge {
+      width: 72px;
+      height: 72px;
+      background: linear-gradient(180deg, #ffd84d, #f59e0b);
+      border: 5px solid #84994F;
+      border-radius: 22px;
+      color: #082f49;
+      font-weight: 900;
+      font-size: 30px;
+      text-align: center;
+      line-height: 26px;
+      padding-top: 10px;
+      text-shadow: 1px 1px white;
+      flex-shrink: 0;
+    }
+
+    .grade-badge span {
+      font-size: 14px;
+    }
+
+    .title-area {
+      flex: 1;
+    }
+
+    .title-area h1 {
+      margin: 0;
+      font-size: clamp(14px, 3vw, 30px);
+      color: #ffffff;
+    }
+
+    .title-area p {
+      margin: 4px 0 0;
+      font-size: clamp(14px, 1.5vw, 20px);
+      font-weight: 700;
+      color: #eef6ff;
+    }
+
+    .score-box {
+      background: rgba(255,255,255,0.12);
+      border: 2px solid rgba(255,255,255,0.25);
+      border-radius: 18px;
+      padding: 14px 20px;
+      font-size: 24px;
+      font-weight: 900;
+    }
+
+    .progress-box {
+      width: 250px;
+      background: rgba(255,255,255,0.12);
+      border: 2px solid rgba(255,255,255,0.25);
+      border-radius: 18px;
+      padding: 10px 14px;
+      display: grid;
+      grid-template-columns: 1fr auto;
+      gap: 6px 12px;
+      align-items: center;
+    }
+
+    .progress-box span {
+      font-weight: 900;
+    }
+
+    .progress-bar {
+      height: 18px;
+      background: #FCB53B;
+      border-radius: 30px;
+      overflow: hidden;
+      border: 2px solid #FCB53B;
+      grid-column: 1 / 2;
+    }
+
+    #progressFill {
+      width: 0%;
+      height: 100%;
+      background: linear-gradient(90deg, #7ee337, #bef264);
+      transition: 0.4s;
+    }
+
+    #progressText {
+      font-size: 22px;
+      grid-row: 1 / 3;
+      grid-column: 2 / 3;
+    }
+
+    .icon-btn {
+      width: 58px;
+      height: 58px;
+      border: none;
+      border-radius: 18px;
+      font-size: 30px;
+      font-weight: 900;
+      color: white;
+      background: linear-gradient(180deg, #FCB53B, #FCB53B);
+      box-shadow: 0 5px 0 #FCB53B;
+      cursor: pointer;
+    }
+
+    .game-map {
+      position: relative;
+      flex: 1;
+      background-size: cover;
+      background-position: center;
+      overflow: hidden;
+    }
+
+    .detective {
+      position: absolute;
+      right: 3%;
+      bottom: 40%;
+      width: 15%;
+      max-width: 240px;
+      min-width: 150px;
+      z-index: 3;
+      filter: drop-shadow(0 12px 12px rgba(0,0,0,0.35));
+      pointer-events: none;
+    }
+
+    .character-point,
+    .building-point {
+      position: absolute;
+      border: none;
+      background: transparent;
+      cursor: pointer;
+      z-index: 5;
+      transition: 0.25s;
+    }
+
+    .character-point:hover,
+    .building-point:hover {
+      transform: scale(1.06);
+    }
+
+    .character-point img {
+      width: 125px;
+      height: 125px;
+      object-fit: contain;
+      object-position: center;
+      border-radius: 50%;
+      border: 5px solid white;
+      box-shadow: #FFE797 0 0 0 4px, rgba(255,231,151,0.8) 0 0 15px;
+      background: white;
+      padding: 6px;
+    }
+
+    .character-point span {
+      display: block;
+      width: fit-content;
+      min-width: 78px;
+      margin: -10px auto 0;
+      padding: 5px 14px;
+      border-radius: 20px;
+      color: white;
+      font-weight: 900;
+      font-size: 18px;
+      border: 3px solid white;
+      text-shadow: 1px 1px 2px rgba(0,0,0,0.4);
+    }
+
+    .character-point small {
+      position: absolute;
+      background: white;
+      border: 3px solid #15345c;
+      border-radius: 18px;
+      padding: 9px 12px;
+      width: 160px;
+      color: #111827;
+      font-size: 15px;
+      font-weight: 900;
+      line-height: 1.15;
+      box-shadow: 0 6px 14px rgba(0,0,0,0.2);
+    }
+
+    .point-mert {
+      left: 28%;
+      top: 8%;
+    }
+
+    .point-mert span {
+      background: #A72703;
+    }
+
+    .point-mert small {
+      left: 115px;
+      top: 25px;
+    }
+
+    .point-ece {
+      left: 53%;
+      top: 12%;
+    }
+
+    .point-ece span {
+      background: #A72703;
+    }
+
+    .point-ece small {
+      left: 120px;
+      top: 32px;
+    }
+
+    .point-arda {
+      left: 39%;
+      top: 55%;
+    }
+
+    .point-arda span {
+      background: #A72703;
+    }
+
+    .point-arda small {
+      right: 120px;
+      top: 30px;
+    }
+
+    .point-zeynep {
+      left: 60%;
+      top: 70%;
+    }
+
+    .point-zeynep span {
+      background: #A72703;
+    }
+
+    .point-zeynep small {
+      left: 120px;
+      top: 43px;
+    }
+
+    .building-point {
+      left: 61%;
+      top: 40%;
+      width: 170px;
+      background: rgba(255,255,255,0.92);
+      border: 4px solid #A72703;
+      border-radius: 22px;
+      padding: 12px;
+      box-shadow: 0 0 0 5px rgba(206, 115, 115, 0.2), 0 8px 18px rgba(0,0,0,0.3);
+    }
+
+    .building-point > span {
+      font-size: 38px;
+    }
+
+    .building-point b {
+      display: block;
+      color: #b91c1c;
+      font-size: 17px;
+    }
+
+    .building-point small {
+      display: block;
+      color: #111827;
+      font-weight: 800;
+      margin-top: 4px;
+    }
+
+    .point-haber {
+  width: 135px;
+  padding: 8px;
+  border-width: 3px;
+  border-radius: 18px;
+}
+
+.point-haber > span {
+  font-size: 28px;
+}
+
+.point-haber b {
+  font-size: 14px;
+  line-height: 1.05;
+}
+
+.point-haber small {
+  font-size: 11px;
+  line-height: 1.1;
+  margin-top: 3px;
+}
+
+    .done-mark {
+      display: none;
+      position: absolute;
+      right: 0;
+      top: 0;
+      width: 44px;
+      height: 44px;
+      border-radius: 50%;
+      background: #22c55e;
+      color: white;
+      border: 4px solid white;
+      font-size: 28px;
+      font-weight: 900;
+      align-items: center;
+      justify-content: center;
+      box-shadow: 0 6px 12px rgba(0,0,0,0.3);
+    }
+
+    .solved .done-mark {
+      display: flex;
+    }
+
+    .solved img {
+      box-shadow: 0 0 0 6px #22c55e, 0 0 30px #bef264;
+    }
+
+    .mission-panel {
+      position: absolute;
+      left: 8px;
+      top: 12px;
+      bottom: 10px;
+      width: 290px;
+      background: #e9f7ff;
+      border: 5px solid #84994F;
+      border-radius: 28px;
+      padding: 10px;
+      z-index: 6;
+      box-shadow: 0 10px 25px rgba(0,0,0,0.35);
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    .mission-panel h2 {
+      margin: 0 0 4px;
+      background: linear-gradient(180deg, #FCB53B, #FCB53B);
+      color: white;
+      border-radius: 20px;
+      padding: 10px;
+      font-size: 26px;
+      text-align: center;
+      text-shadow: 2px 2px #062e64;
+    }
+
+    .mission-item {
+      display: grid;
+      grid-template-columns: 58px 1fr 28px;
+      gap: 6px;
+      align-items: center;
+      background: #fff8e7;
+      border: 3px solid #FCB53B;
+      border-radius: 18px;
+      padding: 7px 8px;
+    }
+
+    .mission-item h3 {
+      margin: 0;
+      font-size: 16px;
+      color: #111827;
+    }
+
+    .mission-item p {
+      margin: 2px 0 0;
+      font-size: 12px;
+      color: #374151;
+      font-weight: 700;
+    }
+
+    .mission-icon {
+      width: 42px;
+      height: 42px;
+      border-radius: 14px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      font-size: 20px;
+      font-weight: 900;
+      color: white;
+    }
+
+    .yellow { background: #f59e0b; }
+    .green { background: #22c55e; }
+    .blue { background: #3b82f6; }
+    .purple { background: #8b5cf6; }
+    .red { background: #ef4444; }
+
+    .star {
+      font-size: 30px;
+      color: #c7a44b;
+    }
+
+    .mission-item.completed {
+      background: #dcfce7;
+      border-color: #22c55e;
+    }
+
+    .mission-item.completed .star {
+      color: #f59e0b;
+    }
+
+    .guide-btn {
+      margin-top: auto;
+      border: none;
+      border-radius: 20px;
+      background: linear-gradient(180deg, #fbbf24, #FCB53B);
+      color: white;
+      font-size: 18px;
+      font-weight: 900;
+      padding: 10px;
+      cursor: pointer;
+      box-shadow: 0 6px 0 #92400e;
+      text-shadow: 2px 2px #92400e;
+    }
+
+    .modal {
+      position: fixed;
+      inset: 0;
+      background: rgba(2, 8, 23, 0.72);
+      display: none;
+      justify-content: center;
+      align-items: center;
+      z-index: 50;
+      padding: 20px;
+    }
+
+    .modal.active {
+      display: flex;
+    }
+
+    .modal-card {
+      width: min(760px, 95vw);
+      max-height: 92vh;
+      overflow-y: auto;
+      background: #f8fbff;
+      border: 6px solid #A72703;
+      border-radius: 30px;
+      padding: 24px;
+      position: relative;
+      box-shadow: 0 20px 50px rgba(0,0,0,0.45);
+    }
+
+    .small-card {
+      width: min(560px, 95vw);
+    }
+
+    .close-btn {
+      position: absolute;
+      right: 18px;
+      top: 14px;
+      width: 42px;
+      height: 42px;
+      border: none;
+      border-radius: 50%;
+      background: #ef4444;
+      color: white;
+      font-size: 30px;
+      font-weight: 900;
+      cursor: pointer;
+    }
+
+    .modal-header {
+      display: flex;
+      gap: 18px;
+      align-items: center;
+      padding-right: 45px;
+    }
+
+    .modal-header img {
+      width: 125px;
+      height: 125px;
+      object-fit: cover;
+      object-position: top;
+      border-radius: 26px;
+      border: 4px solid #F96E5B;
+      background: white;
+    }
+
+    .modal-header h2 {
+      margin: 0;
+      color: #F96E5B;
+      font-size: 32px;
+    }
+
+    .modal-header p {
+      margin: 8px 0 0;
+      font-size: 20px;
+      font-weight: 800;
+      color: #111827;
+    }
+
+    .clue-area,
+    .choice-area {
+      margin-top: 18px;
+      background: white;
+      border: 3px solid #F96E5B;
+      border-radius: 22px;
+      padding: 16px;
+    }
+
+    .clue-area h3,
+    .choice-area h3 {
+      margin: 0 0 12px;
+      color: #0f172a;
+    }
+
+    .clue-buttons {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+
+    .clue-btn {
+      border: none;
+      border-radius: 16px;
+      background: linear-gradient(180deg, #F96E5B, #F96E5B);
+      color: white;
+      font-weight: 900;
+      padding: 12px 18px;
+      cursor: pointer;
+      font-size: 16px;
+      box-shadow: 0 4px 0 #F96E5B;
+    }
+
+    .clue-btn.used {
+      background: #FCB53B;
+      box-shadow: 0 4px 0 #FCB53B;
+    }
+
+    #clueList {
+      margin: 14px 0 0;
+      padding-left: 22px;
+      font-size: 17px;
+      font-weight: 700;
+    }
+
+    #clueList li {
+      margin-bottom: 8px;
+    }
+
+    #choices {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 12px;
+    }
+
+    .choice-btn {
+      border: 3px solid #F96E5B;
+      background: #FCB53B;
+      border-radius: 16px;
+      padding: 13px;
+      cursor: pointer;
+      font-weight: 900;
+      font-size: 16px;
+      color: #0f172a;
+    }
+
+    .choice-btn:disabled {
+      opacity: 0.45;
+      cursor: not-allowed;
+    }
+
+    .choice-btn:hover:not(:disabled) {
+      background: #FFE797;
+      transform: scale(1.02);
+    }
+
+    #feedback {
+      min-height: 34px;
+      margin: 16px 0 0;
+      font-size: 18px;
+      font-weight: 900;
+      text-align: center;
+    }
+
+    .feedback-correct {
+      color: #84994F;
+    }
+
+    .feedback-wrong {
+      color: #A72703;
+    }
+
+    .final-card {
+      text-align: center;
+    }
+
+    .final-card h2 {
+      font-size: 42px;
+      color: #A72703;
+    }
+
+    .badge-big {
+      display: inline-block;
+      background: linear-gradient(180deg, #f59e0b, #f59e0b);
+      color: #ffffff;
+      border: 6px solid #f59e0b;
+      border-radius: 28px;
+      padding: 22px 34px;
+      font-size: 34px;
+      font-weight: 900;
+      box-shadow: 0 10px 0 #92400e;
+      margin: 10px 0 22px;
+    }
+
+    .final-score {
+      font-size: 24px;
+      font-weight: 900;
+    }
+
+    .play-again {
+      border: none;
+      border-radius: 20px;
+      background: #FCB53B;
+      color: white;
+      font-size: 22px;
+      font-weight: 900;
+      padding: 14px 24px;
+      cursor: pointer;
+    }
+    .restart-card {
+  width: min(460px, 90vw);
+  text-align: center;
+  background: linear-gradient(180deg, #e0f7ff, #ffffff);
+  border: 6px solid #A72703;
+    }
+
+    .restart-card h2 {
+      margin: 0 0 12px;
+      font-size: 32px;
+      color: #f59e0b;
+    }
+
+    .restart-card p {
+      font-size: 20px;
+      font-weight: 800;
+      color: #1f2937;
+      margin-bottom: 24px;
+    }
+
+    .restart-actions {
+      display: flex;
+      justify-content: center;
+      gap: 14px;
+      flex-wrap: wrap;
+    }
+
+    .restart-actions button {
+      border: none;
+      border-radius: 18px;
+      padding: 14px 24px;
+      font-size: 18px;
+      font-weight: 900;
+      cursor: pointer;
+      color: white;
+    }
+
+    .restart-yes {
+      background: linear-gradient(180deg, #84994F, #84994F);
+      box-shadow: 0 5px 0 #84994F;
+    }
+
+    .restart-no {
+      background: linear-gradient(180deg, #f59e0b, #f59e0b);
+      box-shadow: 0 5px 0 #f59e0b;
+    }
+
+    .restart-actions button:hover {
+      transform: translateY(2px);
+    }
+
+    @media (max-width: 1100px) {
+      body {
+        overflow: auto;
+      }
+
+      .game-shell {
+        height: auto;
+        min-height: 100vh;
+      }
+
+      .top-bar {
+        height: auto;
+        flex-wrap: wrap;
+      }
+
+      .game-map {
+        height: 780px;
+      }
+
+      .mission-panel {
+        width: 300px;
+      }
+
+      .detective-speech {
+        font-size: 22px;
+        width: 210px;
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+  <div class="game-shell">
+
+    <header class="top-bar">
+
+      <div class="title-area">
+        <h1>Etik Dedektif: Dijital Mahalle</h1>
+      </div>
+
+      <div class="score-box">
+        ⭐ <span id="score">0</span>
+      </div>
+
+      <div class="progress-box">
+        <span>İlerleme</span>
+        <div class="progress-bar">
+          <div id="progressFill"></div>
+        </div>
+        <b id="progressText">0/5</b>
+      </div>
+
+      <button class="icon-btn" id="restartBtn">↻</button>
+    </header>
+
+    <main class="game-map">
+
+      <img src="{{ url_for('static', filename='games/Grade5/5_unit4_w1/dedektif.png') }}" class="detective" alt="Etik Dedektif">
+
+
+      <button class="character-point point-mert" data-id="mert">
+        <img src="{{ url_for('static', filename='games/Grade5/5_unit4_w1/mert.png') }}" alt="Mert">
+        <span>Mert</span>
+        <small>Kaynak göstermeden ödev kullandım.</small>
+        <div class="done-mark">✓</div>
+      </button>
+
+      <button class="character-point point-ece" data-id="ece">
+        <img src="{{ url_for('static', filename='games/Grade5/5_unit4_w1/ece.png') }}" alt="Ece">
+        <span>Ece</span>
+        <small>İzinsiz fotoğraf paylaştım.</small>
+        <div class="done-mark">✓</div>
+      </button>
+
+      <button class="character-point point-arda" data-id="arda">
+        <img src="{{ url_for('static', filename='games/Grade5/5_unit4_w1/arda.png') }}" alt="Arda">
+        <span>Arda</span>
+        <small>Arkadaşımın şifresini denedim.</small>
+        <div class="done-mark">✓</div>
+      </button>
+
+      <button class="character-point point-zeynep" data-id="zeynep">
+        <img src="{{ url_for('static', filename='games/Grade5/5_unit4_w1/zeynep.png') }}" alt="Zeynep">
+        <span>Zeynep</span>
+        <small>Kırıcı yorum yazdım.</small>
+        <div class="done-mark">✓</div>
+      </button>
+
+      <button class="building-point point-haber" data-id="haber">
+        <span>📱</span>
+        <b>Sosyal Medya Durağı</b>
+        <small>Sahte haber paylaşıldı!</small>
+        <div class="done-mark">✓</div>
+      </button>
+
+      <aside class="mission-panel">
+        <h2>🛡️ Görevler</h2>
+
+        <div class="mission-item" data-topic="Gizlilik ve mahremiyet">
+          <div class="mission-icon yellow">🔒</div>
+          <div>
+            <h3>Gizlilik</h3>
+            <p>Kişisel bilgileri koru.</p>
+          </div>
+          <span class="star">☆</span>
+        </div>
+
+        <div class="mission-item" data-topic="Emeğe saygı">
+          <div class="mission-icon green">©</div>
+          <div>
+            <h3>Telif ve Emeğe Saygı</h3>
+            <p>Kaynak göstermeyi öğren.</p>
+          </div>
+          <span class="star">☆</span>
+        </div>
+
+        <div class="mission-item" data-topic="Güvenli davranış">
+          <div class="mission-icon blue">✓</div>
+          <div>
+            <h3>Güvenli Davranış</h3>
+            <p>Şifre ve hesap güvenliği.</p>
+          </div>
+          <span class="star">☆</span>
+        </div>
+
+        <div class="mission-item" data-topic="Saygılı iletişim">
+          <div class="mission-icon purple">💬</div>
+          <div>
+            <h3>Saygılı İletişim</h3>
+            <p>Dijital ortamda nazik ol.</p>
+          </div>
+          <span class="star">☆</span>
+        </div>
+
+        <div class="mission-item" data-topic="Doğru bilgi paylaşımı">
+          <div class="mission-icon red">!</div>
+          <div>
+            <h3>Doğru Bilgi</h3>
+            <p>Bilgiyi kontrol et.</p>
+          </div>
+          <span class="star">☆</span>
+        </div>
+
+        <button id="guideBtn" class="guide-btn">Oyun Kılavuzu</button>
+      </aside>
+
+    </main>
+  </div>
+
+  <div class="modal" id="taskModal">
+    <div class="modal-card">
+
+      <button class="close-btn" id="closeModal">×</button>
+
+      <div class="modal-header">
+        <img id="modalImage" src="" alt="">
+        <div>
+          <h2 id="modalTitle"></h2>
+          <p id="modalScenario"></p>
+        </div>
+      </div>
+
+      <div class="clue-area">
+        <h3>🔎 İpuçlarını Topla</h3>
+
+        <div class="clue-buttons">
+          <button class="clue-btn" data-clue="0">1. İpucu</button>
+          <button class="clue-btn" data-clue="1">2. İpucu</button>
+          <button class="clue-btn" data-clue="2">3. İpucu</button>
+        </div>
+
+        <ul id="clueList"></ul>
+      </div>
+
+      <div class="choice-area">
+        <h3>Bu olay hangi etik ilkeyle ilgilidir?</h3>
+        <div id="choices"></div>
+      </div>
+
+      <p id="feedback"></p>
+
+    </div>
+  </div>
+
+  <div class="modal" id="guideModal">
+    <div class="modal-card small-card">
+      <button class="close-btn" id="closeGuide">×</button>
+
+      <h2>Oyun Kılavuzu</h2>
+
+      <ol>
+        <li>Oyunun amacı, dijital etik konularında bilinçli ve sorumlu davranışlar geliştirmektir.</li>
+        <li>Her olay, belirli bir etik ilkeyle ilgilidir.</li>
+        <li>Öğrencilerin üzerine tıklayarak vakaları çözmeye başla!</li>
+        <li>İpucularına tıklayarak bilgi topla.</li>
+        <li>Sosyal medya durağına uğramayı unutma.</li>
+        <li>Oyunu tamamlamak için mahallede yaşanan her olayı çözmelisin.</li>
+        <li>Tüm vakaları çöz oyunu tamamla!</li>
+      </ol>
+    </div>
+  </div>
+
+  <div class="modal" id="finalModal">
+    <div class="modal-card final-card">
+      <h2>🏆 Tebrikler!</h2>
+      <div class="badge-big">Dijital Etik Uzmanı</div>
+      <p>Tüm olayları çözdün ve Dijital Mahalle’yi daha güvenli hale getirdin.</p>
+      <p class="final-score">Toplam Puan: <span id="finalScore">0</span></p>
+      <button onclick="location.reload()" class="play-again">Yeniden Oyna</button>
+    </div>
+  </div>
+
+  <div class="modal" id="restartModal">
+  <div class="modal-card restart-card">
+    <h2>Oyunu Yeniden Başlat</h2>
+    <p>Oyunu yeniden başlatmak istediğine emin misin?</p>
+
+    <div class="restart-actions">
+      <button id="restartYes" class="restart-yes">Yeniden Başlat</button>
+      <button id="restartNo" class="restart-no">Vazgeç</button>
+    </div>
+  </div>
+</div>
+  <script>
+    document.querySelector(".game-map").style.backgroundImage =
+    "url('{{ url_for('static', filename='games/Grade5/5_unit4_w1/mahalle.png') }}')";
+    const missions = {
+      mert: {
+        name: "Mert",
+        image: "{{ url_for('static', filename='games/Grade5/5_unit4_w1/mert.png') }}",
+        scenario: "Mert, internetten bulduğu bir yazıyı kaynak göstermeden ödevinde kullandı.",
+        correct: "Emeğe saygı",
+        topic: "Emeğe saygı",
+        clues: [
+          "Yazı Mert'e ait değil.",
+          "İnternetten alınan bilgilerin kaynağı belirtilmelidir.",
+          "Başkasının emeğini kendi emeğimiz gibi göstermek etik değildir."
+        ],
+        explanation: "Bu olay emeğe saygı ile ilgilidir çünkü Mert başkasına ait bir içeriği kaynak göstermeden kullanmıştır."
+      },
+
+      ece: {
+        name: "Ece",
+        image: "{{ url_for('static', filename='games/Grade5/5_unit4_w1/ece.png') }}",
+        scenario: "Ece, arkadaşının fotoğrafını izin almadan sınıf grubunda paylaştı.",
+        correct: "Gizlilik ve mahremiyet",
+        topic: "Gizlilik ve mahremiyet",
+        clues: [
+          "Fotoğraf Ece'ye ait değil.",
+          "Paylaşmadan önce izin alınmamış.",
+          "Kişisel fotoğraflar izinsiz paylaşılmamalıdır."
+        ],
+        explanation: "Bu olay gizlilik ve mahremiyetle ilgilidir çünkü bir kişinin fotoğrafı izinsiz paylaşılmıştır."
+      },
+
+      arda: {
+        name: "Arda",
+        image: "{{ url_for('static', filename='games/Grade5/5_unit4_w1/arda.png') }}",
+        scenario: "Arda, arkadaşının şifresini tahmin ederek hesabına girmeye çalıştı.",
+        correct: "Güvenli davranış",
+        topic: "Güvenli davranış",
+        clues: [
+          "Şifre kişiye özeldir.",
+          "Başkasının hesabına izinsiz girmeye çalışmak yanlıştır.",
+          "Hesap güvenliği herkesin sorumluluğudur."
+        ],
+        explanation: "Bu olay güvenli davranışla ilgilidir çünkü başkasının şifresini denemek ve hesabına girmeye çalışmak doğru değildir."
+      },
+
+      zeynep: {
+        name: "Zeynep",
+        image: "{{ url_for('static', filename='games/Grade5/5_unit4_w1/zeynep.png') }}",
+        scenario: "Zeynep, oyun sohbetinde başka bir oyuncuya kırıcı bir yorum yazdı.",
+        correct: "Saygılı iletişim",
+        topic: "Saygılı iletişim",
+        clues: [
+          "Yorum karşıdaki kişiyi üzebilir.",
+          "Dijital ortamda da yüz yüze konuşuyormuş gibi saygılı olunmalıdır.",
+          "Hakaret ve alay içeren ifadeler etik değildir."
+        ],
+        explanation: "Bu olay saygılı iletişimle ilgilidir çünkü dijital ortamda da başkalarına nazik ve saygılı davranmalıyız."
+      },
+
+      haber: {
+        name: "Sosyal Medya Durağı",
+        image: "{{ url_for('static', filename='games/Grade5/5_unit4_w1/dedektif.png') }}",
+        scenario: "Mahalle grubunda doğruluğu kontrol edilmeden bir haber paylaşıldı.",
+        correct: "Doğru bilgi paylaşımı",
+        topic: "Doğru bilgi paylaşımı",
+        clues: [
+          "Haberin kaynağı belli değil.",
+          "Yanlış bilgi başkalarını yanıltabilir.",
+          "Paylaşmadan önce güvenilir kaynaklardan kontrol edilmelidir."
+        ],
+        explanation: "Bu olay doğru bilgi paylaşımıyla ilgilidir çünkü güvenilirliği kontrol edilmeyen bilgiler paylaşılmamalıdır."
+      }
+    };
+
+    const choices = [
+      "Gizlilik ve mahremiyet",
+      "Telif hakkı",
+      "Saygılı iletişim",
+      "Doğru bilgi paylaşımı",
+      "Emeğe saygı",
+      "Güvenli davranış"
+    ];
+
+    let currentMissionId = null;
+    let openedClues = [];
+    let solvedCount = 0;
+    let score = 0;
+    let solvedMissions = [];
+
+    const totalMissions = Object.keys(missions).length;
+
+    const taskModal = document.getElementById("taskModal");
+    const guideModal = document.getElementById("guideModal");
+    const finalModal = document.getElementById("finalModal");
+
+    const modalImage = document.getElementById("modalImage");
+    const modalTitle = document.getElementById("modalTitle");
+    const modalScenario = document.getElementById("modalScenario");
+    const clueList = document.getElementById("clueList");
+    const choicesArea = document.getElementById("choices");
+    const feedback = document.getElementById("feedback");
+
+    const scoreText = document.getElementById("score");
+    const progressFill = document.getElementById("progressFill");
+    const progressText = document.getElementById("progressText");
+    const finalScore = document.getElementById("finalScore");
+
+    document.querySelectorAll(".character-point, .building-point").forEach(point => {
+      point.addEventListener("click", (e) => {
+        e.preventDefault();
+        e.stopPropagation();
+
+        const id = point.dataset.id;
+        openMission(id);
+      });
+    });
+
+    function openMission(id) {
+      currentMissionId = id;
+      openedClues = [];
+
+      const mission = missions[id];
+
+      modalImage.src = mission.image;
+      modalTitle.textContent = mission.name;
+      modalScenario.textContent = mission.scenario;
+
+      clueList.innerHTML = "";
+      feedback.textContent = "";
+      feedback.className = "";
+
+      document.querySelectorAll(".clue-btn").forEach(btn => {
+        btn.classList.remove("used");
+        btn.disabled = false;
+      });
+
+      createChoices(false);
+
+      taskModal.classList.add("active");
+    }
+
+    function createChoices(enabled) {
+      choicesArea.innerHTML = "";
+
+      choices.forEach(choice => {
+        const btn = document.createElement("button");
+        btn.className = "choice-btn";
+        btn.textContent = choice;
+        btn.disabled = !enabled;
+
+        btn.addEventListener("click", () => checkAnswer(choice));
+
+        choicesArea.appendChild(btn);
+      });
+    }
+
+    document.querySelectorAll(".clue-btn").forEach(btn => {
+      btn.addEventListener("click", () => {
+        const clueIndex = Number(btn.dataset.clue);
+        const mission = missions[currentMissionId];
+
+        if (!openedClues.includes(clueIndex)) {
+          openedClues.push(clueIndex);
+
+          const li = document.createElement("li");
+          li.textContent = mission.clues[clueIndex];
+          clueList.appendChild(li);
+
+          btn.classList.add("used");
+          btn.disabled = true;
+        }
+
+        if (openedClues.length === 3) {
+          createChoices(true);
+          feedback.textContent = "Tüm ipuçlarını topladın. Şimdi doğru etik ilkeyi seç!";
+          feedback.className = "";
+        }
+      });
+    });
+
+    function checkAnswer(selectedChoice) {
+      const mission = missions[currentMissionId];
+
+      if (selectedChoice === mission.correct) {
+        feedback.textContent = "Doğru! " + mission.explanation;
+        feedback.className = "feedback-correct";
+
+        setTimeout(() => {
+          completeMission(currentMissionId);
+          taskModal.classList.remove("active");
+        }, 1700);
+
+      } else {
+        feedback.textContent = "Tekrar düşün. İpuçlarını olayla birlikte yorumlamalısın.";
+        feedback.className = "feedback-wrong";
+        score = Math.max(0, score - 10);
+        updateScore();
+      }
+    }
+
+    function completeMission(id) {
+    const point = document.querySelector(`[data-id="${id}"]`);
+
+    if (!solvedMissions.includes(id)) {
+      solvedMissions.push(id);
+
+      point.classList.add("solved");
+      solvedCount++;
+      score += 100;
+
+      updateScore();
+      updateProgress();
+      completePanelTopic(missions[id].topic);
+    }
+
+    if (solvedCount === totalMissions) {
+      setTimeout(showFinal, 700);
+    }
+  }
+
+    function completePanelTopic(topic) {
+      document.querySelectorAll(".mission-item").forEach(item => {
+        if (item.dataset.topic === topic) {
+          item.classList.add("completed");
+          item.querySelector(".star").textContent = "★";
+        }
+      });
+    }
+
+    function updateScore() {
+      scoreText.textContent = score;
+    }
+
+    function updateProgress() {
+      const percent = (solvedCount / totalMissions) * 100;
+      progressFill.style.width = percent + "%";
+      progressText.textContent = solvedCount + "/" + totalMissions;
+    }
+
+    function showFinal() {
+        finalScore.textContent = score;
+        finalModal.classList.add("active");
+
+        // -----------------------
+        // PUANI DATABASE'E GÖNDER
+        // -----------------------
+        fetch("/save-progress", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            credentials: "same-origin", // session cookie gönderimi
+            body: JSON.stringify({
+                game_key: "5_unit4_w1",  // GAME_INFO ile eşleşmeli
+                score: score
+            })
+        })
+        .then(res => res.json())
+        .then(data => {
+            if (data.success) console.log("Skor kaydedildi:", score, data);
+            else console.warn("Skor kaydedilemedi:", data.error);
+        })
+        .catch(err => console.error("Fetch hatası:", err));
+    }
+
+    document.getElementById("closeModal").addEventListener("click", () => {
+      taskModal.classList.remove("active");
+    });
+
+    document.getElementById("guideBtn").addEventListener("click", () => {
+      guideModal.classList.add("active");
+    });
+
+    document.getElementById("closeGuide").addEventListener("click", () => {
+      guideModal.classList.remove("active");
+    });
+
+    const restartModal = document.getElementById("restartModal");
+
+    document.getElementById("restartBtn").addEventListener("click", () => {
+      restartModal.classList.add("active");
+    });
+
+    document.getElementById("restartYes").addEventListener("click", () => {
+      location.reload();
+    });
+
+    document.getElementById("restartNo").addEventListener("click", () => {
+      restartModal.classList.remove("active");
+    });
+
+    window.addEventListener("click", (e) => {
+      if (e.target === taskModal) {
+        taskModal.classList.remove("active");
+      }
+
+      if (e.target === guideModal) {
+        guideModal.classList.remove("active");
+      }
+    });
+  </script>
+
+</body>
+</html>
