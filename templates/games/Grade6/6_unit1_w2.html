@@ -698,6 +698,7 @@
             resultScore.textContent = `${score} Puan`;
             correctWrongRatio.textContent = `Toplam 5 sorudan ${correctAnswersCount} tanesini doğru tahmin ettin!`;
             
+            // --- Değerlendirme mesajları ---
             if (score === 100) {
                 evaluationMsg.textContent = "🧙‍♂️ Mükemmel! Geleceğin Baş Kahini Sensin! Teknolojik gelişim örüntülerini kusursuz yakaladın ve tüm çıkarımları doğru yaptın. 🚀";
             } else if (score === 80) {
@@ -711,6 +712,25 @@
             } else {
                 evaluationMsg.textContent = "💡 Henüz kahin gücün uyanmadı! Sorun değil; geçmişten günümüze teknolojilerin nasıl değiştiğini dikkatlice inceleyip tekrar dene.";
             }
+
+            // -----------------------
+            // PUANI VERİTABANINA GÖNDER
+            // -----------------------
+            fetch("/save-progress", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                credentials: "same-origin", // session cookie gönderimi
+                body: JSON.stringify({
+                    game_key: "6_unit1_w2", // GAME_INFO ile eşleşmeli
+                    score: score
+                })
+            })
+            .then(res => res.json())
+            .then(data => {
+                if (data.success) console.log("Skor kaydedildi:", score, data);
+                else console.warn("Skor kaydedilemedi:", data.error);
+            })
+            .catch(err => console.error("Fetch hatası:", err));
         }
 
         function restartGame() {

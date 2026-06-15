@@ -1174,49 +1174,48 @@
       showToast(paused ? 'Sistem duraklatıldı. P ile devam edebilirsin.' : 'Sistem yeniden aktif!');
     }
 
-    function endGame(reason) {
-      if (!gameActive) return;
-      gameActive = false;
-      paused = false;
-      clearInterval(timerInterval);
-      clearTimeout(spawnTimeout);
-      removeCurrentCard();
-      updateHud();
+    function endGame() {
+    // Oyun bitişi durumunu ayarla
+    gameRunning = false;
+    clearInterval(spawnTimer);
+    clearInterval(questionTimer);
 
-      const highScore = score >= 80;
-      if (highScore) fireConfetti();
+    // Oyun ekranını ve bitiş ekranını göster
+    document.querySelectorAll(".item").forEach(i => i.remove());
+    document.getElementById("gameScreen").classList.remove("active");
+    document.getElementById("endScreen").classList.add("active");
 
-      const title = highScore ? 'Sistem Mükemmel Eğitildi!' : 'Veri Deposu Kararsız Kaldı!';
-      const robot = highScore ? 'https://cdn-icons-png.flaticon.com/512/4712/4712109.png' : 'https://cdn-icons-png.flaticon.com/512/4712/4712035.png';
-      const message = highScore
-        ? `Harika arşivci! Güvenilir girdileri seçtin ve yapay zekâ sistemini güçlendirdin.`
-        : `Biraz daha kaynak kontrolü gerekiyor. Güvenilir bilgiyi kaydet, şüpheli bilgiyi imha et!`;
-
-      Swal.fire({
-        title: title,
-        html: `
-          <div style="font-family:Poppins,sans-serif;color:#d7ddff;">
-            <img src="${robot}" alt="Robot" style="width:118px;margin:8px auto 12px;display:block;filter:drop-shadow(0 0 12px rgba(95,251,255,.55));">
-            <p style="margin:0 0 10px;">${message}</p>
-            <div style="font-family:Rajdhani,sans-serif;font-size:34px;font-weight:700;color:${highScore ? '#39ff9a' : '#ff3864'};">
-              Skor: ${score}
-            </div>
-            <p style="margin:8px 0 0;font-size:13px;color:#aeb8e8;">Kaydedilen güvenilir veri: ${saved}</p>
-          </div>
-        `,
-        background: 'linear-gradient(145deg, #101638, #160926)',
-        color: '#ffffff',
-        confirmButtonText: 'Tekrar Oyna',
-        confirmButtonColor: highScore ? '#39ff9a' : '#ff3864',
-        allowOutsideClick: false,
-        customClass: {
-          popup: 'animate__animated animate__zoomIn'
-        }
-      }).then(() => {
-        startScreen.style.display = 'grid';
-        resetGame();
-      });
+    // Skoru ve mesajları güncelle
+    document.getElementById("finalScore").textContent = score;
+    let message = "";
+    if (score >= 3000) {
+        message = `${selectedName}, siber veri deposunda harika ilerledin! Tüm güvenilir verileri topladın.`;
+    } else if (score >= 1500) {
+        message = `${selectedName}, iyi iş çıkardın! Bazı veriler gözden kaçmış olabilir.`;
+    } else {
+        message = `${selectedName}, biraz dikkatli ol! Doğru verileri toplayarak tekrar dene.`;
     }
+    document.getElementById("finalMessage").textContent = message;
+
+    // -----------------------
+    // PUANI VERİTABANINA GÖNDER
+    // -----------------------
+    fetch("/save-progress", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        credentials: "same-origin", // session cookie gönderimi
+        body: JSON.stringify({
+            game_key: "6_unit5_w1",  // GAME_INFO ile eşleşmeli
+            score: score             // JS’deki skor değişkeni
+        })
+    })
+    .then(res => res.json())
+    .then(data => {
+        if (data.success) console.log("Skor kaydedildi:", score, data);
+        else console.warn("Skor kaydedilemedi:", data.error);
+    })
+    .catch(err => console.error("Fetch hatası:", err));
+}
 
     function fireConfetti() {
       const duration = 1800;

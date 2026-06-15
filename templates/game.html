@@ -33,7 +33,7 @@
             <div class="unit-icon"><i class="fa-solid fa-laptop-code"></i></div>
             <div class="unit-info">
                 <h1>{{ game.level }} · {{ game.unit }}</h1>
-                <span>{{ game.subtitle }}</span>
+                <span class="subtitle">{{ game_description }}</span>
             </div>
     </div>
 
@@ -92,7 +92,7 @@
 
                     <h2>Nasıl Oynanır?</h2>
 
-                    <p>{{ how_to_play }}</p>
+                    <p>{{ how_to_play | replace('\n', '<br>') | safe }}</p>
 
                     <button class="how-to-play-start-btn" id="startGameOverlayBtn">
                         Oyuna Başla 🚀

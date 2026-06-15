@@ -455,6 +455,40 @@
       applyTransformations();
       bubble.classList.add('hidden');
     }
+
+
+    // PUANI DATABASE'E GÖNDER
+function saveMiniCodeScore() {
+    // Tüm bloklar doğru mu kontrol et veya mevcut skor değişkenini kullan
+    const blocks = document.querySelectorAll('.workspace-block');
+    let correctCount = 0;
+    blocks.forEach(block => {
+        if (block.dataset.correct === "true") correctCount++;
+    });
+
+    const score = Math.round((correctCount / blocks.length) * 100); // 0-100 arası puan
+
+    fetch("/save-progress", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        credentials: "same-origin",
+        body: JSON.stringify({
+            game_key: "6_unit6_w2", // GAME_INFO ile eşleşmeli
+            score: score
+        })
+    })
+    .then(res => res.json())
+    .then(data => {
+        if (data.success) console.log("Skor kaydedildi:", score, data);
+        else console.warn("Skor kaydedilemedi:", data.error);
+    })
+    .catch(err => console.error("Fetch hatası:", err));
+}
+
+// Örneğin Yeşil Bayrak tıklandığında veya oyunun bitiminde çağır
+document.getElementById('greenFlagBtn').addEventListener('click', () => {
+    saveMiniCodeScore();
+});
   </script>
 </body>
 </html>

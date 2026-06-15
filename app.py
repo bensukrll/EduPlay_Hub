@@ -148,18 +148,18 @@ GAME_INFO = {
     # 6. SINIF - ÜNİTE 1
     # =========================
     "6_unit1_w1": {
-        "title": "Bilişim Kavramları",
+        "title": "Yenilikçi Bilişim Kavramları",
         "subtitle": "Bilişim teknolojileriyle ilgili temel kavramları eşleştir!",
-        "unit": "Bilişim Teknolojilerinin Temelleri",
+        "unit": "Bilişim Teknolojilerinin Hayatımızdaki Yeri",
         "level": "6. Sınıf",
         "icon": "💡",
         "template": "6_unit1_w1"
     },
 
     "6_unit1_w2": {
-        "title": "Donanım ve Yazılım",
-        "subtitle": "Bilgisayar sistemindeki donanım ve yazılım örneklerini ayırt et!",
-        "unit": "Bilişim Teknolojilerinin Temelleri",
+        "title": "Teknoloji Kahini: Geleceği Tahmin Et 🔮",
+        "subtitle": "Geçmişten günümüze gelen teknolojik gelişim örüntülerini incele ve geleceği tahmin et!",
+        "unit": "Bilişim Teknolojilerinin Hayatımızdaki Yeri",
         "level": "6. Sınıf",
         "icon": "🖥️",
         "template": "6_unit1_w2"
@@ -178,9 +178,9 @@ GAME_INFO = {
     },
 
     "6_unit2_w2": {
-        "title": "Siber Güvenlik Görevi",
-        "subtitle": "Siber güvenlik risklerini ve korunma yollarını doğru eşleştir!",
-        "unit": "Bilişim Etiği ve Siber Güvenlik",
+        "title": "Veri Analisti Görevde 📊",
+        "subtitle": "Gerçek yaşam problemlerini çözmek için veri analisti rolünü üstlen!",
+        "unit": "Dijital Ürün Tasarım ve Geliştirme",
         "level": "6. Sınıf",
         "icon": "🔐",
         "template": "6_unit2_w2"
@@ -190,8 +190,8 @@ GAME_INFO = {
     # 6. SINIF - ÜNİTE 3
     # =========================
     "6_unit3_w1": {
-        "title": "Ağ Türleri",
-        "subtitle": "Ağ türlerini özelliklerine göre doğru şekilde sınıflandır!",
+        "title": "İnternet Dedektifi: Doğru Arama Görevi 🔎",
+        "subtitle": "Arama motorlarını ve internet teknolojilerini doğru şekilde kullanarak bilgiye ulaş!",
         "unit": "Bilgisayar Ağları ve İletişim",
         "level": "6. Sınıf",
         "icon": "📡",
@@ -199,8 +199,8 @@ GAME_INFO = {
     },
 
     "6_unit3_w2": {
-        "title": "Ağ Dedektifi",
-        "subtitle": "Ağ türlerini ve temel ağ bileşenlerini keşfet!",
+        "title": "İnternet Görev Tetrisi 📡",
+        "subtitle": "Arama motorları ve iletişim araçlarını doğru kategoriye yerleştir!",
         "unit": "Bilgisayar Ağları ve İletişim",
         "level": "6. Sınıf",
         "icon": "🕵️‍♀️",
@@ -211,18 +211,18 @@ GAME_INFO = {
     # 6. SINIF - ÜNİTE 4
     # =========================
     "6_unit4_w1": {
-        "title": "Dijital Ürün Planlama",
-        "subtitle": "Bir dijital ürün geliştirmek için gerekli planlama adımlarını sırala!",
-        "unit": "Dijital Ürün Tasarım ve Geliştirme",
+        "title": "Bilişim Etiği Güvenlik Labirenti 🛡️",
+        "subtitle": "Labirentte güvenlik risklerini fark et ve doğru kararlar ver!",
+        "unit": "Bilişim Etiği ve Siber Güvenlik",
         "level": "6. Sınıf",
         "icon": "📝",
         "template": "6_unit4_w1"
     },
 
     "6_unit4_w2": {
-        "title": "Tasarım Kararları",
-        "subtitle": "Dijital ürün tasarımında doğru araç ve yöntemleri seç!",
-        "unit": "Dijital Ürün Tasarım ve Geliştirme",
+        "title": "Siber Kaşif: Güvenli İnternet Koşusu 🏃‍♀️🔐",
+        "subtitle": "Telif hakkı ve siber güvenlik sorularını çözerek dijital dünyada güvenle ilerle!",
+        "unit": "Bilişim Etiği ve Siber Güvenlik",
         "level": "6. Sınıf",
         "icon": "🎯",
         "template": "6_unit4_w2"
@@ -232,8 +232,8 @@ GAME_INFO = {
     # 6. SINIF - ÜNİTE 5
     # =========================
     "6_unit5_w1": {
-        "title": "Yapay Zekâ Nerede?",
-        "subtitle": "Yapay zekâ kullanılan ve kullanılmayan durumları ayırt et!",
+        "title": "Siber Arşivci: Veri Deposu 🗄️🤖",
+        "subtitle": "Sahnedeki robot hareketlerini doğru algoritma bloklarıyla eşleştir!",
         "unit": "Yapay Zekâ",
         "level": "6. Sınıf",
         "icon": "🤖",
@@ -241,8 +241,8 @@ GAME_INFO = {
     },
 
     "6_unit5_w2": {
-        "title": "Akıllı Sistemler",
-        "subtitle": "Yapay zekâ sistemlerinin çalışma mantığını örneklerle keşfet!",
+        "title": "Siber Simyacı: Veri İksiri 🧪✨",
+        "subtitle": "Blokları sıralayarak karakterin hareketlerini ve efektleri oluştur!",
         "unit": "Yapay Zekâ",
         "level": "6. Sınıf",
         "icon": "🧠",
@@ -388,15 +388,17 @@ def play(game_id):
     unit = parts[1]
 
     how_to_play = get_how_to_play_from_json(game_id)
+    game_description = get_description_from_json(game_id)  # ← bu satır eksikti
 
     return render_template(
         "game.html",
         game=game,
+        unit=unit,
         game_id=game_id,
         source=source,
         level=level,
-        unit=unit,
-        how_to_play=how_to_play
+        how_to_play=how_to_play,
+        game_description=game_description
     )
 
 @app.route("/embed/<game_id>")
@@ -528,6 +530,27 @@ def account():
         total_score=total_score,
         teacher_stats=teacher_stats
     )
+
+
+def get_description_from_json(game_id):
+    parts = game_id.split("_")
+    if len(parts) < 3:
+        return ""
+    level = parts[0]
+    unit = parts[1]
+    try:
+        with app.open_resource("static/game_data.json", mode="r", encoding="utf-8") as f:
+            data = json.load(f)
+        return (
+            data
+            .get(level, {})
+            .get(unit, {})
+            .get("description", "")  # ← games'e girmeden ünite description'ı
+        )
+    except Exception as e:
+        print("description okunamadı:", e)
+        return ""
+
 # ==================================================
 #  MAIL GÖNDERME FONKSİYONU
 # ==================================================

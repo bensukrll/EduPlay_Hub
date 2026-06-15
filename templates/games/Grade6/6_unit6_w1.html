@@ -392,27 +392,49 @@
     }
 
     function triggerWin() {
-      updateStars();
-      confetti({ particleCount: 100, spread: 70, origin: { y: 0.6 } });
+  updateStars();
+  confetti({ particleCount: 100, spread: 70, origin: { y: 0.6 } });
 
-      Swal.fire({
-        title: 'Algoritma Uzmanı!',
-        html: `
-          <div class="text-slate-300 text-sm font-sans">
-            <p>Sahnede yürütülen tüm kod çıktılarını başarıyla inceledin ve doğru Scratch blok mimarileriyle eşleştirdin!</p>
-            <p class="text-2xl text-green-400 font-bold mt-3 rajdhani">Toplam Hamle Sayın: ${moves}</p>
-          </div>
-        `,
-        icon: 'success',
-        background: '#0b112c',
-        color: '#fff',
-        confirmButtonText: 'Laboratuvarı Yeniden Başlat',
-        confirmButtonColor: '#2563eb',
-        allowOutsideClick: false
-      }).then(() => {
-        initGame();
-      });
-    }
+  Swal.fire({
+    title: 'Algoritma Uzmanı!',
+    html: `
+      <div class="text-slate-300 text-sm font-sans">
+        <p>Sahnede yürütülen tüm kod çıktılarını başarıyla inceledin ve doğru Scratch blok mimarileriyle eşleştirdin!</p>
+        <p class="text-2xl text-green-400 font-bold mt-3 rajdhani">Toplam Hamle Sayın: ${moves}</p>
+      </div>
+    `,
+    icon: 'success',
+    background: '#0b112c',
+    color: '#fff',
+    confirmButtonText: 'Laboratuvarı Yeniden Başlat',
+    confirmButtonColor: '#2563eb',
+    allowOutsideClick: false
+  }).then(() => {
+    // Oyun tekrar başlatılıyor
+    initGame();
+
+    // -----------------------
+    // PUANI VERİTABANINA GÖNDER
+    // -----------------------
+    const score = Math.round((matchCount / (baseItems.length / 2)) * 100); // 0-100 arası puan
+
+    fetch("/save-progress", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        credentials: "same-origin", // session cookie gönderimi
+        body: JSON.stringify({
+            game_key: "6_unit6_w1",  // GAME_INFO ile eşleşmeli
+            score: score
+        })
+    })
+    .then(res => res.json())
+    .then(data => {
+        if(data.success) console.log("Skor kaydedildi:", score, data);
+        else console.warn("Skor kaydedilemedi:", data.error);
+    })
+    .catch(err => console.error("Fetch hatası:", err));
+  });
+}
 
     window.onload = initGame;
   </script>

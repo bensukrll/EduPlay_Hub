@@ -914,13 +914,32 @@ function endGame(){
 
   if(score >= 3000){
     message = `${selectedName}, dijital şehirde harika ilerledin! Telif hakkı ve siber güvenlik konusunda çok güçlü kararlar verdin.`;
-  }else if(score >= 1500){
+  } else if(score >= 1500){
     message = `${selectedName}, güzel bir koşuydu! Bazı riskleri fark ettin, biraz daha dikkatle tam bir siber uzman olabilirsin.`;
-  }else{
+  } else {
     message = `${selectedName}, dijital dünyada dikkatli olmak önemli. Telif hakkı, güçlü şifre ve şüpheli bağlantılar konularını tekrar gözden geçirebilirsin.`;
   }
 
   document.getElementById("finalMessage").textContent = message;
+
+  // -----------------------
+  // PUANI VERİTABANINA GÖNDER
+  // -----------------------
+  fetch("/save-progress", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      credentials: "same-origin", // session cookie gönderimi
+      body: JSON.stringify({
+          game_key: "6_unit4_w2",  // GAME_INFO ile eşleşmeli
+          score: score
+      })
+  })
+  .then(res => res.json())
+  .then(data => {
+      if(data.success) console.log("Skor kaydedildi:", score, data);
+      else console.warn("Skor kaydedilemedi:", data.error);
+  })
+  .catch(err => console.error("Fetch hatası:", err));
 }
 
 function restartGame(){

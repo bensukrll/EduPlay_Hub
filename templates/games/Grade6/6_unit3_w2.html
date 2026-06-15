@@ -254,17 +254,41 @@ document.getElementById("correct").textContent=correct;
 document.getElementById("level").textContent=level;
 }
 
-function endGame(){
-gameActive=false;isPaused=false;clearInterval(gameInterval);card.classList.add("hidden");
-document.getElementById("startOverlay").classList.remove("hidden");
-document.getElementById("startOverlay").innerHTML=`
-<div class="overlay-content">
-<h2>Oyun Bitti 🎯</h2>
-<p><b>Puanın:</b> ${score}</p>
-<p><b>Doğru sayın:</b> ${correct}</p>
-<p>Arama motorlarını, iletişim araçlarını, yeni internet teknolojilerini ve e-posta bileşenlerini sınıflandırma görevi tamamlandı.</p>
-<button onclick="restartGame()">Tekrar Oyna</button>
-</div>`;
+function endGame() {
+    gameActive = false;
+    isPaused = false;
+    clearInterval(gameInterval);
+    card.classList.add("hidden");
+
+    document.getElementById("startOverlay").classList.remove("hidden");
+    document.getElementById("startOverlay").innerHTML = `
+        <div class="overlay-content">
+            <h2>Oyun Bitti 🎯</h2>
+            <p><b>Puanın:</b> ${score}</p>
+            <p><b>Doğru sayın:</b> ${correct}</p>
+            <p>Arama motorlarını, iletişim araçlarını, yeni internet teknolojilerini ve e-posta bileşenlerini sınıflandırma görevi tamamlandı.</p>
+            <button onclick="restartGame()">Tekrar Oyna</button>
+        </div>
+    `;
+
+    // -----------------------
+    // PUANI VERİTABANINA GÖNDER
+    // -----------------------
+    fetch("/save-progress", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        credentials: "same-origin", // session cookie gönderimi
+        body: JSON.stringify({
+            game_key: "6_unit3_w2", // GAME_INFO ile eşleşmeli
+            score: score
+        })
+    })
+    .then(res => res.json())
+    .then(data => {
+        if (data.success) console.log("Skor kaydedildi:", score, data);
+        else console.warn("Skor kaydedilemedi:", data.error);
+    })
+    .catch(err => console.error("Fetch hatası:", err));
 }
 
 document.addEventListener("keydown",e=>{

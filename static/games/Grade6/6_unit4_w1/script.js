@@ -530,6 +530,25 @@ function gameOver(win) {
     title.style.color = "#ff3333";
     finalMessage.innerText = "Tekrar dene! Canavara daha dikkatli yaklaş ve güvenlik sorularını çözerek ilerle.";
   }
+
+  // -----------------------
+  // PUANI VERİTABANINA GÖNDER
+  // -----------------------
+  fetch("/save-progress", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    credentials: "same-origin", // session cookie gönderimi
+    body: JSON.stringify({
+      game_key: "6_unit4_w1",  // GAME_INFO ile eşleşmeli
+      score: score
+    })
+  })
+  .then(res => res.json())
+  .then(data => {
+    if (data.success) console.log("Skor kaydedildi:", score, data);
+    else console.warn("Skor kaydedilemedi:", data.error);
+  })
+  .catch(err => console.error("Fetch hatası:", err));
 }
 
 function draw() {

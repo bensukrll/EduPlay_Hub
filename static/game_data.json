@@ -143,7 +143,7 @@
     "unit1": {
       "grade": "6. Sınıf",
       "unitNumber": "Ünite 1",
-      "title": "Bilişim Teknolojileri ve Toplum",
+      "title": "Bilişim Teknolojilerinin Hayatımızdaki Yeri",
       "description": "Bilişim teknolojilerinin birey ve toplum üzerindeki etkilerini öğren.",
       "games": {
         "6_unit1_w1": {
@@ -154,11 +154,11 @@
           "howToPlay": "Açıklama kartları doğru teknoloji kutularıyla eşleştirilir, ardından Cevapları Kontrol Et butonuyla sonuç görülür. Her yeni oyunda farklı açıklamalar gelir; Yeniden Oyna butonuyla keşif devam eder!"
         },
         "6_unit1_w2": {
-          "title": "Dijital Etki Kartları",
-          "week": "2. Hafta",
-          "description": "Teknoloji kullanımının olumlu ve olumsuz etkilerini sınıflandır.",
-          "outcome": "Bilişim teknolojilerinin olumlu ve olumsuz etkilerini ayırt eder.",
-          "howToPlay": "Bu oyunda verilen görevleri dikkatle oku, doğru seçimleri yap ve oyunu tamamlamak için yönergeleri takip et. Hazır olduğunda Oyuna Başla butonuna tıkla!"
+            "title": "Teknoloji Kahini: Geleceği Tahmin Et 🔮",
+            "week": "2. Hafta",
+            "description": "Geçmişten günümüze gelişen teknolojilerin izini takip et, örüntüyü yakala ve gelecekte hayatımıza girebilecek teknolojileri tahmin et!",
+            "outcome": "BTY.6.1.2. Bilişim teknolojinin gelecekteki durumlarına yönelik çıkarım yapabilme",
+            "howToPlay": "Her soruda bir teknoloji gelişim zinciri karşına çıkar. Disketten buluta uzanan örüntüyü incele, sırada ne gelebileceğini tahmin et ve nedenini keşfet. Sorular rastgele gelir!"            
         }
       }
     },
@@ -167,7 +167,7 @@
       "grade": "6. Sınıf",
       "unitNumber": "Ünite 2",
       "title": "Dijital Ürün Tasarım ve Geliştirme",
-      "description": "Dijital ortamda güvenli ve etik davranışları öğren.",
+      "description": "Tablolama ve dijital araçlarla veri toplama, analiz etme ve yorumlama becerilerini öğren.",
       "games": {
         "6_unit2_w1": {
           "title": "Tablolama Kaçış Odası 📊",
@@ -177,11 +177,11 @@
           "howToPlay": "İpuçlarını okuyarak çengel bulmacayı çöz. Hücre, satır, sütun, formül, grafik ve veri kavramlarını doğru yerlere yaz. Bulmacayı tamamlayınca görevler açılır. Doğru seçenekleri seçerek Tablolama Uzmanı rozetine ulaş!"
         },
         "6_unit2_w2": {
-          "title": "Siber Güvenlik Avı",
+          "title": "Veri Analisti Görevde 📊",
           "week": "2. Hafta",
-          "description": "Güvenli ve güvensiz dijital durumları ayırt et.",
-          "outcome": "Siber güvenlik için dikkat edilmesi gereken temel durumları fark eder.",
-          "howToPlay": "Bu oyunda verilen görevleri dikkatle oku, doğru seçimleri yap ve oyunu tamamlamak için yönergeleri takip et. Hazır olduğunda Oyuna Başla butonuna tıkla!"
+          "description": "Gerçek yaşam problemlerini çözmek için veri analisti rolüne gir, gerekli bilgileri ayıkla, verileri tabloya dönüştür, grafik oluştur ve bulgulardan anlamlı sonuçlara ulaş!",
+          "outcome": "BTY.6.2.2, BTY.6.2.3, BTY.6.2.4 — Tablolama problemlerini belirler, verileri toplar ve analiz eder",
+          "howToPlay": "Her görevde bir problem senaryosu çıkar. Önce doğru araştırma sorusunu seç, gerekli verileri tabloya yerleştir ve uygun grafik oluştur. Son aşamada grafiği yorumla ve analiz sorularını cevapla."
         }
       }
     },
@@ -189,22 +189,22 @@
     "unit3": {
       "grade": "6. Sınıf",
       "unitNumber": "Ünite 3",
-      "title": "Dijital İçerik Üretimi",
-      "description": "Dijital içerik oluşturma, düzenleme ve paylaşma süreçlerini öğren.",
+      "title": "Bilgisayar Ağları ve İletişim",
+      "description": "İnternet ve iletişim teknolojilerini amacına uygun kullanmayı öğren.",
       "games": {
         "6_unit3_w1": {
-          "title": "İçerik Tasarımcısı",
-          "week": "1. Hafta",
-          "description": "Dijital içerik oluşturma adımlarını doğru sıraya koy.",
-          "outcome": "Dijital içerik oluşturma sürecindeki temel aşamaları sıralar.",
-          "howToPlay": "Bu oyunda verilen görevleri dikkatle oku, doğru seçimleri yap ve oyunu tamamlamak için yönergeleri takip et. Hazır olduğunda Oyuna Başla butonuna tıkla!"
+            "title": "İnternet Dedektifi: Doğru Arama Görevi 🔎",
+            "week": "1. Hafta",
+            "description": "İnternet Dedektifi olarak görevin, bilgiye en hızlı ve doğru yoldan ulaşmak! Arama motorlarını tanı, doğru anahtar kelimeleri seç ve verimli internet teknolojilerini kullan.",
+            "outcome": "BTY.6.3.1 — İnternet ile amacına uygun olarak çalışabilme",
+            "howToPlay": "Her görevde farklı bir internet araştırma senaryosu çıkar. Amacına en uygun arama motorunu, doğru arama ifadesini ve güvenilir kaynağı seçerek ilerle. Sorular rastgele gelir; yeniden oynadığında farklı görevlerle karşılaşabilir ve İnternet Dedektifi rozetine ulaşabilirsin."
         },
         "6_unit3_w2": {
-          "title": "Doğru İçerik Seçimi",
-          "week": "2. Hafta",
-          "description": "Amaca uygun dijital içerik türünü seç.",
-          "outcome": "Dijital içerikleri kullanım amaçlarına göre ayırt eder.",
-          "howToPlay": "Bu oyunda verilen görevleri dikkatle oku, doğru seçimleri yap ve oyunu tamamlamak için yönergeleri takip et. Hazır olduğunda Oyuna Başla butonuna tıkla!"
+            "title": "İnternet Görev Tetrisi 📡",
+            "week": "2. Hafta",
+            "description": "Dijital iletişim ağı karıştı! Arama motorları, iletişim araçları, yeni internet teknolojileri ve e-posta bileşenleri doğru yerlere ulaşmayı bekliyor. Kartları dikkatle takip et, doğru kategoriye indir ve internet görev merkezini yeniden düzenle!",
+            "outcome": "BTY.6.3.1, BTY.6.3.2 — İnternet ile amacına uygun çalışma ve iletişim teknolojilerini sınıflandırma",
+            "howToPlay": "Yukarıdan düşen kartları sağ ve sol ok tuşlarıyla hareket ettir. Kart doğru sütuna geldiğinde boşluk veya aşağı ok tuşuna basarak bırak. Arama motorlarını, eş zamanlı ve eş zamansız iletişim araçlarını, yeni internet teknolojilerini ve e-posta kullanım ögelerini doğru sınıflandırarak puan topla. Seviye yükseldikçe kartlar hızlanır!"
         }
       }
     },
@@ -212,22 +212,22 @@
     "unit4": {
       "grade": "6. Sınıf",
       "unitNumber": "Ünite 4",
-      "title": "Veri ve Bilgi İşleme",
-      "description": "Veri toplama, düzenleme ve yorumlama süreçlerini öğren.",
+      "title": "Bilişim Etiği ve Siber Güvenlik",
+      "description": "Siber güvenlik, etik kurallar ve lisans türlerini öğrenerek güvenli dijital davranış becerilerini kazan.",
       "games": {
         "6_unit4_w1": {
-          "title": "Veri Sınıflandırma",
+          "title": "Bilişim Etiği Güvenlik Labirenti 🛡️",
           "week": "1. Hafta",
-          "description": "Verileri türlerine göre doğru gruplara ayır.",
-          "outcome": "Verileri özelliklerine göre sınıflandırır.",
-          "howToPlay": "Bu oyunda verilen görevleri dikkatle oku, doğru seçimleri yap ve oyunu tamamlamak için yönergeleri takip et. Hazır olduğunda Oyuna Başla butonuna tıkla!"
+          "description": "Dijital dünyanın labirentine gir, güvenlik risklerini fark et, etik ihlalleri tanı ve bilişim suçlarına karşı en doğru kararları ver! Şifre güvenliği, oltalama, siber zorbalık, kişisel veri paylaşımı ve telif hakkı konularında dijital güvenlik uzmanı ol.",
+          "outcome": "BTY.6.4.1 — Bilişim etiği kapsamında güvenlik önlemlerini yönetebilme",
+          "howToPlay": "Yön tuşlarıyla robotu labirentte hareket ettir. Ekrandaki soruyu oku ve doğru cevabın bulunduğu kutucuğa git ya da cevaba tıkla. Yanlış cevapta can kaybetmezsin, ipucunu okuyup tekrar deneyebilirsin. Tüm güvenlik görevlerini tamamlayarak Dijital Güvenlik Uzmanı rozetine ulaş!"
         },
         "6_unit4_w2": {
-          "title": "Tablo Tamamlama",
+          "title": "Siber Kaşif",
           "week": "2. Hafta",
-          "description": "Eksik verilen tablo bilgilerini doğru şekilde tamamla.",
-          "outcome": "Verileri tablo üzerinde düzenler ve yorumlar.",
-          "howToPlay": "Bu oyunda verilen görevleri dikkatle oku, doğru seçimleri yap ve oyunu tamamlamak için yönergeleri takip et. Hazır olduğunda Oyuna Başla butonuna tıkla!"
+          "description": "Dijital şehrin hızlı yollarında ilerle, güvenli davranışları topla ve telif hakkı ihlalleri ile siber tehlikelerden kaç!",
+          "outcome": "BTY.6.4.2, BTY.6.4.3 — Telif hakkı ve siber güvenlik önlemlerini yönetebilme",
+          "howToPlay": "Önce karakterini seç ve dijital koşuya başla. A-D veya sağ-sol ok tuşlarıyla şerit değiştir, W veya yukarı ok tuşuyla zıpla. Yolda karşına çıkan güvenli nesneleri topla; virüs, oltalama, zayıf şifre ve korsan içerik gibi risklerden kaç. Her 20 saniyede bir Bilgi Kapısı açılır; telif hakkı ve siber güvenlik sorularını doğru cevaplayarak puan kazan. Üst üste doğru kararlar vererek Siber Kalkan’ı aktifleştir ve dijital dünyada güvenle ilerle!"
         }
       }
     },
@@ -235,22 +235,22 @@
     "unit5": {
       "grade": "6. Sınıf",
       "unitNumber": "Ünite 5",
-      "title": "Bilgisayar Ağları ve İletişim",
-      "description": "Bilgisayar ağlarının temel kavramlarını ve iletişim süreçlerini öğren.",
+      "title": "Yapay Zekâ",
+      "description": "Yapay zekâ araçlarını ve modellerini kullanmayı, veri toplama ve analiz etme süreçlerini öğren.",
       "games": {
         "6_unit5_w1": {
-          "title": "Bilgisayar Sistemleri",
+          "title": "Siber Arşivci: Veri Deposu 🗄️🤖",
           "week": "1. Hafta",
-          "description": "Bilgisayarın temel donanım ve yazılım bileşenlerini keşfet.",
-          "outcome": "Bilgisayar sistemlerini oluşturan temel bileşenleri açıklar.",
-          "howToPlay": "Bu oyunda verilen görevleri dikkatle oku, doğru seçimleri yap ve oyunu tamamlamak için yönergeleri takip et. Hazır olduğunda Oyuna Başla butonuna tıkla!"
+          "description": "Siber veri deposunda yapay zekâyı eğitecek bilgiler hızla akıyor! Her bilginin kaynağını incele, güvenilir olanları sisteme kaydet, şüpheli ve yanlış bilgileri imha ederek yapay zekânın doğru verilerle çalışmasını sağla.",
+            "outcome": "BTY.6.5.1 — Yapay zekâ girdilerini toplayabilme ve doğrulama",
+            "howToPlay": "Taşıyıcı banttan gelen her kartta bir yapay zekâ girdisi ve kaynak bilgisi yer alır. Kart güvenilir bir kaynaktan geliyorsa KAYDET, sahte veya şüpheli görünüyorsa İMHA ET butonuna bas. Doğru kararlar puan kazandırır, yanlış kararlar veya kaçırılan kartlar can kaybettirir. Süre bitmeden en yüksek skoru topla ve yapay zekâ sistemini başarıyla eğit!"
         },
         "6_unit5_w2": {
-          "title": "Bilgisayar Ağları",
+          "title": "Siber Simyacı: Veri İksiri 🧪✨",
           "week": "2. Hafta",
-          "description": "Ağ türlerini ve internetin temel çalışma mantığını keşfet.",
-          "outcome": "Bilgisayar ağlarının temel bileşenlerini ve bağlantı mantığını açıklar.",
-          "howToPlay": "Bu oyunda verilen görevleri dikkatle oku, doğru seçimleri yap ve oyunu tamamlamak için yönergeleri takip et. Hazır olduğunda Oyuna Başla butonuna tıkla!"
+          "description": "Siber laboratuvara gir, yapay zekâyı eğitmek için doğru bilgileri bul, güvenilir kaynakları seç ve yanlış bilgileri veri iksirinden ayıkla!",
+          "outcome": "BTY.6.5.1 — Yapay zekâ girdilerini yönetebilme",
+          "howToPlay": "Önce verilen yapay zekâ görevini dikkatle oku. Göreve en uygun bilgi toplama aracını seç, ardından doğru anahtar bilgi elementlerini kazana ekle. Son aşamada dikkatli ol: güvenilir bilgiyi değil, uydurma ve şüpheli bilgiyi ayıklamalısın. Temiz veri hazır olduğunda iksiri veri kristaline kaydet ve Baş Simyacı unvanına ulaş!"
         }
       }
     },
@@ -258,22 +258,22 @@
     "unit6": {
       "grade": "6. Sınıf",
       "unitNumber": "Ünite 6",
-      "title": "Algoritma ve Programlama",
-      "description": "Algoritmik düşünme, problem çözme ve programlama temellerini öğren.",
+      "title": "Yazılım Tasarımı ve Programlama",
+      "description": "Blok tabanlı yazılım geliştirme sürecini yönetmeyi, yapay zekâ destekli ürünler oluşturmayı öğren.",
       "games": {
         "6_unit6_w1": {
-          "title": "Kod Bloklarını Sırala",
-          "week": "1. Hafta",
-          "description": "Bir programın çalışması için kod bloklarını doğru sıraya koy.",
-          "outcome": "Algoritmik işlem adımlarını doğru sırayla düzenler.",
-          "howToPlay": "Bu oyunda verilen görevleri dikkatle oku, doğru seçimleri yap ve oyunu tamamlamak için yönergeleri takip et. Hazır olduğunda Oyuna Başla butonuna tıkla!"
+            "title": "Blok Ustası: Algoritma Eşleştirme 🤖",
+            "week": "1. Hafta",
+            "description": "Bu oyun, blok tabanlı programlama mantığını öğrenmeni ve değerlendirmeyi amaçlar. Her sahne hareketini incele, robotun animasyonunu sahnede izle ve doğru Scratch algoritma bloğunu bulup eşleştir. Hamle sayın ve doğru eşleşmelere göre yıldız kazan.",
+            "outcome": "BTY.6.6.1 — Blok tabanlı ortamda yazılım geliştirme sürecinde kullanılan bileşenlerden yararlanabilme",
+            "howToPlay": "Kartları tıklayarak seç; bir sahne hareketi kartı ve bir algoritma bloğu kartını eşleştir. Her doğru eşleşme yeşil renkle işaretlenir ve küçük bir başarı animasyonu gösterilir. Yanlış eşleşmelerde kartlar kısa süreli kırmızı animasyonla geri döner; tekrar dene. Tüm hareketler eşleştirildiğinde yıldız ve puanla geri bildirim alırsın. Her oyun başında görevler havuzdan rastgele seçilir, böylece her oynayış farklıdır."
         },
         "6_unit6_w2": {
-          "title": "Hata Ayıklama Görevi",
-          "week": "2. Hafta",
-          "description": "Verilen algoritmadaki hataları bul ve doğru adımlarla değiştir.",
-          "outcome": "Algoritmadaki hataları fark eder ve düzeltir.",
-          "howToPlay": "Bu oyunda verilen görevleri dikkatle oku, doğru seçimleri yap ve oyunu tamamlamak için yönergeleri takip et. Hazır olduğunda Oyuna Başla butonuna tıkla!"
+            "title": "Mini Kod Fabrikası 🟦🟪🟧",
+            "week": "2. Hafta",
+            "description": "Bu oyunla temel algoritma mantığını ve blok tabanlı programlamayı keşfedeceksin. Karakterin yapacağı hareketleri, görünüm değişimlerini ve kontrol akışını blokları birleştirerek belirleyebilirsin. Her blok, karakterin sahnede yapacağı bir aksiyona karşılık gelir ve bu aksiyonlar sırasıyla çalışır.",
+            "outcome": "BTY.6.6.1 — Blok tabanlı ortamda yazılım geliştirme sürecinde kullanılan bileşenlerden yararlanabilme",
+            "howToPlay": "Sol taraftaki blok kütüphanesinden Hareket, Görünüm, Kontrol veya Dans & Eğlence bloklarını sürükleyip sağdaki Kodlama Alanına ekle. Blokları tıklayarak veya sürükleyip bırakarak çalışma alanına yerleştir. “Yeşil Bayrak” butonuna tıklayarak algoritmanı çalıştır ve karakterin hareketlerini sahnede izle. “Sıfırla” butonuyla her şeyi temizleyip tekrar deneyebilirsin. Blokların sırası algoritmanın akışını belirler; farklı kombinasyonlarla farklı hareketler oluşturabilirsin."
         }
       }
     }

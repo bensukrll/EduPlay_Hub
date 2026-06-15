@@ -219,6 +219,27 @@ document.getElementById("check").addEventListener("click", () => {
         resultBox.classList.add("warning");
         resultText.textContent = `💪 Güzel gidiyorsun! ${correctCount}/${dropzones.length} doğru yaptın. Birkaç eşleşmeyi tekrar düşün.`;
     }
+
+    // -------------------
+    // PUANI VERİTABANINA GÖNDER
+    // -------------------
+    const score = Math.round((correctCount / dropzones.length) * 100);
+
+    fetch("/save-progress", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        credentials: "same-origin", // session cookie gönderimi
+        body: JSON.stringify({
+            game_key: "6_unit1_w1", // GAME_INFO ile eşleşmeli
+            score: score
+        })
+    })
+    .then(res => res.json())
+    .then(data => {
+        if (data.success) console.log("Skor kaydedildi:", score, data);
+        else console.warn("Skor kaydedilemedi:", data.error);
+    })
+    .catch(err => console.error("Fetch hatası:", err));
 });
 
 document.getElementById("restart").addEventListener("click", initGame);

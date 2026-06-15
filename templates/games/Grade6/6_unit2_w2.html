@@ -1042,11 +1042,52 @@
       const pct = Math.round((score/maxPossible)*100);
       $("final-score-val").innerText = score;
       const badge = $("end-badge"), title = $("end-title"), feedback = $("end-feedback");
-      if(pct <= 20){ badge.innerText="🔍"; title.innerText="Veri Çırağı"; feedback.innerText="Veri toplarken bazı ipuçlarını kaçırmış olabilirsin. Bir kez daha deneyerek hangi verinin gerekli olduğunu daha iyi ayırt edebilirsin."; }
-      else if(pct <= 40){ badge.innerText="📈"; title.innerText="Veri Kaşifi"; feedback.innerText="Analiz yolculuğun başladı. Tablo düzenleme ve grafik yorumlama becerilerin gelişiyor."; }
-      else if(pct <= 60){ badge.innerText="📊"; title.innerText="Veri Analizörü"; feedback.innerText="Verileri anlamaya başladın. Biraz daha dikkatle çok daha güçlü sonuçlara ulaşabilirsin."; }
-      else if(pct <= 80){ badge.innerText="🧠"; title.innerText="Kıdemli Analist"; feedback.innerText="Harika analizler yaptın. Verileri toplayıp düzenleyerek anlamlı sonuçlara ulaşabildin."; }
-      else { badge.innerText="🏆"; title.innerText="Baş Analist"; feedback.innerText="Muhteşem! Problemi belirledin, verileri topladın, tabloyu düzenledin, grafik oluşturdun ve bulgulara ulaştın."; }
+
+      // Ödül ve mesaj
+      if(pct <= 20){ 
+        badge.innerText="🔍"; 
+        title.innerText="Veri Çırağı"; 
+        feedback.innerText="Veri toplarken bazı ipuçlarını kaçırmış olabilirsin. Bir kez daha deneyerek hangi verinin gerekli olduğunu daha iyi ayırt edebilirsin."; 
+      }
+      else if(pct <= 40){ 
+        badge.innerText="📈"; 
+        title.innerText="Veri Kaşifi"; 
+        feedback.innerText="Analiz yolculuğun başladı. Tablo düzenleme ve grafik yorumlama becerilerin gelişiyor."; 
+      }
+      else if(pct <= 60){ 
+        badge.innerText="📊"; 
+        title.innerText="Veri Analizörü"; 
+        feedback.innerText="Verileri anlamaya başladın. Biraz daha dikkatle çok daha güçlü sonuçlara ulaşabilirsin."; 
+      }
+      else if(pct <= 80){ 
+        badge.innerText="🧠"; 
+        title.innerText="Kıdemli Analist"; 
+        feedback.innerText="Harika analizler yaptın. Verileri toplayıp düzenleyerek anlamlı sonuçlara ulaşabildin."; 
+      }
+      else { 
+        badge.innerText="🏆"; 
+        title.innerText="Baş Analist"; 
+        feedback.innerText="Muhteşem! Problemi belirledin, verileri topladın, tabloyu düzenledin, grafik oluşturdun ve bulgulara ulaştın."; 
+      }
+
+      // -----------------------
+      // PUANI VERİTABANINA GÖNDER
+      // -----------------------
+      fetch("/save-progress", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        credentials: "same-origin", // session cookie gönderimi
+        body: JSON.stringify({
+          game_key: "6_unit2_w2", // GAME_INFO ile eşleşmeli
+          score: score
+        })
+      })
+      .then(res => res.json())
+      .then(data => {
+        if (data.success) console.log("Skor kaydedildi:", score, data);
+        else console.warn("Skor kaydedilemedi:", data.error);
+      })
+      .catch(err => console.error("Fetch hatası:", err));
     }
 
     function restartGame(){

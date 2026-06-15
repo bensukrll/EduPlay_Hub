@@ -1336,6 +1336,28 @@
                 actions.appendChild(restartBtn);
                 gamePanel.append(finishHeader, finishTitle, finishText, actions);
                 progressBar.style.width = "100%";
+
+                // -----------------------
+                // PUANI VERİTABANINA GÖNDER
+                // -----------------------
+                const correctCount = history.filter(h => h.isCorrect).length;
+                const score = Math.round((correctCount / steps.length) * 100);
+
+                fetch("/save-progress", {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
+                    credentials: "same-origin", // session cookie gönderimi
+                    body: JSON.stringify({
+                        game_key: "6_unit3_w1", // GAME_INFO ile eşleşmeli
+                        score: score
+                    })
+                })
+                .then(res => res.json())
+                .then(data => {
+                    if (data.success) console.log("Skor kaydedildi:", score, data);
+                    else console.warn("Skor kaydedilemedi:", data.error);
+                })
+                .catch(err => console.error("Fetch hatası:", err));
             }
 
             renderStep();
