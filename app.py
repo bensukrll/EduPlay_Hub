@@ -22,8 +22,8 @@ GAME_INFO = {
     # 5. SINIF - ÜNİTE 1
     # =========================
     "5_unit1_w1": {
-        "title": "Teknoloji Dedektifi",
-        "subtitle": "Günlük yaşamda kullanılan bilişim teknolojilerini tanı ve sınıflandır!",
+        "title": "BT Temel Bileşenler Kaçış Oyunu 🖥️",
+        "subtitle": "Bilişim teknolojilerinin temel kavramlarını, kullanım alanlarını ve günlük yaşamdaki etkilerini keşfet.",
         "unit": "Bilişim Teknolojilerinin Hayatımızdaki Yeri",
         "level": "5. Sınıf",
         "icon": "💻",
@@ -31,8 +31,8 @@ GAME_INFO = {
     },
 
     "5_unit1_w2": {
-        "title": "Dijital Sağlık Dengesi",
-        "subtitle": "Bilişim teknolojilerinin olumlu ve olumsuz etkilerini ayırt et!",
+        "title": "Dijital Gün Simülasyonu 🌐",
+        "subtitle": "Bilişim teknolojilerinin temel kavramlarını, günlük yaşamdaki kullanım alanlarını, birey ve toplum üzerindeki etkilerini ve dijital sağlığı keşfet.",
         "unit": "Bilişim Teknolojilerinin Hayatımızdaki Yeri",
         "level": "5. Sınıf",
         "icon": "🧘",
@@ -65,7 +65,7 @@ GAME_INFO = {
     # =========================
     "5_unit3_w1": {
         "title": "Ağ Bileşenleri",
-        "subtitle": "Bilgisayar ağlarında kullanılan temel bileşenleri tanı!",
+        "subtitle": "Bilgisayar ağlarını, ağ bileşenlerini, bağlantı yöntemlerini ve veri paketlerinin ağ içinde nasıl yol aldığını keşfet.",
         "unit": "Bilgisayar Ağları ve İletişim",
         "level": "5. Sınıf",
         "icon": "🔌",
@@ -106,8 +106,8 @@ GAME_INFO = {
     # 5. SINIF - ÜNİTE 5
     # =========================
     "5_unit5_w1": {
-        "title": "Yapay Zekâ Avı",
-        "subtitle": "Günlük yaşamda kullanılan yapay zekâ örneklerini keşfet!",
+        "title": "Yapay Zekâ",
+        "subtitle": "Yapay zekâ uygulamalarını, kullanım alanlarını ve çalışma mantığını keşfet.",
         "unit": "Yapay Zekâ",
         "level": "5. Sınıf",
         "icon": "🤖",

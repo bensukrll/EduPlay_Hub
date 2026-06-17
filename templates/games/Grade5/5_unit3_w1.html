@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Veri Paketi Yolculuğu</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='games/Grade5/5_unit3_w1/style.css') }}">
+</head>
+<body>
+  <main class="game">
+
+    <!-- START -->
+    <section id="startScreen" class="screen active start-screen">
+      <div class="start-card">
+        <div class="badge">BTY.5.3 • Bilgisayar Ağları ve İletişim</div>
+        <h1>📨 Veri Paketi Yolculuğu</h1>
+        <p>
+          Veri paketini doğru ağ yolundan gönder. Görevde istenen mesajın hedefine ulaşması için
+          sadece gönderen ve alıcıyı değil, aradaki ağ bileşenlerini de sırayla seçmelisin.
+        </p>
+
+        <div class="steps">
+          <div>
+            <span>1️⃣</span>
+            <b>Görevi oku</b>
+            <small>Örneğin: Ahmet’ten Ayşe’ye mesaj gönder.</small>
+          </div>
+          <div>
+            <span>2️⃣</span>
+            <b>Yolu sırayla seç</b>
+            <small>Ahmet → Switch → Ayşe şeklinde tıkla.</small>
+          </div>
+          <div>
+            <span>3️⃣</span>
+            <b>Paketi izle</b>
+            <small>Doğru yol seçilirse veri paketi hareket eder.</small>
+          </div>
+        </div>
+
+        <button id="startBtn" class="main-btn">Oyuna Başla</button>
+      </div>
+    </section>
+
+    <!-- GAME -->
+    <section id="gameScreen" class="screen">
+      <header class="topbar">
+        <div>
+          <h1>📨 Veri Paketi Yolculuğu</h1>
+          <p>Veri paketinin geçmesi gereken yolu sırayla seç.</p>
+        </div>
+
+        <div class="hud">
+          <div>
+            <span>Senaryo</span>
+            <b><span id="scenarioNo">1</span>/3</b>
+          </div>
+        </div>
+      </header>
+
+      <nav class="tabs">
+        <button class="tab active" data-tab="0">1. Sınıf İçi Ağ</button>
+        <button class="tab locked" data-tab="1">2. İnternet Ağı</button>
+        <button class="tab locked" data-tab="2">3. Kablosuz Ağ</button>
+      </nav>
+
+      <section class="mission-card">
+        <div class="scenario-info">
+          <span id="scenarioType" class="tag">LAN</span>
+          <h2 id="scenarioTitle">Sınıf İçi Ağ</h2>
+          <p id="scenarioText">Aynı sınıftaki cihazlar switch üzerinden haberleşir.</p>
+        </div>
+
+        <div class="task-box">
+          <span>Aktif Görev</span>
+          <h3 id="taskTitle">Ahmet’ten Ayşe’ye mesaj gönder</h3>
+          <p id="taskHint">Ahmet → Switch → Ayşe sırasına tıkla.</p>
+
+          <div class="route-preview selected-route">
+            <small>Senin seçimin</small>
+            <div id="selectedRoute" class="route-chips">
+              <span class="empty-chip">Henüz seçim yok</span>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section id="mapWrap" class="map-wrap">
+        <svg id="lineLayer" class="line-layer"></svg>
+        <div id="nodeLayer" class="node-layer"></div>
+        <div id="packet" class="packet hidden">✉️</div>
+      </section>
+
+      <section id="feedbackBox" class="feedback-box">
+        <div>
+          <b id="feedbackTitle">Hazırsın!</b>
+          <p id="feedbackText">Yolu sırayla seç: gönderen, ara bileşen ve alıcı.</p>
+        </div>
+        <button id="clearBtn" class="small-btn">Seçimi Temizle</button>
+      </section>
+    </section>
+
+    <!-- END -->
+    <section id="endScreen" class="screen end-screen">
+      <div class="end-card">
+        <h1>🎉 Tebrikler, oyunu tamamladınız!</h1>
+        <p>
+          Üç farklı ağ senaryosunda veri paketinin hangi yoldan ilerlediğini doğru şekilde gösterdin.
+        </p>
+
+        <div class="report">
+          <h3>📌 Öğrenme Özeti</h3>
+          <ul>
+            <li><b>Switch:</b> Aynı sınıf veya laboratuvardaki cihazların haberleşmesini sağlar.</li>
+            <li><b>Router:</b> Verinin doğru ağa yönlendirilmesine yardım eder.</li>
+            <li><b>Modem:</b> Okul ağının internete çıkmasını sağlar.</li>
+            <li><b>Wi‑Fi:</b> Tablet gibi cihazların kablosuz bağlanmasını sağlar.</li>
+            <li><b>Veri paketi:</b> Göndericiden çıkar, gerekli ağ bileşenlerinden geçer ve alıcıya ulaşır.</li>
+          </ul>
+        </div>
+
+        <button id="restartBtn" class="main-btn">Yeniden Oyna</button>
+      </div>
+    </section>
+
+  </main>
+
+<script src="{{ url_for('static', filename='games/Grade5/5_unit3_w1/script.js') }}"></script>
+</body>
+</html>

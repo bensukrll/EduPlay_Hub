@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Dijital Gün Simülasyonu</title>
+  <link rel="stylesheet" href="{{url_for('static', filename='games/Grade5/5_unit1_w2/style.css')}}">
+</head>
+<body>
+  <main class="game-shell">
+    <section id="startScreen" class="screen start-screen active">
+      <div class="start-card">
+        <div class="start-text">
+          <h1>Dijital Gün Simülasyonu</h1>
+          <p>
+            Bir öğrencinin gününü birinci şahıs bakış açısından yöneteceksin.
+            Her sahnede iki seçenekten birini seçerek enerji, göz sağlığı,
+            ruh hali ve başarı dengesini korumaya çalış.
+          </p>
+          <div class="mini-rules">
+            <div><b>Amaç:</b> Sağlıklı ve dengeli teknoloji kullanımı.</div>
+            <div><b>Kazanım:</b> Bilişim teknolojilerinin birey ve toplum üzerindeki etkilerini fark etme.</div>
+            <div><b>Final:</b> Gün sonu dijital denge raporunu gör.</div>
+          </div>
+          <button id="startBtn" class="primary-btn">Oyuna Başla</button>
+        </div>
+
+        <img class="start-character" src="{{ url_for('static', filename='games/Grade5/5_unit1_w2/images/karakter.png') }}" alt="Oyun Karakteri">
+      </div>
+    </section>
+
+    <section id="gameScreen" class="screen game-screen">
+      <div class="top-hud">
+        <div class="location-card">
+          <span id="timeIcon">🌅</span>
+          <div>
+            <small id="timeLabel">Sabah</small>
+            <strong id="placeLabel">Yatak Odası</strong>
+          </div>
+        </div>
+
+        <div class="bars">
+          <div class="bar-wrap">
+            <span>⚡ Enerji</span>
+            <div class="bar"><div id="energyBar" class="bar-fill"></div></div>
+            <b id="energyText">100</b>
+          </div>
+          <div class="bar-wrap">
+            <span>👀 Göz Sağlığı</span>
+            <div class="bar"><div id="eyeBar" class="bar-fill"></div></div>
+            <b id="eyeText">100</b>
+          </div>
+          <div class="bar-wrap">
+            <span>😊 Ruh Hali</span>
+            <div class="bar"><div id="moodBar" class="bar-fill"></div></div>
+            <b id="moodText">100</b>
+          </div>
+          <div class="bar-wrap">
+            <span>📚 Başarı</span>
+            <div class="bar"><div id="successBar" class="bar-fill"></div></div>
+            <b id="successText">100</b>
+          </div>
+        </div>
+      </div>
+
+      <div id="scene" class="scene">
+        <div id="sceneShade" class="scene-shade"></div>
+        <div class="first-person-layer" aria-hidden="true">
+          <div class="fp-arm fp-left-arm"></div>
+          <div class="fp-arm fp-right-arm"></div>
+        </div>
+
+        <div id="decisionPanel" class="decision-panel">
+          <div class="question-head">
+            <span id="stepCounter">1 / 8</span>
+            <h2 id="questionTitle">Sabah uyandın...</h2>
+            <p id="questionText">Ne yaparsın?</p>
+          </div>
+          <div class="choices">
+            <button id="choiceA" class="choice-card"></button>
+            <button id="choiceB" class="choice-card"></button>
+          </div>
+        </div>
+
+        <div id="feedbackBox" class="feedback-box hidden">
+          <span id="feedbackIcon">✅</span>
+          <h3 id="feedbackTitle">Güzel seçim!</h3>
+          <p id="feedbackText"></p>
+          <button id="nextBtn" class="primary-btn">Devam Et</button>
+        </div>
+      </div>
+    </section>
+
+    <section id="endScreen" class="screen end-screen">
+      <div class="end-card">
+        <div class="end-top">
+        <span id="endBadge" class="end-badge">Dijital Denge</span>
+
+        <h2 id="endTitle">Gün Tamamlandı!</h2>
+        <p id="endText"></p>
+      </div>
+
+        <div class="final-score-box">
+          <div class="score-circle">
+            <span id="finalScore">0</span>
+            <small>/ 100</small>
+          </div>
+          <div class="final-bars">
+            <p><b>⚡ Enerji:</b> <span id="finalEnergy"></span></p>
+            <p><b>👀 Göz Sağlığı:</b> <span id="finalEye"></span></p>
+            <p><b>😊 Ruh Hali:</b> <span id="finalMood"></span></p>
+            <p><b>📚 Başarı:</b> <span id="finalSuccess"></span></p>
+          </div>
+        </div>
+
+        <div id="summaryList" class="summary-list"></div>
+
+        <button id="restartBtn" class="primary-btn">Tekrar Oyna</button>
+      </div>
+    </section>
+  </main>
+
+  <script src="{{url_for('static', filename='games/Grade5/5_unit1_w2/script.js')}}"></script>
+</body>
+</html>

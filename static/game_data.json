@@ -3,22 +3,22 @@
     "unit1": {
       "grade": "5. Sınıf",
       "unitNumber": "Ünite 1",
-      "title": "Dijital Dünyaya Giriş",
+      "title": "Bilişim Teknolojilerinin Hayatımızdaki Yeri",
       "description": "Bilişim teknolojilerinin günlük yaşamdaki yerini ve temel kavramlarını öğren.",
       "games": {
         "5_unit1_w1": {
-          "title": "Dijital Dünyayı Keşfet",
+          "title": "BT Temel Bileşenler Kaçış Oyunu 🖥️",
           "week": "1. Hafta",
-          "description": "Bilişim teknolojilerinin günlük yaşamda nerelerde kullanıldığını keşfet.",
-          "outcome": "Bilişim teknolojilerinin günlük yaşamdaki kullanım alanlarını fark eder.",
-          "howToPlay": "Bu oyunda verilen görevleri dikkatle oku, doğru seçimleri yap ve oyunu tamamlamak için yönergeleri takip et. Hazır olduğunda Oyuna Başla butonuna tıkla!"
+          "description": "Donanım, yazılım, veri, bilgi ve bilişim teknolojilerinin kullanım alanlarıyla ilgili doğru-yanlış sorularını cevaplayarak virüsten kaç.",
+          "outcome": "BTY.5.1.1 - Bilişim teknolojilerinin temel kavramlarını ve günlük yaşamdaki kullanım alanlarını açıklar.",
+          "howToPlay": "Oyuna başladığında karşına doğru-yanlış soruları gelir. Cevabın doğruysa karakterin çıkış kapısına yaklaşır, yanlışsa virüs sana yaklaşır. 25 soruluk havuzdan rastgele gelen 10 soruyu cevapla, virüse yakalanmadan kapıya ulaş ve sistemi kurtar!"
         },
         "5_unit1_w2": {
-          "title": "Teknoloji Dedektifi",
+          "title": "Dijital Gün Simülasyonu 🌐",
           "week": "2. Hafta",
-          "description": "Farklı teknolojik araçları kullanım amaçlarına göre eşleştir.",
-          "outcome": "Bilişim teknolojisi araçlarını kullanım amaçlarına göre sınıflandırır.",
-          "howToPlay": "Bu oyunda verilen görevleri dikkatle oku, doğru seçimleri yap ve oyunu tamamlamak için yönergeleri takip et. Hazır olduğunda Oyuna Başla butonuna tıkla!"
+          "description": "Günlük yaşamda bilişim teknolojilerini kullanırken verilen kararların enerji, göz sağlığı, ruh hâli ve başarı üzerindeki etkilerini deneyimle.",
+          "outcome": "BTY.5.1.2 - Bilişim teknolojilerinin birey ve toplum üzerindeki etkilerini özetleyebilme.",
+          "howToPlay": "Oyunda bir öğrencinin dijital gününü yönlendirirsin. Her sahnede iki farklı teknoloji kullanımı seçeneği karşına çıkar. Seçimlerin enerji, göz sağlığı, ruh hâli ve başarı puanlarını etkiler. Sağlıklı ve bilinçli teknoloji kullanım kararları vererek günü dengeli şekilde tamamlamaya çalış!"
         }
       }
     },
@@ -53,11 +53,11 @@
       "description": "Bilgisayar ağlarının nasıl çalıştığını ve bağlantı yöntemlerini öğren.",
       "games": {
         "5_unit3_w1": {
-          "title": "Ağları Tanıyalım",
+          "title": "Veri Paketi Yolculuğu 📨",
           "week": "1. Hafta",
-          "description": "Bilgisayar ağlarının ne işe yaradığını ve nerelerde kullanıldığını keşfet.",
-          "outcome": "Bilgisayar ağlarının günlük yaşamdaki kullanım alanlarını fark eder.",
-          "howToPlay": "Bu oyunda verilen görevleri dikkatle oku, doğru seçimleri yap ve oyunu tamamlamak için yönergeleri takip et. Hazır olduğunda Oyuna Başla butonuna tıkla!"
+          "description": "Veri paketlerinin bir cihazdan başka bir cihaza ulaşırken switch, router, modem, internet ve Wi-Fi gibi ağ bileşenlerinden nasıl geçtiğini keşfet.",
+           "outcome": "BTY.5.3.1 - Bilgisayar ağları ve bileşenlerini sorgulayabilme. BTY.5.3.2 - Bilgisayar ağları ve bağlanma yöntemlerini sınıflandırabilme.",
+          "howToPlay": "Oyuna başladığında karşına farklı ağ senaryoları gelir. Her senaryoda veri paketinin doğru yere ulaşması için geçmesi gereken yolu sırayla seçmelisin. Örneğin Ahmet’ten Ayşe’ye mesaj göndermek için Ahmet, Switch ve Ayşe sırasına tıkla. Doğru yolu seçtiğinde veri paketi hareket eder ve bir sonraki senaryoya geçersin. Üç senaryoyu da tamamladığında oyunu bitirirsin."
         },
         "5_unit3_w2": {
           "title": "Bağlantı Ustası",
@@ -99,11 +99,11 @@
       "description": "Yapay zekâyı keşfet, uygulamalarını sınıflandır ve güvenli kullanım kurallarını öğren.",
       "games": {
         "5_unit5_w1": {
-          "title": "Dosya Yönetimi",
+          "title": "Robotu Eğit: Yapay Zekâ Öğreniyor 🤖",
           "week": "1. Hafta",
-          "description": "Dosya ve klasörleri doğru şekilde düzenleyerek dijital ortamda düzen oluştur.",
-          "outcome": "Dosya ve klasörleri amacına uygun şekilde düzenler.",
-          "howToPlay": "Bu oyunda verilen görevleri dikkatle oku, doğru seçimleri yap ve oyunu tamamlamak için yönergeleri takip et. Hazır olduğunda Oyuna Başla butonuna tıkla!"
+          "description": "Robotu örnek verilerle eğit, tahminlerini kontrol et ve yapay zekânın nasıl öğrendiğini keşfet.",
+          "outcome": "BTY.5.5.1 - Yapay zekâ uygulamalarını sınıflandırabilme.",
+          "howToPlay": "İlk aşamada nesne kartlarını Hayvan, Yiyecek, Araç ve Eşya kategorilerine doğru şekilde yerleştirerek robotu eğit. İkinci aşamada robotun tahminlerini kontrol et ve yanlış tahmin yaptığında ona doğru kategoriyi öğret. Son aşamada yeni nesnelerin gerçek kategorisini seçerek robotun öğrendiklerini test et. Oyun sonunda yapay zekânın verilerden öğrendiğini, tahmin yaptığını ve doğru geri bildirimle gelişebildiğini keşfet!"
         },
         "5_unit5_w2": {
           "title": "Güvenli Yapay Zekâ Labirenti",

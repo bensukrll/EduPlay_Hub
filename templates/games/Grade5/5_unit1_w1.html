@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BT - Temel Bileşenler Kaçış Oyunu</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='games/Grade5/5_unit1_w1/style.css') }}">
+</head>
+<body>
+
+<div class="game-container" id="gameArea">
+    
+    <div class="question-box" id="questionBox">
+        <p id="question">Soru yükleniyor...</p>
+        <div class="btn-group">
+            <button class="yes" onclick="answer(true)">Doğru</button>
+            <button class="no" onclick="answer(false)">Yanlış</button>
+        </div>
+    </div>
+
+    <img class="monster" id="monster" src="{{ url_for('static', filename='games/Grade5/5_unit1_w1/monster.png') }}" alt="Canavar">
+    
+    <img class="player" id="player" src="{{ url_for('static', filename='games/Grade5/5_unit1_w1/hero.png') }}" alt="Oyuncu">
+    <img class="door" id="door" src="{{ url_for('static', filename='games/Grade5/5_unit1_w1/door.png') }}" alt="Çıkış Kapısı">
+
+
+    <div class="start-screen" id="startScreen">
+        <div class="screen-content">
+            <h1>🎮 Kaçış Oyununa Hoş Geldin!</h1>
+            <p>Soruları doğru bil, virüsten kaç ve sistemden çık!</p>
+            <button class="start-btn" onclick="startGame()">OYUNU BAŞLAT</button>
+        </div>
+    </div>
+
+</div>
+
+<audio id="monsterRoar">
+    <source src="data:audio/mp3;base64,//uQZAAA..." type="audio/mp3">
+</audio>
+
+<audio id="winSound">
+    <source src="data:audio/mp3;base64,//uQZAAA..." type="audio/mp3">
+</audio>
+
+<script src="{{ url_for('static', filename='games/Grade5/5_unit1_w1/script.js') }}"></script>
+
+</body>
+</html>

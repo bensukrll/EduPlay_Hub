@@ -1,0 +1,1256 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Robotu Eğit: Yapay Zekâ Öğreniyor</title>
+
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    html,
+    body {
+      width: 100%;
+      height: 100%;
+      overflow: hidden;
+      font-family: Arial, Helvetica, sans-serif;
+      background: linear-gradient(135deg, #68D2E8, #FEEFAD);
+      color: #1f2937;
+    }
+
+    body {
+      padding: 0;
+    }
+
+    .game-shell {
+      width: 100vw;
+      height: 100vh;
+      max-width: none;
+      margin: 0 auto;
+      background: rgba(255, 255, 255, 0.97);
+      border: 2px solid #03AED2;
+      border-radius: 18px;
+      box-shadow: 0 10px 24px rgba(0, 0, 0, 0.12);
+      padding: clamp(8px, 1.3vh, 14px) clamp(10px, 1.5vw, 18px);
+      display: flex;
+      flex-direction: column;
+      gap: clamp(6px, 1vh, 10px);
+      overflow: hidden;
+    }
+
+    h1 {
+      text-align: center;
+      margin: 0;
+      font-size: clamp(30px, 4.4vmin, 46px);
+      line-height: 1;
+      color: #03AED2;
+      flex: 0 0 auto;
+    }
+
+    .subtitle {
+      text-align: center;
+      margin: 0;
+      color: #333333;
+      font-size: clamp(16px, 2vmin, 21px);
+      line-height: 1.18;
+      font-weight: 600;
+      flex: 0 0 auto;
+    }
+
+    .top-panel {
+      display: grid;
+      grid-template-columns: clamp(112px, 13vw, 160px) minmax(0, 1fr) clamp(175px, 18vw, 235px);
+      gap: clamp(8px, 1.2vw, 14px);
+      align-items: stretch;
+      flex: 0 0 auto;
+      min-height: clamp(96px, 14vh, 136px);
+    }
+
+    .robot-box {
+      background: #ffffff;
+      border: 2px solid #FDDE55;
+      border-radius: 14px;
+      padding: 6px;
+      text-align: center;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      overflow: hidden;
+    }
+
+    .robot-img {
+      width: clamp(94px, 12vmin, 128px);
+      height: clamp(94px, 12vmin, 128px);
+      object-fit: contain;
+      animation: floatRobot 2s infinite ease-in-out;
+    }
+
+    @keyframes floatRobot {
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(-4px); }
+    }
+
+    .speech {
+      background: #ffffff;
+      border: 2px dashed #68D2E8;
+      border-radius: 14px;
+      padding: clamp(10px, 1.5vh, 16px) clamp(14px, 1.8vw, 24px);
+      display: flex;
+      align-items: center;
+      font-size: clamp(17px, 2.1vmin, 23px);
+      font-weight: 600;
+      line-height: 1.28;
+      margin: 0;
+      overflow: hidden;
+    }
+
+    .score-box {
+      background: #FEEFAD;
+      border: 2px solid #FDDE55;
+      border-radius: 14px;
+      padding: clamp(8px, 1.2vh, 12px) clamp(10px, 1.2vw, 16px);
+      text-align: center;
+      font-weight: 800;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      font-size: clamp(16px, 1.9vmin, 21px);
+      line-height: 1.25;
+    }
+
+    .learning-wrap {
+      background: #ffffff;
+      height: clamp(18px, 2.4vh, 24px);
+      border-radius: 999px;
+      overflow: hidden;
+      margin-top: 7px;
+      border: 1px solid #03AED2;
+      flex: 0 0 auto;
+    }
+
+    .learning-bar {
+      height: 100%;
+      width: 0%;
+      background: linear-gradient(90deg, #03AED2, #68D2E8);
+      transition: width 0.4s ease;
+    }
+
+    .stage-tabs {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: clamp(7px, 1vw, 12px);
+      flex: 0 0 auto;
+    }
+
+    .stage-tab {
+      padding: clamp(9px, 1.4vh, 14px) clamp(8px, 1vw, 14px);
+      border-radius: 12px;
+      background: #e2e8f0;
+      text-align: center;
+      font-weight: 800;
+      color: #475569;
+      line-height: 1.1;
+      font-size: clamp(16px, 1.9vmin, 21px);
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .stage-tab.active {
+      background: #03AED2;
+      color: white;
+    }
+
+    .screen {
+      display: none;
+      flex: 1 1 0;
+      min-height: 0;
+      overflow: hidden;
+    }
+
+    .screen.active {
+      display: flex;
+      flex-direction: column;
+      min-height: 0;
+      overflow: hidden;
+    }
+
+    #startScreen.active {
+      justify-content: center;
+      align-items: center;
+    }
+
+    .start-card,
+    .final-card {
+      background: linear-gradient(135deg, #e0f2fe, #fef9c3);
+      border: 2px solid #03AED2;
+      border-radius: 20px;
+      padding: clamp(18px, 3vh, 30px);
+      text-align: center;
+      margin: 0 auto;
+      width: min(94%, 920px);
+      max-height: 100%;
+      overflow: hidden;
+    }
+
+    .start-card h2,
+    .final-card h2 {
+      color: #03AED2;
+      margin: 0 0 10px;
+      font-size: clamp(28px, 4vmin, 42px);
+      line-height: 1.05;
+    }
+
+    .start-card p,
+    .final-card p {
+      margin: 8px 0;
+      font-size: clamp(18px, 2.2vmin, 24px);
+      line-height: 1.25;
+    }
+
+    .rules {
+      text-align: left;
+      width: 100%;
+      margin: clamp(10px, 1.8vh, 16px) auto;
+      background: white;
+      border-radius: 14px;
+      padding: clamp(12px, 2vh, 18px) clamp(18px, 2.5vw, 30px);
+      border: 2px dashed #68D2E8;
+      font-size: clamp(16px, 1.95vmin, 21px);
+      line-height: 1.35;
+    }
+
+    .rules ol {
+      margin: 0;
+      padding-left: 24px;
+    }
+
+    .rules li {
+      margin: 5px 0;
+    }
+
+    .btn {
+      border: none;
+      border-radius: 12px;
+      padding: clamp(10px, 1.45vh, 15px) clamp(18px, 2.2vw, 30px);
+      background: #FDDE55;
+      color: #333333;
+      font-weight: 800;
+      cursor: pointer;
+      font-size: clamp(16px, 1.9vmin, 21px);
+      transition: all 0.2s ease;
+      margin: 4px;
+      line-height: 1.1;
+    }
+
+    .btn:hover {
+      transform: translateY(-2px);
+      background: #F5C857;
+      box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+    }
+
+    .btn.secondary { background: #64748b; color: white; }
+    .btn.good { background: #4ade80; color: white; }
+    .btn.bad { background: #f87171; color: white; }
+    .btn.warning { background: #FDDE55; }
+
+    .game-area {
+      background: #f8fafc;
+      border: 2px solid #dbeafe;
+      border-radius: 16px;
+      padding: clamp(10px, 1.4vh, 16px);
+      flex: 1 1 0;
+      min-height: 0;
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+    }
+
+    .task-title {
+      text-align: center;
+      margin: 0 0 4px;
+      color: #0f172a;
+      font-size: clamp(23px, 3vmin, 33px);
+      font-weight: 900;
+      line-height: 1.05;
+      flex: 0 0 auto;
+    }
+
+    .task-desc {
+      text-align: center;
+      margin: 0 0 clamp(8px, 1.2vh, 12px);
+      color: #475569;
+      font-size: clamp(16px, 2vmin, 22px);
+      font-weight: 600;
+      line-height: 1.22;
+      flex: 0 0 auto;
+    }
+
+    .training-layout {
+      display: grid;
+      grid-template-columns: minmax(420px, 0.46fr) minmax(0, 0.54fr);
+      gap: clamp(10px, 1.2vw, 16px);
+      flex: 1 1 0;
+      min-height: 0;
+      overflow: hidden;
+    }
+
+    .cards-pool,
+    .dropzones {
+      background: white;
+      border-radius: 14px;
+      border: 2px solid #c7d2fe;
+      padding: clamp(8px, 1.1vh, 12px);
+      min-height: 0;
+      overflow: hidden;
+    }
+
+    .cards-pool {
+      display: flex;
+      flex-direction: column;
+    }
+
+    .cards-pool h3 {
+      margin: 0 0 clamp(6px, 1vh, 10px);
+      color: #03AED2;
+      text-align: center;
+      font-size: clamp(20px, 2.5vmin, 28px);
+      line-height: 1.05;
+      flex: 0 0 auto;
+    }
+
+    .cards {
+      flex: 1 1 0;
+      min-height: 0;
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      grid-template-rows: repeat(4, minmax(0, 1fr));
+      gap: clamp(6px, 0.9vmin, 10px);
+      padding: clamp(6px, 0.9vmin, 10px);
+      border-radius: 12px;
+      background: #f1f5f9;
+      overflow: hidden;
+    }
+
+    .item-card {
+      width: 100%;
+      height: 100%;
+      min-width: 0;
+      background: #ffffff;
+      border: 2px solid #03AED2;
+      border-radius: 12px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      cursor: grab;
+      user-select: none;
+      font-weight: 900;
+      box-shadow: 0 4px 8px rgba(15, 23, 42, 0.06);
+      transition: all 0.2s;
+      text-align: center;
+      padding: 4px;
+      line-height: 1.05;
+    }
+
+    .cards .item-card {
+      font-size: clamp(14px, 1.9vmin, 20px);
+    }
+
+    .item-card:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 6px 12px rgba(0,0,0,0.1);
+    }
+
+    .item-card.selected {
+      outline: 3px solid #facc15;
+    }
+
+    .item-card.correct {
+      border-color: #4ade80;
+      background: #f0fdf4;
+    }
+
+    .item-card.wrong {
+      border-color: #dc2626;
+      background: #fee2e2;
+    }
+
+    .emoji {
+      font-size: clamp(28px, 3.7vmin, 44px);
+      margin-bottom: 3px;
+      line-height: 1;
+    }
+
+    .dropzones {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      grid-template-rows: repeat(2, minmax(0, 1fr));
+      gap: clamp(8px, 1.2vmin, 14px);
+    }
+
+    .dropzone {
+      min-height: 0;
+      background: #eff6ff;
+      border: 3px dashed #03AED2;
+      border-radius: 13px;
+      padding: clamp(6px, 0.9vmin, 10px);
+      display: flex;
+      flex-wrap: wrap;
+      gap: clamp(4px, 0.7vmin, 8px);
+      justify-content: center;
+      align-content: flex-start;
+      overflow: hidden;
+    }
+
+    .dropzone-title {
+      width: 100%;
+      text-align: center;
+      font-weight: 900;
+      color: #03AED2;
+      margin-bottom: clamp(3px, 0.6vh, 7px);
+      background: #e0f7fa;
+      border-radius: 8px;
+      padding: clamp(4px, 0.7vh, 7px);
+      font-size: clamp(16px, 2.1vmin, 23px);
+      line-height: 1.1;
+      position: sticky;
+      top: 0;
+      z-index: 2;
+    }
+
+    .dropzone .item-card {
+      width: calc(50% - 4px);
+      height: clamp(42px, 6.4vh, 72px);
+      min-height: 0;
+      padding: 3px 2px;
+      font-size: clamp(12px, 1.55vmin, 17px);
+      border-radius: 9px;
+    }
+
+    .dropzone .emoji {
+      font-size: clamp(17px, 2.5vmin, 30px);
+      margin-bottom: 1px;
+    }
+
+    .center-card {
+      background: white;
+      border: 2px solid #bfdbfe;
+      border-radius: 20px;
+      padding: clamp(18px, 3vh, 34px);
+      text-align: center;
+      width: min(92%, 680px);
+      max-height: 100%;
+      margin: auto;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      box-shadow: 0 6px 16px rgba(0,0,0,0.05);
+      overflow: hidden;
+    }
+
+    .big-object {
+      font-size: clamp(80px, 12vmin, 132px);
+      line-height: 1;
+      margin: 4px 0;
+    }
+
+    .object-name {
+      font-size: clamp(28px, 4vmin, 42px);
+      font-weight: 900;
+      color: #03AED2;
+      margin: 4px 0 8px;
+      line-height: 1.05;
+    }
+
+    .guess-box {
+      margin: clamp(8px, 1.4vh, 14px) auto;
+      background: #FEEFAD;
+      border: 2px solid #FDDE55;
+      border-radius: 14px;
+      padding: clamp(10px, 1.6vh, 16px);
+      font-size: clamp(19px, 2.4vmin, 28px);
+      font-weight: 900;
+      line-height: 1.18;
+      width: 100%;
+    }
+
+    .category-buttons {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: clamp(6px, 0.9vmin, 10px);
+      margin-top: clamp(8px, 1.2vh, 12px);
+      width: 100%;
+    }
+
+    .feedback {
+      margin-top: clamp(7px, 1vh, 12px);
+      padding: clamp(9px, 1.4vh, 14px);
+      border-radius: 12px;
+      background: #e0f2fe;
+      border: 2px solid #7dd3fc;
+      font-weight: 800;
+      font-size: clamp(15px, 1.9vmin, 21px);
+      line-height: 1.25;
+      width: 100%;
+    }
+
+    .bottom-actions {
+      text-align: center;
+      margin-top: clamp(6px, 1vh, 10px);
+      flex: 0 0 auto;
+    }
+
+    #trainingFeedback {
+      flex: 0 0 auto;
+    }
+
+    @media (max-height: 720px) {
+      .game-shell { gap: 6px; padding: 8px 12px; }
+      h1 { font-size: clamp(27px, 4vmin, 38px); }
+      .subtitle { font-size: clamp(14px, 1.8vmin, 18px); }
+      .top-panel { min-height: 86px; }
+      .robot-img { width: 86px; height: 86px; }
+      .speech { font-size: clamp(15px, 1.9vmin, 19px); padding: 8px 12px; }
+      .score-box { font-size: clamp(14px, 1.7vmin, 18px); }
+      .stage-tab { padding: 8px 9px; font-size: clamp(14px, 1.75vmin, 18px); }
+      .task-title { font-size: clamp(20px, 2.6vmin, 28px); }
+      .task-desc { font-size: clamp(14px, 1.8vmin, 18px); margin-bottom: 7px; }
+      .cards-pool h3 { font-size: clamp(18px, 2.2vmin, 24px); }
+      .cards .item-card { font-size: clamp(12px, 1.65vmin, 16px); }
+      .emoji { font-size: clamp(24px, 3.2vmin, 36px); }
+      .dropzone-title { font-size: clamp(14px, 1.85vmin, 19px); padding: 3px; }
+      .dropzone .item-card { height: clamp(36px, 5.8vh, 54px); font-size: clamp(10px, 1.35vmin, 14px); }
+      .dropzone .emoji { font-size: clamp(15px, 2.1vmin, 24px); }
+      .btn { padding: 8px 16px; font-size: clamp(14px, 1.75vmin, 18px); }
+      .feedback { padding: 8px; font-size: clamp(13px, 1.65vmin, 17px); }
+      .big-object { font-size: clamp(64px, 10vmin, 100px); }
+      .object-name { font-size: clamp(24px, 3.4vmin, 34px); }
+      .guess-box { font-size: clamp(16px, 2.1vmin, 22px); }
+    }
+
+    @media (max-width: 950px) {
+      .top-panel {
+        grid-template-columns: clamp(90px, 14vw, 120px) minmax(0, 1fr) clamp(145px, 22vw, 190px);
+      }
+
+      .training-layout {
+        grid-template-columns: minmax(330px, 0.48fr) minmax(0, 0.52fr);
+      }
+    }
+
+    @media (max-width: 760px) {
+      .game-shell {
+        height: 100svh;
+      }
+
+      h1 {
+        font-size: 28px;
+      }
+
+      .subtitle {
+        font-size: 14px;
+      }
+
+      .top-panel {
+        grid-template-columns: 76px 1fr 122px;
+        min-height: 76px;
+      }
+
+      .robot-img {
+        width: 68px;
+        height: 68px;
+      }
+
+      .speech,
+      .score-box {
+        font-size: 13px;
+      }
+
+      .stage-tab {
+        font-size: 12px;
+        padding: 7px 4px;
+      }
+
+      .training-layout {
+        grid-template-columns: 1fr;
+        grid-template-rows: 0.44fr 0.56fr;
+      }
+
+      .cards {
+        grid-template-columns: repeat(4, minmax(0, 1fr));
+        grid-template-rows: repeat(4, minmax(0, 1fr));
+      }
+
+      .dropzone .item-card {
+        width: calc(50% - 4px);
+      }
+    }
+  </style>
+
+</head>
+
+<body>
+
+  <div class="game-shell">
+
+    <h1>Robotu Eğit</h1>
+    <p class="subtitle">Unutma! Yapay zekâ örneklerden öğrenir, tahmin yapar ve hatalarından gelişir.</p>
+    <div class="top-panel">
+      <div class="robot-box">
+        <img class="robot-img" id="robotFace" src="{{ url_for('static', filename='games/Grade5/5_unit5_w1/robot.png') }}" alt="MiniBot">
+      </div>
+
+      <div class="speech" id="robotSpeech">
+        Merhaba! Ben Yellowbot. Bana nesneleri tanıtırsan onları sınıflandırmayı öğrenebilirim.
+      </div>
+
+      <div class="score-box">
+        Puan: <span id="scoreText">0</span>
+        <br>
+        Öğrenme: <span id="learningText">0</span>%
+        <div class="learning-wrap">
+          <div class="learning-bar" id="learningBar"></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="stage-tabs">
+      <div class="stage-tab active" id="tab0">1. Robota Öğret</div>
+      <div class="stage-tab" id="tab1">2. Tahmini Kontrol Et</div>
+      <div class="stage-tab" id="tab2">3. Test Zamanı</div>
+    </div>
+
+    <div class="screen active" id="startScreen">
+      <div class="start-card">
+        <h2>Oyuna Hazır mısın?</h2>
+        <p>Bu oyunda bir yapay zekâ robotunu eğiteceksin.</p>
+
+        <div class="rules">
+          <ol>
+            <li>Nesneleri doğru kategorilere yerleştir.</li>
+            <li>Robotun tahminlerinin doğruluğunu kontrol et.</li>
+            <li>Robot hata yaparsa ona doğru cevabı öğret.</li>
+            <li>Son aşamada robot yeni nesneler için tahmin yapacak.</li>
+          </ol>
+        </div>
+
+        <button class="btn" onclick="startGame()">Oyuna Başla</button>
+      </div>
+    </div>
+
+    <div class="screen" id="gameScreen">
+      <div class="game-area" id="gameArea"></div>
+    </div>
+
+  </div>
+
+  <script>
+    const categories = ["Hayvan", "Yiyecek", "Araç", "Eşya"];
+
+    const trainingItems = [
+        // HAYVAN
+        { name: "Kedi", emoji: "🐱", category: "Hayvan" },
+        { name: "Köpek", emoji: "🐶", category: "Hayvan" },
+        { name: "Kuş", emoji: "🐦", category: "Hayvan" },
+        { name: "Balık", emoji: "🐟", category: "Hayvan" },
+
+        // YİYECEK
+        { name: "Elma", emoji: "🍎", category: "Yiyecek" },
+        { name: "Muz", emoji: "🍌", category: "Yiyecek" },
+        { name: "Pasta", emoji: "🍰", category: "Yiyecek" },
+        { name: "Çilek", emoji: "🍓", category: "Yiyecek" },
+
+        // ARAÇ
+        { name: "Araba", emoji: "🚗", category: "Araç" },
+        { name: "Bisiklet", emoji: "🚲", category: "Araç" },
+        { name: "Otobüs", emoji: "🚌", category: "Araç" },
+        { name: "Uçak", emoji: "✈️", category: "Araç" },
+
+        // EŞYA
+        { name: "Kalem", emoji: "✏️", category: "Eşya" },
+        { name: "Çanta", emoji: "🎒", category: "Eşya" },
+        { name: "Defter", emoji: "📒", category: "Eşya" },
+        { name: "Saat", emoji: "⌚", category: "Eşya" }
+        ];
+
+    const guessItems = [
+      { name: "Kuş", emoji: "🐦", category: "Hayvan", robotGuess: "Hayvan" },
+      { name: "Pasta", emoji: "🍰", category: "Yiyecek", robotGuess: "Yiyecek" },
+      { name: "Otobüs", emoji: "🚌", category: "Araç", robotGuess: "Eşya" },
+      { name: "Defter", emoji: "📒", category: "Eşya", robotGuess: "Eşya" },
+      { name: "Balık", emoji: "🐟", category: "Hayvan", robotGuess: "Yiyecek" },
+      { name: "Tren", emoji: "🚆", category: "Araç", robotGuess: "Araç" }
+    ];
+
+    const testItems = [
+      { name: "Tavşan", emoji: "🐰", category: "Hayvan", robotGuess: "Hayvan" },
+      { name: "Çilek", emoji: "🍓", category: "Yiyecek", robotGuess: "Yiyecek" },
+      { name: "Uçak", emoji: "✈️", category: "Araç", robotGuess: "Araç" },
+      { name: "Silgi", emoji: "🧽", category: "Eşya", robotGuess: "Eşya" },
+      { name: "Kaplumbağa", emoji: "🐢", category: "Hayvan", robotGuess: "Hayvan" },
+      { name: "Saat", emoji: "⌚", category: "Eşya", robotGuess: "Araç" }
+    ];
+
+    let stage = 0;
+    let score = 0;
+    let learning = 0;
+    let selectedCard = null;
+    let guessIndex = 0;
+    let testIndex = 0;
+    let answered = false;
+
+    const startScreen = document.getElementById("startScreen");
+    const gameScreen = document.getElementById("gameScreen");
+    const gameArea = document.getElementById("gameArea");
+    const scoreText = document.getElementById("scoreText");
+    const learningText = document.getElementById("learningText");
+    const learningBar = document.getElementById("learningBar");
+    const robotSpeech = document.getElementById("robotSpeech");
+    const robotFace = document.getElementById("robotFace");
+
+    function startGame() {
+      stage = 0;
+      score = 0;
+      learning = 0;
+      guessIndex = 0;
+      testIndex = 0;
+      answered = false;
+
+      startScreen.classList.remove("active");
+      gameScreen.classList.add("active");
+
+      updateHeader();
+      updateTabs();
+      renderTrainingStage();
+
+      speak("Önce bana örnekler göster. Kartları doğru kutulara yerleştirirsen öğrenmeye başlayacağım!");
+    }
+
+    function updateHeader() {
+      scoreText.textContent = score;
+      learningText.textContent = learning;
+      learningBar.style.width = learning + "%";
+    }
+
+    function speak(text) {
+      robotSpeech.textContent = text;
+    }
+
+    function updateTabs() {
+      for (let i = 0; i < 3; i++) {
+        document.getElementById("tab" + i).classList.remove("active");
+      }
+      document.getElementById("tab" + stage).classList.add("active");
+    }
+
+    function shuffleArray(array) {
+      return [...array].sort(() => Math.random() - 0.5);
+    }
+
+    function renderTrainingStage() {
+      stage = 0;
+      updateTabs();
+
+      const shuffled = shuffleArray(trainingItems);
+
+      gameArea.innerHTML = `
+        <h2 class="task-title">1. Aşama: Robota Öğret</h2>
+        <p class="task-desc">
+          Kartları doğru kategori kutularına sürükle. Mobilde kartı seçip kutuya da tıklayabilirsin.
+        </p>
+
+        <div class="training-layout">
+          <div class="cards-pool">
+            <h3>Örnek Veriler</h3>
+            <div class="cards" id="cardsPool">
+              ${shuffled.map((item, index) => createCardHTML(item, index)).join("")}
+            </div>
+          </div>
+
+          <div class="dropzones">
+            ${categories.map(cat => `
+              <div class="dropzone" data-category="${cat}">
+                <div class="dropzone-title">${cat}</div>
+              </div>
+            `).join("")}
+          </div>
+        </div>
+
+        <div class="bottom-actions" id="trainingActions">
+        <button class="btn good" onclick="checkTraining()">Eğitimi Kontrol Et</button>
+        <button class="btn secondary" onclick="renderTrainingStage()">Yeniden Dene</button>
+      </div>
+
+        <div id="trainingFeedback"></div>
+      `;
+
+      addDragDropEvents();
+      addClickMoveEvents();
+    }
+
+    function createCardHTML(item, index) {
+      return `
+        <div class="item-card" draggable="true" data-category="${item.category}" data-name="${item.name}" id="card-${index}">
+          <div class="emoji">${item.emoji}</div>
+          <div>${item.name}</div>
+        </div>
+      `;
+    }
+
+    function addDragDropEvents() {
+      const cards = document.querySelectorAll(".item-card");
+      const dropzones = document.querySelectorAll(".dropzone");
+      const pool = document.getElementById("cardsPool");
+
+      cards.forEach(card => {
+        card.addEventListener("dragstart", e => {
+          e.dataTransfer.setData("text/plain", card.id);
+        });
+      });
+
+      [...dropzones, pool].forEach(zone => {
+        zone.addEventListener("dragover", e => {
+          e.preventDefault();
+        });
+
+        zone.addEventListener("drop", e => {
+          e.preventDefault();
+          const cardId = e.dataTransfer.getData("text/plain");
+          const card = document.getElementById(cardId);
+          if (card) {
+            zone.appendChild(card);
+            card.classList.remove("correct", "wrong");
+          }
+        });
+      });
+    }
+
+    function addClickMoveEvents() {
+      const cards = document.querySelectorAll(".item-card");
+      const dropzones = document.querySelectorAll(".dropzone");
+      const pool = document.getElementById("cardsPool");
+
+      cards.forEach(card => {
+        card.addEventListener("click", e => {
+          e.stopPropagation();
+
+          if (selectedCard) {
+            selectedCard.classList.remove("selected");
+          }
+
+          selectedCard = card;
+          selectedCard.classList.add("selected");
+        });
+      });
+
+      [...dropzones, pool].forEach(zone => {
+        zone.addEventListener("click", () => {
+          if (selectedCard) {
+            zone.appendChild(selectedCard);
+            selectedCard.classList.remove("selected", "correct", "wrong");
+            selectedCard = null;
+          }
+        });
+      });
+    }
+
+    function checkTraining() {
+      const dropzones = document.querySelectorAll(".dropzone");
+      const cards = document.querySelectorAll(".item-card");
+      let correct = 0;
+      let placed = 0;
+
+      cards.forEach(card => {
+        card.classList.remove("correct", "wrong");
+      });
+
+      dropzones.forEach(zone => {
+        const zoneCategory = zone.dataset.category;
+        const zoneCards = zone.querySelectorAll(".item-card");
+
+        zoneCards.forEach(card => {
+          placed++;
+
+          if (card.dataset.category === zoneCategory) {
+            correct++;
+            card.classList.add("correct");
+          } else {
+            card.classList.add("wrong");
+          }
+        });
+      });
+
+      const feedback = document.getElementById("trainingFeedback");
+
+      if (placed < trainingItems.length) {
+        feedback.innerHTML = `
+          <div class="feedback">
+            Önce tüm kartları kategori kutularına yerleştirmelisin.
+          </div>
+        `;
+        speak("Bazı örnekleri hâlâ görmedim. Tüm kartları kutulara koyarsan daha iyi öğrenirim.", "🤔");
+        return;
+      }
+
+      if (correct === trainingItems.length) {
+        score += 40;
+        learning = Math.max(learning, 35);
+        updateHeader();
+
+        feedback.innerHTML = `
+        <div class="feedback">
+          Harika! Tüm örnekleri doğru öğrettin. MiniBot artık ilk bilgilerini öğrendi.
+        </div>
+      `;
+
+      document.getElementById("trainingActions").innerHTML = `
+        <button class="btn good" onclick="renderGuessStage()">2. Aşamaya Geç</button>
+      `;
+
+        speak("Yaşasın! Bana birçok örnek gösterdin. Artık hayvanları, yiyecekleri, araçları ve eşyaları daha iyi ayırt edebiliyorum!", "😊");      } else {
+        learning = Math.max(learning, Math.round((correct / trainingItems.length) * 25));
+        updateHeader();
+
+        feedback.innerHTML = `
+          <div class="feedback">
+            ${correct} doğru, ${trainingItems.length - correct} yanlış var. 
+            Kırmızı kartları doğru kategoriye taşıyıp tekrar kontrol et.
+          </div>
+        `;
+
+        speak("Bazı örnekleri yanlış öğrendim. Yanlışları düzeltirsen daha doğru tahmin yapabilirim.", "😯");
+      }
+    }
+
+    function renderGuessStage() {
+      stage = 1;
+      answered = false;
+      updateTabs();
+
+      if (guessIndex >= guessItems.length) {
+        learning = Math.max(learning, 70);
+        updateHeader();
+
+        gameArea.innerHTML = `
+          <h2 class="task-title">2. Aşama Tamamlandı</h2>
+          <div class="center-card test-card">
+            <div class="big-object">🎉</div>
+            <p class="object-name">MiniBot artık tahmin yapmayı öğrendi!</p>
+            <p>Şimdi yeni nesnelerle test zamanı.</p>
+            <button class="btn" onclick="renderTestStage()">3. Aşamaya Geç</button>
+          </div>
+        `;
+
+        speak("Tahmin yaptım, hatalarımı gördüm ve geri bildirimlerle geliştim. İşte yapay zekâ böyle öğrenir!", "🥳");
+        return;
+      }
+
+      const item = guessItems[guessIndex];
+
+      gameArea.innerHTML = `
+        <h2 class="task-title">2. Aşama: Robotun Tahminini Kontrol Et</h2>
+        <p class="task-desc">
+          MiniBot bir tahmin yapacak. Tahmin doğruysa “Doğru”, yanlışsa “Yanlış” butonuna bas.
+        </p>
+
+        <div class="center-card">
+          <div class="big-object">${item.emoji}</div>
+          <div class="object-name">${item.name}</div>
+
+          <div class="guess-box">
+            MiniBot'un tahmini: ${item.robotGuess}
+          </div>
+
+          <button class="btn good" onclick="checkRobotGuess(true)">Doğru</button>
+          <button class="btn bad" onclick="checkRobotGuess(false)">Yanlış</button>
+
+          <div id="guessFeedback"></div>
+        </div>
+      `;
+
+      speak(`${item.name} nesnesini inceliyorum. Bence bu kategori: ${item.robotGuess}. Sence doğru mu?`, "🤖");
+    }
+
+    function checkRobotGuess(userSaidCorrect) {
+      if (answered) return;
+
+      const item = guessItems[guessIndex];
+      const robotWasCorrect = item.robotGuess === item.category;
+      const feedback = document.getElementById("guessFeedback");
+
+      if (userSaidCorrect === robotWasCorrect) {
+        if (robotWasCorrect) {
+          score += 15;
+          learning = Math.min(100, learning + 7);
+          updateHeader();
+
+          feedback.innerHTML = `
+            <div class="feedback">
+              Doğru! MiniBot doğru tahmin yaptı. ${item.name} gerçekten ${item.category} kategorisindedir.
+            </div>
+            <div class="bottom-actions">
+              <button class="btn" onclick="nextGuess()">Sonraki Tahmin</button>
+            </div>
+          `;
+
+          speak("Tahminim doğru çıktı! Demek ki öğrendiğim örnekler işe yarıyor.", "😊");
+          answered = true;
+        } else {
+          score += 10;
+          updateHeader();
+
+          feedback.innerHTML = `
+            <div class="feedback">
+              Evet, MiniBot yanlış tahmin yaptı. Şimdi ona doğru kategoriyi öğret.
+            </div>
+            <div class="category-buttons">
+              ${categories.map(cat => `
+                <button class="btn warning" onclick="teachCorrectCategory('${cat}')">${cat}</button>
+              `).join("")}
+            </div>
+          `;
+
+          speak("Yanlış tahmin etmişim. Bana doğru cevabı seçtirirsen hatamdan öğrenirim.", "😅");
+        }
+      } else {
+        if (robotWasCorrect) {
+          feedback.innerHTML = `
+            <div class="feedback">
+              Dikkat! MiniBot aslında doğru tahmin yapmıştı. ${item.name}, ${item.category} kategorisindedir.
+            </div>
+            <div class="bottom-actions">
+              <button class="btn" onclick="nextGuess()">Sonraki Tahmin</button>
+            </div>
+          `;
+
+          speak("Ben doğru tahmin etmiştim ama sen yanlış olduğunu düşündün. Yapay zekâyı kontrol ederken dikkatli olmalıyız.", "🤔");
+          answered = true;
+        } else {
+          feedback.innerHTML = `
+            <div class="feedback">
+              MiniBot'un tahmini yanlıştı ama sen doğru dedin. Şimdi ona doğru kategoriyi öğret.
+            </div>
+            <div class="category-buttons">
+              ${categories.map(cat => `
+                <button class="btn warning" onclick="teachCorrectCategory('${cat}')">${cat}</button>
+              `).join("")}
+            </div>
+          `;
+
+          speak("Beni yanlış yönlendirme! Yapay zekâ yanlış veriyle eğitilirse yanlış öğrenebilir.", "😟");
+        }
+      }
+    }
+
+    function teachCorrectCategory(selectedCategory) {
+      const item = guessItems[guessIndex];
+      const feedback = document.getElementById("guessFeedback");
+
+      if (selectedCategory === item.category) {
+        score += 15;
+        learning = Math.min(100, learning + 9);
+        updateHeader();
+
+        feedback.innerHTML = `
+          <div class="feedback">
+            Harika! MiniBot'a doğru cevabı öğrettin. ${item.name}, ${item.category} kategorisindedir.
+          </div>
+          <div class="bottom-actions">
+            <button class="btn" onclick="nextGuess()">Sonraki Tahmin</button>
+          </div>
+        `;
+
+        speak("Teşekkür ederim! Yanlışımı düzelttim. Geri bildirim sayesinde daha iyi öğreniyorum.", "😊");
+        answered = true;
+      } else {
+        feedback.innerHTML = `
+          <div class="feedback">
+            Bu da doğru değil. ${item.name} için doğru kategori başka. Tekrar dene.
+          </div>
+          <div class="category-buttons">
+            ${categories.map(cat => `
+              <button class="btn warning" onclick="teachCorrectCategory('${cat}')">${cat}</button>
+            `).join("")}
+          </div>
+        `;
+
+        speak("Bu bilgi de doğru görünmüyor. Yapay zekânın iyi öğrenmesi için doğru veri gerekir.", "🤔");
+      }
+    }
+
+    function nextGuess() {
+      guessIndex++;
+      renderGuessStage();
+    }
+
+    function renderTestStage() {
+      stage = 2;
+      answered = false;
+      updateTabs();
+
+      if (testIndex >= testItems.length) {
+        renderFinalScreen();
+        return;
+      }
+
+      const item = testItems[testIndex];
+
+      gameArea.innerHTML = `
+        <h2 class="task-title">3. Aşama: Test Zamanı</h2>
+        <p class="task-desc">
+          MiniBot yeni bir nesne görüyor. Sen doğru kategoriyi seçerek onu test et.
+        </p>
+
+        <div class="center-card test-card">
+          <div class="big-object">${item.emoji}</div>
+          <div class="object-name">${item.name}</div>
+
+          <div class="guess-box">
+            MiniBot düşünüyor: “Bence bu ${item.robotGuess} olabilir.”
+          </div>
+
+          <p><strong>Bu nesnenin gerçek kategorisi nedir?</strong></p>
+
+          <div class="category-buttons">
+            ${categories.map(cat => `
+              <button class="btn" onclick="answerTest('${cat}')">${cat}</button>
+            `).join("")}
+          </div>
+
+          <div id="testFeedback"></div>
+        </div>
+      `;
+
+      speak(`${item.name} daha önce birebir gördüğüm bir örnek olmayabilir. Ama öğrendiklerime bakarak tahmin yapıyorum.`, "🤖");
+    }
+
+    function answerTest(selectedCategory) {
+      if (answered) return;
+
+      const item = testItems[testIndex];
+      const robotWasCorrect = item.robotGuess === item.category;
+      const feedback = document.getElementById("testFeedback");
+
+      if (selectedCategory === item.category) {
+        score += 20;
+        learning = Math.min(100, learning + 6);
+        updateHeader();
+
+        if (robotWasCorrect) {
+          feedback.innerHTML = `
+            <div class="feedback">
+              Süper! Sen de doğru bildin, MiniBot da doğru tahmin yaptı. 
+              Bu, yapay zekânın benzer örneklerden çıkarım yapmasına benzer.
+            </div>
+            <div class="bottom-actions">
+              <button class="btn" onclick="nextTest()">Sonraki Nesne</button>
+            </div>
+          `;
+
+          speak("Doğru tahmin ettim! Öğrendiğim örnekleri yeni nesneye uyguladım.", "🥳");
+        } else {
+          feedback.innerHTML = `
+            <div class="feedback">
+              Sen doğru bildin ama MiniBot yanlış tahmin yaptı. 
+              Bu bize yapay zekânın her zaman doğru cevap vermeyebileceğini gösterir.
+            </div>
+            <div class="bottom-actions">
+              <button class="btn" onclick="nextTest()">Sonraki Nesne</button>
+            </div>
+          `;
+
+          speak("Bu kez yanlış tahmin ettim. Daha fazla doğru örnek görürsem gelişebilirim.", "😅");
+        }
+      } else {
+        feedback.innerHTML = `
+          <div class="feedback">
+            Doğru cevap ${item.category} olmalıydı. 
+            Yapay zekâyı eğitirken doğru kategori seçmek çok önemlidir.
+          </div>
+          <div class="bottom-actions">
+            <button class="btn" onclick="nextTest()">Sonraki Nesne</button>
+          </div>
+        `;
+
+        speak("Yanlış veri verirsek ben de yanlış öğrenebilirim. Doğru veri çok önemlidir.", "🤔");
+      }
+
+      answered = true;
+    }
+
+    function nextTest() {
+      testIndex++;
+      renderTestStage();
+    }
+
+    // -----------------------
+// PUANI DATABASE'E GÖNDER
+// -----------------------
+function saveRobotScore() {
+    fetch("/save-progress", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        credentials: "same-origin", // session cookie gönderimi
+        body: JSON.stringify({
+            game_key: "5_unit5_w1",  // GAME_INFO ile eşleşmeli
+            score: score             // JS’deki skor değişkeni
+        })
+    })
+    .then(res => res.json())
+    .then(data => {
+        if(data.success) console.log("Skor kaydedildi:", score, data);
+        else console.warn("Skor kaydedilemedi:", data.error);
+    })
+    .catch(err => console.error("Fetch hatası:", err));
+}
+
+    // renderFinalScreen() fonksiyonunun sonuna ekle
+    function renderFinalScreen() {
+        learning = Math.max(learning, 100);
+        updateHeader();
+
+        let message = "";
+        if (score >= 180) {
+            message = "Mükemmel! MiniBot'u çok iyi eğittin.";
+        } else if (score >= 120) {
+            message = "Çok iyi! MiniBot birçok şeyi öğrendi.";
+        } else {
+            message = "Güzel deneme! Daha fazla doğru örnekle MiniBot daha iyi öğrenebilir.";
+        }
+
+        gameArea.innerHTML = `
+            <div class="final-card">
+                <h2>🎉 Oyun Bitti</h2>
+                <p class="object-name">${message}</p>
+                <p><strong>Toplam Puan:</strong> ${score}</p>
+                <p><strong>Öğrenme Seviyesi:</strong> ${learning}%</p>
+                <div class="rules">
+                    <h3>Bu oyunda ne öğrendik?</h3>
+                    <ol>
+                        <li>Yapay zekâ örneklerden yani verilerden öğrenir.</li>
+                        <li>Yapay zekâ öğrendiklerine göre tahmin yapar.</li>
+                        <li>Yanlış tahmin yaparsa doğru geri bildirimle gelişebilir.</li>
+                        <li>Yanlış veri verilirse yapay zekâ yanlış öğrenebilir.</li>
+                        <li>Yapay zekâ benzer örneklerden çıkarım yapmaya çalışır.</li>
+                    </ol>
+                </div>
+                <button class="btn" onclick="startGame()">Tekrar Oyna</button>
+            </div>
+        `;
+
+        speak("Eğitim tamamlandı! Artık yapay zekânın verilerden öğrenip tahmin yaptığını biliyorsun.", "🥳");
+
+        // Veritabanına puanı kaydet
+        saveRobotScore();
+    }
+  </script>
+
+</body>
+</html>
