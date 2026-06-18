@@ -127,8 +127,8 @@ GAME_INFO = {
     # 5. SINIF - ÜNİTE 6
     # =========================
     "5_unit6_w1": {
-        "title": "Problem Çözme Adımları",
-        "subtitle": "Bir problemi çözmek için gerekli işlem adımlarını belirle!",
+        "title": "Kız Grubu Oyunu 🎤",
+        "subtitle": "Problem çözme, algoritma, girdi-çıktı ve akış şeması konularını eğlenceli bir kız grubu oluşturma oyunu ile öğren.",
         "unit": "Yazılım Tasarımı ve Programlama",
         "level": "5. Sınıf",
         "icon": "🧩",
@@ -136,8 +136,8 @@ GAME_INFO = {
     },
 
     "5_unit6_w2": {
-        "title": "Algoritma Sıralaması",
-        "subtitle": "Verilen günlük yaşam problemini algoritmik adımlarla sırala!",
+        "title": "Kek Yapma Algoritması 🎂",
+        "subtitle": "Günlük yaşam problemlerini belirleyerek bu problemlerin çözümü için algoritma oluşturmayı, girdi-çıktı ilişkisini kurmayı ve işlem adımlarını doğru sıraya koymayı öğren.",
         "unit": "Yazılım Tasarımı ve Programlama",
         "level": "5. Sınıf",
         "icon": "🔢",

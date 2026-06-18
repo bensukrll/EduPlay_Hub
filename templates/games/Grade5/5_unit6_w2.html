@@ -1,0 +1,661 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Kek Yapma Algoritması</title>
+
+  <style>
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+    margin: 0;
+    width: 100vw;
+    height: 100vh;
+    overflow: hidden;
+    font-family: "Comic Sans MS", Arial, sans-serif;
+    background: linear-gradient(135deg, #fff0c9, #ffd6e8);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    color: #3b2f2f;
+    }
+
+    .game-container {
+    width: 100vw;
+    height: 100vh;
+    max-width: none;
+    min-height: 0;
+    overflow: hidden;
+    background: #fff1f7;
+    border-radius: 0;
+    padding: 18px 28px;
+    box-shadow: none;
+    text-align: center;
+    }
+
+    h1 {
+      margin-top: 0;
+      color: #c94f7c;
+    }
+
+    h3 {
+      margin-top: 0;
+    }
+
+    .screen {
+      display: none;
+    }
+
+    .screen.active {
+      display: block;
+    }
+
+    .subtitle {
+      max-width: 780px;
+      margin: 0 auto 18px;
+      font-size: 18px;
+      line-height: 1.5;
+    }
+
+    button {
+      border: none;
+      padding: 12px 24px;
+      border-radius: 999px;
+      background: #ff7eb6;
+      color: white;
+      font-size: 17px;
+      font-weight: bold;
+      cursor: pointer;
+      margin-top: 16px;
+      transition: 0.2s;
+    }
+
+    button:hover {
+      background: #e85f9e;
+      transform: scale(1.04);
+    }
+
+    .cake-icon {
+      font-size: 78px;
+      margin: 18px 0;
+    }
+
+    .stage-info {
+      background: #fff3f8;
+      border: 2px dashed #ff9bc8;
+      border-radius: 16px;
+      padding: 12px;
+      margin-bottom: 18px;
+      font-size: 16px;
+      line-height: 1.4;
+    }
+
+    .algorithm-area {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 18px;
+      align-items: start;
+    }
+
+    .box {
+      background: #fff9fc;
+      border: 2px solid #ffc1dc;
+      border-radius: 18px;
+      padding: 15px;
+      min-height: 430px;
+    }
+
+    .draggable {
+      background: white;
+      border: 2px solid #ff9bc8;
+      border-radius: 14px;
+      padding: 10px;
+      margin: 8px 0;
+      cursor: grab;
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.08);
+      font-size: 14px;
+      line-height: 1.35;
+    }
+
+    .draggable:active {
+      cursor: grabbing;
+    }
+
+    .drop-slot {
+      background: white;
+      border: 2px dashed #c9a0b8;
+      border-radius: 14px;
+      min-height: 52px;
+      padding: 8px;
+      margin: 8px 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #8b6b7c;
+      font-size: 14px;
+    }
+
+    .correct {
+      border-color: #43a047 !important;
+      background: #e8f7e8 !important;
+    }
+
+    .wrong {
+      border-color: #e53935 !important;
+      background: #ffe7e7 !important;
+    }
+
+    .feedback {
+      font-weight: bold;
+      margin-top: 14px;
+      font-size: 18px;
+      min-height: 25px;
+    }
+
+    .success-box {
+      background: #fff1f7;
+      border: 3px solid #ff9bc8;
+      border-radius: 24px;
+      padding: 28px;
+      max-width: 760px;
+      margin: 25px auto;
+      font-size: 22px;
+      line-height: 1.5;
+    }
+
+    #startScreen.screen.active {
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    padding: 40px 20px;
+    }
+
+    #startScreen h1 {
+    font-size: 64px;
+    margin-bottom: 24px;
+    }
+
+    #startScreen .subtitle {
+    max-width: 1000px;
+    font-size: 28px;
+    line-height: 1.5;
+    margin: 0 auto 28px;
+    }
+
+    #startScreen .cake-icon {
+    font-size: 110px;
+    margin: 24px 0;
+    }
+
+    #startScreen p {
+    max-width: 1000px;
+    font-size: 24px;
+    line-height: 1.5;
+    margin: 0 auto 20px;
+    }
+
+    #startScreen button {
+    margin-top: 28px;
+    padding: 20px 44px;
+    font-size: 32px;
+    border-radius: 999px;
+    }
+
+   @media (max-width: 900px) {
+    #startScreen h1 {
+    font-size: 42px;
+    }
+
+    #startScreen .subtitle,
+    #startScreen p {
+    font-size: 20px;
+    max-width: 90%;
+    }
+
+    #startScreen .cake-icon {
+    font-size: 80px;
+    }
+
+    #startScreen button {
+    font-size: 24px;
+    padding: 16px 32px;
+    }
+    }
+
+        #stageOne.screen.active {
+        height: 100%;
+        display: flex;
+        flex-direction: column;
+        overflow: hidden;
+        }
+
+        #stageOne h1 {
+        font-size: 30px;
+        margin: 0 0 6px;
+        }
+
+        #stageOne .stage-info {
+        font-size: 15px;
+        padding: 7px;
+        margin-bottom: 8px;
+        }
+
+        #stageOne .algorithm-area {
+        flex: 1;
+        min-height: 0;
+        height: calc(100vh - 170px);
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 14px;
+        }
+
+        #stageOne .box {
+        min-height: 0;
+        height: 100%;
+        padding: 10px;
+        overflow: hidden;
+        }
+
+        #stageOne .box h3 {
+        font-size: 20px;
+        margin: 0 0 6px;
+        }
+
+        #mixedSteps,
+        #orderSlots {
+        height: calc(100% - 32px);
+        display: flex;
+        flex-direction: column;
+        gap: 4px;
+        overflow: hidden;
+        }
+
+        #stageOne .draggable {
+        font-size: 14px;
+        padding: 6px 9px;
+        margin: 0;
+        line-height: 1.15;
+        border-radius: 9px;
+        }
+
+        #stageOne .drop-slot {
+        flex: 1;
+        min-height: 0;
+        padding: 3px 6px;
+        margin: 0;
+        font-size: 14px;
+        border-radius: 9px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        }
+
+        #stageOne .drop-slot .draggable {
+        width: auto;
+        max-width: 95%;
+        font-size: 14px;
+        padding: 5px 9px;
+        line-height: 1.15;
+        margin: 0;
+        }
+
+        #stageOne button {
+        width: 100%;
+        margin-top: 8px;
+        padding: 10px 20px;
+        font-size: 17px;
+        }
+
+        #stageOne .feedback {
+        font-size: 15px;
+        margin-top: 4px;
+        min-height: 18px;
+        }
+
+    /* 14 algoritma adımı için 1. aşama düzeni */
+    #stageOne .algorithm-area {
+      height: calc(100vh - 155px);
+    }
+
+    #stageOne .draggable {
+      font-size: 12.5px;
+      padding: 5px 7px;
+      line-height: 1.1;
+    }
+
+    #stageOne .drop-slot .draggable {
+      font-size: 12px;
+      padding: 4px 6px;
+      line-height: 1.08;
+    }
+
+  </style>
+</head>
+
+<body>
+  <div class="game-container">
+
+    <!-- GİRİŞ -->
+    <section id="startScreen" class="screen active">
+      <h1>🎂 Kek Yapma Algoritması</h1>
+
+      <p class="subtitle">
+        Bu oyunda kek yapma problemini algoritma adımlarına ayıracak
+        ve adımları doğru sıraya yerleştireceksin.
+      </p>
+
+      <div class="cake-icon">🧁</div>
+
+      <p>
+        Amaç: Problem çözme, girdi-çıktı belirleme ve işlem adımlarını doğru sıraya koymayı öğrenmek.
+      </p>
+
+      <button onclick="startGame()">Oyuna Başla</button>
+    </section>
+
+    <!-- 1. AŞAMA -->
+    <section id="stageOne" class="screen">
+      <h1>1. Aşama: Kek Yapma Algoritmasını Sırala</h1>
+
+      <div class="stage-info">
+        Aşağıdaki algoritma adımları karışık verildi.
+        Adımları 1. adımdan son adıma kadar doğru sıraya sürükle.
+      </div>
+
+      <div class="algorithm-area">
+        <div class="box" id="mixedStepsBox">
+          <h3>Karışık Algoritma Adımları</h3>
+          <div id="mixedSteps"></div>
+        </div>
+
+        <div class="box">
+          <h3>Doğru Sıra</h3>
+          <div id="orderSlots"></div>
+        </div>
+      </div>
+
+      <button onclick="checkStageOne()">Kontrol Et</button>
+      <div id="stageOneFeedback" class="feedback"></div>
+    </section>
+
+    <!-- BİTİŞ -->
+    <section id="endScreen" class="screen">
+      <h1>🎉 Tebrikler!</h1>
+
+      <div class="success-box">
+        <p>
+          Algoritmanın mantığını öğrendin!
+        </p>
+        <p>
+          Bir problemi adımlara ayırdın, karar yapılarını fark ettin ve adımları doğru sıraya koydun.
+        </p>
+      </div>
+
+      <div class="cake-icon">🎂</div>
+
+      <button onclick="restartGame()">Tekrar Oyna</button>
+    </section>
+
+  </div>
+
+  <script>
+    const algorithmSteps = [
+      { text: "Başla", order: 1 },
+      {
+        text: '"Lütfen malzemeleri (un, şeker, yumurta, yağ, süt) hazırlayınız."',
+        order: 2
+      },
+      {
+        text: "Yumurta ve şekeri köpürene kadar çırp. Ardından un, süt ve yağı ekleyip karıştır.",
+        order: 4
+      },
+      {
+        text: "Fırını 180 dereceye ayarla ve ısıtmaya başla.",
+        order: 3
+      },
+      {
+        text: "Fırın sıcaklığı 180 dereceye ulaştı mı?",
+        order: 5
+      },
+      {
+        text: 'Hayır ise bekle. Ok işareti kendi üzerine veya bir önceki adıma döner.',
+        order: 6
+      },
+      {
+        text: "Evet ise bir sonraki adıma devam et.",
+        order: 7
+      },
+      {
+        text: "Kek harcını kalıba dök ve fırına ver. 35 dakika pişmeye bırak.",
+        order: 8
+      },
+      {
+        text: "Kürdan Testi - Pişti mi?: Batırılan kürdan temiz çıkıyor mu?",
+        order: 9
+      },
+      {
+        text: 'Hayır (Kek pişmediyse): Ok işareti "5 dakika daha pişmeye bırak" işlemine gider ve tekrar bu karar yapısına döner.',
+        order: 10
+      },
+      {
+        text: 'Evet (Kek piştiyse): Akış "KEK HAZIR" çıktısına gider.',
+        order: 11
+      },
+      {
+        text: '"Afiyet olsun, kekiniz hazır!"',
+        order: 12
+      },
+      {
+        text: "Bitir",
+        order: 13
+      }
+    ];
+
+    let draggedItem = null;
+
+    function startGame() {
+      showScreen("stageOne");
+      createStageOne();
+    }
+
+    function showScreen(screenId) {
+      document.querySelectorAll(".screen").forEach(screen => {
+        screen.classList.remove("active");
+      });
+
+      document.getElementById(screenId).classList.add("active");
+    }
+
+    function shuffle(array) {
+      return [...array].sort(() => Math.random() - 0.5);
+    }
+
+    function createCard(text, answer) {
+      const card = document.createElement("div");
+      card.className = "draggable";
+      card.draggable = true;
+      card.textContent = text;
+      card.dataset.answer = answer;
+      addDragEvents(card);
+      return card;
+    }
+
+    function createStageOne() {
+      const mixedSteps = document.getElementById("mixedSteps");
+      const orderSlots = document.getElementById("orderSlots");
+      const feedback = document.getElementById("stageOneFeedback");
+
+      mixedSteps.innerHTML = "";
+      orderSlots.innerHTML = "";
+      feedback.textContent = "";
+
+      addReturnBoxEvents(document.getElementById("mixedStepsBox"));
+
+      shuffle(algorithmSteps).forEach(step => {
+        const card = createCard(step.text, step.order);
+        mixedSteps.appendChild(card);
+      });
+
+      for (let i = 1; i <= algorithmSteps.length; i++) {
+        const slot = document.createElement("div");
+        slot.className = "drop-slot";
+        slot.dataset.slot = i;
+        slot.dataset.placeholder = i + ". adım";
+        slot.textContent = i + ". adım";
+        addDropZoneEvents(slot);
+        orderSlots.appendChild(slot);
+      }
+    }
+
+    function addDragEvents(element) {
+      element.addEventListener("dragstart", () => {
+        draggedItem = element;
+        setTimeout(() => {
+          element.style.opacity = "0.5";
+        }, 0);
+      });
+
+      element.addEventListener("dragend", () => {
+        element.style.opacity = "1";
+        draggedItem = null;
+      });
+    }
+
+    function getDirectCard(container) {
+      return Array.from(container.children).find(child =>
+        child.classList.contains("draggable")
+      );
+    }
+
+    function addDropZoneEvents(zone) {
+      if (zone.dataset.dropReady === "true") return;
+
+      zone.dataset.dropReady = "true";
+
+      zone.addEventListener("dragover", event => {
+        event.preventDefault();
+      });
+
+      zone.addEventListener("drop", event => {
+        event.preventDefault();
+
+        if (!draggedItem) return;
+
+        const origin = draggedItem.parentElement;
+        const existingCard = getDirectCard(zone);
+
+        if (existingCard === draggedItem) return;
+
+        if (existingCard) {
+          origin.appendChild(existingCard);
+        }
+
+        zone.innerHTML = "";
+        zone.appendChild(draggedItem);
+
+        refreshPlaceholder(origin);
+        refreshPlaceholder(zone);
+      });
+    }
+
+    function addReturnBoxEvents(box) {
+      if (box.dataset.returnReady === "true") return;
+
+      box.dataset.returnReady = "true";
+
+      box.addEventListener("dragover", event => {
+        event.preventDefault();
+      });
+
+      box.addEventListener("drop", event => {
+        event.preventDefault();
+
+        if (!draggedItem) return;
+
+        const origin = draggedItem.parentElement;
+
+        if (box.id === "mixedStepsBox") {
+          document.getElementById("mixedSteps").appendChild(draggedItem);
+        }
+
+        refreshPlaceholder(origin);
+      });
+    }
+
+    function refreshPlaceholder(container) {
+      if (!container) return;
+
+      const isDropArea =
+        container.classList.contains("drop-slot");
+
+      if (isDropArea && !getDirectCard(container)) {
+        container.textContent = container.dataset.placeholder || "";
+      }
+    }
+
+    function checkStageOne() {
+      const slots = document.querySelectorAll("#orderSlots .drop-slot");
+      let allCorrect = true;
+
+      slots.forEach(slot => {
+        slot.classList.remove("correct", "wrong");
+
+        const card = getDirectCard(slot);
+
+        if (card && Number(card.dataset.answer) === Number(slot.dataset.slot)) {
+          slot.classList.add("correct");
+        } else {
+          slot.classList.add("wrong");
+          allCorrect = false;
+        }
+      });
+
+      const feedback = document.getElementById("stageOneFeedback");
+
+      if (allCorrect) {
+        feedback.style.color = "#2e7d32";
+        feedback.textContent = "Harika! Kek yapma algoritmasını doğru sıraladın.";
+
+        // -----------------------
+        // PUANI DATABASE'E GÖNDER
+        // -----------------------
+        // Bu oyun doğru tamamlanınca tam puan verir.
+        const score = 100;
+
+        fetch("/save-progress", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            credentials: "same-origin",
+            body: JSON.stringify({
+                game_key: "5_unit6_w1",
+                score: score
+            })
+        })
+        .then(res => res.json())
+        .then(data => {
+            if(data.success) console.log("Skor kaydedildi:", score, data);
+            else console.warn("Skor kaydedilemedi:", data.error);
+        })
+        .catch(err => console.error("Fetch hatası:", err));
+
+        setTimeout(() => {
+          showScreen("endScreen");
+        }, 1200);
+      } else {
+        feedback.style.color = "#d32f2f";
+        feedback.textContent = "Bazı adımlar yanlış sırada. Doğru sıra: 6 = Fırın hazır değilse bekle, 10 = Kek pişmediyse 5 dakika daha pişir, 11 = Kek piştiyse KEK HAZIR çıktısına git.";
+      }
+    }
+
+    function restartGame() {
+      showScreen("startScreen");
+    }
+  </script>
+</body>
+</html>

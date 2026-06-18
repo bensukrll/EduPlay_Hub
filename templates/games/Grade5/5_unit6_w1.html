@@ -1,0 +1,859 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Kız Grubu Oyunu</title>
+
+  <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+  <style>
+    :root {
+      --pink: #fb42b1;
+      --orange: #fdab34;
+      --cyan: #42e2f3;
+      --dark: rgba(0, 0, 0, 0.62);
+      --white: #ffffff;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body,
+    html {
+      margin: 0;
+      padding: 0;
+      width: 100%;
+      min-height: 100%;
+      font-family: 'Fredoka', sans-serif;
+      background-color: #121212;
+      color: var(--white);
+      overflow: hidden;
+    }
+
+    body {
+      min-height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      background-image: url("{{ url_for('static', filename='games/Grade5/5_unit6_w1/gemini.png') }}");
+      background-size: cover;
+      background-position: center;
+      background-repeat: no-repeat;
+      transition: background-image 0.5s ease-in-out;
+    }
+
+    .screen {
+      display: none;
+      width: 100vw;
+      height: 100vh;
+      position: relative;
+      justify-content: center;
+      align-items: center;
+      text-align: center;
+    }
+
+    .screen.active {
+      display: flex;
+    }
+
+    .start-stage {
+      position: relative;
+      width: 100%;
+      height: 100%;
+    }
+
+    .hero-image {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+      filter: brightness(72%);
+    }
+
+    .overlay {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      width: min(88%, 850px);
+      transform: translate(-50%, -50%);
+      color: white;
+      text-shadow: 2px 2px 8px rgba(0, 0, 0, 0.85);
+      background-color: var(--dark);
+      padding: 28px;
+      border-radius: 20px;
+      box-shadow: 0 18px 45px rgba(0, 0, 0, 0.35);
+      backdrop-filter: blur(3px);
+    }
+
+    h1 {
+      font-size: clamp(30px, 4vw, 52px);
+      margin: 0 0 22px;
+      font-weight: 700;
+      line-height: 1.15;
+    }
+
+    h2 {
+      font-size: clamp(22px, 2.5vw, 34px);
+      margin: 12px 0;
+      line-height: 1.25;
+    }
+
+    p {
+      font-size: clamp(17px, 1.6vw, 22px);
+      line-height: 1.45;
+      margin: 12px 0;
+    }
+
+    .btn,
+    .start-button,
+    .answer-button,
+    .nav-button,
+    .finish-button,
+    .spotlight-button {
+      font-family: 'Fredoka', sans-serif;
+      border: none;
+      cursor: pointer;
+      color: white;
+      transition: transform 0.25s ease, background 0.25s ease, opacity 0.25s ease;
+    }
+
+    .start-button,
+    .btn {
+      padding: 18px 42px;
+      font-size: clamp(22px, 2.5vw, 32px);
+      background: linear-gradient(135deg, var(--orange), var(--orange));
+      border-radius: 26px;
+      text-transform: uppercase;
+      box-shadow: 0 5px 20px rgba(255, 105, 180, 0.5);
+    }
+
+    .start-button:hover,
+    .btn:hover {
+      background: linear-gradient(135deg, var(--pink), var(--pink));
+      transform: scale(1.07);
+    }
+
+    .quiz-overlay {
+      position: relative;
+      width: min(90%, 940px);
+      max-height: 92vh;
+      overflow: auto;
+      color: white;
+      text-shadow: 2px 2px 8px rgba(0, 0, 0, 0.8);
+      text-align: center;
+      padding: 24px;
+      background-color: var(--dark);
+      border-radius: 18px;
+      box-shadow: 0 18px 45px rgba(0, 0, 0, 0.35);
+      backdrop-filter: blur(3px);
+    }
+
+    #questionTitle {
+      font-size: clamp(26px, 3vw, 40px);
+      margin-bottom: 16px;
+    }
+
+    .progress-text {
+      font-size: 18px;
+      opacity: 0.95;
+      margin-bottom: 14px;
+    }
+
+    .answer-list {
+      display: grid;
+      gap: 12px;
+      margin: 18px auto 0;
+    }
+
+    .answer-button {
+      width: 100%;
+      padding: 13px 18px;
+      font-size: clamp(16px, 1.7vw, 20px);
+      line-height: 1.35;
+      background: var(--orange);
+      border-radius: 12px;
+      box-shadow: 0 5px 12px rgba(0, 0, 0, 0.45);
+      text-align: left;
+    }
+
+    .answer-button:hover:not(:disabled) {
+      background: var(--pink);
+      transform: scale(1.025);
+    }
+
+    .answer-button:disabled {
+      opacity: 0.75;
+      cursor: not-allowed;
+    }
+
+    .answer-button.correct {
+      background: #27c477;
+    }
+
+    .answer-button.wrong {
+      background: #e44b6a;
+    }
+
+    .message {
+      min-height: 32px;
+      font-size: clamp(18px, 2vw, 24px);
+      margin-top: 18px;
+      font-weight: 700;
+    }
+
+    .nav-buttons {
+      margin-top: 18px;
+      display: flex;
+      justify-content: center;
+      flex-wrap: wrap;
+      gap: 12px;
+    }
+
+    .nav-button,
+    .finish-button,
+    .spotlight-button {
+      padding: 12px 26px;
+      font-size: clamp(17px, 1.6vw, 21px);
+      background: var(--orange);
+      border-radius: 12px;
+      box-shadow: 0 5px 12px rgba(0, 0, 0, 0.45);
+    }
+
+    .finish-button {
+      background: var(--cyan);
+    }
+
+    .spotlight-button {
+      background: #ff69b4;
+      margin: 6px;
+    }
+
+    .nav-button:hover,
+    .finish-button:hover,
+    .spotlight-button:hover {
+      background: var(--pink);
+      transform: scale(1.06);
+    }
+
+    .result-overlay {
+      position: relative;
+      width: min(88%, 900px);
+      color: white;
+      text-align: center;
+      background-color: var(--dark);
+      padding: 28px;
+      border-radius: 20px;
+      box-shadow: 0 18px 45px rgba(0, 0, 0, 0.35);
+      text-shadow: 2px 2px 8px rgba(0, 0, 0, 0.8);
+      opacity: 0;
+      transform: translateY(14px);
+      transition: opacity 0.8s ease, transform 0.8s ease;
+    }
+
+    .result-overlay.show {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    .fan-message {
+      font-size: clamp(22px, 2.4vw, 32px);
+      margin-bottom: 20px;
+      font-style: italic;
+    }
+
+    .confetti {
+      position: absolute;
+      top: 0;
+      left: 50%;
+      width: 10px;
+      height: 10px;
+      background-color: #ff69b4;
+      animation: confettiAnimation 2s linear forwards;
+      pointer-events: none;
+      z-index: 10;
+    }
+
+    @keyframes confettiAnimation {
+      0% {
+        transform: translateY(-100%) rotate(0deg);
+        opacity: 1;
+      }
+
+      100% {
+        transform: translateY(100vh) rotate(360deg);
+        opacity: 0;
+      }
+    }
+
+    @media (max-width: 700px) {
+      .overlay,
+      .quiz-overlay,
+      .result-overlay {
+        width: 92%;
+        padding: 18px;
+      }
+
+      .nav-buttons {
+        flex-direction: column;
+      }
+
+      .nav-button,
+      .finish-button,
+      .spotlight-button,
+      .start-button,
+      .btn {
+        width: 100%;
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <!-- 1. EKRAN: BAŞLANGIÇ -->
+  <section id="startScreen" class="screen active">
+    <div class="start-stage">
+      <img
+        src="{{ url_for('static', filename='games/Grade5/5_unit6_w1/spotlight.png') }}"
+        alt="Kız Grubu Performansı"
+        class="hero-image"
+        id="backgroundImage"
+      />
+
+      <div class="overlay">
+        <h1>Kendi Kız Grubunu Oluştur</h1>
+        <button id="startButton" class="start-button">BAŞLA</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- 2. EKRAN: AÇIKLAMA / KULİS -->
+  <section id="introScreen" class="screen">
+    <div class="start-stage">
+      <img
+        src="{{ url_for('static', filename='games/Grade5/5_unit6_w1/kulis.png') }}"
+        alt="Kulis"
+        class="hero-image"
+      />
+
+      <div class="overlay">
+        <h1>4 Kişilik Kız Grubunu Oluştur</h1>
+        <p>4 kişilik kız grubumuzu oluşturmak için seçme yapmamız lazım.</p>
+        <p>Sorulan 4 soruyu doğru cevapla ve kızların tümünü ekibine kat!</p>
+        <p>Unutma! Tüm sorulara doğru cevabı veremezsen kızlardan birini ekibine alamazsın.</p>
+        <br />
+        <button id="questionButton" class="start-button">SORULARI GÖRELİM!</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- 3. EKRAN: SORULAR -->
+  <section id="quizScreen" class="screen">
+    <div class="quiz-overlay">
+      <div class="progress-text" id="progressText">Soru 1 / 4</div>
+      <h1 id="questionTitle"></h1>
+
+      <div class="answer-list">
+        <button class="answer-button" onclick="checkAnswer('A')"></button>
+        <button class="answer-button" onclick="checkAnswer('B')"></button>
+        <button class="answer-button" onclick="checkAnswer('C')"></button>
+        <button class="answer-button" onclick="checkAnswer('D')"></button>
+      </div>
+
+      <div id="message" class="message"></div>
+
+      <div class="nav-buttons">
+        <button id="prevButton" class="nav-button" onclick="goPrev()">Geri</button>
+        <button id="nextButton" class="nav-button" onclick="goNext()">İleri</button>
+        <button id="finishButton" class="finish-button" onclick="finishQuiz()">Bitir</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- 4. EKRAN: BAŞARILI SONUÇ -->
+  <section id="successScreen" class="screen">
+    <div class="result-overlay" id="successOverlay">
+      <h1>GÖREVİ TAMAMLADIN TÜM KIZLAR BİR ARADA!</h1>
+      <p class="fan-message">Fanlarınız sizi bekliyor, spotlar üzerinizde!</p>
+      <button class="spotlight-button" onclick="triggerConfetti()">Konfeti Patlat!</button>
+      <button class="spotlight-button" onclick="restartGame()">Yeniden Başla</button>
+    </div>
+  </section>
+
+  <!-- 5. EKRAN: BAŞARISIZ SONUÇ -->
+  <section id="failScreen" class="screen">
+    <div class="result-overlay" id="failOverlay">
+      <h1>Üzgünüm, 4 sorunun tamamını doğru cevaplayamadın.</h1>
+      <h2>Grupta yeterince üye olmadığı için grup dağıldı.</h2>
+      <h2>İstersen tekrar deneyebilirsin.</h2>
+      <button class="btn" onclick="restartGame()">Tekrar Dene</button>
+    </div>
+  </section>
+
+  <script>
+    const imagePaths = {
+      gemini: "{{ url_for('static', filename='games/Grade5/5_unit6_w1/gemini.png') }}",
+      kulis: "{{ url_for('static', filename='games/Grade5/5_unit6_w1/kulis.png') }}",
+      finish: "{{ url_for('static', filename='games/Grade5/5_unit6_w1/finish.png') }}",
+      failed: "{{ url_for('static', filename='games/Grade5/5_unit6_w1/failed.png') }}"
+    };
+
+    let currentQuestion = 0;
+    const totalQuestions = 4;
+    let failed = false;
+    let questions = [];
+    let userAnswers = [];
+
+    const questionPool = [
+      {
+        question: "Aşağıdakilerden hangisi günlük yaşamda karşılaşılan bir problem olabilir?",
+        options: [
+          "Okula zamanında yetişememek",
+          "Kalemin mavi olması",
+          "Defterin sayfalı olması",
+          "Bilgisayarın ekranı olması"
+        ],
+        correctAnswer: "A"
+      },
+      {
+        question: "Bir problemi çözmeye başlamadan önce ilk olarak ne yapılmalıdır?",
+        options: [
+          "Hemen kod yazılmalıdır.",
+          "Problem belirlenmelidir.",
+          "Çözüm unutulmalıdır.",
+          "Rastgele adımlar seçilmelidir."
+        ],
+        correctAnswer: "B"
+      },
+      {
+        question: "“Sabah okula geç kalmamak” problemi için aşağıdakilerden hangisi uygun bir çözüm adımıdır?",
+        options: [
+          "Gece çok geç uyumak",
+          "Alarm kurmak",
+          "Çantayı okulda bırakmak",
+          "Kahvaltı yapmadan çıkmak"
+        ],
+        correctAnswer: "B"
+      },
+      {
+        question: "Bir algoritmada “girdi” ne anlama gelir?",
+        options: [
+          "Problemin sonunda elde edilen sonuç",
+          "Çözüm için kullanılan bilgiler",
+          "Programın kapanması",
+          "Hata mesajı"
+        ],
+        correctAnswer: "B"
+      },
+      {
+        question: "“İki sayıyı toplama” problemi için aşağıdakilerden hangisi girdidir?",
+        options: [
+          "Toplam sonucu",
+          "İşlem adımları",
+          "Toplanacak iki sayı",
+          "Akış şeması"
+        ],
+        correctAnswer: "C"
+      },
+      {
+        question: "“İki sayıyı toplama” problemi için çıktı aşağıdakilerden hangisidir?",
+        options: [
+          "Birinci sayı",
+          "İkinci sayı",
+          "Toplam sonucu",
+          "Sayıları yazmak"
+        ],
+        correctAnswer: "C"
+      },
+      {
+        question: "Aşağıdakilerden hangisi algoritmanın doğru tanımıdır?",
+        options: [
+          "Bir problemi çözmek için izlenen sıralı adımlar",
+          "Sadece bilgisayarda oynanan oyunlar",
+          "Rastgele yazılan komutlar",
+          "Bilgisayarın ekran görüntüsü"
+        ],
+        correctAnswer: "A"
+      },
+      {
+        question: "Algoritma adımları nasıl olmalıdır?",
+        options: [
+          "Karışık ve eksik",
+          "Sıralı ve anlaşılır",
+          "Rastgele ve uzun",
+          "Sadece resimlerden oluşan"
+        ],
+        correctAnswer: "B"
+      },
+      {
+        question: "“Diş fırçalama” algoritmasında ilk adım aşağıdakilerden hangisi olabilir?",
+        options: [
+          "Ağzı çalkalamak",
+          "Diş macununu fırçaya sürmek",
+          "Diş fırçasını almak",
+          "Dişleri fırçalamayı bitirmek"
+        ],
+        correctAnswer: "C"
+      },
+      {
+        question: "Aşağıdakilerden hangisi “çay demleme” algoritması için uygun bir işlem adımı değildir?",
+        options: [
+          "Suyu kaynatmak",
+          "Çay eklemek",
+          "Telefonu şarj etmek",
+          "Çayın demlenmesini beklemek"
+        ],
+        correctAnswer: "C"
+      },
+      {
+        question: "Akış şeması ne için kullanılır?",
+        options: [
+          "Algoritmayı şekillerle göstermek için",
+          "Bilgisayarı kapatmak için",
+          "Sadece oyun oynamak için",
+          "İnternete bağlanmak için"
+        ],
+        correctAnswer: "A"
+      },
+      {
+        question: "Akış şemasında işlem adımlarını göstermek için genellikle hangi şekil kullanılır?",
+        options: [
+          "Dikdörtgen",
+          "Yıldız",
+          "Kalp",
+          "Bulut"
+        ],
+        correctAnswer: "A"
+      },
+      {
+        question: "Akış şemasında başlangıç ve bitişi göstermek için genellikle hangi şekil kullanılır?",
+        options: [
+          "Üçgen",
+          "Oval",
+          "Kare",
+          "Altıgen"
+        ],
+        correctAnswer: "B"
+      },
+      {
+        question: "“Hava yağmurluysa şemsiye al, değilse şemsiye alma.” ifadesinde hangi yapı vardır?",
+        options: [
+          "Sadece çıktı",
+          "Karar verme",
+          "Dosya silme",
+          "Rastgele işlem"
+        ],
+        correctAnswer: "B"
+      },
+      {
+        question: "Akış şemasında karar verme adımları genellikle hangi şekille gösterilir?",
+        options: [
+          "Elmas",
+          "Daire",
+          "Dikdörtgen",
+          "Çizgi"
+        ],
+        correctAnswer: "A"
+      },
+      {
+        question: "Aşağıdaki algoritma adımlarından hangisi doğru sıralanmıştır?",
+        options: [
+          "Ayakkabıyı bağla → Ayakkabıyı giy → Evden çık",
+          "Evden çık → Ayakkabıyı giy → Ayakkabıyı bağla",
+          "Ayakkabıyı giy → Ayakkabıyı bağla → Evden çık",
+          "Ayakkabıyı bağla → Evden çık → Ayakkabıyı giy"
+        ],
+        correctAnswer: "C"
+      },
+      {
+        question: "“Bir öğrencinin ödevini zamanında yapması” problemi için aşağıdakilerden hangisi çıktı olabilir?",
+        options: [
+          "Ödev konusunu öğrenmek",
+          "Ödevin tamamlanması",
+          "Defteri açmak",
+          "Kalem almak"
+        ],
+        correctAnswer: "B"
+      },
+      {
+        question: "Aşağıdakilerden hangisi algoritmik düşünmeye örnektir?",
+        options: [
+          "Problemi anlamadan rastgele çözüm denemek",
+          "Problemi parçalara ayırıp adım adım çözmek",
+          "Çözüm adımlarını karıştırmak",
+          "Girdileri önemsememek"
+        ],
+        correctAnswer: "B"
+      },
+      {
+        question: "“Marketten ekmek alma” problemi için doğru işlem sırası hangisidir?",
+        options: [
+          "Eve dön → Markete git → Ekmek al",
+          "Markete git → Ekmek al → Ödeme yap → Eve dön",
+          "Ekmek al → Eve dön → Markete git",
+          "Ödeme yap → Markete git → Ekmek al"
+        ],
+        correctAnswer: "B"
+      },
+      {
+        question: "Bir algoritmanın daha kolay anlaşılması için aşağıdakilerden hangisi yapılabilir?",
+        options: [
+          "Adımlar eksik yazılabilir.",
+          "Akış şeması ile gösterilebilir.",
+          "Sıralama bozulabilir.",
+          "Gereksiz bilgiler eklenebilir."
+        ],
+        correctAnswer: "B"
+      }
+    ];
+
+    function showScreen(screenId) {
+      document.querySelectorAll(".screen").forEach(screen => {
+        screen.classList.remove("active");
+      });
+
+      document.getElementById(screenId).classList.add("active");
+
+      if (screenId === "startScreen") {
+        document.body.style.backgroundImage = `url('${imagePaths.gemini}')`;
+      } else if (screenId === "introScreen" || screenId === "quizScreen") {
+        document.body.style.backgroundImage = `url('${imagePaths.kulis}')`;
+      } else if (screenId === "successScreen") {
+        document.body.style.backgroundImage = `url('${imagePaths.finish}')`;
+        setTimeout(() => {
+          document.getElementById("successOverlay").classList.add("show");
+        }, 200);
+      } else if (screenId === "failScreen") {
+        document.body.style.backgroundImage = `url('${imagePaths.failed}')`;
+        setTimeout(() => {
+          document.getElementById("failOverlay").classList.add("show");
+        }, 200);
+      }
+    }
+
+    function getRandomQuestions(pool, count) {
+      const shuffled = [...pool];
+
+      for (let i = shuffled.length - 1; i > 0; i--) {
+        const randomIndex = Math.floor(Math.random() * (i + 1));
+        [shuffled[i], shuffled[randomIndex]] = [shuffled[randomIndex], shuffled[i]];
+      }
+
+      return shuffled.slice(0, count);
+    }
+
+    function startQuiz() {
+      currentQuestion = 0;
+      failed = false;
+      questions = getRandomQuestions(questionPool, totalQuestions);
+      userAnswers = Array(totalQuestions).fill(null);
+
+      document.getElementById("successOverlay").classList.remove("show");
+      document.getElementById("failOverlay").classList.remove("show");
+
+      showScreen("quizScreen");
+      loadQuestion();
+    }
+
+    function checkAnswer(answer) {
+      if (userAnswers[currentQuestion] !== null) {
+        return;
+      }
+
+      userAnswers[currentQuestion] = answer;
+
+      const correctAnswer = questions[currentQuestion].correctAnswer;
+      const buttons = document.querySelectorAll(".answer-button");
+
+      buttons.forEach((button, index) => {
+        const buttonLetter = String.fromCharCode(65 + index);
+        button.disabled = true;
+        button.style.cursor = "not-allowed";
+
+        if (buttonLetter === correctAnswer) {
+          button.classList.add("correct");
+        }
+
+        if (buttonLetter === answer && answer !== correctAnswer) {
+          button.classList.add("wrong");
+        }
+      });
+
+      if (answer === correctAnswer) {
+        document.getElementById("message").innerText = "Tebrikler, doğru cevabı buldun.";
+      } else {
+        document.getElementById("message").innerText = "Üzgünüm, yanlış cevabı seçtin.";
+        failed = true;
+      }
+
+      document.getElementById("prevButton").style.display = "inline-block";
+
+      if (currentQuestion === totalQuestions - 1) {
+        document.getElementById("nextButton").style.display = "none";
+        document.getElementById("finishButton").style.display = "inline-block";
+      } else {
+        document.getElementById("nextButton").style.display = "inline-block";
+        document.getElementById("finishButton").style.display = "none";
+      }
+    }
+
+    function goPrev() {
+      if (currentQuestion > 0) {
+        currentQuestion--;
+        loadQuestion();
+      } else {
+        showScreen("introScreen");
+      }
+    }
+
+    function goNext() {
+      if (userAnswers[currentQuestion] === null) {
+        document.getElementById("message").innerText = "Lütfen önce bir cevap seç.";
+        return;
+      }
+
+      if (currentQuestion < totalQuestions - 1) {
+        currentQuestion++;
+        loadQuestion();
+      }
+    }
+
+    function finishQuiz() {
+        if (userAnswers.includes(null)) {
+            document.getElementById("message").innerText = "Lütfen tüm soruları cevapla.";
+            return;
+        }
+
+        if (failed) {
+            showScreen("failScreen");
+        } else {
+            showScreen("successScreen");
+        }
+
+        // -----------------------
+        // PUANI DATABASE'E GÖNDER
+        // -----------------------
+        // Örnek skor: doğru cevap sayısı üzerinden 0-100 arası
+        const correctCount = userAnswers.filter((answer, i) => answer === questions[i].correctAnswer).length;
+        const score = Math.round((correctCount / questions.length) * 100);
+
+        fetch("/save-progress", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            credentials: "same-origin", // session cookie gönderimi
+            body: JSON.stringify({
+                game_key: "5_unit6_w1", // GAME_INFO ile eşleşmeli
+                score: score
+            })
+        })
+        .then(res => res.json())
+        .then(data => {
+            if(data.success) console.log("Skor kaydedildi:", score, data);
+            else console.warn("Skor kaydedilemedi:", data.error);
+        })
+        .catch(err => console.error("Fetch hatası:", err));
+    }
+
+    function loadQuestion() {
+      const questionTitle = document.getElementById("questionTitle");
+      const progressText = document.getElementById("progressText");
+      const questionData = questions[currentQuestion];
+      const buttons = document.querySelectorAll(".answer-button");
+
+      progressText.innerText = `Soru ${currentQuestion + 1} / ${totalQuestions}`;
+      questionTitle.innerText = `Soru ${currentQuestion + 1}: ${questionData.question}`;
+
+      buttons.forEach((button, index) => {
+        button.innerText = `${String.fromCharCode(65 + index)}) ${questionData.options[index]}`;
+        button.disabled = false;
+        button.style.cursor = "pointer";
+        button.classList.remove("correct", "wrong");
+      });
+
+      document.getElementById("message").innerText = "";
+      document.getElementById("prevButton").style.display = "none";
+      document.getElementById("nextButton").style.display = "none";
+      document.getElementById("finishButton").style.display = "none";
+
+      if (userAnswers[currentQuestion] !== null) {
+        const selectedAnswer = userAnswers[currentQuestion];
+        const correctAnswer = questionData.correctAnswer;
+
+        if (selectedAnswer === correctAnswer) {
+          document.getElementById("message").innerText = "Tebrikler, doğru cevabı buldun.";
+        } else {
+          document.getElementById("message").innerText = "Üzgünüm, yanlış cevabı seçtin.";
+        }
+
+        buttons.forEach((button, index) => {
+          const buttonLetter = String.fromCharCode(65 + index);
+          button.disabled = true;
+          button.style.cursor = "not-allowed";
+
+          if (buttonLetter === correctAnswer) {
+            button.classList.add("correct");
+          }
+
+          if (buttonLetter === selectedAnswer && selectedAnswer !== correctAnswer) {
+            button.classList.add("wrong");
+          }
+        });
+
+        document.getElementById("prevButton").style.display = "inline-block";
+
+        if (currentQuestion === totalQuestions - 1) {
+          document.getElementById("finishButton").style.display = "inline-block";
+        } else {
+          document.getElementById("nextButton").style.display = "inline-block";
+        }
+      }
+    }
+
+    function triggerConfetti() {
+      for (let i = 0; i < 100; i++) {
+        createConfetti();
+      }
+    }
+
+    function createConfetti() {
+      const confetti = document.createElement("div");
+      const size = Math.random() * 10 + 5;
+
+      confetti.style.width = size + "px";
+      confetti.style.height = size + "px";
+      confetti.style.backgroundColor = `hsl(${Math.random() * 360}, 100%, 70%)`;
+      confetti.style.left = Math.random() * 100 + "%";
+      confetti.style.animationDuration = Math.random() * 1 + 2 + "s";
+      confetti.classList.add("confetti");
+
+      document.body.appendChild(confetti);
+
+      setTimeout(() => {
+        confetti.remove();
+      }, 3000);
+    }
+
+    function restartGame() {
+      currentQuestion = 0;
+      failed = false;
+      questions = [];
+      userAnswers = [];
+
+      document.querySelectorAll(".confetti").forEach(confetti => confetti.remove());
+      document.getElementById("successOverlay").classList.remove("show");
+      document.getElementById("failOverlay").classList.remove("show");
+
+      showScreen("startScreen");
+    }
+
+    document.getElementById("startButton").addEventListener("click", function () {
+      showScreen("introScreen");
+    });
+
+    document.getElementById("questionButton").addEventListener("click", function () {
+      startQuiz();
+    });
+  </script>
+</body>
+</html>

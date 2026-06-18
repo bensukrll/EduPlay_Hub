@@ -122,18 +122,18 @@
       "description": "Problemleri algoritmalarla çöz, hataları ayıkla ve blok tabanlı yazılımlar geliştir.",
       "games": {
         "5_unit6_w1": {
-          "title": "Algoritma Sıralaması",
+          "title": "Kız Grubu Oyunu 🎤",
           "week": "1. Hafta",
-          "description": "Bir problemin çözüm adımlarını doğru sıraya koy.",
-          "outcome": "Problem çözümü için işlem adımlarını sıralar.",
-          "howToPlay": "Bu oyunda verilen görevleri dikkatle oku, doğru seçimleri yap ve oyunu tamamlamak için yönergeleri takip et. Hazır olduğunda Oyuna Başla butonuna tıkla!"
+          "description": "Problem çözme, algoritma, girdi-çıktı ve akış şeması konularını eğlenceli bir kız grubu oluşturma oyunu ile öğren.",
+          "outcome": "BTY.5.6.1. Problem çözümü için algoritmik düşünebilme",
+          "howToPlay": "Oyuna başladığında kendi 4 kişilik kız grubunu oluşturmak için soruları cevaplaman gerekir. Oyun her başladığında 20 soruluk soru havuzundan rastgele 4 soru seçilir. Sorular problem çözme, algoritma, girdi-çıktı ve akış şeması konularıyla ilgilidir. Her soruda doğru seçeneği işaretlemelisin. Dört sorunun tamamını doğru cevaplarsan kızların tümünü ekibine katarsın ve oyunu başarıyla tamamlarsın. Eğer sorulardan birini yanlış cevaplarsan kızlardan birini ekibine alamazsın ve başarısız ekranına yönlendirilirsin." 
         },
         "5_unit6_w2": {
-          "title": "Akış Şeması Tamamlama",
+          "title": "Kek Yapma Algoritması 🎂",
           "week": "2. Hafta",
-          "description": "Eksik bırakılan akış şeması parçalarını doğru yerlere yerleştir.",
-          "outcome": "Problem çözümüne ilişkin işlem adımlarını akış şeması ile gösterir.",
-          "howToPlay": "Bu oyunda verilen görevleri dikkatle oku, doğru seçimleri yap ve oyunu tamamlamak için yönergeleri takip et. Hazır olduğunda Oyuna Başla butonuna tıkla!"
+          "description": "Kek yapma problemini adım adım çözerek algoritmik düşünmeyi keşfet. Malzemeleri belirle, işlem adımlarını doğru sıraya koy ve karar adımlarının algoritmadaki yerini fark et.",
+          "outcome": "BTY.5.6.1 - Problem çözümü için algoritmik düşünebilme.",
+          "howToPlay": "Oyuna başladığında kek yapma algoritmasının adımları karışık olarak verilir. Bu adımları başlangıçtan bitişe kadar doğru sıraya sürükleyip yerleştirmelisin. Girdi olarak gerekli malzemeleri, işlem adımlarını ve karar yapılarını doğru sırada düşünmelisin. Tüm adımları doğru sıraladığında oyunu tamamlarsın."
         }
       }
     }
